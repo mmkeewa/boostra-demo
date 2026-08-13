@@ -102,13 +102,13 @@ a{color:inherit;text-decoration:none}
 .tab-gpt svg{flex:0 0 auto}
 
 /* Greeting */
-.greeting{padding:var(--s6) var(--s4) 0;font-size:18px;line-height:20px;font-weight:700}
+.greeting{padding:var(--s6) var(--s4) 0;font-size:20px;line-height:24px;font-weight:700}
 
 /* ---------- Loan slider ---------- */
-.loans{display:flex;gap:var(--s4);overflow-x:auto;padding:var(--s4) calc((100% - 277px)/2);scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.loans{display:flex;gap:var(--s4);overflow-x:auto;padding:var(--s4) calc((100% - 300px)/2);scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .loans::-webkit-scrollbar{height:0}
 .loan{
-  flex:0 0 277px;scroll-snap-align:center;
+  flex:0 0 300px;scroll-snap-align:center;
   background:var(--fg-secondary);border-radius:var(--r-s);
   box-shadow:var(--shadow-card);padding-top:var(--s2);
   display:flex;flex-direction:column;gap:var(--s2);
@@ -117,7 +117,7 @@ a{color:inherit;text-decoration:none}
 .loan-logo .mark{width:16px;height:16px;border-radius:99px;overflow:hidden;flex:0 0 auto;background:#fff;display:grid;place-items:center}
 .loan-logo .mark img{width:100%;height:100%;object-fit:cover;border-radius:99px}
 .loan-logo .mark.boostra{background:var(--fg-primary)}
-.loan-logo .name{font-size:12px;line-height:16px;color:var(--text-inverted);white-space:nowrap}
+.loan-logo .name{font-size:14px;line-height:20px;color:var(--text-inverted);white-space:nowrap}
 .loan-content{
   background:var(--bg-primary);border-radius:var(--r-s);
   padding:var(--s2) var(--s2) var(--s4);
@@ -126,7 +126,7 @@ a{color:inherit;text-decoration:none}
 .badge{
   display:inline-flex;align-items:center;gap:var(--s1);
   padding:var(--s1) var(--s2);border-radius:24px;border:1px solid var(--border-warning);
-  font-size:10px;line-height:16px;font-weight:600;color:var(--border-warning);white-space:nowrap;
+  font-size:12px;line-height:16px;font-weight:600;color:var(--border-warning);white-space:nowrap;
 }
 .badge svg{flex:0 0 auto}
 .badge.ok{border-color:var(--border-success);color:var(--text-success)}
@@ -135,7 +135,7 @@ a{color:inherit;text-decoration:none}
 .loan-debt{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
 .loan-sum{font-size:32px;line-height:38px;font-weight:800;color:#000;text-align:center}
 .loan-sum small{font-size:16px;line-height:20px;font-weight:700}
-.loan-sub{width:100%;text-align:center;font-size:12px;line-height:16px;color:var(--text-secondary)}
+.loan-sub{width:100%;text-align:center;font-size:14px;line-height:20px;color:var(--text-secondary)}
 .loan-sub .accent{color:var(--text-accent)}
 
 /* ---------- Pay block ---------- */
@@ -181,7 +181,7 @@ a{color:inherit;text-decoration:none}
   background:var(--border-primary);color:var(--text-primary);border-radius:var(--r-xl);
   padding:var(--s1) var(--s3);font-size:12px;line-height:16px;font-weight:600;white-space:nowrap;
 }
-.contract-meta{display:flex;justify-content:space-between;gap:var(--s4);font-size:12px;line-height:16px}
+.contract-meta{display:flex;justify-content:space-between;gap:var(--s4);font-size:14px;line-height:20px}
 .contract-meta .r{text-align:right}
 .promo{
   border-radius:var(--r-s);padding:var(--s5);display:flex;flex-direction:column;gap:var(--s4);
@@ -229,9 +229,9 @@ a{color:inherit;text-decoration:none}
 .radio.on{background:var(--fg-accent);border-color:var(--fg-accent)}
 .radio.on svg{color:#fff}
 .add-toggle{display:inline-flex;align-items:center;gap:var(--s1);font-size:12px;line-height:16px;font-weight:600;color:var(--text-primary);align-self:flex-start}
-.add-toggle .chev{width:16px;height:16px}
+.add-toggle .chev{width:16px;height:16px;color:var(--text-primary)}
 .add-body{display:flex;flex-direction:column;gap:var(--s2);overflow:hidden;max-height:700px;transition:max-height .3s ease}
-.collapsed-add .add-body{max-height:0}
+.collapsed-add .add-body{max-height:0;margin-top:calc(var(--s4) * -1)}
 .consent-cap{font-size:12px;line-height:16px;color:#6b7380}
 .consent{display:flex;gap:var(--s4);align-items:flex-start;font-size:12px;line-height:16px}
 .consent .box{width:16px;height:16px;border-radius:192px;border:1px solid var(--border-accent);flex:0 0 auto}
@@ -283,7 +283,7 @@ a{color:inherit;text-decoration:none}
 .modal{
   background:var(--bg-primary);border-radius:var(--r-m);box-shadow:var(--shadow-m);
   width:100%;max-width:342px;height:600px;max-height:calc(100dvh - 40px);overflow:hidden;
-  padding:var(--s6) var(--s5) var(--s5);display:flex;flex-direction:column;gap:var(--s4);
+  padding:var(--s6) var(--s6) var(--s5);display:flex;flex-direction:column;gap:var(--s4);
   transform:translateY(8px) scale(.98);transition:transform .2s ease;
 }
 .modal-overlay.show .modal{transform:none}
@@ -334,7 +334,7 @@ a{color:inherit;text-decoration:none}
 .sheet-overlay.open{display:flex;opacity:1}
 .sheet{background:#fff;border-radius:var(--r-m) var(--r-m) 0 0;box-shadow:var(--shadow-m);
   width:100%;max-width:100%;max-height:calc(100% - 28px);overflow-y:auto;
-  padding:0 var(--s5) var(--s5);display:flex;flex-direction:column;gap:var(--s4);
+  padding:0 var(--s6) var(--s5);display:flex;flex-direction:column;gap:var(--s4);
   transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1)}
 .sheet-overlay.open .sheet{transform:translateY(0)}
 .sheet::-webkit-scrollbar{width:0}
@@ -417,6 +417,8 @@ a{color:inherit;text-decoration:none}
   text-align:center;font:700 22px/1 "Inter",sans-serif;color:var(--text-primary);outline:none}
 .otp-box:focus{border-color:var(--border-accent);background:#fff}
 .otp-resend{align-self:center;color:var(--text-accent);font-size:14px;line-height:20px;font-weight:500}
+.otp-resend.is-wait{color:var(--text-secondary);font-weight:400;cursor:default}
+.otp-resend:disabled{cursor:default}
 
 /* Модалки-формы (чек / БКИ) */
 .sheet-h2{font-size:22px;line-height:26px;font-weight:800}
@@ -435,8 +437,8 @@ a{color:inherit;text-decoration:none}
 /* Закреплённая «Закрыть» в листах-модалках (при скролле формы остаётся сверху) */
 .sheet .modal-close{
   position:sticky;top:0;z-index:3;align-self:stretch;text-align:left;
-  margin:0 calc(var(--s5) * -1);
-  padding:var(--s6) var(--s5) var(--s3);   /* 24px над «Закрыть», липнет к верху */
+  margin:0 calc(var(--s6) * -1);
+  padding:var(--s6) var(--s6) var(--s3);   /* 24px над «Закрыть», липнет к верху */
   background:var(--bg-primary);border-radius:var(--r-m) var(--r-m) 0 0;
 }
 
@@ -450,6 +452,10 @@ a{color:inherit;text-decoration:none}
 
 /* Единая высота форм-модалок (БКИ = как «Загрузка чека»); контент скроллится */
 #paidSheet .sheet,#bkiSheet .sheet{height:656px}
+/* Погашение и Продление — одной высоты, чтобы верх не скакал при переключении */
+#fullSign .sheet,#extendSheet .sheet{height:656px}
+/* Оффер: двойной отступ между кнопкой «Получить» и «Мой договор» (способы оплаты скрыты) */
+#pay.is-offer{padding-bottom:var(--s8)}
 
 /* Слайдер: соседние карточки бледнее (фокус на центральной) */
 .loan{opacity:.45;transition:opacity .35s ease}
@@ -583,7 +589,7 @@ a{color:inherit;text-decoration:none}
         <div class="card">
           <div class="card-row">
             <span class="card-title">Мой договор</span>
-            <button class="pill-btn">Посмотреть</button>
+            <button class="pill-btn" id="contractBtn">Посмотреть</button>
           </div>
           <div class="contract-meta">
             <span id="contractName">ООО МКК «РУСЗАЙМСЕРВИС»</span>
@@ -758,7 +764,7 @@ a{color:inherit;text-decoration:none}
         <input class="otp-box" inputmode="numeric" maxlength="1" aria-label="Цифра 3">
         <input class="otp-box" inputmode="numeric" maxlength="1" aria-label="Цифра 4">
       </div>
-      <button class="otp-resend" data-toast="Код отправлен повторно">Получить код повторно</button>
+      <button class="otp-resend" id="otpResend">Получить код повторно</button>
       <button class="btn-primary" data-open-view="payView">Подписать</button>
     </div>
   </div>
@@ -977,13 +983,14 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     { name: 'ООО МКК «РУСЗАЙМСЕРВИС»', no: 'RZS26-5217184', full: '12 700 ₽', extend: '3 700 ₽', actions: ['full', 'extend', 'partial'] },
     { name: 'ООО МКК «ФРИДА»',        no: 'FRD26-8842013', full: '18 780 ₽', extend: '5 400 ₽', actions: ['full', 'extend', 'partial'] },
     { name: 'ООО МКК «ЛОРД»',         no: 'LRD25-3319027', full: '34 900 ₽', extend: '9 200 ₽', actions: ['full', 'extend'] }, // просрочен → без «частично»
-    { name: 'Boostra — новый заём',   no: 'оформление за 5 минут', offer: true }
+    { name: 'Boostra — новый заём',   no: 'деньги у вас за 5 минут', offer: true }
   ];
   var loansEl = $('#loans');
   var loanCards = $$('.loan', loansEl);
   var quick = $('#quick'), sumVal = $('#sumVal'), sumInput = $('#sumInput'),
       sumWrap = $('#sumInputWrap'), payBtn = $('#payBtn'), methodsLink = $('#methodsLink'),
-      contractName = $('#contractName'), contractNo = $('#contractNo');
+      contractName = $('#contractName'), contractNo = $('#contractNo'),
+      contractBtn = $('#contractBtn'), payEl = $('#pay');
   var active = 0, currentMode = 'full';
 
   function setMode(mode) {
@@ -1013,9 +1020,13 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     if (L.offer) {
       quick.hidden = true; sumWrap.hidden = true; methodsLink.hidden = true;
       payBtn.textContent = 'Получить';
+      if (payEl) payEl.classList.add('is-offer');            // двойной отступ до «Мой договор»
+      if (contractBtn) contractBtn.textContent = 'Открыть';
     } else {
       quick.hidden = false; sumWrap.hidden = false; methodsLink.hidden = false;
       payBtn.textContent = 'Оплатить';
+      if (payEl) payEl.classList.remove('is-offer');
+      if (contractBtn) contractBtn.textContent = 'Посмотреть';
       // show only actions available for this loan
       $$('.qa', quick).forEach(function (b) {
         b.hidden = L.actions.indexOf(b.getAttribute('data-mode')) < 0;
@@ -1179,6 +1190,12 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     closeSheets();
     var ov = $('#' + id); ov.classList.add('open');
     var sh = ov.querySelector('.sheet'); if (sh) sh.scrollTop = 0;   // всегда открывать с заголовка
+    if (id === 'signSms') {
+      clearOtp(); startOtpTimer();
+      if (document.documentElement.classList.contains('is-touch')) {
+        var f0 = otp && otp.querySelector('.otp-box'); if (f0) f0.focus();   // мобильная — сразу клавиатура
+      }
+    }
   }
   function openView(id) {
     closeSheets();
@@ -1258,14 +1275,46 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     });
   }
 
-  /* ---------- Confetti salute (success) ---------- */
+  /* ---------- OTP: «Получить код повторно» — сначала отсчёт, потом кнопка ---------- */
+  var otpResend = $('#otpResend'), otpTimer = null, otpLeft = 0;
+  function clearOtp() { if (otp) [].forEach.call(otp.querySelectorAll('.otp-box'), function (b) { b.value = ''; }); }
+  function otpTick() {
+    otpLeft--;
+    if (otpLeft <= 0) {
+      clearInterval(otpTimer); otpTimer = null;
+      otpResend.classList.remove('is-wait'); otpResend.disabled = false;
+      otpResend.textContent = 'Получить код повторно';
+    } else { otpResend.textContent = 'Получить код повторно через ' + otpLeft + ' с'; }
+  }
+  function startOtpTimer() {
+    if (!otpResend) return;
+    otpLeft = 28; otpResend.classList.add('is-wait'); otpResend.disabled = true;
+    otpResend.textContent = 'Получить код повторно через ' + otpLeft + ' с';
+    if (otpTimer) clearInterval(otpTimer);
+    otpTimer = setInterval(otpTick, 1000);
+  }
+  if (otpResend) otpResend.addEventListener('click', function () {
+    if (otpResend.disabled) return;                       // отсчёт ещё идёт
+    clearOtp(); toast('Код отправлен повторно'); startOtpTimer();   // введённое стирается
+    var ff = otp && otp.querySelector('.otp-box'); if (ff) ff.focus();
+  });
+
+  /* ---------- Confetti salute (success) — круги, не овалы ---------- */
   var canvas = $('#confetti'), ctx = canvas && canvas.getContext('2d');
-  var parts = [], raf = null, endAt = 0, tPrev = 0;
+  var parts = [], raf = null, endAt = 0, tPrev = 0, CW = 0, CH = 0;
   var COLORS = ['#038aee', '#2cb82c', '#3b82f6', '#22c55e', '#0aa0e0', '#16a34a'];
+  function sizeCanvas() {
+    // буфер под реальный размер (× dpr) и рисуем в CSS-пикселях → круги остаются круглыми
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    CW = canvas.clientWidth || canvas.offsetWidth || 320;
+    CH = canvas.clientHeight || canvas.offsetHeight || 360;
+    canvas.width = Math.round(CW * dpr); canvas.height = Math.round(CH * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
   function burst(cx) {
     for (var i = 0; i < 46; i++) {
       var ang = -Math.PI / 2 + (Math.random() - 0.5) * 0.9, sp = 22 + Math.random() * 18;
-      parts.push({ x: cx + (Math.random() - 0.5) * 50, y: canvas.height + 10,
+      parts.push({ x: cx + (Math.random() - 0.5) * 50, y: CH + 10,
         vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, g: 0.16 + Math.random() * 0.07,
         s: 8 + Math.random() * 9, rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.4,
         c: COLORS[(Math.random() * COLORS.length) | 0], life: 1 });
@@ -1274,22 +1323,23 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
   function frame(t) {
     if (!tPrev) tPrev = t;
     var dt = Math.min(2.2, (t - tPrev) / 16.67); tPrev = t;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, CW, CH);
     for (var i = parts.length - 1; i >= 0; i--) {
       var p = parts[i];
       p.vy += p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
-      if (p.y > canvas.height * 0.5 && p.vy > 0) p.life -= 0.009 * dt;
-      if (p.life <= 0 || p.y > canvas.height + 40) { parts.splice(i, 1); continue; }
+      if (p.y > CH * 0.5 && p.vy > 0) p.life -= 0.009 * dt;
+      if (p.life <= 0 || p.y > CH + 40) { parts.splice(i, 1); continue; }
       ctx.save(); ctx.globalAlpha = Math.max(0, p.life); ctx.translate(p.x, p.y);
       ctx.beginPath(); ctx.arc(0, 0, p.s * 0.42, 0, 6.2832); ctx.fillStyle = p.c; ctx.fill(); ctx.restore();
     }
     if (parts.length || t < endAt) raf = requestAnimationFrame(frame);
-    else { ctx.clearRect(0, 0, canvas.width, canvas.height); raf = null; }
+    else { ctx.clearRect(0, 0, CW, CH); raf = null; }
   }
   function fireSalute() {
     if (!ctx) return;
+    sizeCanvas();
     parts = []; tPrev = 0;
-    var W = canvas.width, times = [0, 480, 940], xs = [W * 0.26, W * 0.74, W * 0.5];
+    var times = [0, 480, 940], xs = [CW * 0.26, CW * 0.74, CW * 0.5];
     times.forEach(function (ms, k) { setTimeout(function () { burst(xs[k]); }, ms); });
     endAt = performance.now() + 2200;
     if (!raf) raf = requestAnimationFrame(frame);
