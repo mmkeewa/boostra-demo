@@ -469,6 +469,11 @@ a{color:inherit;text-decoration:none}
 .flow-view.open .success-check{animation:checkPop .5s cubic-bezier(.2,.85,.3,1) both}
 .flow-view.open .success-check svg path{stroke-dasharray:44;stroke-dashoffset:44;animation:checkDraw .42s .3s ease forwards}
 
+/* «Мои карты и счета»: симметричные отступы сверху/снизу в свёрнутом виде
+   (убираем flex-gap до свёрнутого блока, отступ переносим внутрь клипа) */
+#cardsCard{gap:0}
+#cardsCard .collapse-body > :first-child{margin-top:var(--s4)}
+
 </style>
 </head>
 <body>
