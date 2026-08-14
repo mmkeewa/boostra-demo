@@ -181,8 +181,7 @@ a{color:inherit;text-decoration:none}
   background:var(--border-primary);color:var(--text-primary);border-radius:var(--r-xl);
   padding:var(--s1) var(--s3);font-size:12px;line-height:16px;font-weight:600;white-space:nowrap;
 }
-.contract-meta{display:flex;justify-content:space-between;gap:var(--s4);font-size:14px;line-height:20px}
-.contract-meta .r{text-align:right}
+.contract-meta{display:flex;flex-direction:column;gap:var(--s1);font-size:14px;line-height:20px}
 .promo{
   border-radius:var(--r-s);padding:var(--s5);display:flex;flex-direction:column;gap:var(--s4);
   background:linear-gradient(245deg,#ddffdd 41%,#c2e4fd 88%);
@@ -450,10 +449,21 @@ a{color:inherit;text-decoration:none}
 .badge.err{animation:overduePulse 2.4s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.badge.err{animation:none}}
 
-/* Единая высота форм-модалок (БКИ = как «Загрузка чека»); контент скроллится */
-#paidSheet .sheet,#bkiSheet .sheet{height:656px}
-/* Погашение и Продление — одной высоты, чтобы верх не скакал при переключении */
-#fullSign .sheet,#extendSheet .sheet{height:656px}
+/* Листы-модалки: одна высота = по высоте окна, контент скроллится внутри.
+   Дети НЕ сжимаются флексом (иначе раскрывающиеся блоки схлопываются в 0). */
+#paidSheet .sheet,#bkiSheet .sheet,
+#fullSign .sheet,#extendSheet .sheet{height:calc(100% - 28px)}
+.sheet > *{flex-shrink:0}
+
+/* Раскрывающийся документ: padding внутрь, иначе он виден при max-height:0 */
+.doc-box.anim-collapse{padding:0;background:transparent}
+.doc-box.anim-collapse > *{padding:0 var(--s4)}
+.doc-box.anim-collapse > :first-child{padding-top:var(--s4)}
+.doc-box.anim-collapse > :last-child{padding-bottom:var(--s4)}
+.doc-box.anim-collapse.open{background:var(--bg-secondary)}
+
+/* Подсказка под суммой (срок / выгода) */
+.sum-input .hint{font-size:12px;line-height:16px;color:var(--text-secondary);margin-top:var(--s15)}
 /* Оффер: двойной отступ между кнопкой «Получить» и «Мой договор» (способы оплаты скрыты) */
 #pay.is-offer{padding-bottom:var(--s8)}
 
@@ -552,7 +562,7 @@ a{color:inherit;text-decoration:none}
         <article class="loan" data-loan="3">
           <div class="loan-logo"><span class="mark boostra"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjEwLjQ5OCIgaGVpZ2h0PSI1LjI0OTAyIiB2aWV3Qm94PSIwIDAgMTAuNDk4IDUuMjQ5MDIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGlkPSJib29zdHJhIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTUuMzU1MzggMS40MzgyOEM1LjM2NTY2IDEuNDI5MzggNS4zNzYwNCAxLjQyMDQ0IDUuMzg2NTQgMS40MTE0OEM3LjAzOTMzIDAgNy43NTQ3MiAwIDguMzc5NzUgMEM5LjY4MDI5IDAgMTAuNDk4IDAuODc4MjQyIDEwLjQ5OCAyLjA2Mjg1QzEwLjQ5OCA0LjAxMzM2IDkuMjE3MjIgNS4yNDkwMiA3LjUyMjU4IDUuMjQ5MDJDNi4zMzU1IDUuMjQ5MDIgNS44ODQyNCA0LjU3ODQzIDUuMTcyMDcgMy44NDAzOUM1LjE2MjY5IDMuODMwNjcgNS4xNTI4NyAzLjgyMDc5IDUuMTQyNjYgMy44MTA3NUM1LjEzMjM5IDMuODE5NjUgNS4xMjIgMy44Mjg1OCA1LjExMTUxIDMuODM3NTRDMy40NTg3MiA1LjI0OTAyIDIuNzMwNTkgNS4yNDkwMiAyLjExODI5IDUuMjQ5MDJDMC44MTc3NjQgNS4yNDkwMiAwIDQuMzcwNzggMCAzLjE4NjE4QzAgMS4yMzU2NyAxLjI4MDgzIDAgMi45NzU0NyAwQzQuMTI3ODIgMCA0LjYxMzggMC42NzA1OTMgNS4zMjU5NyAxLjQwODY0QzUuMzM1MzUgMS40MTgzNiA1LjM0NTE3IDEuNDI4MjMgNS4zNTUzOCAxLjQzODI4Wk0yLjU2OTE1IDMuNTQzODZDMi4wMzE0MiAzLjU0Mzg2IDEuODA3NzMgMy4wNzY2NiAxLjgwNzczIDIuNjU3OTZDMS44MDc3MyAyLjE2NjMyIDIuMTk2MzEgMS42MDQ5MSAyLjg4NTk5IDEuNjA0OTFDMy41NDM2OCAxLjYwNDkxIDQuMjI3NjUgMi42ODMzMyA0LjIyNzY1IDIuNjU3OTZDNC4yMjc2NSAyLjYyNTggMy4yODgzOCAzLjU0Mzg2IDIuNTY5MTUgMy41NDM4NlpNNy45NTU5OSAxLjYwNDkxQzguNDkzNzIgMS42MDQ5MSA4LjcxNzQxIDIuMDcyMTEgOC43MTc0MSAyLjQ5MDgxQzguNzE3NDEgMi45ODI0NSA4LjMyODgzIDMuNTQzODYgNy42MzkxNSAzLjU0Mzg2QzYuOTgxNDcgMy41NDM4NiA2LjI5NzQ5IDIuNDY1NDQgNi4yOTc0OSAyLjQ5MDgxQzYuMjk3NDkgMi41MjI5NyA3LjIzNjc2IDEuNjA0OTEgNy45NTU5OSAxLjYwNDkxWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==" alt=""></span><span class="name">Заём на лучших условиях</span></div>
           <div class="loan-content">
-            <span class="badge accent">Получить</span>
+            <span class="badge accent">Действует ещё 3 дня</span>
             <div class="loan-debt">
               <div class="loan-sum"><small>до</small> 30 000 ₽</div>
               <div class="loan-sub">Уже у вас<br>через 5 минут</div>
@@ -574,6 +584,7 @@ a{color:inherit;text-decoration:none}
           <span class="val" id="sumVal">12 700 ₽</span>
           <input id="sumInput" inputmode="numeric" placeholder="Введите сумму" hidden>
           <div class="divider"></div>
+          <span class="hint" id="sumHint">Экономия на процентах 4 300 ₽</span>
         </div>
 
         <button class="btn-primary" id="payBtn">Оплатить</button>
@@ -593,7 +604,7 @@ a{color:inherit;text-decoration:none}
           </div>
           <div class="contract-meta">
             <span id="contractName">ООО МКК «РУСЗАЙМСЕРВИС»</span>
-            <span class="r" id="contractNo">RZS26-5217184</span>
+            <span id="contractNo">RZS26-5217184</span>
           </div>
           <div class="promo">
             <h4>Как улучшить кредитную историю?</h4>
@@ -785,7 +796,7 @@ a{color:inherit;text-decoration:none}
         <div class="file-row"><button class="file-btn">Выберите файл</button><span class="file-name">Файл не выбран</span></div>
         <span class="file-hint">PNG, JPG или PDF · до 100 МБ</span>
       </div>
-      <button class="btn-primary" data-sheet-close>Отправить чек</button>
+      <button class="btn-primary" data-open-view="successView" data-success="receipt">Отправить чек</button>
     </div>
   </div>
 
@@ -810,7 +821,7 @@ a{color:inherit;text-decoration:none}
         <div class="file-row"><button class="file-btn">Выберите файл</button><span class="file-name">Файл не выбран</span></div>
         <span class="file-hint">PNG, JPG, WEBP, HEIC, HEIF · до 15 МБ</span>
       </div>
-      <button class="btn-primary" data-sheet-close>Отправить запрос</button>
+      <button class="btn-primary" data-open-view="successView" data-success="bki">Отправить запрос</button>
     </div>
   </div>
 
@@ -868,7 +879,7 @@ a{color:inherit;text-decoration:none}
         </div>
       </div>
       <div class="success-foot">
-        <div class="promo-mini">
+        <div class="promo-mini" id="promoMini">
           <div class="promo-txt"><b id="promoTitle">Новый заём с повышенным лимитом</b><span>Оформите в течение 5 минут</span></div>
           <span class="promo-thumb"></span>
         </div>
@@ -980,9 +991,9 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
 
   /* ---------- Loans (slider drives the page) ---------- */
   var LOANS = [
-    { name: 'ООО МКК «РУСЗАЙМСЕРВИС»', no: 'RZS26-5217184', full: '12 700 ₽', extend: '3 700 ₽', actions: ['full', 'extend', 'partial'] },
-    { name: 'ООО МКК «ФРИДА»',        no: 'FRD26-8842013', full: '18 780 ₽', extend: '5 400 ₽', actions: ['full', 'extend', 'partial'] },
-    { name: 'ООО МКК «ЛОРД»',         no: 'LRD25-3319027', full: '34 900 ₽', extend: '9 200 ₽', actions: ['full', 'extend'] }, // просрочен → без «частично»
+    { name: 'ООО МКК «РУСЗАЙМСЕРВИС»', no: 'RZS26-5217184', full: '12 700 ₽', extend: '3 700 ₽', save: '4 300 ₽', savePart: '300 ₽', actions: ['full', 'extend', 'partial'] },
+    { name: 'ООО МКК «ФРИДА»',        no: 'FRD26-8842013', full: '18 780 ₽', extend: '5 400 ₽', save: '6 100 ₽', savePart: '450 ₽', actions: ['full', 'extend', 'partial'] },
+    { name: 'ООО МКК «ЛОРД»',         no: 'LRD25-3319027', full: '34 900 ₽', extend: '9 200 ₽', save: '11 200 ₽', savePart: '800 ₽', actions: ['full', 'extend'] }, // просрочен → без «частично»
     { name: 'Boostra — новый заём',   no: 'деньги у вас за 5 минут', offer: true }
   ];
   var loansEl = $('#loans');
@@ -990,7 +1001,7 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
   var quick = $('#quick'), sumVal = $('#sumVal'), sumInput = $('#sumInput'),
       sumWrap = $('#sumInputWrap'), payBtn = $('#payBtn'), methodsLink = $('#methodsLink'),
       contractName = $('#contractName'), contractNo = $('#contractNo'),
-      contractBtn = $('#contractBtn'), payEl = $('#pay');
+      contractBtn = $('#contractBtn'), payEl = $('#pay'), sumHint = $('#sumHint');
   var active = 0, currentMode = 'full';
 
   function setMode(mode) {
@@ -1004,6 +1015,11 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     } else {
       sumInput.hidden = true; sumVal.hidden = false;
       sumVal.textContent = mode === 'extend' ? L.extend : L.full;
+    }
+    // подсказка под инпутом: срок / выгода — своя для каждого выбора
+    if (sumHint) {
+      sumHint.textContent = mode === 'extend' ? 'Срок предлагается автоматически'
+        : 'Экономия на процентах ' + (mode === 'partial' ? L.savePart : L.save);
     }
   }
 
@@ -1123,7 +1139,15 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
   /* ---------- Consent checkboxes ---------- */
   document.addEventListener('click', function (e) {
     var docLink = e.target.closest('[data-doc]');   // ссылка на документ раскрывает его ниже
-    if (docLink) { var d = $('#' + docLink.getAttribute('data-doc')); d.classList.toggle('open'); return; }
+    if (docLink) {
+      var d = $('#' + docLink.getAttribute('data-doc'));
+      var nowOpen = d.classList.toggle('open');
+      // раскрыли — доскроллить до заявления ниже
+      if (nowOpen) setTimeout(function () {
+        try { d.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {}
+      }, 320);
+      return;
+    }
     var c = e.target.closest('.consent');
     if (c) {
       var box = $('.box', c); box.classList.toggle('on');
@@ -1178,8 +1202,12 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
   var SUCCESS = {
     full:    { t: 'Заём полностью погашен', s: 'Дождитесь обработки платежа, это займёт не более 15 минут. Можете заниматься своими делами', p: 'Новый заём с повышенным лимитом' },
     extend:  { t: 'Оплата прошла успешно', s: 'Заём продлён до 15.09.2026. Информация в личном кабинете обновится в течение нескольких минут', p: 'Новый заём с повышенным лимитом' },
-    partial: { t: 'Оплата прошла успешно', s: 'Информация в личном кабинете обновится в течение нескольких минут', p: 'У вас есть предодобренная заявка' }
+    partial: { t: 'Оплата прошла успешно', s: 'Информация в личном кабинете обновится в течение нескольких минут', p: 'У вас есть предодобренная заявка' },
+    // отправка формы (чек / БКИ) — без промо-блока
+    receipt: { t: 'Чек отправлен',   s: 'Ответ будет в течение 3 рабочих дней', noPromo: true },
+    bki:     { t: 'Запрос отправлен', s: 'Ответ будет в течение 3 рабочих дней', noPromo: true }
   };
+  var successKind = null;   // 'receipt' | 'bki' | null (обычная оплата)
   function currentAmount() {
     var L = LOANS[active];
     if (currentMode === 'partial') return (sumInput.value.trim() || '0') + ' ₽';
@@ -1203,10 +1231,12 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     var v = $('#' + id); v.classList.add('open');
     var sc = v.querySelector('.flow-scroll'); if (sc) sc.scrollTop = 0;
     if (id === 'successView') {
-      var sd = SUCCESS[currentMode] || SUCCESS.partial;
+      var sd = SUCCESS[successKind] || SUCCESS[currentMode] || SUCCESS.partial;
       $('#successTitle').textContent = sd.t;
       $('#successText').textContent = sd.s;
-      $('#promoTitle').textContent = sd.p;
+      var pm = $('#promoMini');
+      if (pm) pm.hidden = !!sd.noPromo;                 // на чеке/БКИ промо нет
+      if (!sd.noPromo) $('#promoTitle').textContent = sd.p;
       fireSalute();
     }
   }
@@ -1226,6 +1256,7 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     var ov = e.target.closest('[data-open-view]');
     if (ov) {
       var openS = $('.sheet-overlay.open');
+      successKind = ov.getAttribute('data-success') || null;   // чек / БКИ / обычная оплата
       if (ov.getAttribute('data-open-view') === 'payView') payReturn = openS ? openS.id : null;
       payAmount.textContent = currentAmount();
       openView(ov.getAttribute('data-open-view'));
