@@ -271,20 +271,22 @@ a{color:inherit;text-decoration:none}
   background:no-repeat center/8px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10' fill='none'%3E%3Cpath d='M2 5.2 4 7.2 8 3' stroke='%23fff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
 
 /* ---------- Способы оплаты · модалка ---------- */
+/* модалка = такой же bottom-sheet, как остальные листы: снизу, во всю ширину, единой высоты */
 .modal-overlay{
   position:fixed;inset:0;z-index:50;background:rgba(20,26,34,.55);
-  display:flex;align-items:center;justify-content:center;padding:20px;
+  display:flex;align-items:flex-end;justify-content:center;padding:0;
   opacity:0;transition:opacity .18s ease;
 }
 .modal-overlay.show{opacity:1}
 .modal-overlay[hidden]{display:none}
 .modal{
-  background:var(--bg-primary);border-radius:var(--r-m);box-shadow:var(--shadow-m);
-  width:100%;max-width:342px;height:600px;max-height:calc(100dvh - 40px);overflow:hidden;
-  padding:var(--s6) var(--s6) var(--s5);display:flex;flex-direction:column;gap:var(--s4);
-  transform:translateY(8px) scale(.98);transition:transform .2s ease;
+  background:var(--bg-primary);border-radius:var(--r-m) var(--r-m) 0 0;box-shadow:var(--shadow-m);
+  width:100%;max-width:100%;height:calc(100% - 28px);overflow:hidden;
+  padding:0 var(--s6) var(--s5);display:flex;flex-direction:column;gap:var(--s4);
+  transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);
 }
-.modal-overlay.show .modal{transform:none}
+.modal-overlay.show .modal{transform:translateY(0)}
+.modal > *{flex-shrink:0}
 .modal-close,.modal-title,.segctl{flex:0 0 auto}
 .modal-close{align-self:flex-start;color:var(--text-accent);font-size:14px;line-height:20px;font-weight:500}
 .modal-title{text-align:center;font-size:18px;line-height:20px;font-weight:700}
@@ -433,7 +435,8 @@ a{color:inherit;text-decoration:none}
 .file-hint{font-size:12px;line-height:16px;color:var(--text-secondary)}
 
 /* Закреплённая «Закрыть» в листах-модалках (при скролле формы остаётся сверху) */
-.sheet .modal-close{
+.sheet .modal-close,
+.modal .modal-close{
   position:sticky;top:0;z-index:3;align-self:stretch;text-align:left;
   margin:0 calc(var(--s6) * -1);
   padding:var(--s6) var(--s6) var(--s3);   /* 24px над «Закрыть», липнет к верху */
@@ -1026,7 +1029,7 @@ a{color:inherit;text-decoration:none}
       <p class="mp-tip"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.2" stroke="#038aee" stroke-width="1.2"/><path d="M8 7.2v3.4" stroke="#038aee" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="5.2" r=".9" fill="#038aee"/></svg><span>Совет: моментальное зачисление через личный кабинет в приложении boostra</span></p>
       <div class="mp-bki">
         <p>Платёж задержался и в кредитной истории появилась некорректная запись? Мы поможем исправить</p>
-        <button class="help-link" data-toast="Корректировка в БКИ — экран в работе">Исправить запись в БКИ →</button>
+        <button class="help-link" data-open-sheet="bkiSheet">Исправить запись в БКИ →</button>
       </div>
     </div>
 
@@ -1037,7 +1040,7 @@ a{color:inherit;text-decoration:none}
       <p class="mp-tip"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.2" stroke="#038aee" stroke-width="1.2"/><path d="M8 7.2v3.4" stroke="#038aee" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="5.2" r=".9" fill="#038aee"/></svg><span>Совет: моментальное зачисление через личный кабинет в приложении boostra</span></p>
       <div class="mp-bki">
         <p>Платёж задержался и в кредитной истории появилась некорректная запись? Мы поможем исправить</p>
-        <button class="help-link" data-toast="Корректировка в БКИ — экран в работе">Исправить запись в БКИ →</button>
+        <button class="help-link" data-open-sheet="bkiSheet">Исправить запись в БКИ →</button>
       </div>
     </div>
     </div>
@@ -1054,8 +1057,6 @@ a{color:inherit;text-decoration:none}
     <p class="sheet-sub">Демо-режим: выберите, что показать</p>
     <div class="state-list" id="stateList">
       <button class="state-btn" data-state="1">1 заём</button>
-      <button class="state-btn" data-state="2">2 займа</button>
-      <button class="state-btn" data-state="3">3 займа</button>
       <button class="state-btn" data-state="4">4 займа</button>
       <button class="state-btn" data-state="refusal">Отказ по заявке</button>
       <button class="state-btn" data-state="noloan">Нет займа — автозаявки</button>
@@ -1407,6 +1408,7 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
   function closeSheets() { $$('.sheet-overlay').forEach(function (s) { s.classList.remove('open'); }); }
   function openSheet(id) {
     closeSheets();
+    closeModal();                       // лист открывается поверх — модалку убираем, иначе она перекроет
     var ov = $('#' + id); ov.classList.add('open');
     var sh = ov.querySelector('.sheet'); if (sh) sh.scrollTop = 0;   // всегда открывать с заголовка
     if (id === 'signSms') {
