@@ -1590,10 +1590,8 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
       return;
     }
 
-    // в «1 заём» и «4 займа» оффер не показываем — сразу идут займы клиента
-    var n = parseInt(state, 10);
-    var head = (n === 1 || n === 4) ? [] : [OFFERS[0]];
-    var list = isNoLoan ? OFFERS.slice() : head.concat(LOAN_POOL.slice(0, n));
+    // если у клиента есть займы — оффер не показываем, сразу идут займы
+    var list = isNoLoan ? OFFERS.slice() : LOAN_POOL.slice(0, parseInt(state, 10));
     renderLoans(sortLoans(list));
     loansEl.scrollLeft = 0;
     applyLoan(0);
@@ -1608,7 +1606,7 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     applyState(b.getAttribute('data-state'));
   });
 
-  applyState('3');                      // по умолчанию: оффер + 3 займа (кнопки в меню для него нет)
+  applyState('3');                      // по умолчанию: 3 займа (кнопки в меню для него нет)
 })();
 
 </script>
