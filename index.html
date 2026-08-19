@@ -241,6 +241,7 @@ a{color:inherit;text-decoration:none}
 
 /* Помощь после оплаты */
 .help-item{display:flex;gap:var(--s4);align-items:flex-start}
+.help-item[hidden]{display:none}
 .help-item .ico{width:24px;height:24px;flex:0 0 auto}
 .help-item h5{font-size:14px;line-height:16px;font-weight:700}
 .help-item p{font-size:14px;line-height:20px;margin-top:var(--s2)}
@@ -773,7 +774,7 @@ a{color:inherit;text-decoration:none}
       <div class="section" id="helpSection" style="padding:var(--s3) var(--s4) var(--s4)">
         <div class="card">
           <span class="card-title">Помощь после оплаты</span>
-          <div class="help-item">
+          <div class="help-item" id="helpPaid">
             <svg class="ico" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="#038aee" stroke-width="1.6"/><path d="M12 8v6m0-6-2 2m2-2 2 2" stroke="#038aee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <div>
               <h5>Я полностью оплатил заём</h5>
@@ -781,7 +782,7 @@ a{color:inherit;text-decoration:none}
               <button class="help-link" data-open-sheet="paidSheet">Загрузить чек<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="transform:rotate(-90deg)"><path d="M4 6.5 8 10l4-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
           </div>
-          <div class="hr"></div>
+          <div class="hr" id="helpHr"></div>
           <div class="help-item">
             <svg class="ico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#da2e35" stroke-width="1.6"/><path d="M12 7v6m0 3v.1" stroke="#da2e35" stroke-width="1.8" stroke-linecap="round"/></svg>
             <div>
@@ -1217,7 +1218,11 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     // для нового займа (оффера) нет карт/счетов и помощи после оплаты
     var cardsSec = $('#cardsSection'), helpSec = $('#helpSection');
     if (cardsSec) cardsSec.hidden = !!L.offer;
-    if (helpSec) helpSec.hidden = !!L.offer;
+    // у оффера карт/счетов нет, а «Помощь после оплаты» остаётся — но только корректировка в БКИ
+    if (helpSec) helpSec.hidden = false;
+    var paidItem = $('#helpPaid'), paidHr = $('#helpHr');
+    if (paidItem) paidItem.hidden = !!L.offer;
+    if (paidHr) paidHr.hidden = !!L.offer;
     if (L.offer) {
       quick.hidden = true; sumWrap.hidden = true; methodsLink.hidden = true;
       payBtn.textContent = 'Получить';
