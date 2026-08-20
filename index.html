@@ -482,6 +482,12 @@ a{color:inherit;text-decoration:none}
 /* Модалки-формы (чек / БКИ) */
 .sheet-h2{font-size:22px;line-height:26px;font-weight:800}
 .sheet-text{font-size:14px;line-height:20px;color:var(--text-secondary)}
+/* Серый информационный бокс (макеты 40000244-12533 / -12566) */
+.info-gray{background:#f2f4f7;border-radius:var(--r-s);padding:var(--s4);display:flex;flex-direction:column;gap:var(--s3)}
+.info-gray b{font-size:15px;line-height:20px;font-weight:600}
+.info-gray p{font-size:14px;line-height:20px}
+.info-gray .hr{margin:0}
+.file-btn.accent{display:inline-flex;align-items:center;gap:var(--s15);background:var(--bg-accent-soft);color:var(--text-accent)}
 .info-box2{background:var(--bg-accent-soft);border-radius:var(--r-s);padding:var(--s4);display:flex;flex-direction:column;gap:var(--s1)}
 .info-box2 b{font-size:14px;line-height:18px;font-weight:700}
 .info-box2 p{font-size:14px;line-height:20px}
@@ -983,9 +989,13 @@ a{color:inherit;text-decoration:none}
     <div class="sheet">
       <button class="modal-close" data-sheet-close>Закрыть</button>
       <h3 class="sheet-h2">Загрузка чека об оплате</h3>
-      <p class="sheet-text">Это нужно, только если вы полностью оплатили заём по банковским реквизитам или через Почту России.</p>
-      <p class="mp-tip"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.2" stroke="#038aee" stroke-width="1.2"/><path d="M8 7.2v3.4" stroke="#038aee" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="5.2" r=".9" fill="#038aee"/></svg><span>Совет: чек не нужен при оплате через личный кабинет в приложении boostra</span></p>
-      <div class="info-box2"><b>Что дальше</b><p>Мы сверим чек и зафиксируем оплату — обычно до 3 рабочих дней (зависит от банка и способа перевода). Как только всё сойдётся, статус появится в личном кабинете.</p></div>
+      <div class="info-gray">
+        <p>Это нужно, только если вы полностью оплатили заём по банковским реквизитам или через Почту России.</p>
+        <div class="hr"></div>
+        <b>Что дальше</b>
+        <p>Мы сверим чек и зафиксируем оплату. Проверка займет до 3 рабочих дней (зависит от банка и способа перевода). Как только всё сойдётся, статус появится в личном кабинете.</p>
+      </div>
+      <p class="mp-tip"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.2v3.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="5.2" r=".9" fill="currentColor"/></svg><span>Совет: чек не нужен при оплате через личный кабинет в приложении boostra</span></p>
       <div class="field"><label>Выберите договор</label>
         <div class="select-field"><select><option>RZS26-5217184</option><option>FRD26-8842013</option><option>LRD25-3319027</option></select>
           <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -1005,8 +1015,10 @@ a{color:inherit;text-decoration:none}
     <div class="sheet">
       <button class="modal-close" data-sheet-close>Закрыть</button>
       <h3 class="sheet-h2">Запрос на корректировку в БКИ</h3>
-      <p class="sheet-text">Поможем исправить некорректную запись в вашей кредитной истории и повысить рейтинг. Заполните форму и приложите скриншот из отчёта БКИ.</p>
-      <div class="info-box2"><b>Важно</b><p>Корректировку мы можем сделать только по займу, оформленному в Boostra.</p></div>
+      <div class="info-gray">
+        <b>Корректируем только займы boostra</b>
+        <p>Поможем исправить некорректную запись в вашей кредитной истории и повысить рейтинг. Заполните форму и приложите скриншот из отчёта БКИ.</p>
+      </div>
       <div class="field"><label>Клиент</label><div class="field-val">Иванов Иван Иванович</div></div>
       <div class="field"><label>Дата рождения</label><div class="field-val">21.03.1992</div></div>
       <div class="field"><label>Выберите договор</label>
@@ -1014,11 +1026,11 @@ a{color:inherit;text-decoration:none}
           <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       </div>
       <div class="field"><label>Выберите БКИ (бюро кредитных историй)</label>
-        <div class="select-field"><select><option>НАЗВАНИЕ</option><option>НБКИ</option><option>ОКБ</option><option>Скоринг Бюро</option></select>
+        <div class="select-field"><select><option>Название</option><option>НБКИ</option><option>ОКБ</option><option>Скоринг Бюро</option></select>
           <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       </div>
       <div class="field"><label>Скриншот из БКИ</label>
-        <div class="file-row"><button class="file-btn">Выберите файл</button><span class="file-name">Файл не выбран</span></div>
+        <div class="file-row"><button class="file-btn accent"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2.5v9M2.5 7h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Выберите файл</button><span class="file-name">Файл не выбран</span></div>
         <span class="file-hint">PNG, JPG, WEBP, HEIC, HEIF · до 15 МБ</span>
       </div>
       <div class="sheet-actions">
@@ -1591,7 +1603,7 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
                s: 'Мы проверим документ и привяжем его к договору. Обычно это занимает не более одного рабочего дня',
                banner: false },
     receipt: { t: 'Чек загружен',
-               s: 'Мы сверим чек и зафиксируем оплату — обычно до 3 рабочих дней (зависит от банка и способа перевода). Как только всё сойдётся, статус появится в личном кабинете.' },
+               s: 'Мы сверим чек и зафиксируем оплату. Проверка займет до 3 рабочих дней (зависит от банка и способа перевода). Как только всё сойдётся, статус появится в личном кабинете.' },
     bki:     { t: 'Запрос отправлен',
                s: 'Мы проверим скриншот и имеющиеся данные, при ошибке скорректируем — обычно до 3 рабочих дней. Как только будет исправлено, вы получите письмо.' }
   };
