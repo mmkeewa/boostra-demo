@@ -172,7 +172,7 @@ a{color:inherit;text-decoration:none}
 .dot.active{width:24px;background:var(--bg-accent)}
 
 /* ---------- Pay block ---------- */
-.pay{display:flex;flex-direction:column;gap:var(--s4);padding:var(--s4)}
+.pay{display:flex;flex-direction:column;gap:var(--s4);padding:0 var(--s4) var(--s4)}
 .quick{display:flex;gap:var(--s3)}
 .qa{
   flex:1 1 0;min-width:0;background:var(--bg-primary);border-radius:var(--r-s);
@@ -208,7 +208,7 @@ a{color:inherit;text-decoration:none}
 @media (max-height:740px){
   .greeting{padding-top:var(--s3)}
   .loans{padding-top:var(--s2)}
-  .pay{gap:var(--s3);padding-top:var(--s3);padding-bottom:var(--s3)}
+  .pay{gap:var(--s3);padding-top:0;padding-bottom:var(--s3)}
   .sum-input .divider{margin-top:var(--s2)}
   .qa{padding:var(--s2) var(--s3)}
 }
