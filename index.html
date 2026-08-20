@@ -2,9 +2,21 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<!-- Фиксированные px + резиновая раскладка (по HIG): текст не скейлится с шириной экрана,
-     лишнее место забирает контент. Прототип ведёт себя как будущий продакшен. -->
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+// Прототип показывает макет 1:1: на телефоне вьюпорт = 375, браузер пропорционально
+// растягивает интерфейс до ширины экрана (проценты как на артборде Figma).
+// Планшет и десктоп — обычный device-width (там рамка телефона).
+(function(){
+  var phone = false;
+  try { phone = matchMedia("(pointer:coarse)").matches &&
+                Math.min(screen.width, screen.height) < 520; } catch (e) {}
+  var m = document.createElement("meta");
+  m.name = "viewport";
+  m.content = phone ? "width=375, viewport-fit=cover"
+                    : "width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1";
+  document.head.appendChild(m);
+})();
+</script>
 <meta name="theme-color" content="#ffffff">
 <title>Boostra · Личный кабинет</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -189,6 +201,10 @@ a{color:inherit;text-decoration:none}
 .pay-methods{display:flex;align-items:center;justify-content:center;gap:var(--s2);padding-top:var(--s1)}
 .pay-methods span{font-size:14px;line-height:20px;color:var(--text-secondary)}
 
+/* Главная синяя кнопка прилипает к низу экрана, пока её секция на виду */
+.pay .btn-primary,#pay .btn-primary{position:sticky;bottom:var(--s3);z-index:15;
+  box-shadow:0 6px 20px rgba(2,17,59,.18)}
+
 /* ---------- Generic card ---------- */
 .card{
   background:var(--bg-primary);border-radius:var(--r-m);box-shadow:var(--shadow-card);
@@ -305,7 +321,8 @@ a{color:inherit;text-decoration:none}
 .modal-overlay[hidden]{display:none}
 .modal{
   background:var(--bg-primary);border-radius:var(--r-m) var(--r-m) 0 0;box-shadow:var(--shadow-m);
-  width:100%;max-width:100%;height:auto;max-height:calc(100% - 28px);overflow:hidden;
+  /* одна высота во всех табах — контент таба скроллится внутри .method-panes */
+  width:100%;max-width:100%;height:min(620px,calc(100% - 28px));overflow:hidden;
   padding:0 var(--s6) var(--s5);display:flex;flex-direction:column;gap:var(--s4);
   transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);
 }
