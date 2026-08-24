@@ -1960,7 +1960,7 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     $$('#calGrid .cal-day').forEach(function (x) { x.classList.toggle('sel', x === d); });
   });
   $('#calConfirm').addEventListener('click', function () {
-    SUCCESS.cant.s = 'Ждём платёж до ' + calDay + ' сентября, 23:59. До этой даты напоминать не будем.<br><br>Обратите внимание: если вы не оплатите в выбранную дату, то проценты будут начислены за все дни';
+    SUCCESS.cant.s = 'Ждём платёж до ' + calDay + ' сентября, 23:59. До этой даты напоминать не будем.<br><br>Воспользуйтесь этим временем, чтобы спокойно собрать сумму для оплаты займа';
     successKind = 'cant';
     openView('successView');
   });
