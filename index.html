@@ -123,21 +123,16 @@ a{color:inherit;text-decoration:none}
 .loans::-webkit-scrollbar{height:0}
 .loan{
   position:relative;flex:0 0 300px;min-height:186px;scroll-snap-align:center;
-  background:var(--fg-secondary);border-radius:var(--r-s);
+  background:linear-gradient(243.82deg,#dde1e8 7.45%,#e5e7e9 75.23%);border-radius:var(--r-s);
   border:4px solid #fff;                       /* белая обводка поверх подложки (макет 40000526-25230) */
   box-shadow:var(--shadow-card);padding-top:var(--s2);
   display:flex;flex-direction:column;gap:var(--s2);
 }
-/* Фирменные подложки МФО */
-.loan.brand-rzs{background:linear-gradient(243.82deg,#e4bd81 7.45%,#b29465 75.23%)}
-.loan.brand-frida,
-.loan.brand-gulden{background:linear-gradient(249.69deg,#0065f4 2.77%,#0c49a3 78.14%)}
-.loan.brand-lord{background:linear-gradient(251.22deg,#204b82 3.76%,#1a3a62 79.16%)}
 .loan-logo{display:flex;align-items:center;justify-content:center;gap:var(--s2);padding:0 var(--s3)}
 .loan-logo .mark{width:16px;height:16px;border-radius:99px;overflow:hidden;flex:0 0 auto;background:#fff;display:grid;place-items:center}
 .loan-logo .mark img{width:100%;height:100%;object-fit:cover;border-radius:99px}
 .loan-logo .mark.boostra{background:var(--fg-primary)}
-.loan-logo .name{font-size:15px;line-height:18px;font-weight:400;color:var(--text-inverted);white-space:nowrap}
+.loan-logo .name{font-size:15px;line-height:18px;font-weight:400;color:#616c82;white-space:nowrap}
 .loan-content{
   flex:1;min-height:0;width:100%;
   background:var(--bg-primary);border-radius:20px;
