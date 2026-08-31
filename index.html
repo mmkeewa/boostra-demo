@@ -763,7 +763,7 @@ a{color:inherit;text-decoration:none}
       <!-- ===== Loan slider ===== -->
       <div class="loans" id="loans"><!-- карточки рисует renderLoans(); до этого — шиммер-скелетон -->
         <div class="loan skeleton" aria-hidden="true">
-          <div class="loan-logo"><span class="mark sk-dot"></span><span class="name">МКК «ЛОРД»</span></div>
+          <div class="loan-logo"><span class="mark sk-dot"></span><span class="name">ООО МКК «ЛОРД»</span></div>
           <div class="loan-content sk-body">
             <span class="sk-bar sk-badge"></span>
             <span class="sk-bar sk-sum"></span>
@@ -1434,7 +1434,7 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
       var head = '<article class="loan' + (i === 0 ? ' is-active' : '') +
           (L.brand ? ' brand-' + L.brand : '') + '" data-loan="' + i + '">' +
         '<div class="loan-logo"><span class="mark' + (L.mark ? ' ' + L.mark : '') + '">' +
-          '<img src="' + L.logo + '" alt=""></span><span class="name">' + L.name.replace(/^ООО\s+/, '') + '</span></div>';
+          '<img src="' + L.logo + '" alt=""></span><span class="name">' + L.name + '</span></div>';
       if (L.type === 'il') {
         // Instalment: два ближайших платежа + график (макет 40000389-66120)
         return head + '<div class="loan-content il">' +
