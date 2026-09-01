@@ -187,8 +187,11 @@ s{color:var(--text-secondary);font-weight:400}
 .collapsed-docs .chev{transform:rotate(0)}
 #docsToggle:not(.collapsed-docs) .chev{transform:rotate(180deg)}
 
-.fallback-note{width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:var(--s1);padding:var(--s3) 0}
-.fallback-note b{font-size:14px;line-height:16px;font-weight:700}
+.fallback-note{width:100%;text-align:center;display:flex;flex-direction:column;align-items:stretch;gap:var(--s1)}
+/* Кнопка отказа от займа ИП (макет 40000817:1931): белая пилюля py12 px32 */
+.opt-out-btn{background:#fff;border-radius:var(--r-xl);padding:var(--s3) var(--s8);
+  font-size:14px;line-height:16px;font-weight:700;width:100%}
+.opt-out-btn:active{filter:brightness(.96)}
 .fallback-note p{font-size:12px;line-height:16px;font-weight:500;color:var(--text-secondary)}
 
 /* ---------- Проверка / успех / фолбэк ---------- */
@@ -359,10 +362,10 @@ s{color:var(--text-secondary);font-weight:400}
       </div>
       </section>
 
-      <button class="fallback-note" id="optOut">
-        <b>Мне не подходит заём для ИП</b>
-        <p>Оформим обычный заём для физ. лиц по ставке 0,8% в день</p>
-      </button>
+      <div class="fallback-note">
+        <button class="opt-out-btn" id="optOut">Мне не подходит заём для ИП</button>
+        <p>Оформим обычный заём для физ. лиц<br>по ставке 0,8% в день</p>
+      </div>
     </main>
 
     <!-- ===== Проверка ИП ===== -->
