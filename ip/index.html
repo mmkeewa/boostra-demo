@@ -90,9 +90,9 @@ s{color:var(--text-secondary);font-weight:400}
 .offer-sum .til{color:#6f7985}
 .slider-block{display:flex;flex-direction:column;gap:var(--s2)}
 .cil-cap{font-size:14px;line-height:20px;font-weight:500;color:var(--text-secondary)}
-#ilRange{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;outline:none;
+#ilRange,#crRange{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;outline:none;
   background:linear-gradient(to right,var(--bg-accent) var(--fill,100%),var(--border-primary) var(--fill,100%))}
-#ilRange::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;
+#ilRange::-webkit-slider-thumb,#crRange::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;
   background:#fff;border:7px solid var(--bg-accent);box-shadow:0 1px 4px rgba(2,17,59,.25)}
 .range-scale{display:flex;justify-content:space-between;font-size:12px;line-height:16px;color:var(--text-secondary)}
 .tiles{display:flex;gap:10px}
@@ -196,11 +196,24 @@ s{color:var(--text-secondary);font-weight:400}
 /* ---------- Проверка / успех / фолбэк ---------- */
 .view.on-card{margin:var(--s4);background:#fff;border-radius:32px;min-height:calc(100dvh - 152px)}
 .check-illu{width:230px}
-.wip-tag{background:#fff6e8;color:#bf6a02;border-radius:24px;padding:var(--s1) var(--s3);
-  font-size:12px;line-height:18px;font-weight:500;margin-bottom:var(--s3)}
 .ok-badge{width:72px;height:72px;border-radius:99px;display:grid;place-items:center;
-  background:linear-gradient(135deg,#0b99ff,#02d15c)}
-#okHome{margin-top:var(--s4);max-width:280px}
+  background:linear-gradient(135deg,#21c25e,#0b99ff)}
+
+/* Кросс-карточка с градиентной рамкой (макет 40001007-72226) */
+.cross-wrap{width:100%;margin-top:var(--s3);border-radius:26px;padding:2px;
+  background:linear-gradient(120deg,#35d07f,#59b7ff)}
+.cross-inner{background:#fff;border-radius:24px;padding:var(--s4);
+  display:flex;flex-direction:column;gap:var(--s3);text-align:center}
+.cross-head{font-size:14px;line-height:20px;font-weight:700}
+.cross-head .accent-b{color:var(--text-accent);font-weight:700}
+.hrline{height:1px;background:var(--border-primary)}
+.cross-row{display:flex;justify-content:space-between;align-items:center;gap:var(--s3);
+  font-size:14px;line-height:20px}
+.cross-row b{font-weight:500;text-align:right}
+#crGoal{color:var(--text-secondary)}
+#crGoal.filled{color:var(--text-primary)}
+#crLater{align-self:center}
+#okHome{margin-top:var(--s4);max-width:280px;width:100%}
 /* Фолбэк ФЛ (макеты 40000991-65952): всё на одной белой карточке */
 .fb-card{align-items:center;gap:var(--s4);padding:var(--s5) var(--s4)}
 .fb-mascot{width:72px}
@@ -396,13 +409,37 @@ s{color:var(--text-secondary);font-weight:400}
       <p class="muted">Проверяем статус ИП…</p>
     </main>
 
-    <!-- ===== Успех: заём выдан ===== -->
+    <!-- ===== Успех: деньги в пути + кросс (макеты 40001007-72226) ===== -->
     <main class="view center" id="okView">
-      <span class="wip-tag">Экран ещё в проработке</span>
       <div class="ok-badge"><svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="m6 12.4 4 4L18 8" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <h2>Деньги уже в пути</h2>
-      <p class="muted" id="okText">Переведём 40 000 ₽ на расчётный счёт ИП в течение 5 минут. Статус займа появится в личном кабинете.</p>
-      <button class="btn-soft" id="okHome">В личный кабинет</button>
+      <p class="muted" id="okText">Скоро средства поступят на расчётный счёт ИП. Заём появится в личном кабинете</p>
+
+      <div class="cross-wrap" id="crossCard">
+        <div class="cross-inner">
+          <p class="cross-head">Вам одобрен ещё один заём<br>по ставке <s>0,8%</s> <span class="accent-b">0,7% в день</span></p>
+          <h3 class="offer-sum"><span id="crSum">20 000 ₽</span> <span class="til">до 14.04.2027</span></h3>
+          <div class="slider-block" id="crSlider" hidden>
+            <input type="range" id="crRange" min="25000" max="40000" step="1000" value="40000">
+            <div class="range-scale"><span>25 000 ₽</span><span>40 000 ₽</span></div>
+          </div>
+          <div class="hrline"></div>
+          <div class="cross-row"><span class="t-cap">Возврат</span><b id="crBack">Вся сумма одним платежом</b></div>
+          <div class="hrline"></div>
+          <div class="select-field"><select id="crGoal">
+            <option value="">Добавьте бизнес-цель</option>
+            <option>Закупка оборудования</option><option>Закупка сырья и материалов</option>
+            <option>Оплата аренды</option><option>Оплата обучения</option>
+            <option>Рефинансирование обязательств, связанных с деятельностью</option>
+            <option>Оплата рекламы и продвижения</option><option>Пополнение оборотных средств</option>
+            <option>Модернизация и ремонт</option><option>Покрытие текущих расходов</option>
+          </select><svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <button class="btn-primary pill" id="crGet">Получить ещё 20 000 ₽</button>
+          <a class="promo-link" id="crLater" href="../index.html">Получу позже</a>
+        </div>
+      </div>
+
+      <button class="btn-soft" id="okHome" hidden>В личный кабинет</button>
     </main>
 
     <!-- ===== Отказ / «мне не подходит» · обычный заём ФЛ (макеты 40000991-65952) ===== -->
@@ -653,9 +690,7 @@ s{color:var(--text-secondary);font-weight:400}
     setTimeout(function () {
       clearInterval(checkTimer);
       if (checkResult === 'ok') {
-        $('#okText').textContent = 'Переведём ' + fmt(currentSum()) +
-          ' на расчётный счёт ИП в течение 5 минут. Статус займа появится в личном кабинете.';
-        show('okView');
+        openSuccess(true);
       } else {
         openFallback('Не прошли обязательные проверки для займа ИП. Одобрен обычный');
       }
@@ -693,10 +728,39 @@ s{color:var(--text-secondary);font-weight:400}
   $('#fbMaster').addEventListener('click', function () { this.classList.toggle('on'); });
   $('#fbGet').addEventListener('click', function () {
     if (!$('#fbMaster').classList.contains('on')) { toast('Подтвердите согласие с документами'); return; }
-    $('#okText').textContent = 'Переведём ' + (fbProduct === 'pdl' ? '20 000 ₽' : '40 000 ₽') +
-      ' на вашу карту в течение 5 минут. Статус займа появится в личном кабинете.';
-    show('okView');
+    openSuccess(false);
   });
+  /* Успех: с кроссом (ИП) или без (фолбэк ФЛ). Кросс — противоположный продукт */
+  function openSuccess(withCross) {
+    $('#crossCard').hidden = !withCross;
+    $('#okHome').hidden = withCross;
+    if (withCross) {
+      var cross = product === 'pdl' ? 'il' : 'pdl';   // был PDL → кросс IL, и наоборот
+      $('#crSlider').hidden = cross !== 'il';
+      if (cross === 'il') {
+        var r = $('#crRange'); r.value = 40000; syncCross();
+        $('#crBack').textContent = 'Раз в 2 недели по 6 720 ₽';
+      } else {
+        $('#crSum').textContent = '20 000 ₽';
+        $('#crBack').textContent = 'Вся сумма одним платежом';
+        $('#crGet').textContent = 'Получить ещё 20 000 ₽';
+      }
+      $('#crGoal').value = ''; $('#crGoal').classList.remove('filled');
+    }
+    show('okView');
+  }
+  function syncCross() {
+    var r = $('#crRange'), v = +r.value;
+    r.style.setProperty('--fill', (v - r.min) / (r.max - r.min) * 100 + '%');
+    $('#crSum').textContent = fmt(v);
+    $('#crGet').textContent = 'Получить ещё ' + fmt(v);
+  }
+  $('#crRange').addEventListener('input', syncCross);
+  $('#crGoal').addEventListener('change', function () { this.classList.toggle('filled', !!this.value); });
+  $('#crGet').addEventListener('click', function () {
+    toast('Кросс-ордер — экран в проработке (в БТ спецификации нет)');
+  });
+
   $('#fbPromo').addEventListener('click', function () { toast('Промокод — экран в работе'); });
   $('#okHome').addEventListener('click', function () { show('offerView'); applyBranch(branch); });
 
