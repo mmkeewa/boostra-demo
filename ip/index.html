@@ -194,6 +194,8 @@ s{color:var(--text-secondary);font-weight:400}
 /* ---------- Проверка / успех / фолбэк ---------- */
 .view.on-card{margin:var(--s4);background:#fff;border-radius:32px;min-height:calc(100dvh - 152px)}
 .check-illu{width:230px}
+.wip-tag{background:#fff6e8;color:#bf6a02;border-radius:24px;padding:var(--s1) var(--s3);
+  font-size:12px;line-height:18px;font-weight:500;margin-bottom:var(--s3)}
 .ok-badge{width:72px;height:72px;border-radius:99px;display:grid;place-items:center;
   background:linear-gradient(135deg,#0b99ff,#02d15c)}
 #okHome{margin-top:var(--s4);max-width:280px}
@@ -372,6 +374,7 @@ s{color:var(--text-secondary);font-weight:400}
 
     <!-- ===== Успех: заём выдан ===== -->
     <main class="view center" id="okView">
+      <span class="wip-tag">Экран ещё в проработке</span>
       <div class="ok-badge"><svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="m6 12.4 4 4L18 8" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <h2>Деньги уже в пути</h2>
       <p class="muted" id="okText">Переведём 40 000 ₽ на расчётный счёт ИП в течение 5 минут. Статус займа появится в личном кабинете.</p>
