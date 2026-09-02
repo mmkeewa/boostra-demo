@@ -365,19 +365,10 @@ s{color:var(--text-secondary);font-weight:400}
               <option>Оплата рекламы и продвижения</option><option>Пополнение оборотных средств</option>
               <option>Модернизация и ремонт</option><option>Покрытие текущих расходов</option>
             </select><svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          </div>
-          <div class="field"><label>Есть просроченные долги и налоги, судебные споры или исполнительные производства? <em>*</em></label>
-            <div class="pill-row" id="debtRow"><button class="pill" data-debt="no">Нет</button><button class="pill" data-debt="yes">Да</button></div>
-          </div>
+          </div>          </div>
           <div class="field"><label>Есть сайт компании, страница в VK, магазин на маркетплейсе?</label>
             <input class="text-input" id="siteInput" placeholder="Введите сайт" autocomplete="off" spellcheck="false">
-          </div>
-          <div class="field"><label>Загрузите банковскую выписку</label>
-            <span class="file-pre">Если счетов несколько, загрузите выписку по каждому.</span>
-            <div class="file-row"><button class="btn-soft file-pick" id="filePick">Выбрать файл</button><button class="q-btn" id="fileQ">?</button></div>
-            <span class="file-hint" id="fileHint">Документ 1С (.txt) или PDF · до 15 МБ</span>
-          </div>
-        </div>
+          </div>        </div>
       </div>
 
       <button class="btn-primary big" id="getBtn">Получить 40 000 ₽</button>
@@ -486,21 +477,6 @@ s{color:var(--text-secondary);font-weight:400}
     </div>
   </div>
 
-  <!-- ===== Как выгрузить выписку (макет 40001007-72263) ===== -->
-  <div class="sheet-overlay" id="helpSheet">
-    <div class="sheet">
-      <button class="modal-close" data-sheet-close>Закрыть</button>
-      <h3 class="sheet-h2 center-text">Как выгрузить выписку из банка</h3>
-      <div class="steps">
-        <div class="step"><span class="n">1</span><p>Откройте интернет-банк или приложение</p></div>
-        <div class="step"><span class="n">2</span><p>Зайдите в раздел «История операций» или «Выписка»</p></div>
-        <div class="step"><span class="n">3</span><p>Выберите счёт и период: за 12 месяцев или за всё время</p></div>
-        <div class="step"><span class="n">4</span><p>Сохраните файл в формате 1С (.txt) и загрузите сюда</p></div>
-      </div>
-      <div class="sheet-actions"><button class="btn-primary pill" data-sheet-close>Понятно</button></div>
-    </div>
-  </div>
-
   <!-- ===== Демо-состояния ===== -->
   <div class="sheet-overlay" id="stateSheet">
     <div class="sheet">
@@ -605,18 +581,6 @@ s{color:var(--text-secondary);font-weight:400}
     goal.classList.toggle('filled', !!goal.value);
     if (goal.value) goal.closest('.field').classList.remove('err');
   });
-  var debt = null;
-  $('#debtRow').addEventListener('click', function (e) {
-    var p = e.target.closest('.pill'); if (!p) return;
-    debt = p.getAttribute('data-debt');
-    $$('#debtRow .pill').forEach(function (x) { x.classList.toggle('sel', x === p); });
-    $('#debtRow').closest('.field').classList.remove('err');
-  });
-  $('#filePick').addEventListener('click', function () {
-    $('#filePick').textContent = 'выписка_1С.txt';
-    $('#fileHint').textContent = 'Файл загружен · 2,4 МБ';
-  });
-  $('#fileQ').addEventListener('click', function () { openSheet('helpSheet'); });
 
   /* ---------- Документы ---------- */
   $('#docsToggle').addEventListener('click', function () {
@@ -630,7 +594,6 @@ s{color:var(--text-secondary);font-weight:400}
   $('#getBtn').addEventListener('click', function () {
     var bad = false;
     if (!goal.value) { goal.closest('.field').classList.add('err'); bad = true; }
-    if (!debt) { $('#debtRow').closest('.field').classList.add('err'); bad = true; }
     if (bad) {
       $('#bizCard').classList.remove('collapsed');
       $('#bizCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
