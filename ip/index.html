@@ -200,19 +200,25 @@ s{color:var(--text-secondary);font-weight:400}
   background:linear-gradient(135deg,#21c25e,#0b99ff)}
 
 /* Кросс-карточка с градиентной рамкой (макет 40001007-72226) */
-.cross-wrap{width:100%;margin-top:var(--s3);border-radius:26px;padding:2px;
+.cross-wrap{width:100%;margin-top:var(--s3);border-radius:22px;padding:1.5px;
   background:linear-gradient(120deg,#35d07f,#59b7ff)}
-.cross-inner{background:#fff;border-radius:24px;padding:var(--s4);
-  display:flex;flex-direction:column;gap:var(--s3);text-align:center}
-.cross-head{font-size:14px;line-height:20px;font-weight:700}
+.cross-inner{background:#fff;border-radius:21px;padding:var(--s4);
+  display:flex;flex-direction:column;gap:10px;text-align:center}
+.cross-head{font-size:13px;line-height:18px;font-weight:700}
 .cross-head .accent-b{color:var(--text-accent);font-weight:700}
+.cross-inner .offer-sum{font-size:20px;line-height:24px}
 .hrline{height:1px;background:var(--border-primary)}
 .cross-row{display:flex;justify-content:space-between;align-items:center;gap:var(--s3);
-  font-size:14px;line-height:20px}
+  font-size:13px;line-height:18px}
 .cross-row b{font-weight:500;text-align:right}
+/* «Добавьте бизнес-цель» — плоская строка с шевроном, без рамки (макет) */
+.cross-inner .select-field select{border:0;padding:var(--s1) var(--s6) var(--s1) 0;
+  font-size:13px;line-height:18px;background:transparent}
+.cross-inner .select-field .chev{right:2px}
 #crGoal{color:var(--text-secondary)}
 #crGoal.filled{color:var(--text-primary)}
-#crLater{align-self:center}
+.cross-inner .btn-primary.pill{padding:var(--s3) var(--s8);font-size:15px;line-height:20px}
+#crLater{align-self:center;text-decoration:none}
 #okHome{margin-top:var(--s4);max-width:280px;width:100%}
 /* Фолбэк ФЛ (макеты 40000991-65952): всё на одной белой карточке */
 .fb-card{align-items:center;gap:var(--s4);padding:var(--s5) var(--s4)}
