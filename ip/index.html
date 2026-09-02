@@ -126,7 +126,7 @@ s{color:var(--text-secondary);font-weight:400}
 
 /* ---------- Белая подложка (анкета + CTA + согласия) ---------- */
 .info-wrap{gap:var(--s4)}
-.gray-card{background:#f7f8fa;border-radius:var(--r-s);padding:var(--s4);display:flex;flex-direction:column}
+.gray-card{background:#f7f8fa;border-radius:var(--r-s);padding:var(--s4);display:flex;flex-direction:column;gap:var(--s4)}
 
 /* ---------- Анкета ---------- */
 .form-card{gap:0}
@@ -140,7 +140,7 @@ s{color:var(--text-secondary);font-weight:400}
 .field label{font-size:15px;line-height:20px}
 .select-field{position:relative}
 .select-field select{width:100%;appearance:none;-webkit-appearance:none;background:#fff;
-  border:1px solid var(--border-primary);border-radius:var(--r-l);padding:var(--s3) var(--s8) var(--s3) var(--s4);
+  border:1px solid var(--border-primary);border-radius:var(--r-l);padding:10px var(--s8) 10px var(--s4);
   font:400 15px/20px "Inter",sans-serif;color:var(--text-secondary);outline:0}
 .select-field select.filled{color:var(--text-primary)}
 .field.err .select-field select,.field.err .pill{border-color:var(--border-error)}
@@ -150,7 +150,7 @@ s{color:var(--text-secondary);font-weight:400}
   font-size:15px;line-height:20px}
 .pill.sel{border-color:var(--border-accent);background:var(--bg-accent-soft);color:var(--text-accent);font-weight:600}
 .text-input{width:100%;background:#fff;border:1px solid var(--border-primary);border-radius:var(--r-l);
-  padding:var(--s3) var(--s4);font:400 15px/20px "Inter",sans-serif;outline:0}
+  padding:10px var(--s4);font:400 15px/20px "Inter",sans-serif;outline:0}
 .text-input:focus{border-color:var(--border-accent)}
 .file-pre{font-size:13px;line-height:18px;color:var(--text-secondary)}
 .file-row{display:flex;gap:var(--s2);align-items:center}
@@ -356,12 +356,7 @@ s{color:var(--text-secondary);font-weight:400}
 
       <!-- Белая подложка: анкета + CTA + согласия (макет 40000811:65709) -->
       <section class="card info-wrap">
-      <div class="gray-card form-card" id="bizCard">
-        <button class="collapse-head" id="bizHead">
-          <span class="card-title">Расскажите о бизнесе <em>*</em></span>
-          <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div class="collapse-body" id="bizBody">
+      <div class="gray-card" id="bizCard">
           <div class="field"><label>Какая бизнес-цель? <em>*</em></label>
             <div class="select-field" id="goalWrap"><select id="goalSel">
               <option value="">Выберите</option>
@@ -372,10 +367,9 @@ s{color:var(--text-secondary);font-weight:400}
               <option>Модернизация и ремонт</option><option>Покрытие текущих расходов</option>
             </select><svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </div>
-          <div class="field"><label>Есть сайт компании, страница в VK, магазин на маркетплейсе?</label>
-            <input class="text-input" id="siteInput" placeholder="Введите сайт" autocomplete="off" spellcheck="false">
+          <div class="field"><label>Какой у вашей компании сайт?</label>
+            <input class="text-input" id="siteInput" placeholder="Введите сайт, если есть" autocomplete="off" spellcheck="false">
           </div>
-        </div>
       </div>
 
       <button class="btn-primary big" id="getBtn">Получить 40 000 ₽</button>
@@ -548,7 +542,6 @@ s{color:var(--text-secondary);font-weight:400}
     $('#pickCards').hidden = b !== 'ilpdl';
     $('#rateLine').hidden = b !== 'ilpdl';
     if (b === 'ilpdl') pick('il');                       // по умолчанию IL (правило из борда)
-    $('#bizCard').classList.add('collapsed');                 // анкета всегда свёрнута по умолчанию
     syncCta();
     $('.screen').scrollTop = 0;
   }
@@ -579,10 +572,7 @@ s{color:var(--text-secondary);font-weight:400}
   range.addEventListener('input', syncRange);
   syncRange();
 
-  /* ---------- Анкета ---------- */
-  $('#bizHead').addEventListener('click', function () {
-    $('#bizCard').classList.toggle('collapsed');
-  });
+  /* ---------- Анкета (всегда раскрыта) ---------- */
   var goal = $('#goalSel');
   goal.addEventListener('change', function () {
     goal.classList.toggle('filled', !!goal.value);
@@ -602,7 +592,6 @@ s{color:var(--text-secondary);font-weight:400}
     var bad = false;
     if (!goal.value) { goal.closest('.field').classList.add('err'); bad = true; }
     if (bad) {
-      $('#bizCard').classList.remove('collapsed');
       $('#bizCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
       toast('Заполните обязательные поля анкеты');
       return;
