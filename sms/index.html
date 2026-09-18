@@ -92,7 +92,10 @@ em{font-style:normal;color:var(--error)}
 .utp-text{position:relative;display:flex;flex-direction:column}
 .utp-text b{font-size:24px;line-height:32px;font-weight:700;letter-spacing:.32px}
 .utp-text span{font-size:16px;line-height:24px;color:var(--ink-66)}
-.utp-check{position:absolute;left:195px;top:39px;width:190px;max-width:none}
+.utp-check{position:absolute;right:-42px;top:39px;width:190px;max-width:none}
+@media (max-width:519px){
+  .utp-check{right:calc(100vw/375*-42)}
+}
 
 /* ---------- Карточки ---------- */
 .card{background:var(--bg-card);border-radius:var(--r-4xl);padding:var(--s4);
@@ -110,14 +113,21 @@ em{font-style:normal;color:var(--error)}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:20px;background:none;outline:none;margin:0}
 input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:6px;
   background:linear-gradient(to right,var(--secondary) var(--fill,60%),var(--prim-a10) var(--fill,60%))}
+input[type=range]{cursor:pointer}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:20px;margin-top:-7px;
   border-radius:999px;background:var(--sec-a10);
   background-image:radial-gradient(closest-side,#fff 0 60%,transparent 62%);
-  box-shadow:0 .5px 4px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.12)}
+  box-shadow:0 .5px 4px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.12);
+  transition:background-color .15s,box-shadow .15s}
+input[type=range]:hover::-webkit-slider-thumb{background-color:rgba(11,153,255,.3)}
+input[type=range]:active::-webkit-slider-thumb{background-color:rgba(11,153,255,.3);
+  box-shadow:0 0 0 3px rgba(11,153,255,.15),0 .5px 4px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.12)}
 input[type=range]::-moz-range-track{height:6px;border-radius:6px;background:var(--prim-a10)}
 input[type=range]::-moz-range-progress{height:6px;border-radius:6px;background:var(--secondary)}
 input[type=range]::-moz-range-thumb{width:24px;height:14px;border:0;border-radius:999px;background:#fff;
   box-shadow:0 .5px 4px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.12)}
+input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-thumb{
+  box-shadow:0 0 0 4px rgba(11,153,255,.3),0 .5px 4px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.12)}
 .range-scale{display:flex;justify-content:space-between;font-size:12px;line-height:16px;color:var(--ink-35)}
 .term-err{font-size:12px;line-height:16px;color:var(--error)}
 .inp-row{display:flex;gap:var(--s2)}
@@ -659,8 +669,8 @@ input[type=range]::-moz-range-thumb{width:24px;height:14px;border:0;border-radiu
     /* PDL: вернёте = сумма × (1 + ставка × срок), как в макете: 30 000 → 33 840 */
     $('#backVal').innerHTML = fmt(Math.round(v * (1 + rate * t))) + NBSP + '₽';
     $('#rateVal').innerHTML = (smz ? '0,7' : '0,8') + NBSP + '%';
-    /* IL: 12 платежей раз в 2 недели, последний — через 24 недели */
-    $('#payVal').innerHTML = fmt(Math.round(v * 4700 / 41000 * (rate / 0.008) / 10) * 10) + NBSP + '₽';
+    /* IL: платёж раз в 2 недели — пропорция из макета Main (31 000 → 4 959 ₽), последний — через 24 недели */
+    $('#payVal').innerHTML = fmt(Math.round(v * 4959 / 31000 * (rate / 0.008))) + NBSP + '₽';
     var d = new Date(); d.setDate(d.getDate() + 168);
     var p2 = function (x) { return (x < 10 ? '0' : '') + x; };
     $('#lastVal').textContent = p2(d.getDate()) + '.' + p2(d.getMonth() + 1) + '.' + d.getFullYear();
