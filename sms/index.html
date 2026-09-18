@@ -119,6 +119,7 @@ input[type=range]::-moz-range-progress{height:6px;border-radius:6px;background:v
 input[type=range]::-moz-range-thumb{width:24px;height:14px;border:0;border-radius:999px;background:#fff;
   box-shadow:0 .5px 4px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.12)}
 .range-scale{display:flex;justify-content:space-between;font-size:12px;line-height:16px;color:var(--ink-35)}
+.term-err{font-size:12px;line-height:16px;color:var(--error)}
 .inp-row{display:flex;gap:var(--s2)}
 .inp-row .inp{flex:1 1 0;min-width:0}
 .inp-col{display:flex;flex-direction:column;gap:var(--s2)}
@@ -356,19 +357,20 @@ input[type=range]::-moz-range-thumb{width:24px;height:14px;border:0;border-radiu
           <!-- PDL: срок -->
           <div class="slider-block" id="termBlock">
             <div class="ci-row">
-              <span class="ci-cap">Выберите срок</span>
+              <span class="ci-cap">Выберете срок</span>
               <span class="price"><b id="termVal">16</b><i>&nbsp;дней</i></span>
             </div>
             <input type="range" id="termRange" min="5" max="30" step="1" value="16">
+            <span class="term-err" id="termErr" hidden>Срок от&nbsp;16 дней доступен со&nbsp;второго займа</span>
           </div>
 
           <!-- PDL: вернёте + ставка -->
           <div class="inp-row" id="pdlInputs">
-            <div class="inp"><span class="inp-cap">Вы вернёте</span><span class="inp-val" id="backVal">33&nbsp;800&nbsp;₽</span></div>
-            <div class="inp"><span class="inp-cap">Ставка</span><span class="inp-val">0,8&nbsp;%</span></div>
+            <div class="inp"><span class="inp-cap">Вы вернёте</span><span class="inp-val" id="backVal">33&nbsp;840&nbsp;₽</span></div>
+            <div class="inp"><span class="inp-cap">Ставка</span><span class="inp-val" id="rateVal">0,8&nbsp;%</span></div>
           </div>
 
-          <!-- IL (самозанятый/ИП): платежи -->
+          <!-- IL: сумма выше 30 000 ₽ -->
           <div class="inp-col" id="ilInputs" hidden>
             <div class="inp"><span class="inp-cap">Платеж раз в&nbsp;2&nbsp;недели</span><span class="inp-val" id="payVal">4&nbsp;700&nbsp;₽</span></div>
             <div class="inp"><span class="inp-cap">Последний платеж</span><span class="inp-val" id="lastVal">23.02.2027</span></div>
@@ -633,8 +635,11 @@ input[type=range]::-moz-range-thumb{width:24px;height:14px;border:0;border-radiu
   });
   $('#fabChat').addEventListener('click', function () { toast('Чат поддержки — вне этой задачи'); });
 
-  /* ---------- Главная: калькулятор ---------- */
+  /* ---------- Главная: калькулятор (логика из «Main {Boostra}», стр. Hero-Block) ----------
+     PDL: 0–30 000 ₽ (срок + «Вы вернёте» + ставка) · IL: 31 000–50 000 ₽ (платежи раз в 2 недели).
+     Срок > 16 дней — подпись «доступен со второго займа». Тумблер 0,7% пересчитывает суммы. */
   var fmt = function (n) { return n.toLocaleString('ru-RU').replace(/\s/g, NBSP); };
+  var PDL_MAX = 30000, FIRST_TERM_MAX = 16;
   var smz = false;
   var sumRange = $('#sumRange'), termRange = $('#termRange');
   function fill(r) {
@@ -643,12 +648,19 @@ input[type=range]::-moz-range-thumb{width:24px;height:14px;border:0;border-radiu
   function calcSync() {
     fill(sumRange); fill(termRange);
     var v = +sumRange.value, t = +termRange.value;
+    var rate = smz ? 0.007 : 0.008;
+    var isIl = v > PDL_MAX;                 // увеличение суммы > 30 000 ₽ — переход на IL
+    $('#termBlock').hidden = isIl;
+    $('#pdlInputs').hidden = isIl;
+    $('#ilInputs').hidden = !isIl;
     $('#sumVal').innerHTML = fmt(v);
     $('#termVal').textContent = t;
-    /* PDL: вернёте = сумма + 0,8% в день, округляем до сотен */
-    $('#backVal').innerHTML = fmt(Math.round(v * (1 + 0.008 * t) / 100) * 100) + NBSP + '₽';
-    /* IL 0,7%: платёж раз в 2 недели (12 платежей), последний — через 24 недели */
-    $('#payVal').innerHTML = fmt(Math.round(v * 4700 / 41000 / 50) * 50) + NBSP + '₽';
+    $('#termErr').hidden = t <= FIRST_TERM_MAX;   // первый заём — до 16 дней
+    /* PDL: вернёте = сумма × (1 + ставка × срок), как в макете: 30 000 → 33 840 */
+    $('#backVal').innerHTML = fmt(Math.round(v * (1 + rate * t))) + NBSP + '₽';
+    $('#rateVal').innerHTML = (smz ? '0,7' : '0,8') + NBSP + '%';
+    /* IL: 12 платежей раз в 2 недели, последний — через 24 недели */
+    $('#payVal').innerHTML = fmt(Math.round(v * 4700 / 41000 * (rate / 0.008) / 10) * 10) + NBSP + '₽';
     var d = new Date(); d.setDate(d.getDate() + 168);
     var p2 = function (x) { return (x < 10 ? '0' : '') + x; };
     $('#lastVal').textContent = p2(d.getDate()) + '.' + p2(d.getMonth() + 1) + '.' + d.getFullYear();
@@ -656,11 +668,9 @@ input[type=range]::-moz-range-thumb{width:24px;height:14px;border:0;border-radiu
   sumRange.addEventListener('input', calcSync);
   termRange.addEventListener('input', calcSync);
   $('#smzRow').addEventListener('click', function () {
-    smz = !smz;
+    smz = !smz;                              // Click → Switch: пересчитать суммы по ставке 0,7%
     $('#smzSwitch').classList.toggle('on', smz);
-    $('#termBlock').hidden = smz;
-    $('#pdlInputs').hidden = smz;
-    $('#ilInputs').hidden = !smz;
+    calcSync();
   });
   calcSync();
   $('#tidHomeBtn').addEventListener('click', function () { toast('Вход через Т-ID — вне этой задачи'); });
