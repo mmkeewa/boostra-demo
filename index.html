@@ -1684,7 +1684,13 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     modal.classList.remove('show');
     setTimeout(function () { modal.hidden = true; }, 180);
   }
-  methodsLink.addEventListener('click', openModal);
+  // Заглушка по просьбе Марины (2026-09-30): модалку не открываем, пока она не отменит.
+  // Вернуть: METHODS_STUB = false
+  var METHODS_STUB = true;
+  methodsLink.addEventListener('click', function () {
+    if (METHODS_STUB) { toast('В разработке'); return; }
+    openModal();
+  });
   modal.addEventListener('click', function (e) {
     if (e.target === modal || e.target.closest('[data-close-modal]')) { closeModal(); return; }
     var s = e.target.closest('[data-method]');
