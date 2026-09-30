@@ -724,6 +724,21 @@ a{color:inherit;text-decoration:none}
 /* Пометка «экран в разработке» на экране успеха */
 .wip-note{align-self:center;margin:var(--s4) var(--s4) 0;padding:6px 12px;border-radius:999px;background:#fff4d6;border:1px solid #f5d27a;color:#8a5a00;font-size:13px;line-height:16px;font-weight:600;text-align:center}
 
+/* ---------- Онбординг ЛК (макет 40002811:72724) ---------- */
+.onb{position:absolute;inset:0;z-index:70;cursor:pointer}
+.onb[hidden]{display:none}
+.onb-scrim{position:absolute;inset:0;width:100%;height:100%}
+.onb-scrim path{fill:#1f275b;fill-opacity:.5}
+.onb-tip{position:absolute;display:flex;align-items:center;gap:20px;padding:8px 20px;border-radius:12px;
+  background:#1e262e;color:#fff;font-size:14px;line-height:20px;white-space:nowrap;
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);cursor:default}
+.onb-tip{transition:opacity .3s ease}
+.onb-tip.hide{opacity:0;pointer-events:none}
+.onb-btn{height:24px;padding:0 8px;border-radius:8px;background:rgba(255,255,255,.2);color:#fff;font-size:14px;line-height:20px}   /* Button / Secondary XSmall */
+.onb-btn[hidden]{display:none}
+.onb-beak{position:absolute;bottom:-8px;width:12px;height:8px;background:#1e262e;clip-path:polygon(0 0,100% 0,50% 100%)}
+.onb-replay{margin-bottom:var(--s2)}
+
 </style>
 </head>
 <body>
@@ -1274,6 +1289,7 @@ a{color:inherit;text-decoration:none}
       <button class="modal-close" data-sheet-close>Закрыть</button>
       <h3 class="sheet-title">Состояние клиента</h3>
       <p class="sheet-sub">Демо-режим: выберите, что показать</p>
+      <button class="state-btn onb-replay" id="onbReplay"><span class="sb-label">Показать онбординг</span></button>
       <div class="state-list" id="stateList">
         <button class="state-btn" data-state="1"><span class="sb-label">1 PDL</span><span class="dev-badge ok">Разработан</span></button>
 
@@ -1304,6 +1320,15 @@ a{color:inherit;text-decoration:none}
         <button class="state-btn" data-help="bki:ok"><span class="sb-label">Корректировка в&nbsp;процессе</span><span class="dev-badge ok">Разработан</span></button>
         <button class="state-btn" data-help="bki:photo"><span class="sb-label">Иное фото</span><span class="dev-badge ok">Разработан</span></button>
       </div>
+    </div>
+  </div>
+  <!-- ===== Онбординг ЛК (макет «Онбординг новый» 40002811:72724) ===== -->
+  <div class="onb" id="onb" hidden>
+    <svg class="onb-scrim" id="onbScrim"><path id="onbPath" fill-rule="evenodd"/></svg>
+    <div class="onb-tip" id="onbTip">
+      <span class="onb-text" id="onbText"></span>
+      <button class="onb-btn" id="onbNext"></button>
+      <i class="onb-beak" id="onbBeak"></i>
     </div>
   </div>
 </div><!-- /device -->
@@ -2062,7 +2087,123 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
     applyState(b.getAttribute('data-state'));
   });
 
+  /* ---------- Онбординг ЛК (макет «Онбординг новый» 40002811:72724) ----------
+     Три шага поверх экрана: займы → варианты оплаты → договор (через «пролистайте вниз»).
+     Займов несколько — подсвечиваем все карточки. Показываем один раз, повтор — из меню. */
+  var onb = $('#onb'), onbPath = $('#onbPath'), onbScrim = $('#onbScrim'), onbTip = $('#onbTip'),
+      onbText = $('#onbText'), onbNext = $('#onbNext'), onbBeak = $('#onbBeak'),
+      screenEl = $('.screen'), deviceEl = $('.device'), onbStep = -1;
+  var ONB = [
+    { text: 'Здесь все ваши займы', btn: 'Далее', pad: 0,
+      targets: function () { return loanCards; }, anchor: function () { return loanCards[active]; } },
+    { text: 'Здесь варианты оплаты', btn: 'Далее', pad: 6,       // от плиток до кнопки «Оплатить», как в макете
+      targets: function () { return [onbUnion([quick, payBtn])]; } },
+    { text: 'Пролистайте вниз, там договор', btn: 'Вниз', bottom: true, targets: function () { return []; } },
+    { text: 'Ваш договор', btn: 'Понятно', pad: 6, targets: function () { return [$('#contractSection .card')]; } }
+  ];
+  var ONB_KEY = 'boostra-lk-onboarding-done';
+  function onbUnion(els) {                             // одна подсветка на несколько элементов
+    return { getBoundingClientRect: function () {
+      var rs = els.map(function (e) { return e.getBoundingClientRect(); });
+      var l = Math.min.apply(null, rs.map(function (r) { return r.left; })),
+          t = Math.min.apply(null, rs.map(function (r) { return r.top; })),
+          ri = Math.max.apply(null, rs.map(function (r) { return r.right; })),
+          b = Math.max.apply(null, rs.map(function (r) { return r.bottom; }));
+      return { left: l, top: t, right: ri, bottom: b, width: ri - l, height: b - t };
+    } };
+  }
+  function rrect(x, y, w, h, r) {
+    r = Math.min(r, w / 2, h / 2);
+    return 'M' + (x + r) + ' ' + y + 'H' + (x + w - r) + 'A' + r + ' ' + r + ' 0 0 1 ' + (x + w) + ' ' + (y + r) +
+      'V' + (y + h - r) + 'A' + r + ' ' + r + ' 0 0 1 ' + (x + w - r) + ' ' + (y + h) +
+      'H' + (x + r) + 'A' + r + ' ' + r + ' 0 0 1 ' + x + ' ' + (y + h - r) +
+      'V' + (y + r) + 'A' + r + ' ' + r + ' 0 0 1 ' + (x + r) + ' ' + y + 'Z';
+  }
+  function onbDraw() {
+    if (onbStep < 0) return;
+    var s = ONB[onbStep], d = deviceEl.getBoundingClientRect(), sc = screenEl.getBoundingClientRect();
+    var W = d.width, H = d.height, pad = s.pad || 0;
+    onbScrim.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var path = 'M0 0H' + W + 'V' + H + 'H0Z';
+    s.targets().forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      path += rrect(r.left - d.left - pad, r.top - d.top - pad, r.width + pad * 2, r.height + pad * 2, 24 + pad);
+    });
+    onbPath.setAttribute('d', path);
+    onbText.textContent = s.text;
+    onbNext.hidden = !s.btn; if (s.btn) onbNext.textContent = s.btn;
+    var tw = onbTip.offsetWidth, th = onbTip.offsetHeight, left, top, cx;
+    if (s.bottom) {                                    // подсказка внизу экрана, клюв вниз
+      cx = (sc.left + sc.right) / 2 - d.left;
+      top = sc.bottom - d.top - th - 20;
+    } else {
+      var a = (s.anchor ? s.anchor() : s.targets()[0]).getBoundingClientRect();
+      cx = (a.left + a.right) / 2 - d.left;
+      top = a.top - d.top - pad - th - 8;
+    }
+    left = Math.max(12, Math.min(W - 12 - tw, cx - tw / 2));
+    onbTip.style.left = left + 'px'; onbTip.style.top = top + 'px';
+    onbBeak.style.left = (cx - left - 6) + 'px';
+  }
+  function onbReveal(el, gapTop) {                      // цель целиком в экране и над ней место под тултип
+    var r = el.getBoundingClientRect(), sc = screenEl.getBoundingClientRect();
+    if (r.top - gapTop < sc.top || r.bottom + 12 > sc.bottom) screenEl.scrollTop += r.top - sc.top - gapTop;
+  }
+  function onbGo(step, noReveal) {
+    onbStep = step;
+    var s = ONB[step];
+    if (step === 0) screenEl.scrollTop = 0;
+    else if (!s.bottom && !noReveal) onbReveal(s.targets()[0], 72);
+    setTimeout(onbDraw, 30);                            // после скролла к цели
+  }
+  function onbStart() { closeSheets(); onb.hidden = false; onbGo(0); }
+  function onbFinish() {
+    onb.hidden = true; onbStep = -1;
+    try { localStorage.setItem(ONB_KEY, '1'); } catch (e) {}
+  }
+  var onbScrolling = false;
+  function onbAction() {                                // кнопка шага; клик по свободной области = то же самое
+    if (onbScrolling) return;
+    if (onbStep === 2) {                                // «Вниз»: докручиваем прямо до договора
+      var r = $('#contractSection .card').getBoundingClientRect(), sc = screenEl.getBoundingClientRect();
+      var target = Math.min(screenEl.scrollHeight - screenEl.clientHeight, screenEl.scrollTop + r.top - sc.top - 140);   // договор ниже шапки, тултип над ним
+      // Плавный переход: экран едет с ease-in-out, подсветка договора едет вместе с ним,
+      // тултип «Ваш договор» проявляется, когда договор встал на место
+      var from = screenEl.scrollTop, dist = target - from, dur = 800, t0 = null;
+      var ease = function (p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; };
+      onbScrolling = true;
+      onbStep = 3; onbTip.classList.add('hide');
+      (function frame(ts) {
+        if (t0 === null) t0 = ts;
+        var p = Math.min(1, (ts - t0) / dur);
+        screenEl.scrollTop = from + dist * ease(p);
+        onbDraw();
+        if (p < 1) { requestAnimationFrame(frame); return; }
+        onbScrolling = false;
+        onbTip.classList.remove('hide');
+      })(performance.now());
+      return;
+    }
+    if (onbStep >= ONB.length - 1) onbFinish(); else onbGo(onbStep + 1);
+  }
+  onbNext.addEventListener('click', function (e) { e.stopPropagation(); onbAction(); });
+  onb.addEventListener('click', function (e) { if (!e.target.closest('.onb-tip')) onbAction(); });
+  onb.addEventListener('wheel', function (e) {          // колесо на шаге «пролистайте вниз» листает экран
+    if (onbStep !== 2 || onbScrolling) return;
+    screenEl.scrollTop += e.deltaY;
+  }, { passive: true });
+  screenEl.addEventListener('scroll', function () {
+    if (onbStep !== 2 || onbScrolling) return;          // долистали сами → договор доехал до экрана
+    var r = $('#contractSection .card').getBoundingClientRect(), sc = screenEl.getBoundingClientRect();
+    if (r.top < sc.top + sc.height * 0.55) onbGo(3);
+  });
+  window.addEventListener('resize', onbDraw);
+  $('#onbReplay').addEventListener('click', onbStart);
+
   applyState('3');                      // по умолчанию: 3 займа (кнопки в меню для него нет)
+  var onbSeen = false;
+  try { onbSeen = localStorage.getItem(ONB_KEY) === '1'; } catch (e) {}
+  if (!onbSeen) setTimeout(onbStart, 400);
 })();
 
 </script>
