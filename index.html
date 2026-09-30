@@ -2094,9 +2094,9 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
       onbText = $('#onbText'), onbNext = $('#onbNext'), onbBeak = $('#onbBeak'),
       screenEl = $('.screen'), deviceEl = $('.device'), onbStep = -1;
   var ONB = [
-    { text: 'Здесь все ваши займы', btn: 'Далее', pad: 0,
+    { text: 'Листайте, здесь все ваши займы', btn: 'Далее', pad: 0,
       targets: function () { return loanCards; }, anchor: function () { return loanCards[active]; } },
-    { text: 'Здесь варианты оплаты', btn: 'Далее', pad: 6,       // от плиток до кнопки «Оплатить», как в макете
+    { text: 'Здесь варианты оплаты займов', btn: 'Далее', pad: 6,       // от плиток до кнопки «Оплатить», как в макете
       targets: function () { return [onbUnion([quick, payBtn])]; } },
     { text: 'Пролистайте вниз, там договор', btn: 'Вниз', bottom: true, targets: function () { return []; } },
     { text: 'Ваш договор', btn: 'Понятно', pad: 6, targets: function () { return [$('#contractSection .card')]; } }
