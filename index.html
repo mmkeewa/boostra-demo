@@ -302,12 +302,6 @@ a{color:inherit;text-decoration:none}
 .add-actions{display:flex;justify-content:flex-end;padding-top:var(--s3)}
 
 /* Помощь после оплаты */
-.help-item{display:flex;gap:var(--s4);align-items:flex-start}
-.help-item[hidden]{display:none}
-.help-item .ico{width:24px;height:24px;flex:0 0 auto}
-.help-item h5{font-size:14px;line-height:16px;font-weight:700}
-.help-item p{font-size:14px;line-height:20px;margin-top:var(--s2)}
-.help-link{display:inline-flex;align-items:center;gap:var(--s1);font-size:12px;line-height:16px;font-weight:600;color:var(--text-accent);margin-top:var(--s3)}
 .hr{height:1px;background:var(--border-primary)}
 
 /* Footer */
@@ -657,15 +651,33 @@ a{color:inherit;text-decoration:none}
 .overdue-card b{display:block;font-size:14px;line-height:20px;font-weight:600;color:var(--text-primary);margin-bottom:var(--s1)}
 .overdue-card p{font-size:14px;line-height:20px;color:var(--text-secondary)}
 
+/* ---------- Помощь после оплаты (макет help-section) ---------- */
+.help-card{gap:var(--s4)}
+.help-card .card-title{font-size:18px;line-height:20px;font-weight:700}
+.help-list{display:flex;flex-direction:column;gap:var(--s2)}
+.help-list .hr{display:none}
+.help-item{position:relative;overflow:hidden;background:#f4f7fa;border-radius:24px;padding:var(--s4);cursor:pointer}
+.help-item[hidden]{display:none}
+.hi-body{display:flex;flex-direction:column;gap:var(--s3)}
+.hi-text{display:flex;flex-direction:column;gap:var(--s2)}
+.hi-text h5{font-size:14px;line-height:24px;font-weight:700;color:var(--text-primary);padding-right:44px}
+.hi-text p{font-size:14px;line-height:20px;color:var(--text-primary)}
+.hi-ico{position:absolute;top:-9px;right:-6px;width:60px;height:60px;border-radius:50%;display:grid;place-items:center}
+.hi-ico svg{width:32px;height:32px}
+.help-item.blue .hi-ico{background:#d6eeff}
+.help-item.red .hi-ico{background:#ffe7e1}
+.help-link{align-self:flex-start;display:inline-flex;align-items:center;gap:var(--s1);font-size:14px;line-height:20px;font-weight:500;color:#038aee}
+.help-link svg{width:24px;height:24px}
+
 /* ---------- Статусы «Помощи после оплаты» ---------- */
-.help-status{margin-top:var(--s3);padding:var(--s3);border-radius:12px;border:1px solid}
+.help-status{padding:var(--s4);border-radius:12px;border:1px solid;cursor:default}
 .help-status[hidden]{display:none}
-.help-status .hs-title{display:flex;gap:var(--s2);font-size:14px;line-height:20px;font-weight:600}
-.help-status .hs-title::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 auto;margin-top:7px}
-.help-status p{margin-top:var(--s1);padding-left:14px}
+.help-status .hs-title{display:flex;gap:var(--s2);font-size:14px;line-height:16px;font-weight:700}
+.help-status .hs-title::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;flex:0 0 auto;margin-top:4px}
+.help-status p{margin-top:6px;padding-left:16px;font-size:14px;line-height:20px;color:var(--text-primary)}
 .help-status.info{background:#e5f3ff;border-color:#b9dcfb}.help-status.info .hs-title{color:#0b99ff}
 .help-status.ok{background:#e9fbe9;border-color:#bfe8c3}.help-status.ok .hs-title{color:#22b33a}
-.help-status.err{background:#fee9eb;border-color:#fbc7cc}.help-status.err .hs-title{color:#f62434}
+.help-status.err{background:#fff2f2;border-color:#ffc2c2}.help-status.err .hs-title{color:#ff0000}
 .help-link[hidden]{display:none}
 .sheet-group{font-size:14px;line-height:20px;font-weight:700;margin:var(--s5) 0 var(--s2)}
 
@@ -800,7 +812,7 @@ a{color:inherit;text-decoration:none}
           <span class="val" id="sumVal">12 700 ₽</span>
           <input id="sumInput" inputmode="numeric" placeholder="Введите сумму" hidden>
           <div class="divider"></div>
-          <span class="hint" id="sumHint">Экономия на процентах 4 300 ₽</span>
+          <span class="hint" id="sumHint" hidden></span>
         </div>
 
         <button class="promo-link" id="promoLink" hidden>У меня есть промокод</button>
@@ -913,37 +925,36 @@ a{color:inherit;text-decoration:none}
         </div>
       </div>
 
-      <!-- ===== Помощь после оплаты ===== -->
+      <!-- ===== Помощь после оплаты (макет help-section, страница «Помощь после оплаты») ===== -->
       <div class="section" id="helpSection" style="padding:var(--s4) var(--s4) var(--s4)">
-        <div class="card">
+        <div class="card help-card">
           <span class="card-title">Помощь после оплаты</span>
-          <div class="help-item" id="helpPaid">
-            <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M13.5 20.5H6.8A2.3 2.3 0 0 1 4.5 18.2V5.8a2.3 2.3 0 0 1 2.3-2.3h7.4a2.3 2.3 0 0 1 2.3 2.3v5.7" stroke="#616c82" stroke-width="1.6" stroke-linecap="round"/><path d="M18 20.3v-5.6M15.3 17.3 18 14.6l2.7 2.7" stroke="#616c82" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <div>
-              <h5>Я полностью оплатил заём</h5>
-              <p>Если вы полностью оплатили заём по реквизитам или на Почте России, загрузите чек</p>
-              <div class="help-status" id="paidStatus" hidden></div>
-              <button class="help-link" id="paidLink" data-open-sheet="paidSheet">Загрузить чек<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="transform:rotate(-90deg)"><path d="M4 6.5 8 10l4-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="help-list">
+            <div class="help-item blue" id="helpPaid" data-card-sheet="paidSheet">
+              <div class="hi-body">
+              <div class="hi-text"><h5>Я полностью оплатил заём</h5><p>Если вы полностью оплатили заём по реквизитам или на Почте России, загрузите чек</p></div>
+            <div class="help-status" id="paidStatus" hidden></div>
+              <button class="help-link" id="paidLink" data-open-sheet="paidSheet">Загрузить чек<svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="1.71429" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
+            <span class="hi-ico"><svg viewBox="0 0 32 32" fill="none"><path d="M12.82 26.67H9.33a2.67 2.67 0 0 1-2.66-2.67V8a2.67 2.67 0 0 1 2.66-2.67H20A2.67 2.67 0 0 1 22.67 8v10.67M18.67 25.33 21.33 28l5.34-5.33M12 10.67h5.33M12 16h2.67" stroke="#038AEE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
-          <div class="hr" id="helpHr"></div>
-          <div class="help-item" id="helpBki">
-            <svg class="ico" viewBox="0 0 24 24" fill="none"><rect x="5" y="4.5" width="14" height="16.5" rx="2.4" stroke="#616c82" stroke-width="1.6"/><rect x="9" y="2.8" width="6" height="3.4" rx="1.2" fill="#fff" stroke="#616c82" stroke-width="1.6"/><path d="m9.4 13 2.1 2.1 3.9-4.3" stroke="#616c82" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <div>
-              <h5>Ошибка в БКИ</h5>
-              <p>Если вы нашли ошибку в БКИ, мы поможем исправить и повысить кредитный рейтинг</p>
-              <div class="help-status" id="bkiStatus" hidden></div>
-              <button class="help-link" id="bkiLink" data-open-sheet="bkiSheet">Сделать корректировку<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="transform:rotate(-90deg)"><path d="M4 6.5 8 10l4-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="hr" id="helpHr"></div>
+            <div class="help-item red" id="helpBki" data-card-sheet="bkiSheet">
+              <div class="hi-body">
+              <div class="hi-text"><h5>Ошибка в БКИ</h5><p>Если вы нашли ошибку в БКИ, мы поможем исправить и повысить кредитный рейтинг</p></div>
+            <div class="help-status" id="bkiStatus" hidden></div>
+              <button class="help-link" id="bkiLink" data-open-sheet="bkiSheet">Сделать корректировку<svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="1.71429" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
+            <span class="hi-ico"><svg viewBox="0 0 32 32" fill="none"><path d="M5.33 10.67V8A2.67 2.67 0 0 1 8 5.33h2.67M5.33 21.33V24A2.67 2.67 0 0 0 8 26.67h2.67M21.33 5.33H24A2.67 2.67 0 0 1 26.67 8v2.67M21.33 26.67H24A2.67 2.67 0 0 0 26.67 24v-2.67M12 13.33h.01M20 13.33h.01M12.67 20.07a4.67 4.67 0 0 1 6.66 0" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
-          <div class="hr" id="helpHr2" hidden></div>
-          <div class="help-item" id="helpDoc" hidden>
-            <svg class="ico" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2.5" stroke="#616c82" stroke-width="1.6"/><path d="M9 8h6M9 12h6M9 16h4" stroke="#616c82" stroke-width="1.6" stroke-linecap="round"/></svg>
-            <div>
-              <h5>Документ использования займа</h5>
-              <p>Подойдёт любой документ, который показывает, на что ушли деньги</p>
-              <button class="help-link" data-open-sheet="docSheet">Прикрепить документ<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="transform:rotate(-90deg)"><path d="M4 6.5 8 10l4-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="hr" id="helpHr2" hidden></div>
+            <div class="help-item blue" id="helpDoc" hidden data-card-sheet="docSheet">
+              <div class="hi-body">
+              <div class="hi-text"><h5>Документ использования займа</h5><p>Подойдёт любой документ, который показывает, на что ушли деньги</p></div>
+              <button class="help-link" data-open-sheet="docSheet">Прикрепить документ<svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="1.71429" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
+            <span class="hi-ico"><svg viewBox="0 0 32 32" fill="none"><rect x="7" y="5" width="18" height="22" rx="3" stroke="#038AEE" stroke-width="2"/><path d="M12 11h8M12 16h8M12 21h5" stroke="#038AEE" stroke-width="2" stroke-linecap="round"/></svg></span>
+          </div>
           </div>
         </div>
       </div>
@@ -1197,7 +1208,7 @@ a{color:inherit;text-decoration:none}
         <h4 class="mp-title">Оплата по банковским реквизитам</h4>
         <p class="mp-sub">Зачисление до 3 рабочих дней</p>
         <p class="mp-text">Можно оплатить переводом по реквизитам. Обратите внимание: банк может удержать комиссию по своему тарифу, а деньги поступают на счёт до 3 рабочих дней. Пока платёж идёт, проценты продолжают начисляться.</p>
-        <button class="help-link mp-req" data-toast="Реквизиты — экран в работе">Посмотреть реквизиты<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="transform:rotate(-90deg)"><path d="M4 6.5 8 10l4-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="help-link mp-req" data-toast="Реквизиты — экран в работе">Посмотреть реквизиты<svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="1.71429" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <div class="appbanner">
           <h3 class="ab-title">В приложении удобнее</h3>
             <p class="ab-sub">Моментальное зачисление</p>
@@ -1214,7 +1225,7 @@ a{color:inherit;text-decoration:none}
         <h4 class="mp-title">Оплата через Почту России</h4>
         <p class="mp-sub">Без комиссии · зачисление до 5 рабочих дней</p>
         <p class="mp-text">Перевод через Почту России без комиссии. Деньги поступают на счёт до 5 рабочих дней, и пока платёж идёт, проценты продолжают начисляться. Планируйте оплату заранее, чтобы уложиться в срок.</p>
-        <button class="help-link mp-req" data-toast="Реквизиты — экран в работе">Посмотреть реквизиты<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="transform:rotate(-90deg)"><path d="M4 6.5 8 10l4-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="help-link mp-req" data-toast="Реквизиты — экран в работе">Посмотреть реквизиты<svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="1.71429" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <div class="appbanner">
           <h3 class="ab-title">В приложении удобнее</h3>
             <p class="ab-sub">Моментальное зачисление</p>
@@ -1486,11 +1497,10 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
       sumInput.hidden = true; sumVal.hidden = false;
       sumVal.textContent = mode === 'extend' ? L.extend : mode === 'current' ? L.current : L.full;
     }
-    // подсказка под инпутом: срок / выгода — своя для каждого выбора. У IL подсказки нет (макет)
+    // подсказка под инпутом — только у продления. «Экономию на процентах» не показываем нигде. У IL подсказки нет (макет)
     if (sumHint) {
-      sumHint.hidden = L.type === 'il' || mode === 'partial';   // у частичной оплаты экономию не показываем
-      sumHint.textContent = mode === 'extend' ? 'Срок предлагается автоматически'
-        : 'Экономия на процентах ' + (mode === 'partial' ? L.savePart : L.save);
+      sumHint.hidden = L.type === 'il' || mode !== 'extend';
+      sumHint.textContent = 'Срок предлагается автоматически';
     }
   }
 
@@ -1784,6 +1794,12 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
       if (ov.getAttribute('data-open-view') === 'payView') payReturn = openS ? openS.id : null;
       payAmount.textContent = currentAmount();
       openView(ov.getAttribute('data-open-view'));
+      return;
+    }
+    var hc = e.target.closest('[data-card-sheet]');           // «Помощь после оплаты»: кликабельна вся карточка
+    if (hc && !e.target.closest('.help-link')) {
+      var hl = hc.querySelector('.help-link');
+      if (hl && !hl.hidden) openSheet(hc.getAttribute('data-card-sheet'));
       return;
     }
     var os = e.target.closest('[data-open-sheet]');
