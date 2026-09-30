@@ -119,7 +119,7 @@ a{color:inherit;text-decoration:none}
 .greeting{padding:var(--s4) var(--s4) var(--s4);font-size:18px;line-height:24px;font-weight:600}
 
 /* ---------- Loan slider ---------- */
-.loans{display:flex;gap:var(--s4);overflow-x:auto;padding:var(--s4) calc((100% - 300px)/2) 20px;margin-bottom:-12px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.loans{display:flex;gap:var(--s2);overflow-x:auto;padding:var(--s4) calc((100% - 300px)/2) 20px;margin-bottom:-12px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .loans::-webkit-scrollbar{height:0}
 .loan{
   position:relative;flex:0 0 300px;min-height:186px;scroll-snap-align:center;
@@ -543,7 +543,7 @@ a{color:inherit;text-decoration:none}
 #pay.is-offer{padding-bottom:var(--s8)}
 
 /* Слайдер: соседние карточки бледнее (фокус на центральной) */
-.loan{opacity:.45;transition:opacity .35s ease}
+.loan{opacity:1}
 .loan.is-active{opacity:1}
 /* Чип «Продлить заём» — без тени */
 .chip-btn{box-shadow:none}
@@ -603,6 +603,10 @@ a{color:inherit;text-decoration:none}
 .state-btn{width:100%;text-align:left;background:var(--bg-secondary);border-radius:var(--r-s);
   padding:var(--s4);font-size:14px;line-height:20px;font-weight:600;color:var(--text-primary)}
 .state-btn.active{background:var(--bg-accent-soft);color:var(--text-accent)}
+.state-btn{display:flex;align-items:center;justify-content:space-between;gap:var(--s2)}
+.dev-badge{flex:0 0 auto;padding:2px 8px;border-radius:999px;font-size:12px;line-height:16px;font-weight:600}
+.dev-badge.ok{background:#e9fbe9;color:#1f9d3a}
+.dev-badge.no{background:#eceff3;color:#6f7985}
 .state-btn:active{filter:brightness(.97)}
 
 /* Баннер приложения — цельная картинка из макета */
@@ -1271,34 +1275,34 @@ a{color:inherit;text-decoration:none}
       <h3 class="sheet-title">Состояние клиента</h3>
       <p class="sheet-sub">Демо-режим: выберите, что показать</p>
       <div class="state-list" id="stateList">
-        <button class="state-btn" data-state="1">1 PDL</button>
+        <button class="state-btn" data-state="1"><span class="sb-label">1 PDL</span><span class="dev-badge ok">Разработан</span></button>
 
-        <button class="state-btn" data-state="4">4 PDL</button>
+        <button class="state-btn" data-state="4"><span class="sb-label">4 PDL</span><span class="dev-badge ok">Разработан</span></button>
 
-        <button class="state-btn" data-state="il">1 Instalment</button>
+        <button class="state-btn" data-state="il"><span class="sb-label">1 Instalment</span><span class="dev-badge no">Не&nbsp;разработан</span></button>
 
         <!-- «Отказ по заявке» временно скрыт по просьбе Марины (2026-08-20); логика applyState("refusal") на месте -->
 
-        <button class="state-btn" data-state="crosspdl">Нет займа — кросс PDL</button>
+        <button class="state-btn" data-state="crosspdl"><span class="sb-label">Нет займа — кросс PDL</span><span class="dev-badge no">Не&nbsp;разработан</span></button>
 
-        <button class="state-btn" data-state="crossil">Нет займа — кросс Instalment</button>
+        <button class="state-btn" data-state="crossil"><span class="sb-label">Нет займа — кросс Instalment</span><span class="dev-badge no">Не&nbsp;разработан</span></button>
       </div>
       <h4 class="sheet-group">Статус чека</h4>
       <div class="state-list" id="paidStatusList">
-        <button class="state-btn active" data-help="paid:">Без статуса</button>
-        <button class="state-btn" data-help="paid:check">Проверяем чек</button>
-        <button class="state-btn" data-help="paid:ok">Чек принят</button>
-        <button class="state-btn" data-help="paid:short">Сумма недостаточна</button>
-        <button class="state-btn" data-help="paid:wrong">Неверные реквизиты</button>
-        <button class="state-btn" data-help="paid:photo">Иное фото</button>
-        <button class="state-btn" data-help="paid:dup">Чек уже загружен</button>
+        <button class="state-btn active" data-help="paid:"><span class="sb-label">Без статуса</span><span class="dev-badge ok">Разработан</span></button>
+        <button class="state-btn" data-help="paid:check"><span class="sb-label">Проверяем чек</span><span class="dev-badge ok">Разработан</span></button>
+        <button class="state-btn" data-help="paid:ok"><span class="sb-label">Чек принят</span><span class="dev-badge ok">Разработан</span></button>
+        <button class="state-btn" data-help="paid:short"><span class="sb-label">Сумма недостаточна</span><span class="dev-badge ok">Разработан</span></button>
+        <button class="state-btn" data-help="paid:wrong"><span class="sb-label">Неверные реквизиты</span><span class="dev-badge ok">Разработан</span></button>
+        <button class="state-btn" data-help="paid:photo"><span class="sb-label">Иное фото</span><span class="dev-badge ok">Разработан</span></button>
+        <button class="state-btn" data-help="paid:dup"><span class="sb-label">Чек уже загружен</span><span class="dev-badge ok">Разработан</span></button>
       </div>
       <h4 class="sheet-group">Статус запроса в&nbsp;БКИ</h4>
       <div class="state-list" id="bkiStatusList">
-        <button class="state-btn active" data-help="bki:">Без статуса</button>
-        <button class="state-btn" data-help="bki:check">Проверяем запрос</button>
-        <button class="state-btn" data-help="bki:ok">Корректировка в&nbsp;процессе</button>
-        <button class="state-btn" data-help="bki:photo">Иное фото</button>
+        <button class="state-btn active" data-help="bki:"><span class="sb-label">Без статуса</span><span class="dev-badge ok">Разработан</span></button>
+        <button class="state-btn" data-help="bki:check"><span class="sb-label">Проверяем запрос</span><span class="dev-badge ok">Разработан</span></button>
+        <button class="state-btn" data-help="bki:ok"><span class="sb-label">Корректировка в&nbsp;процессе</span><span class="dev-badge ok">Разработан</span></button>
+        <button class="state-btn" data-help="bki:photo"><span class="sb-label">Иное фото</span><span class="dev-badge ok">Разработан</span></button>
       </div>
     </div>
   </div>
