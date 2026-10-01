@@ -377,10 +377,10 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
 
 /* камера */
 #cameraView.open{display:flex;background:#152149;height:100%;min-height:0;margin:0;overflow:hidden;
-  padding:20px var(--s4) 24px;gap:var(--s4);align-items:center}
+  padding:20px var(--s4) 40px;gap:var(--s8);align-items:center}
 .cam-mode .app-header{display:none}
 .cam-top{color:#fff;font-size:16px;line-height:24px;text-align:center;width:100%}
-.viewfinder{position:relative;height:min(46%,343px);max-width:100%;aspect-ratio:1/1;
+.viewfinder{position:relative;height:min(42%,343px);max-width:100%;aspect-ratio:1/1;
   flex:none;align-self:center;border-radius:var(--r-2xl);
   background:rgba(255,255,255,.1);overflow:hidden}
 .chip{position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:3;
@@ -393,10 +393,10 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
   width:156px;height:212px;border-radius:14px;border:2px solid rgba(255,255,255,.5);overflow:hidden}
 .cam-photo img{width:100%;height:100%;object-fit:cover}
 .cam-photo.blur img{filter:blur(2px)}
-.cam-instr{display:flex;flex-direction:column;gap:var(--s2);text-align:center;width:100%;flex:none}
+.cam-instr{display:flex;flex-direction:column;gap:var(--s2);text-align:center;width:100%;flex:1 0 auto;min-height:0}
 .cam-instr b{color:#fff;font-size:24px;line-height:32px;font-weight:700;letter-spacing:.32px}
 .cam-instr p{color:rgba(255,255,255,.6);font-size:16px;line-height:24px}
-.cam-controls{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:auto}
+.cam-controls{display:flex;align-items:center;justify-content:space-between;width:100%;flex:none}
 .cam-gal{display:flex;flex-direction:column;gap:4px;align-items:center}
 .cam-thumb{width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.2);
   display:grid;place-items:center}
