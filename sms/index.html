@@ -1707,8 +1707,8 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
     ckCanvas.width = Math.round(ckW * dpr); ckCanvas.height = Math.round(ckH * dpr);
     ckCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-  var CK_G = 0.09;                                 // мягкая гравитация — полёт медленный
-  function ckLaunchV() { return Math.sqrt(2 * CK_G * (ckH - 60 - Math.random() * 120)); }
+  var CK_G = 0.09, CK_DRAG = 0.994;                // быстрый вылет, дальше воздух тормозит
+  function ckLaunchV() { return 1.45 * Math.sqrt(2 * CK_G * (ckH - 60 - Math.random() * 120)); }
   function ckFrame(t) {
     if (!$('#cardOkView').classList.contains('open')) { ckRaf = null; return; }
     if (!ckPrev) ckPrev = t;
@@ -1717,7 +1717,9 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
     for (var i = 0; i < ckParts.length; i++) {
       var p = ckParts[i];
       if (p.delay > 0) { p.delay -= dt * 16.67; continue; }
-      p.vy += CK_G * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+      p.vy = (p.vy + CK_G * dt) * Math.pow(CK_DRAG, dt);
+      p.vx *= Math.pow(CK_DRAG, dt);
+      p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
       if (p.x < p.s) { p.x = p.s; p.vx = Math.abs(p.vx); }
       if (p.x > ckW - p.s) { p.x = ckW - p.s; p.vx = -Math.abs(p.vx); }
       if (p.y > ckH + p.s) {                      // упала за низ — новый прыжок снизу
