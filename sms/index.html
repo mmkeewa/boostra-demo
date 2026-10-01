@@ -320,9 +320,12 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
 .scen-panel{display:none}
 @media (min-width:900px){
   html:not(.is-touch) .scen-panel{display:flex;flex-direction:column;gap:var(--s3);
-    order:-1;width:264px;flex:none;align-self:center;margin-right:40px;
+    order:-1;width:432px;flex:none;align-self:center;margin-right:40px;
     background:#161d33;border-radius:24px;padding:20px;
     max-height:calc(100dvh - 48px);overflow-y:auto}
+  .scen-panel .state-btn{display:flex;align-items:center;justify-content:space-between;gap:8px;
+    white-space:nowrap}
+  .scen-panel .dev-tag{margin-left:0;vertical-align:0}
   .scen-panel .scen-title{color:#fff;font-size:16px;line-height:24px;font-weight:700}
   .scen-panel .state-btn{background:rgba(255,255,255,.07);color:#dfe4f0}
   .scen-panel .state-btn:hover{background:rgba(255,255,255,.13)}
@@ -331,6 +334,11 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
   .scen-panel .dev-tag{background:rgba(255,176,32,.16);color:#ffb020}
   .scen-panel .scen-note{font-size:12px;line-height:16px;color:rgba(223,228,240,.55);margin-top:auto}
   .scen-panel .scen-note b{color:#dfe4f0}
+}
+/* на широких экранах панель уходит влево, телефон остаётся по центру окна */
+@media (min-width:1280px){
+  html:not(.is-touch) .scen-panel{position:fixed;left:32px;top:50%;transform:translateY(-50%);
+    margin-right:0;align-self:auto}
 }
 
 /* ---------- Тост ---------- */
@@ -1049,11 +1057,9 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
   var DEV = 'В разработке';
   var SCENARIOS = [
     { items: [
-      { label: 'Главная с калькулятором', go: 'home', badge: DEV }
-    ] },
-    { group: 'Телефон и СМС', badge: DEV, items: [
-      { label: 'Новый пользователь', go: 'reg' },
-      { label: 'Вход в ЛК — повторный клиент', go: 'login' }
+      { label: 'Главная', go: 'home', badge: DEV },
+      { label: 'Новый клиент — телефон и СМС', go: 'reg', badge: DEV },
+      { label: 'Повторный клиент — вход, телефон и СМС', go: 'login', badge: DEV }
     ] }
   ];
   function tag(b) { return b ? ' <i class="dev-tag">' + b + '</i>' : ''; }
