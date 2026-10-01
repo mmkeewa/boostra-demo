@@ -1588,7 +1588,7 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
       ph.classList.remove('blur');
       $('#camChip').textContent = 'Поместите разворот в рамку';
       $('#camChip').classList.remove('err');
-      setTimeout(recognize, 400);
+      setTimeout(recognize, 2000);   // даём рассмотреть кадр
     }
   });
   $('#camGallery').addEventListener('click', function () { openFile('cam'); });
@@ -1614,7 +1614,7 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
       $('#camPhoto').classList.remove('blur');
       $('#camChip').textContent = 'Поместите разворот в рамку';
       $('#camChip').classList.remove('err');
-      setTimeout(recognize, 900);
+      setTimeout(recognize, 2000);   // даём рассмотреть кадр
     };
     r.readAsDataURL(f);
   });
