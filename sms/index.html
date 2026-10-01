@@ -1839,7 +1839,7 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
     ckCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   var CK_G = 0.09, CK_DRAG = 0.99;                // быстрый вылет, дальше воздух тормозит
-  function ckLaunchV() { return 1.9 * Math.sqrt(2 * CK_G * (ckH - 60 - Math.random() * 120)); }
+  function ckLaunchV() { return 1.55 * Math.sqrt(2 * CK_G * (ckH - 60 - Math.random() * 120)); }  // с учётом drag пик у верха экрана
   function ckFrame(t) {
     if (!$('#cardOkView').classList.contains('open')) { ckRaf = null; return; }
     if (!ckPrev) ckPrev = t;
@@ -1877,7 +1877,7 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
         s: COOKIE_SIZES[i],
         rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.08,
         c: i % 2 ? '#00a043' : '#0072eb',
-        delay: i * 260 + Math.random() * 150       // вылетают по очереди, не спеша
+        delay: i * 25 + Math.random() * 120        // залп разом, как в референсе Shop (~0,3 с на всех)
       });
     }
     if (!ckRaf) ckRaf = requestAnimationFrame(ckFrame);
@@ -1947,23 +1947,29 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
   })();
   function coSetCb(sel, on) { $(sel + ' .cb-box').classList.toggle('on', on); }
   function coOn(sel) { return $(sel + ' .cb-box').classList.contains('on'); }
-  $('#coAsp').addEventListener('click', function () {            // мастер: проставить все согласия
+  function coSync() {                                            // мастер отражает состояние всех галочек ниже
+    var allDocs = $$('#coDocs .cb-box').every(function (b) { return b.classList.contains('on'); });
+    if (!allDocs) coSetCb('#coTerms', false);
+    coSetCb('#coAsp', coOn('#coTerms') && allDocs);
+  }
+  $('#coAsp').addEventListener('click', function () {            // мастер: проставить/снять все согласия (список не раскрывает)
     var on = !coOn('#coAsp');
     coSetCb('#coAsp', on);
     $('#coAspBlock').classList.remove('err');
-    if (on) {
-      coSetCb('#coTerms', true);
-      $('#coDocs').hidden = false;                               // раскрываем перечень документов
-      $$('#coDocs .cb-box').forEach(function (b) { b.classList.add('on'); });
-    }
+    coSetCb('#coTerms', on);
+    $$('#coDocs .cb-box').forEach(function (b) { b.classList.toggle('on', on); });
   });
   $('#coTerms').addEventListener('click', function (e) {
     if (e.target.closest('#coTermsLink')) { $('#coDocs').hidden = !$('#coDocs').hidden; return; }
-    coSetCb('#coTerms', !coOn('#coTerms'));
+    var on = !coOn('#coTerms');
+    coSetCb('#coTerms', on);
+    $$('#coDocs .cb-box').forEach(function (b) { b.classList.toggle('on', on); });
+    coSync();
   });
   $('#coDocs').addEventListener('click', function (e) {
     var b = e.target.closest('.co-doc'); if (!b) return;
     b.querySelector('.cb-box').classList.toggle('on');
+    coSync();                                                    // отжали документ -> «условия» и мастер гаснут
   });
   $('#bankAdd').addEventListener('click', function () {          // внешний сервис добавления счёта
     stage('Добавление счёта. Внешний сервис', 'Экран-заглушка: счёт добавляет сервис-партнёр', function () {
@@ -2019,7 +2025,7 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
     peek.classList.remove('bye');
     peek.hidden = false;
     clearTimeout(peekHideT);
-    peekHideT = setTimeout(function () { peekHide(true); }, 2400);
+    peekHideT = setTimeout(function () { peekHide(true); }, 1600 + Math.random() * 1400);
   }
   function peekHide(reschedule) {
     if (peek.hidden) return;
@@ -2029,7 +2035,11 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
   }
   function peekNext() {
     clearTimeout(peekT);
-    peekT = setTimeout(peekShow, 2500 + Math.random() * 3000);
+    var r = Math.random(), wait;                              // рваный ритм: то сразу, то долгая пауза
+    if (r < 0.35) wait = 500 + Math.random() * 900;
+    else if (r < 0.8) wait = 1500 + Math.random() * 2000;
+    else wait = 4500 + Math.random() * 4000;
+    peekT = setTimeout(peekShow, wait);
   }
   function pbSize() {
     var dpr = Math.min(2, window.devicePixelRatio || 1);
