@@ -305,7 +305,33 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
 .state-btn{background:var(--ink-5);border-radius:var(--r-2xl);padding:var(--s3) var(--s4);
   font-size:14px;line-height:20px;font-weight:500}
 .state-btn:active{background:var(--ink-10)}
+.state-btn.active{background:var(--primary);color:#fff}
 .sheet-note{font-size:12px;line-height:16px;color:var(--ink-66)}
+
+/* тег «В разработке» и группы сценариев */
+.dev-tag{display:inline-block;font-style:normal;font-size:9px;line-height:14px;font-weight:600;
+  letter-spacing:.5px;text-transform:uppercase;vertical-align:2px;
+  color:#bf6a02;background:#fff4e5;border-radius:999px;padding:0 6px;margin-left:4px;white-space:nowrap}
+.scen-group{font-size:11px;line-height:16px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--ink-50);margin:var(--s3) 0 var(--s1);padding-left:var(--s1)}
+.scen-group:first-child{margin-top:0}
+
+/* ---------- Панель сценариев слева (веб) ---------- */
+.scen-panel{display:none}
+@media (min-width:900px){
+  html:not(.is-touch) .scen-panel{display:flex;flex-direction:column;gap:var(--s3);
+    order:-1;width:264px;flex:none;align-self:center;margin-right:40px;
+    background:#161d33;border-radius:24px;padding:20px;
+    max-height:calc(100dvh - 48px);overflow-y:auto}
+  .scen-panel .scen-title{color:#fff;font-size:16px;line-height:24px;font-weight:700}
+  .scen-panel .state-btn{background:rgba(255,255,255,.07);color:#dfe4f0}
+  .scen-panel .state-btn:hover{background:rgba(255,255,255,.13)}
+  .scen-panel .state-btn.active{background:var(--primary);color:#fff}
+  .scen-panel .scen-group{color:rgba(223,228,240,.55)}
+  .scen-panel .dev-tag{background:rgba(255,176,32,.16);color:#ffb020}
+  .scen-panel .scen-note{font-size:12px;line-height:16px;color:rgba(223,228,240,.55);margin-top:auto}
+  .scen-panel .scen-note b{color:#dfe4f0}
+}
 
 /* ---------- Тост ---------- */
 .toastish{position:fixed;left:50%;bottom:32px;transform:translate(-50%,16px);z-index:80;
@@ -597,17 +623,18 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
   <button class="fab" id="fabChat" aria-label="Чат"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJtZXNzYWdlLWNpcmNsZS1xdWVzdGlvbiI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0xMi41MTY3IDE2LjI2NjdDMTAuNTY1OCAxNi44OCA4LjM1IDE2Ljc3MTcgNi40MTY2NyAxNS44MzMzTDIuNSAxNi42NjY3TDMuNTgzMzMgMTMuNDE2N0MxLjY0NjY3IDEwLjU1MjUgMi4zOTUgNi44NTY2NiA1LjMzMzMzIDQuNzcxNjZDOC4yNzE2NyAyLjY4NzUgMTIuNDkxNyAyLjg1ODMzIDE1LjIwNDIgNS4xNzE2NkMxNi41NzgzIDYuMzQ0MTYgMTcuMzUgNy44ODI1IDE3LjQ4OTIgOS40NjVNMTUuODMzMyAxOC4zMzMzVjE4LjM0MTdNMTUuODMzMyAxNS44MzMzQzE2LjIwNjkgMTUuODMyMSAxNi41NjkzIDE1LjcwNTcgMTYuODYyNSAxNS40NzQxQzE3LjE1NTcgMTUuMjQyNiAxNy4zNjI3IDE0LjkxOTQgMTcuNDUwNSAxNC41NTYzQzE3LjUzODIgMTQuMTkzMSAxNy41MDE2IDEzLjgxMTEgMTcuMzQ2NSAxMy40NzEyQzE3LjE5MTQgMTMuMTMxMyAxNi45MjY4IDEyLjg1MzMgMTYuNTk1IDEyLjY4MTdDMTYuMjYzNSAxMi41MTE4IDE1Ljg4NDMgMTIuNDU5MiAxNS41MTkgMTIuNTMyM0MxNS4xNTM4IDEyLjYwNTMgMTQuODI0IDEyLjc5OTkgMTQuNTgzMyAxMy4wODQyIiBzdHJva2U9IiMxNTIxNDkiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K" alt=""></button>
 </div>
 
-<!-- ===== Демо-меню ===== -->
+<!-- ===== Сценарии: панель слева (веб) ===== -->
+<aside class="scen-panel" id="scenPanel" hidden>
+  <b class="scen-title">Сценарии</b>
+  <div class="state-list" id="panelList"></div>
+  <p class="scen-note">Код из СМС в демо: <b>777-777</b>.<br>Любой другой покажет ошибку.</p>
+</aside>
+
+<!-- ===== Сценарии: шит из бургера (мобильный) ===== -->
 <div class="sheet-overlay" id="menuSheet">
   <div class="sheet">
-    <div class="sheet-head"><b>Демо-меню</b><button class="sheet-x" data-sheet-close><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ4Ij4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE1IDVMNSAxNU01IDVMMTUgMTUiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" alt=""></button></div>
-    <div class="state-list">
-      <button class="state-btn" data-go="home">Главная с калькулятором</button>
-      <button class="state-btn" data-go="reg">Новый пользователь — телефон и&nbsp;согласия</button>
-      <button class="state-btn" data-go="regSms">Новый пользователь — код из&nbsp;СМС</button>
-      <button class="state-btn" data-go="regCaptcha">Смена номера — капча</button>
-      <button class="state-btn" data-go="login">Повторный клиент — вход в&nbsp;ЛК</button>
-    </div>
+    <div class="sheet-head"><b>Сценарии</b><button class="sheet-x" data-sheet-close><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ4Ij4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE1IDVMNSAxNU01IDVMMTUgMTUiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" alt=""></button></div>
+    <div class="state-list" id="menuList"></div>
     <p class="sheet-note">Код из СМС в демо: <b>777-777</b>. Любой другой покажет ошибку.</p>
   </div>
 </div>
@@ -625,16 +652,20 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
   /* ---------- Гейт: код доступа 92125 ---------- */
   var CODE = '92125';
   var gate = $('#gate'), gateInput = $('#gateInput'), app = $('#app');
+  function unlock() {
+    gate.hidden = true; app.hidden = false;
+    $('#scenPanel').hidden = false;
+  }
   function tryCode() {
     if (gateInput.value === CODE) {
       try { sessionStorage.setItem('smsGate', '1'); } catch (e) {}
-      gate.hidden = true; app.hidden = false;
+      unlock();
     } else {
       $('#gateErr').hidden = false;
       gateInput.value = ''; gateInput.focus();
     }
   }
-  try { if (sessionStorage.getItem('smsGate') === '1') { gate.hidden = true; app.hidden = false; } } catch (e) {}
+  try { if (sessionStorage.getItem('smsGate') === '1') unlock(); } catch (e) {}
   $('#gateBtn').addEventListener('click', tryCode);
   gateInput.addEventListener('input', function () {
     $('#gateErr').hidden = true;
@@ -1013,17 +1044,36 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
     show('homeView');
   });
 
-  /* ---------- Демо-меню ---------- */
-  $('#menuBtn').addEventListener('click', function () { $('#menuSheet').classList.add('open'); });
-  document.addEventListener('click', function (e) {
-    if (e.target.closest('[data-sheet-close]')) $('#menuSheet').classList.remove('open');
-    var ov = e.target.closest('.sheet-overlay');
-    if (ov && !e.target.closest('.sheet')) ov.classList.remove('open');
-  });
-  $('#menuSheet').addEventListener('click', function (e) {
-    var b = e.target.closest('.state-btn'); if (!b) return;
-    $('#menuSheet').classList.remove('open');
-    var go = b.getAttribute('data-go');
+  /* ---------- Сценарии ----------
+     Новые сценарии дописываем в SCENARIOS: группа (group + badge) и пункты (label, go, badge). */
+  var DEV = 'В разработке';
+  var SCENARIOS = [
+    { items: [
+      { label: 'Главная с калькулятором', go: 'home', badge: DEV }
+    ] },
+    { group: 'Телефон и СМС', badge: DEV, items: [
+      { label: 'Новый пользователь — телефон и согласия', go: 'reg' },
+      { label: 'Код из СМС', go: 'regSms' },
+      { label: 'Смена номера — капча', go: 'regCaptcha' },
+      { label: 'Вход в ЛК — повторный клиент', go: 'login' }
+    ] }
+  ];
+  function tag(b) { return b ? ' <i class="dev-tag">' + b + '</i>' : ''; }
+  function renderScenarios(root) {
+    var h = '';
+    SCENARIOS.forEach(function (sec) {
+      if (sec.group) h += '<div class="scen-group">' + sec.group + tag(sec.badge) + '</div>';
+      sec.items.forEach(function (it) {
+        h += '<button class="state-btn" data-go="' + it.go + '">' + it.label + tag(it.badge) + '</button>';
+      });
+    });
+    root.innerHTML = h;
+  }
+  renderScenarios($('#panelList'));
+  renderScenarios($('#menuList'));
+
+  function goScenario(go) {
+    $$('.state-btn').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-go') === go); });
     if (go === 'home') { show('homeView'); return; }
     if (go === 'login') { openLogin(); return; }
     openReg();
@@ -1034,6 +1084,17 @@ input[type=range]:hover::-moz-range-thumb,input[type=range]:active::-moz-range-t
       regToSms(false);
       if (go === 'regCaptcha') onRegPhoneTouch();
     }
+  }
+  $('#menuBtn').addEventListener('click', function () { $('#menuSheet').classList.add('open'); });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-sheet-close]')) $('#menuSheet').classList.remove('open');
+    var ov = e.target.closest('.sheet-overlay');
+    if (ov && !e.target.closest('.sheet')) ov.classList.remove('open');
+  });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.state-btn'); if (!b) return;
+    $('#menuSheet').classList.remove('open');
+    goScenario(b.getAttribute('data-go'));
   });
 
   /* ---------- Тост ---------- */
