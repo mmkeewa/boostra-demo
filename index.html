@@ -117,6 +117,10 @@ a{color:inherit;text-decoration:none}
 
 /* Greeting */
 .greeting{padding:var(--s4) var(--s4) var(--s4);font-size:18px;line-height:24px;font-weight:600}
+.greeting-row{display:flex;align-items:flex-start;justify-content:space-between}
+.greeting-row .greeting{flex:1;min-width:0}
+.info-btn{flex:0 0 auto;width:24px;height:24px;margin:var(--s4) var(--s4) 0 0;display:grid;place-items:center}
+.info-btn svg{width:24px;height:24px}
 
 /* ---------- Loan slider ---------- */
 .loans{display:flex;gap:var(--s2);overflow-x:auto;padding:var(--s4) calc((100% - 300px)/2) 20px;margin-bottom:-12px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
@@ -739,6 +743,13 @@ a{color:inherit;text-decoration:none}
 .onb-beak{position:absolute;bottom:-8px;width:12px;height:8px;background:#1e262e;clip-path:polygon(0 0,100% 0,50% 100%)}
 .onb-replay{margin-bottom:var(--s2)}
 
+/* Подсказка после онбординга (макет «Tooltop»): слева от иконки «i», клюв вправо */
+.onb-hint{position:absolute;z-index:65;max-width:300px;padding:12px 20px;border-radius:12px;background:#1e262e;color:#fff;
+  font-size:14px;line-height:20px;opacity:0;transition:opacity .25s ease;pointer-events:none}
+.onb-hint[hidden]{display:none}
+.onb-hint.show{opacity:1}
+.onb-hint-beak{position:absolute;right:-8px;top:50%;margin-top:-6px;width:8px;height:12px;background:#1e262e;clip-path:polygon(0 0,100% 50%,0 100%)}
+
 </style>
 </head>
 <body>
@@ -770,7 +781,10 @@ a{color:inherit;text-decoration:none}
       </nav>
 
       <!-- ===== Greeting ===== -->
-      <h1 class="greeting"><span id="greet">Здравствуйте</span>,<br>Иван Иванович</h1>
+      <div class="greeting-row">
+        <h1 class="greeting"><span id="greet">Здравствуйте</span>,<br>Иван Иванович</h1>
+        <button class="info-btn" id="onbInfo" aria-label="Посмотреть подсказки ещё раз"><svg viewBox="0 0 24 24" fill="none"><path d="M17 3.34A10 10 0 1 1 2.005 12.324L2 12l.005-.324A10 10 0 0 1 17 3.34ZM12 11h-1l-.117.007A1 1 0 0 0 11 13v3l.007.117A1 1 0 0 0 12 17h1l.117-.007A1 1 0 0 0 14 16l-.007-.117a1 1 0 0 0-.876-.876L13 15v-3l-.007-.117A1 1 0 0 0 12 11Zm.01-4-.127.007A1 1 0 0 0 12 9l.127-.007A1 1 0 0 0 12.01 7Z" fill="#C5C9CE"/></svg></button>
+      </div>
 
       <!-- ===== Партнёры + отказ (состояние «отказ») ===== -->
       <div class="section" id="partnersSection" hidden>
@@ -1331,6 +1345,8 @@ a{color:inherit;text-decoration:none}
       <i class="onb-beak" id="onbBeak"></i>
     </div>
   </div>
+  <!-- Подсказка после онбординга: к нему можно вернуться по иконке «i» (макет «Tooltop» 40002271:49951) -->
+  <div class="onb-hint" id="onbHint" hidden>Вернуться и посмотреть ещё раз можно здесь<i class="onb-hint-beak"></i></div>
 </div><!-- /device -->
 
 <div class="toast" id="toast"></div>
@@ -2160,8 +2176,45 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
   function onbFinish() {
     onb.hidden = true; onbStep = -1;
     try { localStorage.setItem(ONB_KEY, '1'); } catch (e) {}
+    onbAnimScroll(0, 600, null, showOnbHint);           // наверх к иконке «i» и подсказка, что сюда можно вернуться
   }
+  // Подсказка у иконки «i»: висит 3 секунды или пропадает по клику в любом месте
+  var onbHint = $('#onbHint'), onbInfo = $('#onbInfo'), hintTimer = null;
+  function showOnbHint() {
+    var ic = onbInfo.getBoundingClientRect(), d = deviceEl.getBoundingClientRect();
+    onbHint.hidden = false;
+    onbHint.style.left = (ic.left - d.left - 8 - onbHint.offsetWidth) + 'px';
+    onbHint.style.top = (ic.top - d.top + ic.height / 2 - onbHint.offsetHeight / 2) + 'px';
+    setTimeout(function () { onbHint.classList.add('show'); }, 10);
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(hideOnbHint, 3000);
+    setTimeout(function () { document.addEventListener('click', hideOnbHint, true); }, 0);
+  }
+  function hideOnbHint() {
+    clearTimeout(hintTimer);
+    document.removeEventListener('click', hideOnbHint, true);
+    if (onbHint.hidden) return;
+    onbHint.classList.remove('show');
+    setTimeout(function () { onbHint.hidden = true; }, 250);
+  }
+  screenEl.addEventListener('scroll', function () { if (!onbHint.hidden && onbStep < 0) hideOnbHint(); });
+  onbInfo.addEventListener('click', function () { hideOnbHint(); onbStart(); });
   var onbScrolling = false;
+  var onbEase = function (p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; };
+  function onbAnimScroll(to, dur, each, done) {          // плавная прокрутка экрана ease-in-out
+    var from = screenEl.scrollTop, dist = to - from, t0 = null;
+    if (!dist) { if (each) each(); if (done) done(); return; }
+    // rAF в фоновой вкладке не тикает — тогда идём на таймере, чтобы шаг всё равно доехал до конца
+    var next = function (f) { if (document.hidden) setTimeout(f, 16); else requestAnimationFrame(f); };
+    (function frame() {
+      var now = performance.now();
+      if (t0 === null) t0 = now;
+      var p = Math.min(1, (now - t0) / dur);
+      screenEl.scrollTop = from + dist * onbEase(p);
+      if (each) each();
+      if (p < 1) next(frame); else if (done) done();
+    })();
+  }
   function onbAction() {                                // кнопка шага; клик по свободной области = то же самое
     if (onbScrolling) return;
     if (onbStep === 2) {                                // «Вниз»: докручиваем прямо до договора
@@ -2169,19 +2222,9 @@ try{if(navigator.maxTouchPoints>0||('ontouchstart' in window)||(window.matchMedi
       var target = Math.min(screenEl.scrollHeight - screenEl.clientHeight, screenEl.scrollTop + r.top - sc.top - 140);   // договор ниже шапки, тултип над ним
       // Плавный переход: экран едет с ease-in-out, подсветка договора едет вместе с ним,
       // тултип «Ваш договор» проявляется, когда договор встал на место
-      var from = screenEl.scrollTop, dist = target - from, dur = 800, t0 = null;
-      var ease = function (p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; };
       onbScrolling = true;
       onbStep = 3; onbTip.classList.add('hide');
-      (function frame(ts) {
-        if (t0 === null) t0 = ts;
-        var p = Math.min(1, (ts - t0) / dur);
-        screenEl.scrollTop = from + dist * ease(p);
-        onbDraw();
-        if (p < 1) { requestAnimationFrame(frame); return; }
-        onbScrolling = false;
-        onbTip.classList.remove('hide');
-      })(performance.now());
+      onbAnimScroll(target, 800, onbDraw, function () { onbScrolling = false; onbTip.classList.remove('hide'); });
       return;
     }
     if (onbStep >= ONB.length - 1) onbFinish(); else onbGo(onbStep + 1);
