@@ -137,7 +137,8 @@ h1,h2{font-weight:600}
 .il-graph svg{width:20px;height:20px}
 
 /* ---------- Правая колонка ---------- */
-.tabs-sticky{position:sticky;top:var(--hdr-h);z-index:6;background:var(--bg-page);padding:var(--gap-top) 0 var(--s2);margin-bottom:-8px}
+/* табы: 16 от шапки сверху; снизу паддинг 24 + гэп колонки 24 = 48, чтобы верх баннера (или первой карточки без него) совпадал с верхом карточки займа слева (176) */
+.tabs-sticky{position:sticky;top:var(--hdr-h);z-index:6;background:var(--bg-page);padding:var(--gap-top) 0 var(--s6)}
 .tabs{display:flex;gap:8px;align-items:center}
 .tab{height:32px;padding:0 16px;border-radius:999px;border:1px solid var(--ink-10);font-size:12px;line-height:16px;
   display:inline-flex;align-items:center;white-space:nowrap;background:var(--bg-card)}
@@ -267,11 +268,14 @@ h1,h2{font-weight:600}
 .sch-sum b{font-size:14px;line-height:20px;font-weight:600}
 
 /* ---------- Нижняя полоса: 470 по центру ---------- */
-.bottom-bar{position:fixed;left:50%;bottom:0;z-index:15;width:470px;transform:translateX(-50%);
+.bottom-bar{position:fixed;left:50%;bottom:0;z-index:15;width:470px;transform:translate(-50%,0);
   background:var(--bg-card);border-radius:var(--r-4xl) var(--r-4xl) 0 0;padding:16px 16px 24px;
   display:flex;flex-direction:column;align-items:center;gap:16px;
   box-shadow:0 -4px 12px rgba(21,33,73,.04),0 -16px 40px rgba(21,33,73,.08)}
 .bb-link{font-size:16px;line-height:24px}
+/* полоса оплаты у займов: появляется, когда кнопка «Перейти к оплате» в карточке ушла под шапку, уезжает вниз, когда вернулась */
+.bottom-bar.pay{transform:translate(-50%,120%);transition:transform .28s ease;pointer-events:none}
+.bottom-bar.pay.is-shown{transform:translate(-50%,0);pointer-events:auto}
 
 /* ---------- Панель прототипа ---------- */
 .proto-bar{position:fixed;right:24px;bottom:24px;z-index:30;display:flex;align-items:center;gap:12px;
@@ -584,6 +588,11 @@ h1,h2{font-weight:600}
     <a class="tlink bb-link" href="#">У меня есть промокод</a>
   </div>
 
+  <!-- ===== Нижняя полоса оплаты: только у займов, пока кнопка в карточке не видна ===== -->
+  <div class="bottom-bar pay" id="payBar" aria-hidden="true">
+    <button class="btn btn-primary">Перейти к&nbsp;оплате</button>
+  </div>
+
   <!-- ===== Панель прототипа ===== -->
   <div class="proto-bar">
     <label class="proto-switch"><input type="checkbox" id="bannerToggle" checked><span class="proto-knob"></span>Баннер 115-ФЗ</label>
@@ -635,6 +644,8 @@ h1,h2{font-weight:600}
     });
     panels.forEach(function (p) { p.hidden = p.dataset.panel !== id; });
     bottomBar.hidden = id !== 'offer';
+    hidePayBar();
+    setTimeout(updatePayBar, 0);
     try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, 0); }
     try { history.replaceState(null, '', location.pathname + location.search + '#' + id); } catch (e) {}
   }
@@ -645,6 +656,22 @@ h1,h2{font-weight:600}
     });
     c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(c.dataset.id); } });
   });
+  /* ---------- Полоса «Перейти к оплате»: видна, пока кнопка в карточке оплаты скрыта под шапкой ---------- */
+  var payBar = $('#payBar');
+  var HDR = 80;
+  function hidePayBar() { payBar.classList.remove('is-shown'); payBar.setAttribute('aria-hidden', 'true'); }
+  function showPayBar() { payBar.classList.add('is-shown'); payBar.setAttribute('aria-hidden', 'false'); }
+  function updatePayBar() {
+    var panel = panels.filter(function (p) { return !p.hidden; })[0];
+    var btn = panel && panel.querySelector('.card.pay .btn-primary');
+    if (!btn) { hidePayBar(); return; }
+    var r = btn.getBoundingClientRect();
+    if (r.bottom <= HDR) showPayBar(); else hidePayBar();
+  }
+  /* без requestAnimationFrame: один getBoundingClientRect на событие дёшев, а в фоновой вкладке кадры анимации не приходят */
+  window.addEventListener('scroll', updatePayBar, { passive: true });
+  window.addEventListener('resize', updatePayBar);
+
   var initial = (location.hash || '').slice(1);
   if (['offer', 'pdl', 'il'].indexOf(initial) >= 0) select(initial); else select('offer');
 
