@@ -1532,11 +1532,27 @@ button { font: inherit; color: inherit; }
 }
 .lk-header__logo { left: 0; width: 188px; background-position: 0 -49.2px; }
 .lk-header__actions { right: 0; width: 187px; background-position: -188px -49.2px; }
-/* Веб-версия кабинета (её решение 2026-10-12): без верхней панели приложения, бейджа «меньше процент»
-   и точек карусели. От шапки остаётся только место под статус-бар устройства */
-.lk-header { height: var(--lk-status-h); }
-.lk-header__logo,
-.lk-header__actions,
+/* Веб-версия кабинета (её решения 2026-10-12): вместо верхней панели приложения шапка сайта header-mob
+   из файла «Выдача {Boostra}» (16:13765): 61 px под статус-баром, отступы 16 / 20, нижние углы 40.
+   Бейджа «меньше процент» и точек карусели нет */
+.lk-header.site-header {
+  height: calc(var(--lk-status-h) + 61px);
+  padding-top: var(--lk-status-h);
+  background: var(--bg-grouped-secondary-w);
+  border-radius: 0 0 var(--radius-6xl, 40px) var(--radius-6xl, 40px);
+}
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 61px;
+  padding: var(--space-lg) var(--space-xl);
+}
+.site-header__content { display: flex; align-items: center; gap: 9px; /* 8,97 в макете, токена нет */ }
+.site-header__logo { display: block; width: 77px; height: 17px; }
+.site-header__slash { display: block; width: 8px; height: 23px; }
+.site-header__catalog { color: var(--text-bottom-default); font: 400 9.57px/14.35px "Inter", sans-serif; white-space: nowrap; }
+.site-header__login { color: var(--text-bottom-default); }
 .lk > .lk-loyalty { display: none; }
 .lk-loyalty {
   display: flex;
@@ -2148,10 +2164,16 @@ button { font: inherit; color: inherit; }
 
               <!-- ===== Личный кабинет: экран входа 2989:59591 (её компонент App Card MKK) ===== -->
               <div class="lk" id="lk">
-                <!-- шапка в макете растровая (один JPEG с логотипом и иконками), статус-бар из него скрыт -->
-                <header class="lk-header" aria-label="Boostra">
-                  <span class="lk-header__logo" role="img" aria-label="boostra"></span>
-                  <span class="lk-header__actions" aria-hidden="true"></span>
+                <!-- шапка сайта: header-mob из файла «Выдача {Boostra}» (экран 16:13765); клиент авторизован, поэтому «Выйти» -->
+                <header class="lk-header site-header" aria-label="Boostra">
+                  <div class="site-header__bar">
+                    <div class="site-header__content">
+                      <img class="site-header__logo" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzgiIGhlaWdodD0iMTciIHZpZXdCb3g9IjAgMCA3OCAxNyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjYzNjk3IDBMMC4yOTA1OTIgMTEuMzg5N0MwLjEyMTI2NiAxMi4xNDQzIDAuMDAwMzE4MDA2IDEyLjg3NTMgMC4wMDAzMTgwMDYgMTMuNjUzNEMtMC4wMjM4NzE1IDE1LjY4MTQgMS4zMzA3NCAxNy4wMDIgNC40NzUzOCAxNy4wMDJDMTAuMDM5IDE3LjAwMiAxMi41MzA1IDEyLjczMzggMTIuNTMwNSA4Ljg5MDA3QzEyLjUzMDUgNi44MTQ5MyAxMS4zNjk0IDQuODgxMjggOC45NTA0NCA0Ljg4MTI4QzcuNTQ3NDUgNC44ODEyOCA2LjI4OTU5IDUuNDQ3MjMgNS40OTEzNCA2LjIyNTQxSDUuNDQyOTZMNi43NzMzOCAwSDIuNjM2OTdaTTI1Ljk5MzEgNy45MDM5NUMyNi4wMTg0IDcuODgzNCAyNi4wNDM5IDcuODYyNzggMjYuMDY5NiA3Ljg0MjA4QzMwLjEyNzUgNC41ODI3OSAzMS44ODM5IDQuNTgyNzkgMzMuNDE4NCA0LjU4Mjc5QzM2LjYxMTUgNC41ODI3OSAzOC42MTkyIDYuNjEwNzYgMzguNjE5MiA5LjM0NjE3QzM4LjYxOTIgMTMuODUwMiAzNS40NzQ1IDE2LjcwMzUgMzEuMzEzOSAxNi43MDM1QzI4LjM5OTUgMTYuNzAzNSAyNy4yOTE2IDE1LjE1NSAyNS41NDMxIDEzLjQ1MDdDMjUuNTIwMSAxMy40MjgzIDI1LjQ5NTkgMTMuNDA1NSAyNS40NzA5IDEzLjM4MjNDMjUuNDQ1NiAxMy40MDI5IDI1LjQyMDIgMTMuNDIzNSAyNS4zOTQ0IDEzLjQ0NDJDMjEuMzM2NSAxNi43MDM1IDE5LjU0ODkgMTYuNzAzNSAxOC4wNDU2IDE2LjcwMzVDMTQuODUyNiAxNi43MDM1IDEyLjg0NDggMTQuNjc1NSAxMi44NDQ4IDExLjk0MDFDMTIuODQ0OCA3LjQzNjEgMTUuOTg5NSA0LjU4Mjc5IDIwLjE1MDEgNC41ODI3OUMyMi45NzkzIDQuNTgyNzkgMjQuMTcyNCA2LjEzMTI4IDI1LjkyMDkgNy44MzU1MkMyNS45NDQgNy44NTc5NiAyNS45NjgxIDcuODgwNzYgMjUuOTkzMSA3LjkwMzk1Wk00LjU3MjE0IDEwLjg0NzNDNC45MTA3OSA5LjEyNTg4IDUuOTI2NzUgOC4xMzU0NyA2Ljk0MjcxIDguMTM1NDdDNy43ODkzNCA4LjEzNTQ3IDguMjAwNTYgOC43OTU3NCA4LjIwMDU2IDkuNzg2MTVDOC4yMDA1NiAxMS41NzgzIDYuOTQyNzEgMTMuOTgzNiA1LjM3MDM5IDEzLjk4MzZDNC43NDE0NiAxMy45ODM2IDQuMzA2MDUgMTMuNjA2MyA0LjI4MTg2IDEyLjg5ODlDNC4yMzM0OCAxMi40NTA4IDQuMzMwMjQgMTIuMDQ5OSA0LjQwMjgxIDExLjY3MjZMNC41NzIxNCAxMC44NDczWk0xOS4xNTI1IDEyLjc2NkMxNy44MzIzIDEyLjc2NiAxNy4yODMxIDExLjY4NzIgMTcuMjgzMSAxMC43MjA0QzE3LjI4MzEgOS41ODUxIDE4LjIzNzEgOC4yODg3MyAxOS45MzA0IDguMjg4NzNDMjEuNTQ1MSA4LjI4ODczIDIzLjIyNDQgMTAuNzc4OSAyMy4yMjQ0IDEwLjcyMDRDMjMuMjI0NCAxMC42NDYxIDIwLjkxODMgMTIuNzY2IDE5LjE1MjUgMTIuNzY2Wk0zMi4zNzggOC4yODg3M0MzMy42OTgzIDguMjg4NzMgMzQuMjQ3NCA5LjM2NzU2IDM0LjI0NzQgMTAuMzM0NEMzNC4yNDc0IDExLjQ2OTYgMzMuMjkzNCAxMi43NjYgMzEuNjAwMiAxMi43NjZDMjkuOTg1NCAxMi43NjYgMjguMzA2MiAxMC4yNzU4IDI4LjMwNjIgMTAuMzM0NEMyOC4zMDYyIDEwLjQwODYgMzAuNjEyMiA4LjI4ODczIDMyLjM3OCA4LjI4ODczWk0zNy44NTk2IDE2LjAzNTFDMzguNjMzNyAxNi41Nzc1IDQwLjE4MTggMTYuOTU0OCA0MS43NzgzIDE3LjAwMkM0NS4xODkgMTcuMDI1NSA0Ny42MzIyIDE1LjUzOTkgNDcuNjMyMiAxMi43ODA5QzQ3LjYzMjIgMTEuMDM1OSA0Ni4wNTk4IDEwLjE2MzQgNDQuNzc3OCA5LjU3MzkyQzQzLjg1ODYgOS4xNzMwNCA0My40MjMyIDguODE5MzMgNDMuNDIzMiA4LjQ4OTE5QzQzLjQyMzIgOC4wMTc1NyA0My45MzEyIDcuNzgxNzYgNDQuNzA1MiA3Ljc4MTc2QzQ1LjgxNzkgNy43ODE3NiA0Ni42ODg4IDguMDY0NzMgNDcuMjIwOSA4LjI3Njk2TDQ4LjE2NDMgNS40OTQzOUM0Ny41MzU0IDUuMTY0MjYgNDYuMzk4NSA0Ljg4MTI4IDQ0Ljg3NDUgNC44ODEyOEM0MS41ODQ4IDQuODgxMjggMzkuMjYyNiA2LjQ4NDggMzkuMjYyNiA5LjA1NTE0QzM5LjI2MjYgMTAuNTg3OSA0MC41Njg4IDExLjU1NDcgNDEuOTIzNCAxMi4xOTE0QzQyLjk2MzYgMTIuNjM5NSA0My4zMjY0IDEyLjk2OTYgNDMuMzI2NCAxMy4zOTQxQzQzLjMyNjQgMTMuNzcxNCA0Mi45ODc4IDE0LjA3NzkgNDIuMTY1MyAxNC4wNzc5QzQwLjkzMTcgMTQuMTAxNSAzOS41NTI5IDEzLjU4MjcgMzguODI3MiAxMy4yNTI2TDM3Ljg1OTYgMTYuMDM1MVpNNTAuOTAzOSAyLjk0NzY0TDUwLjQ5MjcgNS4xNDA2OEg0OS4wNDEzTDQ4LjQzNjYgOC4xODI2NEg0OS44ODhMNDkuMDY1NSAxMi4yMzg2QzQ4Ljg5NjIgMTMuMTU4MiA0OC44MjM2IDEzLjc3MTQgNDguODIzNiAxNC4zODQ1QzQ4LjgyMzYgMTUuOTQwOCA0OS45MzY0IDE3LjAwMiA1Mi4xODYgMTcuMDAyQzUyLjk4NDIgMTcuMDAyIDUzLjk1MTggMTYuOTA3NiA1NC40NTk4IDE2LjcxOUw1NC45OTIgMTMuNTU5MUM1NC42NTMzIDEzLjYwNjMgNTQuMzE0NyAxMy42MDYzIDU0LjAyNDQgMTMuNjA2M0M1My4yNzQ1IDEzLjYwNjMgNTMuMDU2OCAxMy4yMDU0IDUzLjA1NjggMTIuNjg2NkM1My4wNTY4IDEyLjM1NjUgNTMuMTUzNiAxMS43NjcgNTMuMjI2MSAxMS4zODk3TDUzLjkwMzQgOC4xODI2NEg1Ni4zMjI0TDU2LjkyNzEgNS4xNDA2OEg1NC41MDgyTDU1LjEzNzEgMS44MzkzMkw1MC45MDM5IDIuOTQ3NjRaTTU5Ljc4NzcgMTYuNzQyNkw2MC41Mzc2IDEyLjc4MDlDNjAuOTQ4OCAxMC42NTg3IDYxLjc3MTIgOC43OTU3NCA2NC4yMTQ0IDguNzk1NzRINjQuNzQ2NUw2NS41NjkgNC45MDQ4N0M2NS4zMjcxIDQuODgxMjggNjUuMTA5NCA0Ljg4MTI4IDY0Ljg2NzUgNC44ODEyOEM2My4yMjI2IDQuODgxMjggNjEuODkyMiA1Ljk0MjQzIDYxLjAyMTQgNy40NTE2Mkg2MC45NDg4QzYxLjAyMTQgNi42NzM0NSA2MS4wNjk3IDUuOTE4ODUgNjEuMTE4MSA1LjE0MDY4SDU3LjU2MjNDNTcuNDQxMyA2LjEwNzUgNTcuMjk2MiA4LjIyOTggNTYuOTU3NSAxMC4wNjkxTDU1LjY1MTMgMTYuNzQyNkg1OS43ODc3Wk03NS41NjU1IDE2Ljc0MjZDNzUuNTE3MSAxNS4yMzM0IDc1Ljc4MzIgMTIuODUxNyA3Ni4wMjUxIDExLjYwMTlMNzcuMjgyOSA1LjUxNzk3Qzc2LjIxODYgNS4xODc4NCA3NC41OTc5IDQuODgxMjggNzMuMDQ5NyA0Ljg4MTI4QzY2LjkwNTYgNC44ODEyOCA2NC40MTQxIDkuMDMxNTYgNjQuNDE0MSAxMi44NzUzQzY0LjQxNDEgMTUuMzk4NCA2NS45MzggMTcuMDAyIDY4LjA5MDkgMTcuMDAyQzY5LjM0ODcgMTcuMDAyIDcwLjgyNDMgMTYuNDU5NiA3MS44NDAzIDE0LjczODJINzEuODg4NkM3MS44NjQ1IDE1LjM5ODQgNzEuODE2MSAxNi4wODIzIDcxLjc5MTkgMTYuNzQyNkg3NS41NjU1Wk03Mi4xNzg5IDEwLjMwNDlDNzEuNjQ2OCAxMy4wNDAzIDcwLjY1NSAxMy43NzE0IDY5LjkwNTEgMTMuNzcxNEM2OS4xNzk0IDEzLjc3MTQgNjguNzE5OCAxMy4yMDU0IDY4LjcxOTggMTIuMTIwN0M2OC43MTk4IDEwLjQyMjggNjkuOTc3NyA3Ljg5OTY2IDcxLjkxMjggNy44OTk2NkM3Mi4xMDY0IDcuODk5NjYgNzIuMzk2NiA3LjkyMzI0IDcyLjY2MjcgNy45NzA0MUw3Mi4xNzg5IDEwLjMwNDlaIiBmaWxsPSIjMTUyMTQ5Ii8+Cjwvc3ZnPgo=" width="77" height="17" alt="boostra">
+                      <img class="site-header__slash" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSIyMyIgdmlld0JveD0iMCAwIDkgMjMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik04LjE1MzA4IDBMMi4wMTAzNSAyMi44MjEySDBMNi4xNDI3MyAwSDguMTUzMDhaIiBmaWxsPSIjMTUyMTQ5Ii8+Cjwvc3ZnPgo=" width="8" height="23" alt="">
+                      <span class="site-header__catalog">Каталог финансовых<br>продуктов</span>
+                    </div>
+                    <span class="site-header__login t-note">Выйти</span>
+                  </div>
                 </header>
 
                 <div class="lk-loyalty">
