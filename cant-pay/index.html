@@ -1532,6 +1532,12 @@ button { font: inherit; color: inherit; }
 }
 .lk-header__logo { left: 0; width: 188px; background-position: 0 -49.2px; }
 .lk-header__actions { right: 0; width: 187px; background-position: -188px -49.2px; }
+/* Веб-версия кабинета (её решение 2026-10-12): без верхней панели приложения, бейджа «меньше процент»
+   и точек карусели. От шапки остаётся только место под статус-бар устройства */
+.lk-header { height: var(--lk-status-h); }
+.lk-header__logo,
+.lk-header__actions,
+.lk > .lk-loyalty { display: none; }
 .lk-loyalty {
   display: flex;
   align-items: center;
