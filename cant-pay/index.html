@@ -127,6 +127,7 @@
   --icon-size-20: 20px;
   --icon-wh: 20px;
   --neutral-bottom-10: var(--palette-bottom-2);
+  --neutral-bottom-20: var(--palette-bottom-3);
   --neutral-bottom-5: var(--palette-bottom-1);
   --neutral-bottom-alpha-10: var(--palette-bottom-alpha-2);
   --neutral-bottom-alpha-20: var(--palette-bottom-alpha-3);
@@ -154,6 +155,7 @@
   --palette-bottom-1: #f3f4f6;
   --palette-bottom-10: #152149;
   --palette-bottom-2: #e8e9ed;
+  --palette-bottom-3: #d0d3db;
   --palette-bottom-alpha-1: rgba(21,33,73,0.05);
   --palette-bottom-alpha-2: rgba(21,33,73,0.1);
   --palette-bottom-alpha-3: rgba(21,33,73,0.2);
@@ -330,6 +332,7 @@
   --ghost-secondary-text-and-icon-default: var(--contrast-secondary-text-and-icon-ghost);
   --ghost-secondary-text-and-icon-hover-and-press: var(--contrast-secondary-text-and-icon-ghost);
   --neutral-bottom-10: var(--palette-bottom-2);
+  --neutral-bottom-20: var(--palette-bottom-3);
   --neutral-bottom-5: var(--palette-bottom-1);
   --neutral-bottom-alpha-10: var(--palette-bottom-alpha-2);
   --neutral-bottom-alpha-20: var(--palette-bottom-alpha-3);
@@ -374,6 +377,7 @@
   --palette-bottom-1: #f3f4f6;
   --palette-bottom-10: #152149;
   --palette-bottom-2: #e8e9ed;
+  --palette-bottom-3: #d0d3db;
   --palette-bottom-alpha-1: rgba(21,33,73,0.05);
   --palette-bottom-alpha-2: rgba(21,33,73,0.1);
   --palette-bottom-alpha-3: rgba(21,33,73,0.2);
@@ -1566,23 +1570,88 @@ button { font: inherit; color: inherit; }
 .flow-stub__text { margin: 0; }
 .flow-stub__text strong { font-weight: var(--typography-primitives-semi-bold); }
 
-/* ---------- Панель фильтров ---------- */
+/* ---------- Плавающие плашки поверх сцены: фильтры и аналитика ----------
+   Вид плашки: фон Backgrounds (Grouped)/Secondary W, радиус Radius/4xl, тень Shadow/Floating/2 level (как у шторки),
+   отступы от краёв окна и внутри Spacing/3xl. Высота по содержимому, но не выше окна без отступов:
+   что не поместилось, прокручивается внутри плашки.
+   Окно уже 1280: плашка одна, справа (.panel), в ней фильтры и под ними аналитика.
+   Окно от 1280: плашки две (.panel-card), аналитика слева, фильтры справа, телефон между ними */
+.stand { --panel-w: 440px; }
 .panel {
   position: relative;
   display: flex;
-  flex: 0 0 440px;
+  flex: 0 0 var(--panel-w);
   flex-direction: column;
+  align-self: flex-start;
   gap: var(--space-3xl);
+  max-height: calc(100% - 2 * var(--space-3xl));
+  margin: var(--space-3xl) var(--space-3xl) var(--space-3xl) 0;
   padding: var(--space-3xl);
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--neutral-bottom-20) transparent;
+  border-radius: var(--radius-4xl);
   background: var(--bg-grouped-secondary-w);
+  box-shadow: var(--shadow-floating-2);
   color: var(--text-bottom-default);
+}
+.panel > * { flex-shrink: 0; }
+.panel-card { min-width: 0; }
+.panel-card--filters { display: flex; flex-direction: column; gap: var(--space-3xl); }
+.panel-card--filters > * { flex-shrink: 0; }
+@media (min-width: 1280px) and (pointer: fine) {
+  /* ширина плашек: 440 на окне от 1440, на 1280 сжимаются до 360, чтобы телефону оставалось не меньше 432 */
+  .stand { --panel-w: clamp(360px, calc((100vw - 560px) / 2), 440px); }
+  .panel { display: contents; }
+  .panel-card {
+    flex: 0 0 var(--panel-w);
+    align-self: flex-start;
+    max-height: calc(100% - 2 * var(--space-3xl));
+    padding: var(--space-3xl);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--neutral-bottom-20) transparent;
+    border-radius: var(--radius-4xl);
+    background: var(--bg-grouped-secondary-w);
+    box-shadow: var(--shadow-floating-2);
+    color: var(--text-bottom-default);
+  }
+  .panel-card--analytics { order: 1; margin: var(--space-3xl) 0 var(--space-3xl) var(--space-3xl); }
+  .stage { order: 2; }
+  .panel-card--filters { order: 3; margin: var(--space-3xl) var(--space-3xl) var(--space-3xl) 0; }
+  /* в своей плашке строки аналитики лежат прямо на ней, без вложенной подложки */
+  .panel-card--analytics .analytics { padding: 0; border-radius: 0; background: none; }
 }
 .panel-group { min-width: 0; margin: 0; padding: 0; border: 0; }
 .panel-group__label { margin-bottom: var(--space-md); padding: 0; color: var(--text-bottom-secondary); }
 .panel-group__chips { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
 /* Сценарии идут списком, один под другим */
 #scenarioChips { flex-direction: column; flex-wrap: nowrap; align-items: flex-start; }
+/* Аналитика по выбранному сценарию: три строки «подпись + значение».
+   В общей плашке с фильтрами стоит на спокойной подложке, в своей плашке без неё */
+p.panel-group__label { margin-top: 0; }
+.analytics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin: 0;
+  padding: var(--space-lg);
+  border-radius: var(--radius-2xl);
+  background: var(--bg-grouped-primary);
+}
+.analytics__row { display: flex; flex-direction: column; gap: var(--space-xxs); }
+.analytics dt { color: var(--text-bottom-secondary); }
+.analytics dd { margin: 0; color: var(--text-bottom-default); }
+/* названия событий и параметров: моноширинного шрифта в токенах ДС нет, системный */
+.analytics code {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  line-height: 1; /* строка с названием события той же высоты, что соседние */
+  overflow-wrap: anywhere;
+}
+.analytics__note { margin: var(--space-md) 0 0; color: var(--text-bottom-secondary); }
 .panel__close,
 .panel-toggle,
 .panel-scrim { display: none; }
@@ -1657,14 +1726,19 @@ button { font: inherit; color: inherit; }
     bottom: 0;
     z-index: 80;
     flex: none;
+    align-self: auto; /* иначе плашка берёт высоту содержимого, а не экрана, и не прокручивается */
     width: min(88vw, 360px);
+    max-height: none;
+    margin: 0;
     gap: var(--space-2xl);
     padding: calc(env(safe-area-inset-top, 0px) + var(--space-lg)) var(--space-lg) var(--space-2xl);
+    border-radius: var(--radius-4xl) 0 0 var(--radius-4xl); /* та же плашка, прижата к правому краю экрана */
     transform: translateX(100%);
     visibility: hidden;
     transition: transform 0.25s ease, visibility 0s 0.25s;
   }
   .panel__close { display: inline-flex; align-self: flex-end; }
+  .panel-card--filters { gap: var(--space-2xl); }
   .stand.is-panel-open .panel { transform: none; visibility: visible; transition: transform 0.25s ease, visibility 0s; }
   .stand.is-panel-open .panel-scrim { opacity: 1; pointer-events: auto; }
 }
@@ -1900,40 +1974,51 @@ button { font: inherit; color: inherit; }
       </div>
     </main>
 
-    <!-- ===== Панель управления ===== -->
+    <!-- ===== Плавающие плашки: фильтры и аналитика =====
+         Окно от 1280: аналитика слева от телефона, фильтры справа. Уже: одна плашка справа, аналитика под фильтрами.
+         Телефон: та же плашка выезжает по язычку -->
     <button class="btn-neutral panel-toggle" id="panelToggle" type="button" data-size-button="medium" aria-label="Фильтры прототипа" aria-controls="panel" aria-expanded="false">
       <span class="btn-content">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.333 5h6.25m4.167 0h2.917M3.333 10h2.084m4.166 0h7.084M3.333 15h8.334m4.166 0h.834M11.667 3.333v3.334M7.5 8.333v3.334m6.25 1.666v3.334" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </span>
     </button>
     <div class="panel-scrim" id="panelScrim"></div>
-    <aside class="panel" id="panel" aria-label="Фильтры прототипа">
+    <aside class="panel" id="panel" aria-label="Фильтры и аналитика прототипа">
       <button class="btn-neutral panel__close" id="panelClose" type="button" data-size-button="medium" aria-label="Закрыть фильтры">
         <span class="btn-content"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ4Ij4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE1IDVMNSAxNU01IDVMMTUgMTUiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" width="20" height="20" alt=""></span>
       </button>
-      <fieldset class="panel-group">
-        <legend class="panel-group__label t-caption">Просрочка</legend>
-        <div class="panel-group__chips" id="dpdChips">
-          <button class="chip chip-active" type="button" data-dpd="early" aria-pressed="true">До&nbsp;3&nbsp;дней</button>
-          <button class="chip chip-inactive" type="button" data-dpd="late" aria-pressed="false">Больше 3&nbsp;дней</button>
-        </div>
-      </fieldset>
-      <fieldset class="panel-group">
-        <legend class="panel-group__label t-caption">Сценарий</legend>
-        <div class="panel-group__chips" id="scenarioChips">
-          <button class="chip chip-active" type="button" data-scenario="entry" aria-pressed="true">Вход</button>
-          <button class="chip chip-inactive" type="button" data-scenario="1" aria-pressed="false">1. Причины</button>
-          <button class="chip chip-inactive" type="button" data-scenario="2" aria-pressed="false">2. Не&nbsp;хватает денег</button>
-          <button class="chip chip-inactive" type="button" data-scenario="2a" aria-pressed="false">2a. День оплаты</button>
-          <button class="chip chip-inactive" type="button" data-scenario="2b" aria-pressed="false">2b. День оплаты · готово</button>
-          <button class="chip chip-inactive" type="button" data-scenario="3" aria-pressed="false">3. Частичная оплата</button>
-          <button class="chip chip-inactive" type="button" data-scenario="4" aria-pressed="false">4. Другой способ</button>
-          <button class="chip chip-inactive" type="button" data-scenario="5" aria-pressed="false">5. Платёж не&nbsp;прошёл</button>
-          <button class="chip chip-inactive" type="button" data-scenario="6" aria-pressed="false">6. Я&nbsp;уже оплатил</button>
-          <button class="chip chip-inactive" type="button" data-scenario="7" aria-pressed="false">7. Другая проблема</button>
-          <button class="chip chip-inactive" type="button" data-scenario="7a" aria-pressed="false">7a. Другая проблема · отправлено</button>
-        </div>
-      </fieldset>
+      <div class="panel-card panel-card--filters">
+        <fieldset class="panel-group">
+          <legend class="panel-group__label t-caption">Просрочка</legend>
+          <div class="panel-group__chips" id="dpdChips">
+            <button class="chip chip-active" type="button" data-dpd="early" aria-pressed="true">До&nbsp;3&nbsp;дней</button>
+            <button class="chip chip-inactive" type="button" data-dpd="late" aria-pressed="false">Больше 3&nbsp;дней</button>
+          </div>
+        </fieldset>
+        <fieldset class="panel-group">
+          <legend class="panel-group__label t-caption">Сценарий</legend>
+          <div class="panel-group__chips" id="scenarioChips">
+            <button class="chip chip-active" type="button" data-scenario="entry" aria-pressed="true">Вход</button>
+            <button class="chip chip-inactive" type="button" data-scenario="1" aria-pressed="false">1. Причины</button>
+            <button class="chip chip-inactive" type="button" data-scenario="2" aria-pressed="false">2. Не&nbsp;хватает денег</button>
+            <button class="chip chip-inactive" type="button" data-scenario="2a" aria-pressed="false">2a. День оплаты</button>
+            <button class="chip chip-inactive" type="button" data-scenario="2b" aria-pressed="false">2b. День оплаты · готово</button>
+            <button class="chip chip-inactive" type="button" data-scenario="2c" aria-pressed="false">2c. Кабинет · день выбран</button>
+            <button class="chip chip-inactive" type="button" data-scenario="3" aria-pressed="false">3. Частичная оплата</button>
+            <button class="chip chip-inactive" type="button" data-scenario="4" aria-pressed="false">4. Другой способ</button>
+            <button class="chip chip-inactive" type="button" data-scenario="5" aria-pressed="false">5. Платёж не&nbsp;прошёл</button>
+            <button class="chip chip-inactive" type="button" data-scenario="6" aria-pressed="false">6. Я&nbsp;уже оплатил</button>
+            <button class="chip chip-inactive" type="button" data-scenario="7" aria-pressed="false">7. Другая проблема</button>
+            <button class="chip chip-inactive" type="button" data-scenario="7a" aria-pressed="false">7a. Другая проблема · отправлено</button>
+          </div>
+        </fieldset>
+      </div>
+      <!-- Аналитика по выбранному сценарию: строки собирает app.js -->
+      <section class="panel-card panel-card--analytics" aria-labelledby="analyticsLabel">
+        <p class="panel-group__label t-caption" id="analyticsLabel">Аналитика</p>
+        <dl class="analytics" id="analytics" aria-live="polite"></dl>
+        <p class="analytics__note t-caption">Доли от&nbsp;28&nbsp;873&nbsp;ответивших на&nbsp;анкету отмены оплаты. Оплата и её тип уже есть в&nbsp;карте разметки datahints.</p>
+      </section>
     </aside>
   </div>
 </div>
@@ -2009,7 +2094,7 @@ button { font: inherit; color: inherit; }
   /* ---------- Тексты диалога (\u00A0 = неразрывный пробел, как в макете) ---------- */
   var T = {
     start: 'Не могу заплатить сейчас',
-    tech: 'Просрочка 2\u00A0дня. Первые 3\u00A0дня она считается технической. Если оплатите в\u00A0этот срок, это не повлияет на\u00A0будущие выдачи',
+    tech: 'Оплатите в\u00A0первые 3\u00A0дня: просрочка техническая и\u00A0на\u00A0новые займы не\u00A0повлияет',
     ask: 'Расскажите, что мешает оплатить. Подберём решение под\u00A0вашу ситуацию\u00A0🤝',
     noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂 Продлите заём, оплатите часть или выберите удобный день оплаты',
     payDate: 'Выберите день, когда вам удобно оплатить\u00A0📅 Срок по\u00A0договору не меняется. Проценты начисляются до\u00A0дня оплаты',
@@ -2017,14 +2102,17 @@ button { font: inherit; color: inherit; }
     method: 'Выберите способ оплаты\u00A0👇',
     failed: 'Так бывает из-за\u00A0лимита банка или нехватки средств на\u00A0карте. Оплатите другим способом\u00A0💳',
     other: 'Расскажите о\u00A0своей проблеме\u00A0✍️',
-    sent1: 'Спасибо, что поделились\u00A0🙏 Мы передали ваше сообщение в\u00A0поддержку',
-    sent2: 'Заём пока остаётся к\u00A0оплате. Расскажите, что мешает оплатить, и мы подберём решение\u00A0🤝',
+    sent: 'Спасибо, что поделились\u00A0🙏 Мы передали ваше сообщение в\u00A0поддержку',
     sample: 'Мне подключили дополнительные услуги, с\u00A0суммой не согласен',
     placeholder: 'Напишите сообщение',
     emptyError: 'Напишите сообщение'
   };
-  function payDateDone(ctx) {
-    return ['Запомнили день оплаты:\u00A0' + ctx.date + '.2026\u00A0✅ Оплатить можно и раньше, в\u00A0личном кабинете'];
+  function payDateDone() {
+    return ['Запомнили день оплаты:\u00A0' + state.payDate + '.2026\u00A0✅ Оплатить можно и раньше, в\u00A0личном кабинете'];
+  }
+  /* кнопка под «Перейти к\u00A0оплате»: пока день не выбран, открывает диалог; после выбора показывает день */
+  function entryLabel() {
+    return state.payDate ? 'Я заплачу\u00A0' + state.payDate + '.2026' : T.start;
   }
 
   /* Просрочка: плашка Label time и срок на карточке займа; tech = реплика про техническую просрочку */
@@ -2037,9 +2125,9 @@ button { font: inherit; color: inherit; }
      go: следующий шаг · exit: выход в существующий флоу (заглушка) · close: закрыть шторку */
   var OTHER_REASON = { label: 'Выбрать другую причину', go: 'reasons' };
   var REASONS = [
-    { label: 'Сейчас не хватает денег', go: 'noMoney' },
-    { label: 'Сумма больше, чем ожидалось', go: 'partial' },
-    { label: 'Хочу оплатить другим способом', go: 'otherMethod' },
+    { label: 'Не хватает денег', go: 'noMoney' },
+    { label: 'Сумма больше ожидаемой', go: 'partial' },
+    { label: 'Оплачу другим способом', go: 'otherMethod' },
     { label: 'Платёж не прошёл', go: 'payFailed' },
     { label: 'Я уже оплатил', exit: 'Загрузка чека об\u00A0оплате', scenario: '6' },
     { label: 'У\u00A0меня другая проблема', go: 'otherProblem' }
@@ -2068,7 +2156,7 @@ button { font: inherit; color: inherit; }
     },
     payDateDone: {
       scenario: '2b', bot: payDateDone,
-      chips: [{ label: 'Изменить день', go: 'payDate' }],
+      chips: [{ label: 'Изменить день', go: 'payDate' }, OTHER_REASON],
       button: { label: 'В\u00A0личный кабинет', close: true }
     },
     partial: {
@@ -2094,13 +2182,15 @@ button { font: inherit; color: inherit; }
       ]
     },
     otherProblem: { scenario: '7', bot: [T.other], input: true },
-    otherProblemSent: { scenario: '7a', bot: [T.sent1, T.sent2], chips: REASONS }
+    otherProblemSent: { scenario: '7a', bot: [T.sent], chips: REASONS }
   };
 
   var PAUSE = 420;      /* пауза перед ответом бота */
   var PAUSE_NEXT = 360; /* пауза между репликами бота в серии */
 
-  var state = { dpd: 'early', scenario: 'entry', step: null, ctx: {}, stub: null };
+  /* payDate: выбранный день оплаты («30.09»), живёт, пока его не изменят или не сбросит тег сценария;
+     pending: ответ сервиса на текущий шаг ещё не пришёл */
+  var state = { dpd: 'early', scenario: 'entry', step: null, payDate: null, pending: false, stub: null };
 
   /* ---------- Таймеры диалога: сбрасываются, когда состояние ставит тег сценария ---------- */
   var timers = [];
@@ -2167,7 +2257,7 @@ button { font: inherit; color: inherit; }
     repliesEl.removeAttribute('style');
     repliesEl.className = 'chat__replies';
     state.step = null;
-    state.ctx = {};
+    state.pending = false;
   }
   /* переписка держится у нижнего края, когда меняется высота зоны ответа или открывается клавиатура */
   if (window.ResizeObserver) new ResizeObserver(function () { scrollBottom(); }).observe(messagesEl);
@@ -2254,7 +2344,7 @@ button { font: inherit; color: inherit; }
       }, i === 0 ? PAUSE : PAUSE_NEXT);
     })();
   }
-  function botTexts(step) { return typeof step.bot === 'function' ? step.bot(state.ctx) : step.bot; }
+  function botTexts(step) { return typeof step.bot === 'function' ? step.bot() : step.bot; }
   /* шаг: зона ответа сразу занимает своё место (скрыта), после паузы приходит ответ бота, зона проявляется */
   function goStep(id) {
     var step = STEPS[id];
@@ -2264,7 +2354,8 @@ button { font: inherit; color: inherit; }
     /* поле сообщения и клавиатура открываются сразу: системная клавиатура на телефоне
        открывается только из обработчика нажатия, на десктопе нарисованная ведёт себя так же */
     if (step.input) { revealReplies(); openInput(); }
-    botSay(botTexts(step), revealReplies);
+    state.pending = true;
+    botSay(botTexts(step), function () { state.pending = false; revealReplies(); });
   }
   function startDialog() {
     cancelTimers();
@@ -2285,7 +2376,7 @@ button { font: inherit; color: inherit; }
       later(function () { showStub(c.exit); }, PAUSE);
       return;
     }
-    if (c.date) state.ctx.date = c.date;
+    if (c.date) setPayDate(c.date);
     goStep(c.go);
   }
   function onAction(a) {
@@ -2342,9 +2433,34 @@ button { font: inherit; color: inherit; }
   function closeDialog() {
     cancelTimers();
     closeSheet();
-    setScenario('entry');
+    setScenario(state.payDate ? '2c' : 'entry');
   }
-  $('#openChat').addEventListener('click', startDialog);
+  /* выбранный день: меняет реплику сервиса и текст кнопки в\u00A0кабинете */
+  function setPayDate(date) {
+    state.payDate = date;
+    $('#openChat').textContent = entryLabel();
+  }
+  /* кнопка «Я заплачу …»: диалог открывается на\u00A0состоянии «день выбран», история сохранена.
+     Если клиент после выбора дня ушёл в\u00A0другую ветку, реплика кнопки и подтверждение дня добавляются в\u00A0конец */
+  function openPayDate() {
+    cancelTimers();
+    hideStub();
+    if (state.step !== 'payDateDone') {
+      say('client', entryLabel(), false);
+      state.step = 'payDateDone';
+      state.pending = true;
+    }
+    if (state.pending) {
+      botTexts(STEPS.payDateDone).forEach(function (t) { say('bot', t, false); });
+      state.pending = false;
+    }
+    renderReplies(false);
+    setScenario(STEPS.payDateDone.scenario);
+    openSheet();
+  }
+  $('#openChat').addEventListener('click', function () {
+    if (state.payDate) openPayDate(); else startDialog();
+  });
   $('#sheetClose').addEventListener('click', closeDialog);
 
   /* ---------- Заглушка: выход в существующий флоу, которого нет в этих макетах ---------- */
@@ -2503,23 +2619,101 @@ button { font: inherit; color: inherit; }
   function setScenario(id) {
     state.scenario = id;
     markChips($('#scenarioChips'), 'data-scenario', id);
+    renderAnalytics(id);
+  }
+
+  /* ---------- Панель: аналитика по\u00A0выбранному сценарию ----------
+     В\u00A0обратных кавычках названия событий и\u00A0параметров: они выводятся моноширинным шрифтом */
+  var A_PAY = 'После входа: `dl_repayment_success_payment`, тип в\u00A0`repayment_type`.';
+  var ANALYTICS = {
+    start: {
+      now: '80\u00A0662\u00A0отмены оплаты за\u00A014.05–03.09.2026 по\u00A047\u00A0821\u00A0договору. 64,2% закрыли анкету без\u00A0ответа, ответили 28\u00A0873.',
+      goal: 'Доля вошедших в\u00A0диалог, которые оплатили: в\u00A0том же визите и за\u00A07\u00A0дней. С\u00A0разбивкой по\u00A0типу оплаты.',
+      events: 'Новое событие одно: клик по\u00A0«Не могу заплатить сейчас». Оплата уже размечена: `dl_repayment_success_payment`, тип в\u00A0`repayment_type` (полное, продление, частичное).'
+    },
+    noMoney: {
+      now: '13\u00A0561\u00A0ответ, 47,0%: «Заплачу позже» 7\u00A0402 и «Не хватает средств на\u00A0карте» 6\u00A0159.',
+      goal: 'Клиент не закрывает кабинет, а продлевает заём, вносит часть или выбирает день.',
+      events: 'После входа: `dl_repayment_success_payment` с\u00A0`repayment_type = loan_repayment_extension` или `loan_repayment_partial`.'
+    },
+    payDate: {
+      now: 'Такой механики нет. «Заплачу позже» выбрали 7\u00A0402\u00A0раза, 25,6% ответов.',
+      goal: 'Доля оплативших до\u00A0выбранного дня от\u00A0выбравших день.',
+      events: 'Выбранный день хранится на\u00A0сервере, считаем по\u00A0нему. Оплата: `dl_repayment_success_payment`.'
+    },
+    partial: {
+      now: '3\u00A0178\u00A0ответов, 11,0%: «Ошибся суммой платежа».',
+      goal: 'Переходы в\u00A0частичную оплату из\u00A0диалога и успешные оплаты после них.',
+      events: 'После входа: `dl_repayment_success_payment` с\u00A0`repayment_type = loan_repayment_partial`.'
+    },
+    otherMethod: {
+      now: '5\u00A0509\u00A0ответов, 19,1%: «Оплачу другим способом».',
+      goal: 'Клиент доходит до\u00A0оплаты выбранным способом, отмен на\u00A0экране оплаты меньше.',
+      events: A_PAY
+    },
+    payFailed: {
+      now: '963\u00A0ответа, 3,3%: «Платёж не прошёл».',
+      goal: 'Повторная оплата через\u00A0СБП или новой картой проходит успешно.',
+      events: A_PAY
+    },
+    paid: {
+      now: 'Меньше 1% ответов: 13\u00A0раз выбрали «Уже оплатил», ещё около\u00A0200 написали об\u00A0этом текстом.',
+      goal: 'Клиент загружает чек сам, без\u00A0обращения в\u00A0поддержку.',
+      events: 'Оплаты нет: клиент уходит в\u00A0загрузку чека.'
+    },
+    otherProblem: {
+      now: '1\u00A0446\u00A0ответов свободным текстом, 5,0%.',
+      goal: 'Сообщения уходят в\u00A0контакт-центр, видим причины, которых нет в\u00A0списке.',
+      events: 'Сообщения считаем в\u00A0контакт-центре.'
+    }
+  };
+  var ANALYTICS_BY_SCENARIO = {
+    entry: 'start', '1': 'start', '2': 'noMoney', '2a': 'payDate', '2b': 'payDate', '2c': 'payDate',
+    '3': 'partial', '4': 'otherMethod', '5': 'payFailed', '6': 'paid', '7': 'otherProblem', '7a': 'otherProblem'
+  };
+  var ANALYTICS_ROWS = [['now', 'Сейчас'], ['goal', 'Ожидаем'], ['events', 'События']];
+  var analyticsEl = $('#analytics'), analyticsKey = null;
+  function renderAnalytics(scenario) {
+    var key = ANALYTICS_BY_SCENARIO[scenario];
+    if (key === analyticsKey) return;
+    analyticsKey = key;
+    analyticsEl.textContent = '';
+    ANALYTICS_ROWS.forEach(function (row) {
+      var item = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
+      item.className = 'analytics__row';
+      dt.className = 't-caption';
+      dt.textContent = row[1];
+      dd.className = 't-note';
+      ANALYTICS[key][row[0]].split('`').forEach(function (part, i) {
+        if (!part) return;
+        if (i % 2) { var code = document.createElement('code'); code.textContent = part; dd.appendChild(code); }
+        else dd.appendChild(document.createTextNode(part));
+      });
+      item.appendChild(dt);
+      item.appendChild(dd);
+      analyticsEl.appendChild(item);
+    });
   }
   function setDpd(id) {
     state.dpd = id;
     markChips($('#dpdChips'), 'data-dpd', id);
     $('#labelTime').textContent = DPD[id].label;
     $('#deadline').textContent = DPD[id].deadline;
-    if (state.scenario !== 'entry') applyScenario(state.scenario);
+    if (state.scenario === 'entry') return;
+    var date = state.payDate;
+    applyScenario(state.scenario, date);
+    if (date) setPayDate(date);
   }
 
   /* Сценарий ставит телефон в состояние сразу, с перепиской, какой она была бы у клиента */
+  var DEFAULT_DATE = '30.09';
   function chipTo(stepId, go, date) {
     return STEPS[stepId].chips.filter(function (c) { return c.go === go && (!date || c.date === date); })[0];
   }
   function replay(stepId, go, date) {
     var c = chipTo(stepId, go, date);
     say('client', c.label, false);
-    if (c.date) state.ctx.date = c.date;
+    if (c.date) setPayDate(c.date);
     state.step = go;
     botTexts(STEPS[go]).forEach(function (t) { say('bot', t, false); });
   }
@@ -2527,7 +2721,8 @@ button { font: inherit; color: inherit; }
     '1': [],
     '2': [['reasons', 'noMoney']],
     '2a': [['reasons', 'noMoney'], ['noMoney', 'payDate']],
-    '2b': [['reasons', 'noMoney'], ['noMoney', 'payDate'], ['payDate', 'payDateDone', '30.09']],
+    '2b': [['reasons', 'noMoney'], ['noMoney', 'payDate'], ['payDate', 'payDateDone', DEFAULT_DATE]],
+    '2c': [['reasons', 'noMoney'], ['noMoney', 'payDate'], ['payDate', 'payDateDone', DEFAULT_DATE]],
     '3': [['reasons', 'partial']],
     '4': [['reasons', 'otherMethod']],
     '5': [['reasons', 'payFailed']],
@@ -2535,12 +2730,14 @@ button { font: inherit; color: inherit; }
     '7': [['reasons', 'otherProblem']],
     '7a': [['reasons', 'otherProblem']]
   };
-  function applyScenario(id) {
+  /* date: день для сценариев 2b и 2c, если он уже выбран (смена просрочки не меняет выбранный день) */
+  function applyScenario(id, date) {
     cancelTimers();
     screen.classList.add('no-anim');
     hideStub();
     closeKb();
     resetChat();
+    setPayDate(null);
     if (id === 'entry') {
       closeSheet();
     } else {
@@ -2548,7 +2745,7 @@ button { font: inherit; color: inherit; }
       if (DPD[state.dpd].tech) say('bot', T.tech, false);
       say('bot', T.ask, false);
       state.step = 'reasons';
-      PATHS[id].forEach(function (p) { replay(p[0], p[1], p[2]); });
+      PATHS[id].forEach(function (p) { replay(p[0], p[1], p[2] && (date || p[2])); });
       if (id === '7a') {
         say('client', T.sample, false);
         state.step = 'otherProblemSent';
@@ -2559,6 +2756,8 @@ button { font: inherit; color: inherit; }
         var paid = REASONS.filter(function (c) { return c.scenario === '6'; })[0];
         say('client', paid.label, false);
         showStub(paid.exit);
+      } else if (id === '2c') {
+        closeSheet(); /* день выбран, клиент вернулся в\u00A0кабинет */
       } else {
         openSheet();
         if (STEPS[state.step].input) openInput();
@@ -2586,6 +2785,7 @@ button { font: inherit; color: inherit; }
     closePanel();
   });
 
+  renderAnalytics(state.scenario);
   fit();
 })();
 
