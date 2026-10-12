@@ -13,7 +13,7 @@
 @charset "UTF-8";
 /* ===== Токены FTM DS Core 2 в CSS-переменных =====
    Подмножество css/tokens.css стенда Стаса (boostra-prj/uix-prototype-demo, коммит b6f1b5a).
-   Оставлены режимы light / main / mobile + desktop, размеры кнопок и тон error;
+   Оставлены режимы light / main / mobile + desktop, размеры кнопок, размер 40 у Segmented Control и тон error;
    из них только переменные, которые использует прототип, и всё, на что они ссылаются.
    Имена и значения не менялись. Нужен ещё токен: скопировать его из исходного файла вместе с цепочкой ссылок. */
 .ds {
@@ -31,6 +31,11 @@
   --body-font-weight: var(--typography-primitives-regular);
   --body-letter-spacing: var(--typography-primitives-letter-spacing-0);
   --body-line-height: var(--typography-primitives-line-height-24);
+  --body-medium-font-family: var(--typography-primitives-inter);
+  --body-medium-font-weight: var(--typography-primitives-medium);
+  --body-medium-letter-spacing: var(--typography-primitives-letter-spacing-0);
+  --body-medium-line-height: var(--typography-primitives-line-height-24);
+  --body-medium-size: var(--typography-primitives-16);
   --body-size: var(--typography-primitives-16);
   --border-bottom-default: var(--palette-bottom-alpha-2);
   --border-bottom-quaternary: var(--palette-bottom-10);
@@ -40,6 +45,8 @@
   --border-width-0: 0px;
   --border-width-1: 1px;
   --brand-attention-10: var(--palette-attention-2);
+  --brand-attention-alpha-5: var(--palette-attention-alpha-1);
+  --brand-attention-ink: var(--palette-attention-11);
   --brand-error: var(--palette-error-9);
   --brand-error-10: var(--palette-error-2);
   --brand-error-alpha-10: var(--palette-error-alpha-2);
@@ -55,12 +62,18 @@
   --brand-secondary-alpha-20: var(--palette-secondary-alpha-3);
   --brand-secondary-alpha-5: var(--palette-secondary-alpha-1);
   --brand-secondary-alpha-70: var(--palette-secondary-alpha-7);
+  --brand-secondary-ink: var(--palette-secondary-11);
   --brand-success-10: var(--palette-success-2);
   --caps-small-strong-font-family: var(--typography-primitives-inter);
   --caps-small-strong-font-weight: var(--typography-primitives-medium);
   --caps-small-strong-letter-spacing: var(--typography-primitives-letter-spacing-0-8);
   --caps-small-strong-line-height: var(--typography-primitives-line-height-16);
   --caps-small-strong-size: var(--typography-primitives-12);
+  --caps-xsmall-strong-font-family: var(--typography-primitives-inter);
+  --caps-xsmall-strong-font-weight: var(--typography-primitives-medium);
+  --caps-xsmall-strong-letter-spacing: var(--typography-primitives-letter-spacing-0-7);
+  --caps-xsmall-strong-line-height: var(--typography-primitives-line-height-16);
+  --caps-xsmall-strong-size: var(--typography-primitives-10);
   --caption-font-family: var(--typography-primitives-inter);
   --caption-font-weight: var(--typography-primitives-regular);
   --caption-letter-spacing: var(--typography-primitives-letter-spacing-0);
@@ -147,8 +160,10 @@
   --outlined-button-stroke-width: var(--border-width-0);
   --outlined-secondary-fill-default: var(--contrast-secondary-fill-default);
   --outlined-secondary-fill-hover-and-press: var(--contrast-secondary-fill-hover-and-press-hover);
+  --palette-attention-11: #c95400;
   --palette-attention-2: #fff1e5;
   --palette-attention-9: #ff811a;
+  --palette-attention-alpha-1: rgba(255,115,0,0.05);
   --palette-backgrounds-grouped-primary: #f4f5f8;
   --palette-backgrounds-grouped-secondary: #ffffff;
   --palette-backgrounds-grouped-tertiary: #f4f5f8;
@@ -169,10 +184,13 @@
   --palette-error-9: #ff0239;
   --palette-error-alpha-1: rgba(255,2,57,0.05);
   --palette-error-alpha-2: rgba(255,2,57,0.1);
+  --palette-gradient-midnight-low-1: var(--palette-primary-3);
+  --palette-gradient-midnight-low-2: var(--palette-tertiary-2);
   --palette-gradient-midnight-mid-1: var(--palette-primary-9);
   --palette-gradient-midnight-mid-2: var(--palette-tertiary-6);
   --palette-peak-always-alpha-10: #ffffff;
   --palette-primary-11: #0042b8;
+  --palette-primary-3: #ccdeff;
   --palette-primary-9: #005bff;
   --palette-primary-alpha-1: rgba(43,118,255,0.06);
   --palette-primary-alpha-2: rgba(23,106,255,0.11);
@@ -187,6 +205,7 @@
   --palette-success-2: #e5f5ec;
   --palette-success-9: #00a043;
   --palette-system-black: rgba(0,0,0,0.5);
+  --palette-tertiary-2: #e7f5ff;
   --palette-tertiary-6: #85ccff;
   --palette-tertiary-9: #0b99ff;
   --palette-tertiary-alpha-1: rgba(11,153,255,0.05);
@@ -202,6 +221,7 @@
   --radius-xl: 12px;
   --radius-xxs: 2px;
   --responsive-comp-home-indicator-home-indicator: 0;
+  --segmented-control-gap: var(--space-xs);
   --semantic-button-fill-default: var(--ghost-info-fill-default);
   --semantic-button-fill-hover-and-press: var(--ghost-info-fill-hover-and-press);
   --semantic-text-and-icon: var(--ghost-info-text-and-icon);
@@ -213,15 +233,21 @@
   --size-button-h: var(--size-24);
   --size-button-icon-wh: var(--icon-wh);
   --size-button-lr-spacing: var(--space-sm);
+  --size-segmented-control-segment-tb-spacing: var(--space-system-10);
+  --space-0: 0px;
   --space-2xl: 24px;
   --space-3xl: 32px;
   --space-lg: 16px;
   --space-md: 12px;
   --space-sm: 8px;
+  --space-system-10: 10px;
+  --space-system-6: 6px;
   --space-xl: 20px;
   --space-xs: 4px;
   --space-xxs: 2px;
   --system-black: var(--palette-system-black);
+  --system-gradient-midnight-low-1: var(--palette-gradient-midnight-low-1);
+  --system-gradient-midnight-low-2: var(--palette-gradient-midnight-low-2);
   --system-gradient-midnight-mid-1: var(--palette-gradient-midnight-mid-1);
   --system-gradient-midnight-mid-2: var(--palette-gradient-midnight-mid-2);
   --system-link-default: var(--palette-secondary-11);
@@ -250,6 +276,7 @@
   --type-neutral-fill-hover-and-press: var(--ghost-neutral-fill-hover-and-press);
   --type-neutral-opacity-default: var(--opacity-100);
   --type-neutral-opacity-hover-and-press: var(--opacity-100);
+  --typography-primitives-10: 10px;
   --typography-primitives-12: 12px;
   --typography-primitives-14: 14px;
   --typography-primitives-16: 16px;
@@ -263,6 +290,7 @@
   --typography-primitives-letter-spacing-0-28: 0.28px;
   --typography-primitives-letter-spacing-0-32: 0.32px;
   --typography-primitives-letter-spacing-0-5: 0.5px;
+  --typography-primitives-letter-spacing-0-7: 0.7px;
   --typography-primitives-letter-spacing-0-8: 0.8px;
   --typography-primitives-line-height-16: 16px;
   --typography-primitives-line-height-20: 20px;
@@ -293,6 +321,8 @@
   --border-primary-quaternary: var(--palette-primary-9);
   --border-secondary-quaternary: var(--palette-secondary-9);
   --brand-attention-10: var(--palette-attention-2);
+  --brand-attention-alpha-5: var(--palette-attention-alpha-1);
+  --brand-attention-ink: var(--palette-attention-11);
   --brand-error: var(--palette-error-9);
   --brand-error-10: var(--palette-error-2);
   --brand-error-alpha-10: var(--palette-error-alpha-2);
@@ -308,6 +338,7 @@
   --brand-secondary-alpha-20: var(--palette-secondary-alpha-3);
   --brand-secondary-alpha-5: var(--palette-secondary-alpha-1);
   --brand-secondary-alpha-70: var(--palette-secondary-alpha-7);
+  --brand-secondary-ink: var(--palette-secondary-11);
   --brand-success-10: var(--palette-success-2);
   --contrast-neutral-border: var(--border-bottom-quaternary);
   --contrast-neutral-fill-default: var(--type-neutral-fill-default);
@@ -344,6 +375,8 @@
   --semantic-button-fill-hover-and-press: var(--ghost-info-fill-hover-and-press);
   --semantic-text-and-icon: var(--ghost-info-text-and-icon);
   --system-black: var(--palette-system-black);
+  --system-gradient-midnight-low-1: var(--palette-gradient-midnight-low-1);
+  --system-gradient-midnight-low-2: var(--palette-gradient-midnight-low-2);
   --system-gradient-midnight-mid-1: var(--palette-gradient-midnight-mid-1);
   --system-gradient-midnight-mid-2: var(--palette-gradient-midnight-mid-2);
   --system-link-default: var(--palette-secondary-11);
@@ -369,8 +402,10 @@
   --vibe-tertiary-alpha-5: var(--palette-tertiary-alpha-1);
 }
 [data-color-scheme="light"] {
+  --palette-attention-11: #c95400;
   --palette-attention-2: #fff1e5;
   --palette-attention-9: #ff811a;
+  --palette-attention-alpha-1: rgba(255,115,0,0.05);
   --palette-backgrounds-grouped-primary: #f4f5f8;
   --palette-backgrounds-grouped-secondary: #ffffff;
   --palette-backgrounds-grouped-tertiary: #f4f5f8;
@@ -391,10 +426,13 @@
   --palette-error-9: #ff0239;
   --palette-error-alpha-1: rgba(255,2,57,0.05);
   --palette-error-alpha-2: rgba(255,2,57,0.1);
+  --palette-gradient-midnight-low-1: var(--palette-primary-3);
+  --palette-gradient-midnight-low-2: var(--palette-tertiary-2);
   --palette-gradient-midnight-mid-1: var(--palette-primary-9);
   --palette-gradient-midnight-mid-2: var(--palette-tertiary-6);
   --palette-peak-always-alpha-10: #ffffff;
   --palette-primary-11: #0042b8;
+  --palette-primary-3: #ccdeff;
   --palette-primary-9: #005bff;
   --palette-primary-alpha-1: rgba(43,118,255,0.06);
   --palette-primary-alpha-2: rgba(23,106,255,0.11);
@@ -409,6 +447,7 @@
   --palette-success-2: #e5f5ec;
   --palette-success-9: #00a043;
   --palette-system-black: rgba(0,0,0,0.5);
+  --palette-tertiary-2: #e7f5ff;
   --palette-tertiary-6: #85ccff;
   --palette-tertiary-9: #0b99ff;
   --palette-tertiary-alpha-1: rgba(11,153,255,0.05);
@@ -427,12 +466,22 @@
   --body-font-weight: var(--typography-primitives-regular);
   --body-letter-spacing: var(--typography-primitives-letter-spacing-0);
   --body-line-height: var(--typography-primitives-line-height-24);
+  --body-medium-font-family: var(--typography-primitives-inter);
+  --body-medium-font-weight: var(--typography-primitives-medium);
+  --body-medium-letter-spacing: var(--typography-primitives-letter-spacing-0);
+  --body-medium-line-height: var(--typography-primitives-line-height-24);
+  --body-medium-size: var(--typography-primitives-16);
   --body-size: var(--typography-primitives-16);
   --caps-small-strong-font-family: var(--typography-primitives-inter);
   --caps-small-strong-font-weight: var(--typography-primitives-medium);
   --caps-small-strong-letter-spacing: var(--typography-primitives-letter-spacing-0-8);
   --caps-small-strong-line-height: var(--typography-primitives-line-height-16);
   --caps-small-strong-size: var(--typography-primitives-12);
+  --caps-xsmall-strong-font-family: var(--typography-primitives-inter);
+  --caps-xsmall-strong-font-weight: var(--typography-primitives-medium);
+  --caps-xsmall-strong-letter-spacing: var(--typography-primitives-letter-spacing-0-7);
+  --caps-xsmall-strong-line-height: var(--typography-primitives-line-height-16);
+  --caps-xsmall-strong-size: var(--typography-primitives-10);
   --caption-font-family: var(--typography-primitives-inter);
   --caption-font-weight: var(--typography-primitives-regular);
   --caption-letter-spacing: var(--typography-primitives-letter-spacing-0);
@@ -484,6 +533,7 @@
   --comp-statusbar-camera: 0;
   --comp-statusbar-h-dynamic-island: 0px;
   --responsive-comp-home-indicator-home-indicator: 0;
+  --segmented-control-gap: var(--space-xs);
 }
 [data-responsive="mobile"] {
   --comp-home-indicator-h: 5px;
@@ -495,6 +545,7 @@
   --comp-statusbar-camera: 1;
   --comp-statusbar-h-dynamic-island: 59px;
   --responsive-comp-home-indicator-home-indicator: 1;
+  --segmented-control-gap: var(--space-0);
 }
 [data-size-button="medium"] {
   --size-button-gap: var(--space-sm);
@@ -514,6 +565,9 @@
   --size-button-icon-wh: var(--icon-wh);
   --size-button-lr-spacing: var(--space-3xl);
 }
+[data-size-segmented-control="40"] {
+  --size-segmented-control-segment-tb-spacing: var(--space-xs);
+}
 
 </style>
 <style>
@@ -530,6 +584,7 @@
   --shadow-floating-1: 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 1px 6px 0 rgba(0, 0, 0, 0.03), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
   --shadow-floating-2: 0 5px 15px 0 rgba(0, 0, 0, 0.08), 0 1px 6px 0 rgba(0, 0, 0, 0.03), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
   --shadow-floating-3: 0 8px 26px 0 rgba(0, 0, 0, 0.05), 0 1px 6px 0 rgba(0, 0, 0, 0.04), 0 3px 8px 0 rgba(0, 0, 0, 0.04), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  --shadow-segment: 0 2px 4px 0 rgba(0, 0, 0, 0.1); /* Component effects/Segment */
 }
 
 /* ---------- Текстовые стили ДС ---------- */
@@ -589,6 +644,28 @@
   font-size: var(--caption-medium-size);
   line-height: var(--caption-medium-line-height);
   letter-spacing: var(--caption-medium-letter-spacing);
+}
+.t-body-medium {
+  font-family: var(--body-medium-font-family);
+  font-weight: var(--body-medium-font-weight);
+  font-size: var(--body-medium-size);
+  line-height: var(--body-medium-line-height);
+  letter-spacing: var(--body-medium-letter-spacing);
+}
+.t-note-medium {
+  font-family: var(--note-medium-font-family);
+  font-weight: var(--note-medium-font-weight);
+  font-size: var(--note-medium-size);
+  line-height: var(--note-medium-line-height);
+  letter-spacing: var(--note-medium-letter-spacing);
+}
+.t-caps-xsmall-strong {
+  font-family: var(--caps-xsmall-strong-font-family);
+  font-weight: var(--caps-xsmall-strong-font-weight);
+  font-size: var(--caps-xsmall-strong-size);
+  line-height: var(--caps-xsmall-strong-line-height);
+  letter-spacing: var(--caps-xsmall-strong-letter-spacing);
+  text-transform: uppercase;
 }
 .t-caps-small-strong {
   font-family: var(--caps-small-strong-font-family);
@@ -913,7 +990,9 @@
   padding: var(--space-lg) var(--space-lg) 0;
 }
 
-/* ---------- Badge (Size=24, Extra color) в 🚧 Loyalty Badge ---------- */
+/* ---------- Badge (Size: 24 / 20; Type: Info, Attention; Extra color: Off / On) ----------
+   Size=24: отступы 4 × 6, Radius/md, текст CAPS/Small Strong. Size=20: отступы 2 × 6, Radius/sm, текст CAPS/XSmall Strong.
+   Extra color=Off: заливка <тон> Alpha/5, текст <тон>/Ink. Extra color=On: плотная заливка, текст Always/Peak */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -924,9 +1003,64 @@
   color: var(--always-peak-alpha);
   white-space: nowrap;
 }
+.badge[data-size-badge="20"] {
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+.badge--info {
+  background: var(--brand-secondary-alpha-5);
+  color: var(--brand-secondary-ink);
+}
+.badge--attention {
+  background: var(--brand-attention-alpha-5);
+  color: var(--brand-attention-ink);
+}
 .badge--midnight-mid {
-  /* Gradient/Midnight/Midnight Mid */
+  /* 🚧 Loyalty Badge: Gradient/Midnight/Midnight Mid */
   background-image: linear-gradient(9.8deg, var(--system-gradient-midnight-mid-1) 14.645%, var(--system-gradient-midnight-mid-2) 85.355%);
+}
+
+/* ---------- Segmented Control / Basic (Size: 52 / 48 / 44 / 40) и Segment / Basic ----------
+   Контейнер: заливка Brand/Primary Alpha/5, отступ Spacing/xs, гэп Segmented Control/Gap, Radius/2xl.
+   Сегмент: отступы Segment/TB spacing (от размера) × Spacing/lg, Radius/xl, текст Body/Body Medium.
+   Active=on: заливка Always/Peak, тень Component effects/Segment, текст Brand/Primary/Ink */
+.segmented-control {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: var(--segmented-control-gap);
+  padding: var(--space-xs);
+  border-radius: var(--radius-2xl);
+  background: var(--brand-primary-alpha-5);
+}
+.segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--size-segmented-control-segment-tb-spacing) var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: none;
+  color: var(--text-bottom-secondary);
+  font-family: var(--body-medium-font-family);
+  font-weight: var(--body-medium-font-weight);
+  font-size: var(--body-medium-size);
+  line-height: var(--body-medium-line-height);
+  letter-spacing: var(--body-medium-letter-spacing);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.segment:focus-visible { outline: 1px solid var(--brand-secondary-alpha-70); outline-offset: 2px; }
+.segment[aria-pressed="false"]:active { background: var(--brand-primary-alpha-10); color: var(--text-bottom-default); }
+.segment[aria-pressed="true"] {
+  background: var(--always-peak-alpha);
+  box-shadow: var(--shadow-segment);
+  color: var(--brand-primary-ink);
+}
+@media (hover: hover) {
+  .segment[aria-pressed="false"]:hover { background: var(--brand-primary-alpha-5); color: var(--text-bottom-default); }
+  .segment[aria-pressed="false"]:active { background: var(--brand-primary-alpha-10); }
 }
 
 /* ---------- Pagination / Dots ---------- */
@@ -1117,6 +1251,34 @@
 .card-mkk__schedule-link { display: flex; flex-shrink: 0; align-items: center; gap: var(--card-xs); }
 .card-mkk__schedule-link > img { display: block; width: 16px; height: 16px; flex-shrink: 0; } /* иконка 16: размер числом, нет токена */
 
+/* ---------- Progress indicator / Linear (Size: XLarge / Large / Medium / Small) ----------
+   Дорожка: Brand/Primary Alpha/10, радиус Radius/full. Заполнение: Brand/Secondary/Secondary.
+   Высоты размеров (20 / 16 / 12 / 4) и радиус заполнения в компоненте ДС числами, токенов нет.
+   Длину и начало заполнения задают left и width у .progress-linear__indicator */
+.progress-linear {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 20px;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--brand-primary-alpha-10);
+}
+.progress-linear[data-size-progress="large"] { height: 16px; }
+.progress-linear[data-size-progress="medium"] { height: 12px; }
+.progress-linear[data-size-progress="small"] { height: 4px; }
+.progress-linear__indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 1000px;
+  background: var(--brand-secondary);
+  transition: background-color 0.2s ease, left 0.25s ease, width 0.25s ease;
+}
+/* нейтральное заполнение: в ДС такого варианта нет, это невыделенные столбики графика и диапазонов */
+.progress-linear[data-tone="neutral"] .progress-linear__indicator { background: var(--neutral-bottom-alpha-40); }
+
 /* ---------- Pay block и Pay option ---------- */
 .pay-block {
   display: flex;
@@ -1148,9 +1310,10 @@
 
 </style>
 <style>
-/* ===== Boostra · «Не могу заплатить сейчас» (92815) · стенд, экран ЛК, диалог, панель =====
-   Формат экрана (сцена, рамка устройства, статус-бар, индикатор «домой») взят из стенда Стаса:
-   boostra-prj/uix-prototype-demo, css/stand.css. Нижней панели стенда здесь нет, справа панель фильтров.
+/* ===== Boostra · «Не могу заплатить сейчас» (92815) · дашборд из плиток, экран ЛК, диалог =====
+   Формат экрана (рамка устройства, статус-бар, индикатор «домой») взят из стенда Стаса:
+   boostra-prj/uix-prototype-demo, css/stand.css. Нижней панели стенда здесь нет.
+   Страница: слева плитка «Флоу» с телефоном, справа плитка «Сценарий» и четыре малые плитки 2 × 2.
    Компоненты ДС лежат в components.css, токены в tokens.css. */
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -1173,25 +1336,62 @@ button { font: inherit; color: inherit; }
 .gate-err { color: var(--text-error-default) !important; }
 .gate-card .btn-primary { width: 100%; margin-top: 8px; }
 
-/* ---------- Сцена и устройство (из стенда Стаса) ---------- */
+/* ---------- Страница: сетка дашборда ----------
+   Фон Backgrounds (Grouped)/Primary. Отступы от краёв окна и между плитками одинаковые: --dash-gap.
+   Левая колонка: плитка «Флоу», около 44% ширины; правая не уже своего содержимого (теги и график в один ряд) */
 #app { height: 100%; }
 .stand {
+  --dash-gap: var(--space-lg);
+  --tile-pad: var(--space-2xl);
+  --stat-pad: var(--space-xl);
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 44fr) minmax(min-content, 56fr);
+  grid-template-rows: minmax(0, 1fr);
   height: 100%;
   min-height: 560px;
   overflow: hidden;
-  background: var(--palette-backgrounds-grouped-primary);
+  background: var(--bg-grouped-primary);
   color: var(--text-bottom-default);
 }
+
+/* ---------- Плитка ----------
+   Карточки в ДС отдельным компонентом нет: вид собран из её токенов, как у карточек в макетах ЛК.
+   Заливка Backgrounds (Grouped)/Secondary W, радиус Radius/4xl, тень Shadow/Floating/1 level */
+.tile {
+  min-width: 0;
+  border-radius: var(--radius-4xl);
+  background: var(--bg-grouped-secondary-w);
+  box-shadow: var(--shadow-floating-1);
+  color: var(--text-bottom-default);
+}
+.tile__label { margin: 0; color: var(--text-bottom-secondary); }
+.tile__caption { margin: 0; color: var(--text-bottom-tertiary); }
+/* названия событий и параметров: моноширинного шрифта в токенах ДС нет, системный */
+.tile code {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  line-height: 1; /* строка с названием события той же высоты, что соседние */
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Плитка «Флоу»: телефон по центру, масштаб под плитку ставит fit() ----------
+   Фон: paint style Gradient/Midnight/Midnight Low (из левого нижнего угла в правый верхний, остановки как в ДС) */
+.tile--flow {
+  display: flex;
+  min-height: 0;
+  margin: var(--dash-gap) 0 var(--dash-gap) var(--dash-gap);
+  padding: var(--dash-gap); /* на окне 1440 × 900 телефон встаёт в плитку в полный размер, 375 × 812 */
+  background: linear-gradient(to top right, var(--system-gradient-midnight-low-1) 14.645%, var(--system-gradient-midnight-low-2) 85.355%);
+}
+/* ---------- Сцена и устройство (из стенда Стаса) ---------- */
 .stage {
   display: flex;
-  flex: 1 0 0;
+  flex: 1 1 0;
   min-width: 0;
   min-height: 0;
   align-items: center;
   justify-content: center;
-  margin: var(--space-3xl);
 }
 .device-holder {
   display: flex;
@@ -1570,88 +1770,239 @@ button { font: inherit; color: inherit; }
 .flow-stub__text { margin: 0; }
 .flow-stub__text strong { font-weight: var(--typography-primitives-semi-bold); }
 
-/* ---------- Плавающие плашки поверх сцены: фильтры и аналитика ----------
-   Вид плашки: фон Backgrounds (Grouped)/Secondary W, радиус Radius/4xl, тень Shadow/Floating/2 level (как у шторки),
-   отступы от краёв окна и внутри Spacing/3xl. Высота по содержимому, но не выше окна без отступов:
-   что не поместилось, прокручивается внутри плашки.
-   Окно уже 1280: плашка одна, справа (.panel), в ней фильтры и под ними аналитика.
-   Окно от 1280: плашки две (.panel-card), аналитика слева, фильтры справа, телефон между ними */
-.stand { --panel-w: 440px; }
+/* ---------- Правая колонка: плитка «Сценарий» и четыре малые плитки ----------
+   На окне от 1280 всё помещается по высоте (при высоте до 880 включается плотный режим, см. ниже).
+   Если высоты всё же не хватает, колонка прокручивается, плитки не обрезаются */
 .panel {
-  position: relative;
   display: flex;
-  flex: 0 0 var(--panel-w);
   flex-direction: column;
-  align-self: flex-start;
-  gap: var(--space-3xl);
-  max-height: calc(100% - 2 * var(--space-3xl));
-  margin: var(--space-3xl) var(--space-3xl) var(--space-3xl) 0;
-  padding: var(--space-3xl);
+  gap: var(--dash-gap);
+  min-width: 0;
+  min-height: 0;
+  padding: var(--dash-gap);
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: var(--neutral-bottom-20) transparent;
-  border-radius: var(--radius-4xl);
-  background: var(--bg-grouped-secondary-w);
-  box-shadow: var(--shadow-floating-2);
-  color: var(--text-bottom-default);
 }
-.panel > * { flex-shrink: 0; }
-.panel-card { min-width: 0; }
-.panel-card--filters { display: flex; flex-direction: column; gap: var(--space-3xl); }
-.panel-card--filters > * { flex-shrink: 0; }
-@media (min-width: 1280px) and (pointer: fine) {
-  /* ширина плашек: 440 на окне от 1440, на 1280 сжимаются до 360, чтобы телефону оставалось не меньше 432 */
-  .stand { --panel-w: clamp(360px, calc((100vw - 560px) / 2), 440px); }
-  .panel { display: contents; }
-  .panel-card {
-    flex: 0 0 var(--panel-w);
-    align-self: flex-start;
-    max-height: calc(100% - 2 * var(--space-3xl));
-    padding: var(--space-3xl);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
-    scrollbar-color: var(--neutral-bottom-20) transparent;
-    border-radius: var(--radius-4xl);
-    background: var(--bg-grouped-secondary-w);
-    box-shadow: var(--shadow-floating-2);
-    color: var(--text-bottom-default);
-  }
-  .panel-card--analytics { order: 1; margin: var(--space-3xl) 0 var(--space-3xl) var(--space-3xl); }
-  .stage { order: 2; }
-  .panel-card--filters { order: 3; margin: var(--space-3xl) var(--space-3xl) var(--space-3xl) 0; }
-  /* в своей плашке строки аналитики лежат прямо на ней, без вложенной подложки */
-  .panel-card--analytics .analytics { padding: 0; border-radius: 0; background: none; }
+
+/* Плитка «Сценарий». Шапка: подпись слева, переключатель просрочки справа, под ними название сценария */
+.tile--scenario {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--tile-pad);
 }
-.panel-group { min-width: 0; margin: 0; padding: 0; border: 0; }
-.panel-group__label { margin-bottom: var(--space-md); padding: 0; color: var(--text-bottom-secondary); }
-.panel-group__chips { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
-/* Сценарии идут списком, один под другим */
-#scenarioChips { flex-direction: column; flex-wrap: nowrap; align-items: flex-start; }
-/* Аналитика по выбранному сценарию: три строки «подпись + значение».
-   В общей плашке с фильтрами стоит на спокойной подложке, в своей плашке без неё */
-p.panel-group__label { margin-top: 0; }
-.analytics {
+.scenario-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas: "label dpdlabel dpd" "title title title";
+  align-items: center;
+  column-gap: var(--space-sm);
+  row-gap: var(--space-xs);
+}
+.scenario-head__label { grid-area: label; }
+.scenario-head__dpd-label { grid-area: dpdlabel; }
+.scenario-head .segmented-control { grid-area: dpd; }
+/* название сценария: H1/H1 Strong */
+.scenario-head__title {
+  grid-area: title;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--h1-strong-font-family);
+  font-weight: var(--h1-strong-font-weight);
+  font-size: var(--h1-strong-size);
+  line-height: var(--h1-strong-line-height);
+  letter-spacing: var(--h1-strong-letter-spacing);
+}
+/* слева теги сценариев в две колонки по шесть, справа график причин отмены */
+.scenario-body {
+  display: grid;
+  grid-template-columns: max-content minmax(min-content, 1fr);
+  column-gap: var(--tile-pad);
+  row-gap: var(--space-lg);
+}
+.scenario-tags {
+  display: grid;
+  grid-template-rows: repeat(6, auto);
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  justify-items: start;
+  align-content: start;
+  gap: var(--space-sm);
+}
+.scenario-chart {
   display: flex;
   flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+.scenario-chart .bar-chart { flex: 1 1 auto; justify-content: space-between; }
+/* График: список строк «подпись слева, доля справа, под ними столбик». Столбик: .progress-linear из components.css.
+   Выделенные строки основным цветом текста, остальные вторичным: читается и без цвета столбика */
+.bar-chart { display: flex; flex-direction: column; gap: var(--space-xs); margin: 0; padding: 0; list-style: none; }
+.bar-chart__row { display: flex; flex-direction: column; gap: var(--space-xs); }
+.bar-chart__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   gap: var(--space-md);
+  color: var(--text-bottom-secondary);
+  transition: color 0.2s ease;
+}
+.bar-chart__row[data-highlight="on"] .bar-chart__head { color: var(--text-bottom-default); }
+.bar-chart__label { white-space: nowrap; }
+.bar-chart__value { flex-shrink: 0; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Четыре малые плитки 2 × 2: делят оставшуюся высоту поровну.
+   В плитке: заголовок (Body/Body Medium), крупное число (H1/H1 Strong) с Badge, подпись (Caption), внизу полоса */
+.tile-grid {
+  display: grid;
+  flex: 1 0 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: var(--dash-gap);
+}
+.tile--stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-height: 0;
+  padding: var(--stat-pad);
+}
+.stat__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xxs) var(--space-sm);
+}
+.stat__title {
   margin: 0;
-  padding: var(--space-lg);
-  border-radius: var(--radius-2xl);
-  background: var(--bg-grouped-primary);
+  font-family: var(--body-medium-font-family);
+  font-weight: var(--body-medium-font-weight);
+  font-size: var(--body-medium-size);
+  line-height: var(--body-medium-line-height);
+  letter-spacing: var(--body-medium-letter-spacing);
 }
-.analytics__row { display: flex; flex-direction: column; gap: var(--space-xxs); }
-.analytics dt { color: var(--text-bottom-secondary); }
-.analytics dd { margin: 0; color: var(--text-bottom-default); }
-/* названия событий и параметров: моноширинного шрифта в токенах ДС нет, системный */
-.analytics code {
-  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  font-size: 13px;
-  line-height: 1; /* строка с названием события той же высоты, что соседние */
-  overflow-wrap: anywhere;
+/* заголовок слева, пояснение справа; в узкой плитке пояснение уходит на свою строку и встаёт слева */
+.stat__head--split { justify-content: space-between; }
+.stat__note { color: var(--text-bottom-tertiary); }
+.stat__value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-sm);
+  margin: 0;
 }
-.analytics__note { margin: var(--space-md) 0 0; color: var(--text-bottom-secondary); }
+.stat__number {
+  white-space: nowrap;
+  font-family: var(--h1-strong-font-family);
+  font-weight: var(--h1-strong-font-weight);
+  font-size: var(--h1-strong-size);
+  line-height: var(--h1-strong-line-height);
+  letter-spacing: var(--h1-strong-letter-spacing);
+}
+.stat__caption { margin: 0; color: var(--text-bottom-secondary); }
+.stat__text { margin: 0; }
+/* полоса с процентом справа, прижата к низу плитки */
+.stat__meter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: auto 0 0;
+  padding-top: var(--space-sm);
+}
+.stat__meter .progress-linear { flex: 1 1 0; width: auto; min-width: 0; }
+.stat__meter .progress-linear__indicator { min-width: 4px; } /* доля меньше 1% остаётся видимой точкой */
+.stat__meter-value { flex-shrink: 0; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.stat__meter-label { flex-shrink: 0; color: var(--text-bottom-secondary); white-space: nowrap; }
+/* диапазоны на общей шкале: подпись, полоса-диапазон, значение. Колонки общие для всех строк */
+.range-chart {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  gap: var(--space-system-6) var(--space-sm);
+  margin: auto 0 0;
+  padding: var(--space-sm) 0 0;
+  list-style: none;
+}
+.range-chart__row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: center;
+  color: var(--text-bottom-secondary);
+}
+.range-chart__row[data-highlight="on"] { color: var(--text-bottom-default); }
+.range-chart__value { justify-self: end; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Плотный режим: окно от 1280 шириной и ниже 880. Те же плитки, меньше отступы и ступень типографики:
+   название сценария H3/H3 Strong рядом с переключателем, заголовки плиток Note/Note Medium, числа H3/H3 Strong */
+@media (min-width: 1280px) and (max-height: 879px) and (pointer: fine) {
+  .stand {
+    --dash-gap: var(--space-md);
+    --tile-pad: var(--space-lg);
+    --stat-pad: var(--space-md) var(--space-lg);
+  }
+  .tile--scenario { gap: var(--space-md); }
+  .scenario-head {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "label dpdlabel" "title dpd";
+    row-gap: var(--space-xxs);
+  }
+  .scenario-head__title {
+    font-family: var(--h3-strong-font-family);
+    font-weight: var(--h3-strong-font-weight);
+    font-size: var(--h3-strong-size);
+    line-height: var(--h3-strong-line-height);
+    letter-spacing: var(--h3-strong-letter-spacing);
+  }
+  .scenario-tags { row-gap: var(--space-xs); }
+  .scenario-chart { gap: var(--space-xs); }
+  .bar-chart { gap: var(--space-xxs); }
+  .bar-chart__row { gap: var(--space-xxs); }
+  .tile--stat { gap: var(--space-xxs); }
+  .stat__title {
+    font-family: var(--note-medium-font-family);
+    font-weight: var(--note-medium-font-weight);
+    font-size: var(--note-medium-size);
+    line-height: var(--note-medium-line-height);
+    letter-spacing: var(--note-medium-letter-spacing);
+  }
+  .stat__number {
+    font-family: var(--h3-strong-font-family);
+    font-weight: var(--h3-strong-font-weight);
+    font-size: var(--h3-strong-size);
+    line-height: var(--h3-strong-line-height);
+    letter-spacing: var(--h3-strong-letter-spacing);
+  }
+  .stat__meter { padding-top: var(--space-xs); }
+  .range-chart { row-gap: var(--space-xs); padding-top: var(--space-xs); }
+}
+
+/* Окно уже 1280: телефон остаётся слева, правая колонка прокручивается. График уходит под теги */
+@media (max-width: 1279px) {
+  .stand { grid-template-columns: minmax(320px, 38fr) minmax(0, 62fr); }
+  .scenario-body { grid-template-columns: minmax(0, 1fr); }
+  .scenario-chart .bar-chart { gap: var(--space-sm); }
+}
+/* совсем узкая колонка и панель на телефоне: всё в один столбец */
+@media (max-width: 959px), (pointer: coarse) {
+  .scenario-head {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "label" "title" "dpdlabel" "dpd";
+    justify-items: start;
+  }
+  .scenario-head__title { white-space: normal; }
+  .scenario-head__dpd-label { margin-top: var(--space-sm); }
+  .scenario-body { grid-template-columns: minmax(0, 1fr); }
+  .scenario-tags { grid-template-rows: none; grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); }
+  .tile-grid { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; }
+}
 .panel__close,
 .panel-toggle,
 .panel-scrim { display: none; }
@@ -1659,14 +2010,21 @@ p.panel-group__label { margin-top: 0; }
 .screen.no-anim *,
 .screen.no-anim *::before { transition: none !important; animation: none !important; }
 @media (prefers-reduced-motion: reduce) {
-  .screen *, .panel, .panel-scrim { transition: none !important; animation: none !important; }
+  .screen *, .panel, .panel-scrim, .progress-linear__indicator, .bar-chart__head, .segment { transition: none !important; animation: none !important; }
 }
 
 /* ---------- Телефон: тач или узкий экран. Прототип на весь экран без рамки, панель выезжает поверх ---------- */
 @media (max-width: 767px), (pointer: coarse) {
   html, body { overflow: hidden; }
-  .stand { min-height: 0; }
-  .stage { margin: 0; }
+  .stand { display: block; min-height: 0; }
+  .tile--flow {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
   .device-holder { width: 100% !important; height: 100% !important; }
   .device {
     width: 100%;
@@ -1719,26 +2077,28 @@ p.panel-group__label { margin-top: 0; }
     pointer-events: none;
     transition: opacity 0.25s ease;
   }
+  /* плитки в выезжающей панели: тот же фон страницы, плитки одна под другой */
   .panel {
+    --dash-gap: var(--space-md);
+    --tile-pad: var(--space-lg);
+    --stat-pad: var(--space-lg);
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     z-index: 80;
-    flex: none;
-    align-self: auto; /* иначе плашка берёт высоту содержимого, а не экрана, и не прокручивается */
     width: min(88vw, 360px);
-    max-height: none;
-    margin: 0;
-    gap: var(--space-2xl);
-    padding: calc(env(safe-area-inset-top, 0px) + var(--space-lg)) var(--space-lg) var(--space-2xl);
-    border-radius: var(--radius-4xl) 0 0 var(--radius-4xl); /* та же плашка, прижата к правому краю экрана */
+    padding: calc(env(safe-area-inset-top, 0px) + var(--space-md)) var(--space-md) var(--space-2xl);
+    border-radius: var(--radius-4xl) 0 0 var(--radius-4xl);
+    background: var(--bg-grouped-primary);
+    box-shadow: var(--shadow-floating-2);
     transform: translateX(100%);
     visibility: hidden;
     transition: transform 0.25s ease, visibility 0s 0.25s;
   }
+  .panel > * { flex-shrink: 0; }
   .panel__close { display: inline-flex; align-self: flex-end; }
-  .panel-card--filters { gap: var(--space-2xl); }
+  .tile-grid { flex: 0 0 auto; }
   .stand.is-panel-open .panel { transform: none; visibility: visible; transition: transform 0.25s ease, visibility 0s; }
   .stand.is-panel-open .panel-scrim { opacity: 1; pointer-events: auto; }
 }
@@ -1766,7 +2126,8 @@ p.panel-group__label { margin-top: 0; }
 <div id="app" hidden>
   <div class="stand ds" id="stand" data-color-scheme="light" data-typography="main" data-responsive="desktop">
 
-    <!-- ===== Сцена: телефон (формат стенда Стаса) ===== -->
+    <!-- ===== Плитка «Флоу»: телефон в рамке (формат стенда Стаса), фон Gradient/Midnight/Midnight Low ===== -->
+    <section class="tile tile--flow" aria-label="Флоу">
     <main class="stage" id="stage">
       <div class="device-holder" id="deviceHolder">
         <div class="device" id="device">
@@ -1973,31 +2334,37 @@ p.panel-group__label { margin-top: 0; }
         </div>
       </div>
     </main>
+    </section>
 
-    <!-- ===== Плавающие плашки: фильтры и аналитика =====
-         Окно от 1280: аналитика слева от телефона, фильтры справа. Уже: одна плашка справа, аналитика под фильтрами.
-         Телефон: та же плашка выезжает по язычку -->
-    <button class="btn-neutral panel-toggle" id="panelToggle" type="button" data-size-button="medium" aria-label="Фильтры прототипа" aria-controls="panel" aria-expanded="false">
+    <!-- ===== Правая колонка дашборда: плитка «Сценарий» и четыре малые плитки 2 × 2 =====
+         Окно от 1280: всё помещается в окно. Уже: колонка прокручивается. Телефон: колонка выезжает по язычку.
+         Содержимое плиток по выбранному сценарию собирает app.js -->
+    <button class="btn-neutral panel-toggle" id="panelToggle" type="button" data-size-button="medium" aria-label="Сценарий и аналитика" aria-controls="panel" aria-expanded="false">
       <span class="btn-content">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.333 5h6.25m4.167 0h2.917M3.333 10h2.084m4.166 0h7.084M3.333 15h8.334m4.166 0h.834M11.667 3.333v3.334M7.5 8.333v3.334m6.25 1.666v3.334" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </span>
     </button>
     <div class="panel-scrim" id="panelScrim"></div>
-    <aside class="panel" id="panel" aria-label="Фильтры и аналитика прототипа">
-      <button class="btn-neutral panel__close" id="panelClose" type="button" data-size-button="medium" aria-label="Закрыть фильтры">
+    <aside class="panel" id="panel" aria-label="Сценарий и аналитика прототипа">
+      <button class="btn-neutral panel__close" id="panelClose" type="button" data-size-button="medium" aria-label="Закрыть">
         <span class="btn-content"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ4Ij4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE1IDVMNSAxNU01IDVMMTUgMTUiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" width="20" height="20" alt=""></span>
       </button>
-      <div class="panel-card panel-card--filters">
-        <fieldset class="panel-group">
-          <legend class="panel-group__label t-caption">Просрочка</legend>
-          <div class="panel-group__chips" id="dpdChips">
-            <button class="chip chip-active" type="button" data-dpd="early" aria-pressed="true">До&nbsp;3&nbsp;дней</button>
-            <button class="chip chip-inactive" type="button" data-dpd="late" aria-pressed="false">Больше 3&nbsp;дней</button>
+
+      <!-- Плитка «Сценарий»: переключатель просрочки, название сценария, теги и график причин отмены -->
+      <section class="tile tile--scenario" aria-labelledby="scenarioLabel">
+        <header class="scenario-head">
+          <p class="tile__label scenario-head__label t-caption" id="scenarioLabel">Сценарий</p>
+          <p class="tile__label scenario-head__dpd-label t-caption" id="dpdLabel">Просрочка</p>
+          <!-- Segmented Control / Basic, Size=40 -->
+          <div class="segmented-control" id="dpdSwitch" role="group" aria-labelledby="dpdLabel" data-size-segmented-control="40">
+            <button class="segment" type="button" data-dpd="early" aria-pressed="true">До&nbsp;3&nbsp;дней</button>
+            <button class="segment" type="button" data-dpd="late" aria-pressed="false">Больше 3&nbsp;дней</button>
           </div>
-        </fieldset>
-        <fieldset class="panel-group">
-          <legend class="panel-group__label t-caption">Сценарий</legend>
-          <div class="panel-group__chips" id="scenarioChips">
+          <h2 class="scenario-head__title" id="scenarioTitle" aria-live="polite">Вход</h2>
+        </header>
+        <div class="scenario-body">
+          <!-- Chip / Active и Chip / Inactive, Size=Small: две колонки по шесть -->
+          <div class="scenario-tags" id="scenarioChips" role="group" aria-labelledby="scenarioLabel">
             <button class="chip chip-active" type="button" data-scenario="entry" aria-pressed="true">Вход</button>
             <button class="chip chip-inactive" type="button" data-scenario="1" aria-pressed="false">1. Причины</button>
             <button class="chip chip-inactive" type="button" data-scenario="2" aria-pressed="false">2. Не&nbsp;хватает денег</button>
@@ -2011,14 +2378,42 @@ p.panel-group__label { margin-top: 0; }
             <button class="chip chip-inactive" type="button" data-scenario="7" aria-pressed="false">7. Другая проблема</button>
             <button class="chip chip-inactive" type="button" data-scenario="7a" aria-pressed="false">7a. Другая проблема · отправлено</button>
           </div>
-        </fieldset>
-      </div>
-      <!-- Аналитика по выбранному сценарию: строки собирает app.js -->
-      <section class="panel-card panel-card--analytics" aria-labelledby="analyticsLabel">
-        <p class="panel-group__label t-caption" id="analyticsLabel">Аналитика</p>
-        <dl class="analytics" id="analytics" aria-live="polite"></dl>
-        <p class="analytics__note t-caption">Доли от&nbsp;28&nbsp;873&nbsp;ответивших на&nbsp;анкету отмены оплаты. Оплата и её тип уже есть в&nbsp;карте разметки datahints.</p>
+          <!-- График причин отмены оплаты: строки и выделение собирает app.js, столбики Progress indicator / Linear -->
+          <div class="scenario-chart">
+            <ul class="bar-chart" id="reasonsChart" aria-label="Причины отмены оплаты"></ul>
+            <p class="tile__caption t-caption">28&nbsp;873&nbsp;ответа на&nbsp;анкету отмены оплаты, 14.05–&#8288;03.09.2026</p>
+          </div>
+        </div>
       </section>
+
+      <!-- Четыре малые плитки: заголовок, крупное число с Badge, подпись, полоса Progress indicator / Linear -->
+      <div class="tile-grid">
+        <section class="tile tile--stat" id="tileNow" aria-labelledby="nowTitle">
+          <header class="stat__head"><h3 class="stat__title" id="nowTitle">Сейчас</h3></header>
+          <p class="stat__value"><span class="stat__number" data-role="number"></span><span class="badge badge--info t-caps-xsmall-strong" data-size-badge="20" data-role="badge"></span></p>
+          <p class="stat__caption t-caption" data-role="caption"></p>
+          <p class="stat__meter">
+            <span class="progress-linear" data-size-progress="small" aria-hidden="true"><span class="progress-linear__indicator" data-role="bar"></span></span>
+            <span class="stat__meter-value t-note-medium" data-role="meter"></span>
+            <span class="stat__meter-label t-caption" data-role="meterLabel"></span>
+          </p>
+        </section>
+        <section class="tile tile--stat" id="tileGoal" aria-labelledby="goalTitle">
+          <header class="stat__head"><h3 class="stat__title" id="goalTitle">Ожидаем</h3></header>
+          <p class="stat__text t-note" data-role="text"></p>
+        </section>
+        <section class="tile tile--stat" id="tileEvents" aria-labelledby="eventsTitle">
+          <header class="stat__head"><h3 class="stat__title" id="eventsTitle">События</h3><span class="badge badge--attention t-caps-xsmall-strong" data-size-badge="20" data-role="badge">1&nbsp;новое</span></header>
+          <p class="stat__text t-note" data-role="text"></p>
+        </section>
+        <section class="tile tile--stat" id="tileEstimate" aria-labelledby="estimateTitle">
+          <header class="stat__head stat__head--split"><h3 class="stat__title" id="estimateTitle">Оценка</h3><span class="stat__note t-caption" data-role="note">В&nbsp;деньгах: число оплат × средний платёж</span></header>
+          <p class="stat__value" data-role="value"><span class="stat__number" data-role="number"></span><span class="badge badge--info t-caps-xsmall-strong" data-size-badge="20" data-role="badge">10%</span></p>
+          <p class="stat__caption t-caption" data-role="caption"></p>
+          <ul class="range-chart" id="estimateChart" aria-label="Дополнительные оплаты в месяц по доле оплативших" data-role="ranges"></ul>
+          <p class="stat__text t-note" data-role="text"></p>
+        </section>
+      </div>
     </aside>
   </div>
 </div>
@@ -2096,7 +2491,7 @@ p.panel-group__label { margin-top: 0; }
     start: 'Не могу заплатить сейчас',
     tech: 'Оплатите в\u00A0первые 3\u00A0дня: просрочка техническая и\u00A0на\u00A0новые займы не\u00A0повлияет',
     ask: 'Расскажите, что мешает оплатить. Подберём решение под\u00A0вашу ситуацию\u00A0🤝',
-    noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂 Продлите заём, оплатите часть или выберите удобный день оплаты',
+    noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂 Выберите удобный день оплаты, продлите заём или оплатите часть',
     payDate: 'Выберите день, когда вам удобно оплатить\u00A0📅 Срок по\u00A0договору не меняется. Проценты начисляются до\u00A0дня оплаты',
     partial: 'Внесите столько, сколько получается сейчас\u00A0👍',
     method: 'Выберите способ оплаты\u00A0👇',
@@ -2137,9 +2532,9 @@ p.panel-group__label { margin-top: 0; }
     noMoney: {
       scenario: '2', bot: [T.noMoney],
       chips: [
+        { label: 'Выбрать день оплаты', go: 'payDate' },
         { label: 'Продлить с\u00A0оплатой\u00A0%', exit: 'Продление займа' },
         { label: 'Оплатить частично', go: 'partial' },
-        { label: 'Выбрать день оплаты', go: 'payDate' },
         OTHER_REASON
       ]
     },
@@ -2607,7 +3002,8 @@ p.panel-group__label { margin-top: 0; }
     document.addEventListener('focusout', function () { setTimeout(syncViewport, 60); });
   }
 
-  /* ---------- Панель: просрочка и сценарий ---------- */
+  /* ---------- Плитка «Сценарий»: просрочка и сценарий ---------- */
+  var scenarioChips = $('#scenarioChips'), scenarioTitle = $('#scenarioTitle'), dpdSwitch = $('#dpdSwitch');
   function markChips(root, attr, value) {
     $$('.chip', root).forEach(function (c) {
       var on = c.getAttribute(attr) === value;
@@ -2616,87 +3012,204 @@ p.panel-group__label { margin-top: 0; }
       c.setAttribute('aria-pressed', String(on));
     });
   }
+  function markSegments(root, attr, value) {
+    $$('.segment', root).forEach(function (c) { c.setAttribute('aria-pressed', String(c.getAttribute(attr) === value)); });
+  }
   function setScenario(id) {
     state.scenario = id;
-    markChips($('#scenarioChips'), 'data-scenario', id);
-    renderAnalytics(id);
+    markChips(scenarioChips, 'data-scenario', id);
+    renderDashboard(id);
   }
 
-  /* ---------- Панель: аналитика по\u00A0выбранному сценарию ----------
-     В\u00A0обратных кавычках названия событий и\u00A0параметров: они выводятся моноширинным шрифтом */
+  /* ---------- Дашборд по\u00A0выбранному сценарию ----------
+     Плитка «Сценарий»: название и\u00A0график причин отмены. Малые плитки: «Сейчас», «Ожидаем», «События», «Оценка».
+     Полосы: Progress indicator / Linear из\u00A0ДС. В\u00A0обратных кавычках названия событий и\u00A0параметров:
+     они выводятся моноширинным шрифтом */
+
+  /* График причин отмены оплаты: доли от\u00A0ответивших на\u00A0анкету, % */
+  var CANCEL_REASONS = [
+    { id: 'later', label: 'Заплачу позже', share: 25.6 },
+    { id: 'noFunds', label: 'Не хватает средств на\u00A0карте', share: 21.3 },
+    { id: 'otherMethod', label: 'Оплачу другим способом', share: 19.1 },
+    { id: 'accident', label: 'Случайно нажал', share: 14.6 },
+    { id: 'wrongAmount', label: 'Ошибся суммой платежа', share: 11.0 },
+    { id: 'ownText', label: 'Свой текст', share: 5.0 },
+    { id: 'failed', label: 'Платёж не прошёл', share: 3.3 }
+  ];
+  /* Плитка «Оценка» для\u00A0входа: дополнительные оплаты в\u00A0месяц, диапазоны на\u00A0общей шкале. main: строка крупного числа */
+  var ESTIMATE_MAX = 2200;
+  var ESTIMATE = [
+    { label: 'каждый двадцатый', from: 240, to: 540 },
+    { label: 'каждый десятый', from: 480, to: 1080, main: true },
+    { label: 'каждый пятый', from: 970, to: 2150 }
+  ];
+
   var A_PAY = 'После входа: `dl_repayment_success_payment`, тип в\u00A0`repayment_type`.';
+  var EST = 'оплат в\u00A0месяц: причину называют по\u00A0';
+  var NOW_LATER = { value: '47,0%', badge: '13\u00A0561\u00A0ответ', caption: '«Заплачу позже» и\u00A0«Не хватает средств на\u00A0карте»', share: 47.0 };
+  var EST_LATER = { value: '≈300', caption: EST + '3\u00A0000\u00A0договоров' };
+  /* reasons: причины отмены, которые закрывает сценарий (выделены на\u00A0графике).
+     now: плитка «Сейчас» (share: длина полосы в\u00A0процентах, meter: подпись справа от\u00A0полосы, если она не\u00A0равна доле).
+     goal и\u00A0events: тексты плиток «Ожидаем» и\u00A0«События», newEvents: бейдж «1 новое».
+     estimate: плитка «Оценка» (ranges: показать диапазоны; text: текст вместо числа) */
   var ANALYTICS = {
     start: {
-      now: '80\u00A0662\u00A0отмены оплаты за\u00A014.05–03.09.2026 по\u00A047\u00A0821\u00A0договору. 64,2% закрыли анкету без\u00A0ответа, ответили 28\u00A0873.',
+      reasons: ['later', 'noFunds', 'otherMethod', 'wrongAmount', 'ownText', 'failed'],
+      now: { value: '80\u00A0662', badge: '47\u00A0821\u00A0договор', caption: 'отмены оплаты за\u00A014.05–\u206003.09.2026', share: 35.8, meterLabel: 'ответили на\u00A0анкету' },
       goal: 'Доля вошедших в\u00A0диалог, которые оплатили: в\u00A0том же визите и за\u00A07\u00A0дней. С\u00A0разбивкой по\u00A0типу оплаты.',
-      events: 'Новое событие одно: клик по\u00A0«Не могу заплатить сейчас». Оплата уже размечена: `dl_repayment_success_payment`, тип в\u00A0`repayment_type` (полное, продление, частичное).'
+      events: 'Новое событие одно: клик по\u00A0«Не могу заплатить сейчас». Оплата уже размечена: `dl_repayment_success_payment`, тип в\u00A0`repayment_type` (полное, продление, частичное).',
+      newEvents: true,
+      estimate: { value: '480–\u20601\u00A0080', caption: 'дополнительных оплат в\u00A0месяц', ranges: true }
     },
     noMoney: {
-      now: '13\u00A0561\u00A0ответ, 47,0%: «Заплачу позже» 7\u00A0402 и «Не хватает средств на\u00A0карте» 6\u00A0159.',
+      reasons: ['later', 'noFunds'],
+      now: NOW_LATER,
       goal: 'Клиент не закрывает кабинет, а продлевает заём, вносит часть или выбирает день.',
-      events: 'После входа: `dl_repayment_success_payment` с\u00A0`repayment_type = loan_repayment_extension` или `loan_repayment_partial`.'
+      events: 'После входа: `dl_repayment_success_payment` с\u00A0`repayment_type = loan_repayment_extension` или `loan_repayment_partial`.',
+      estimate: EST_LATER
     },
     payDate: {
-      now: 'Такой механики нет. «Заплачу позже» выбрали 7\u00A0402\u00A0раза, 25,6% ответов.',
+      reasons: ['later', 'noFunds'],
+      now: NOW_LATER,
       goal: 'Доля оплативших до\u00A0выбранного дня от\u00A0выбравших день.',
-      events: 'Выбранный день хранится на\u00A0сервере, считаем по\u00A0нему. Оплата: `dl_repayment_success_payment`.'
+      events: 'Выбранный день хранится на\u00A0сервере, считаем по\u00A0нему. Оплата: `dl_repayment_success_payment`.',
+      estimate: EST_LATER
     },
     partial: {
-      now: '3\u00A0178\u00A0ответов, 11,0%: «Ошибся суммой платежа».',
+      reasons: ['wrongAmount'],
+      now: { value: '11,0%', badge: '3\u00A0178\u00A0ответов', caption: '«Ошибся суммой платежа»', share: 11.0 },
       goal: 'Переходы в\u00A0частичную оплату из\u00A0диалога и успешные оплаты после них.',
-      events: 'После входа: `dl_repayment_success_payment` с\u00A0`repayment_type = loan_repayment_partial`.'
+      events: 'После входа: `dl_repayment_success_payment` с\u00A0`repayment_type = loan_repayment_partial`.',
+      estimate: { value: '≈70', caption: EST + '730\u00A0договорам' }
     },
     otherMethod: {
-      now: '5\u00A0509\u00A0ответов, 19,1%: «Оплачу другим способом».',
+      reasons: ['otherMethod'],
+      now: { value: '19,1%', badge: '5\u00A0509\u00A0ответов', caption: '«Оплачу другим способом»', share: 19.1 },
       goal: 'Клиент доходит до\u00A0оплаты выбранным способом, отмен на\u00A0экране оплаты меньше.',
-      events: A_PAY
+      events: A_PAY,
+      estimate: { value: '≈130', caption: EST + '1\u00A0300\u00A0договорам' }
     },
     payFailed: {
-      now: '963\u00A0ответа, 3,3%: «Платёж не прошёл».',
+      reasons: ['failed'],
+      now: { value: '3,3%', badge: '963\u00A0ответа', caption: '«Платёж не прошёл»', share: 3.3 },
       goal: 'Повторная оплата через\u00A0СБП или новой картой проходит успешно.',
-      events: A_PAY
+      events: A_PAY,
+      estimate: { value: '≈25', caption: EST + '240\u00A0договорам' }
     },
     paid: {
-      now: 'Меньше 1% ответов: 13\u00A0раз выбрали «Уже оплатил», ещё около\u00A0200 написали об\u00A0этом текстом.',
+      reasons: [],
+      now: { value: 'меньше\u00A01%', badge: '13\u00A0ответов', caption: '«Уже оплатил», ещё около\u00A0200 написали об\u00A0этом текстом', share: 0, meter: 'меньше\u00A01%' },
       goal: 'Клиент загружает чек сам, без\u00A0обращения в\u00A0поддержку.',
-      events: 'Оплаты нет: клиент уходит в\u00A0загрузку чека.'
+      events: 'Оплаты нет: клиент уходит в\u00A0загрузку чека.',
+      estimate: { text: 'Оплаты нет: клиент уходит в\u00A0загрузку чека' }
     },
     otherProblem: {
-      now: '1\u00A0446\u00A0ответов свободным текстом, 5,0%.',
+      reasons: ['ownText'],
+      now: { value: '5,0%', badge: '1\u00A0446\u00A0ответов', caption: '«Свой текст»', share: 5.0 },
       goal: 'Сообщения уходят в\u00A0контакт-центр, видим причины, которых нет в\u00A0списке.',
-      events: 'Сообщения считаем в\u00A0контакт-центре.'
+      events: 'Сообщения считаем в\u00A0контакт-центре.',
+      estimate: { text: 'Сообщения считаем в\u00A0контакт-центре' }
     }
   };
   var ANALYTICS_BY_SCENARIO = {
     entry: 'start', '1': 'start', '2': 'noMoney', '2a': 'payDate', '2b': 'payDate', '2c': 'payDate',
     '3': 'partial', '4': 'otherMethod', '5': 'payFailed', '6': 'paid', '7': 'otherProblem', '7a': 'otherProblem'
   };
-  var ANALYTICS_ROWS = [['now', 'Сейчас'], ['goal', 'Ожидаем'], ['events', 'События']];
-  var analyticsEl = $('#analytics'), analyticsKey = null;
-  function renderAnalytics(scenario) {
+
+  function num(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0'); } /* 1080 → «1 080» с\u00A0неразрывным пробелом */
+  function percent(n) { return n.toFixed(1).replace('.', ',') + '%'; }
+  /* полоса Progress indicator / Linear: from и to задают начало и конец заполнения в\u00A0долях ширины дорожки.
+     Полоса скрыта от\u00A0скринридера: значение всегда стоит рядом текстом */
+  function progress(from, to) {
+    var el = document.createElement('span');
+    el.className = 'progress-linear';
+    el.dataset.sizeProgress = 'small';
+    el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = '<span class="progress-linear__indicator"></span>';
+    el.firstChild.style.left = (from * 100).toFixed(2) + '%';
+    el.firstChild.style.width = ((to - from) * 100).toFixed(2) + '%';
+    return el;
+  }
+  function span(cls, text) {
+    var el = document.createElement('span');
+    el.className = cls;
+    el.textContent = text;
+    return el;
+  }
+  /* текст с\u00A0названиями событий: части в\u00A0обратных кавычках становятся <code> */
+  function fillText(el, text) {
+    el.textContent = '';
+    text.split('`').forEach(function (part, i) {
+      if (!part) return;
+      if (i % 2) { var code = document.createElement('code'); code.textContent = part; el.appendChild(code); }
+      else el.appendChild(document.createTextNode(part));
+    });
+  }
+  function part(root, role) { return $('[data-role="' + role + '"]', root); }
+  function show(el, text) { el.hidden = !text; if (text) el.textContent = text; }
+
+  /* график причин: строка = подпись и\u00A0доля, под ними полоса. Самая большая доля занимает всю ширину */
+  var reasonsChart = $('#reasonsChart');
+  var maxShare = Math.max.apply(null, CANCEL_REASONS.map(function (r) { return r.share; }));
+  CANCEL_REASONS.forEach(function (r) {
+    var li = document.createElement('li'), head = span('bar-chart__head t-caption', '');
+    li.className = 'bar-chart__row';
+    li.dataset.reason = r.id;
+    head.appendChild(span('bar-chart__label', r.label));
+    head.appendChild(span('bar-chart__value', percent(r.share)));
+    li.appendChild(head);
+    li.appendChild(progress(0, r.share / maxShare));
+    reasonsChart.appendChild(li);
+  });
+  /* диапазоны оценки: подпись, полоса-диапазон на\u00A0общей шкале, значение. Выделена строка крупного числа */
+  ESTIMATE.forEach(function (r) {
+    var li = document.createElement('li'), bar = progress(r.from / ESTIMATE_MAX, r.to / ESTIMATE_MAX);
+    li.className = 'range-chart__row t-caption';
+    li.dataset.highlight = r.main ? 'on' : 'off';
+    bar.dataset.tone = r.main ? 'accent' : 'neutral';
+    li.appendChild(span('range-chart__label', r.label));
+    li.appendChild(bar);
+    li.appendChild(span('range-chart__value', num(r.from) + '–\u2060' + num(r.to)));
+    $('#estimateChart').appendChild(li);
+  });
+
+  var tileNow = $('#tileNow'), tileGoal = $('#tileGoal'), tileEvents = $('#tileEvents'), tileEstimate = $('#tileEstimate');
+  var analyticsKey = null;
+  function renderDashboard(scenario) {
+    /* название сценария: текст его тега без\u00A0номера */
+    scenarioTitle.textContent = $('[data-scenario="' + scenario + '"]', scenarioChips).textContent.replace(/^\d+[a-z]?\.\s*/, '');
     var key = ANALYTICS_BY_SCENARIO[scenario];
     if (key === analyticsKey) return;
     analyticsKey = key;
-    analyticsEl.textContent = '';
-    ANALYTICS_ROWS.forEach(function (row) {
-      var item = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
-      item.className = 'analytics__row';
-      dt.className = 't-caption';
-      dt.textContent = row[1];
-      dd.className = 't-note';
-      ANALYTICS[key][row[0]].split('`').forEach(function (part, i) {
-        if (!part) return;
-        if (i % 2) { var code = document.createElement('code'); code.textContent = part; dd.appendChild(code); }
-        else dd.appendChild(document.createTextNode(part));
-      });
-      item.appendChild(dt);
-      item.appendChild(dd);
-      analyticsEl.appendChild(item);
+    var data = ANALYTICS[key], now = data.now, est = data.estimate;
+    /* график причин: длины те же, меняется только выделение */
+    $$('.bar-chart__row', reasonsChart).forEach(function (li) {
+      var on = data.reasons.indexOf(li.dataset.reason) >= 0;
+      li.dataset.highlight = on ? 'on' : 'off';
+      $('.progress-linear', li).dataset.tone = on ? 'accent' : 'neutral';
     });
+    /* «Сейчас» */
+    part(tileNow, 'number').textContent = now.value;
+    part(tileNow, 'badge').textContent = now.badge;
+    part(tileNow, 'caption').textContent = now.caption;
+    part(tileNow, 'bar').style.width = now.share.toFixed(2) + '%';
+    part(tileNow, 'meter').textContent = now.meter || percent(now.share);
+    show(part(tileNow, 'meterLabel'), now.meterLabel);
+    /* «Ожидаем» и\u00A0«События» */
+    part(tileGoal, 'text').textContent = data.goal;
+    fillText(part(tileEvents, 'text'), data.events);
+    part(tileEvents, 'badge').hidden = !data.newEvents;
+    /* «Оценка»: число с\u00A0подписью или текст, если оплаты в\u00A0сценарии нет */
+    part(tileEstimate, 'value').hidden = !est.value;
+    part(tileEstimate, 'number').textContent = est.value || '';
+    show(part(tileEstimate, 'caption'), est.caption);
+    part(tileEstimate, 'ranges').hidden = !est.ranges;
+    part(tileEstimate, 'note').hidden = !est.value;
+    show(part(tileEstimate, 'text'), est.text);
   }
   function setDpd(id) {
     state.dpd = id;
-    markChips($('#dpdChips'), 'data-dpd', id);
+    markSegments(dpdSwitch, 'data-dpd', id);
     $('#labelTime').textContent = DPD[id].label;
     $('#deadline').textContent = DPD[id].deadline;
     if (state.scenario === 'entry') return;
@@ -2774,18 +3287,20 @@ p.panel-group__label { margin-top: 0; }
   panelToggle.addEventListener('click', openPanel);
   $('#panelClose').addEventListener('click', closePanel);
   $('#panelScrim').addEventListener('click', closePanel);
-  $('#dpdChips').addEventListener('click', function (e) {
+  dpdSwitch.addEventListener('click', function (e) {
     var c = e.target.closest('[data-dpd]');
     if (c) setDpd(c.dataset.dpd);
   });
-  $('#scenarioChips').addEventListener('click', function (e) {
+  scenarioChips.addEventListener('click', function (e) {
     var c = e.target.closest('[data-scenario]');
     if (!c) return;
     applyScenario(c.dataset.scenario);
     closePanel();
   });
 
-  renderAnalytics(state.scenario);
+  renderDashboard(state.scenario);
+  /* плитка «Флоу» меняет размер вместе с\u00A0окном и\u00A0шрифтами правой колонки: масштаб телефона пересчитывается */
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(stage);
   fit();
 })();
 
