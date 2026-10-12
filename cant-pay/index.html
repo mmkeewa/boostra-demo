@@ -39,8 +39,9 @@
   --border-secondary-quaternary: var(--palette-secondary-9);
   --border-width-0: 0px;
   --border-width-1: 1px;
+  --brand-attention-10: var(--palette-attention-2);
   --brand-error: var(--palette-error-9);
-  --brand-error-40: var(--palette-error-5);
+  --brand-error-10: var(--palette-error-2);
   --brand-error-alpha-10: var(--palette-error-alpha-2);
   --brand-error-alpha-5: var(--palette-error-alpha-1);
   --brand-primary: var(--palette-primary-9);
@@ -48,11 +49,13 @@
   --brand-primary-alpha-5: var(--palette-primary-alpha-1);
   --brand-primary-ink: var(--palette-primary-11);
   --brand-secondary: var(--palette-secondary-9);
+  --brand-secondary-10: var(--palette-secondary-2);
   --brand-secondary-20: var(--palette-secondary-3);
   --brand-secondary-alpha-10: var(--palette-secondary-alpha-2);
   --brand-secondary-alpha-20: var(--palette-secondary-alpha-3);
   --brand-secondary-alpha-5: var(--palette-secondary-alpha-1);
   --brand-secondary-alpha-70: var(--palette-secondary-alpha-7);
+  --brand-success-10: var(--palette-success-2);
   --caps-small-strong-font-family: var(--typography-primitives-inter);
   --caps-small-strong-font-weight: var(--typography-primitives-medium);
   --caps-small-strong-letter-spacing: var(--typography-primitives-letter-spacing-0-8);
@@ -62,6 +65,11 @@
   --caption-font-weight: var(--typography-primitives-regular);
   --caption-letter-spacing: var(--typography-primitives-letter-spacing-0);
   --caption-line-height: var(--typography-primitives-line-height-16);
+  --caption-medium-font-family: var(--typography-primitives-inter);
+  --caption-medium-font-weight: var(--typography-primitives-medium);
+  --caption-medium-letter-spacing: var(--typography-primitives-letter-spacing-0);
+  --caption-medium-line-height: var(--typography-primitives-line-height-16);
+  --caption-medium-size: var(--typography-primitives-12);
   --caption-size: var(--typography-primitives-12);
   --circle-avatar-radius-32: var(--radius-lg);
   --circle-button-radius-large: var(--radius-xl);
@@ -117,8 +125,9 @@
   --icon-size: var(--icon-size-12);
   --icon-size-12: 12px;
   --icon-size-20: 20px;
-  --icon-size-24: 24px;
   --icon-wh: 20px;
+  --neutral-bottom-10: var(--palette-bottom-2);
+  --neutral-bottom-5: var(--palette-bottom-1);
   --neutral-bottom-alpha-10: var(--palette-bottom-alpha-2);
   --neutral-bottom-alpha-20: var(--palette-bottom-alpha-3);
   --neutral-bottom-alpha-40: var(--palette-bottom-alpha-5);
@@ -137,10 +146,14 @@
   --outlined-button-stroke-width: var(--border-width-0);
   --outlined-secondary-fill-default: var(--contrast-secondary-fill-default);
   --outlined-secondary-fill-hover-and-press: var(--contrast-secondary-fill-hover-and-press-hover);
+  --palette-attention-2: #fff1e5;
+  --palette-attention-9: #ff811a;
   --palette-backgrounds-grouped-primary: #f4f5f8;
   --palette-backgrounds-grouped-secondary: #ffffff;
   --palette-backgrounds-grouped-tertiary: #f4f5f8;
+  --palette-bottom-1: #f3f4f6;
   --palette-bottom-10: #152149;
+  --palette-bottom-2: #e8e9ed;
   --palette-bottom-alpha-1: rgba(21,33,73,0.05);
   --palette-bottom-alpha-2: rgba(21,33,73,0.1);
   --palette-bottom-alpha-3: rgba(21,33,73,0.2);
@@ -149,34 +162,34 @@
   --palette-control-b-3: rgba(21,33,73,0.5);
   --palette-control-b-4: rgba(21,33,73,0.66);
   --palette-control-b-5: #152149;
-  --palette-control-wh-4: rgba(255,255,255,0.7);
-  --palette-control-wh-5: #ffffff;
-  --palette-error-5: #ff9ab0;
+  --palette-error-2: #ffe6eb;
   --palette-error-9: #ff0239;
   --palette-error-alpha-1: rgba(255,2,57,0.05);
   --palette-error-alpha-2: rgba(255,2,57,0.1);
   --palette-gradient-midnight-mid-1: var(--palette-primary-9);
   --palette-gradient-midnight-mid-2: var(--palette-tertiary-6);
   --palette-peak-always-alpha-10: #ffffff;
-  --palette-peak-lvl-1-7: rgba(255,255,255,0.6);
   --palette-primary-11: #0042b8;
   --palette-primary-9: #005bff;
   --palette-primary-alpha-1: rgba(43,118,255,0.06);
   --palette-primary-alpha-2: rgba(23,106,255,0.11);
   --palette-secondary-11: #0072eb;
+  --palette-secondary-2: #e5f2ff;
   --palette-secondary-3: #cce4ff;
   --palette-secondary-9: #007aff;
   --palette-secondary-alpha-1: rgba(0,122,255,0.05);
   --palette-secondary-alpha-2: rgba(0,122,255,0.1);
   --palette-secondary-alpha-3: rgba(0,122,255,0.2);
   --palette-secondary-alpha-7: rgba(0,122,255,0.7);
+  --palette-success-2: #e5f5ec;
+  --palette-success-9: #00a043;
   --palette-system-black: rgba(0,0,0,0.5);
   --palette-tertiary-6: #85ccff;
   --palette-tertiary-9: #0b99ff;
   --palette-tertiary-alpha-1: rgba(11,153,255,0.05);
   --palette-tertiary-alpha-2: rgba(11,153,255,0.1);
-  --palette-violet-9: #aa5aff;
   --radius-2xl: 16px;
+  --radius-3xl: 20px;
   --radius-4xl: 24px;
   --radius-5xl: 32px;
   --radius-full: 999999px;
@@ -205,19 +218,24 @@
   --space-xl: 20px;
   --space-xs: 4px;
   --space-xxs: 2px;
-  --surface-lvl-1-peak-60: var(--palette-peak-lvl-1-7);
   --system-black: var(--palette-system-black);
   --system-gradient-midnight-mid-1: var(--palette-gradient-midnight-mid-1);
   --system-gradient-midnight-mid-2: var(--palette-gradient-midnight-mid-2);
+  --system-link-default: var(--palette-secondary-11);
+  --text-attention-default: var(--palette-attention-9);
   --text-bottom-default: var(--palette-control-b-5);
   --text-bottom-quaternary: var(--palette-control-b-1);
   --text-bottom-secondary: var(--palette-control-b-4);
   --text-bottom-tertiary: var(--palette-control-b-3);
   --text-error-default: var(--palette-error-9);
-  --text-peak-default: var(--palette-control-wh-5);
-  --text-peak-secondary: var(--palette-control-wh-4);
   --text-secondary-default: var(--palette-secondary-11);
+  --text-success-default: var(--palette-success-9);
   --text-tertiary-default: var(--palette-tertiary-9);
+  --title-medium-font-family: var(--typography-primitives-inter);
+  --title-medium-font-weight: var(--typography-primitives-semi-bold);
+  --title-medium-letter-spacing: var(--typography-primitives-letter-spacing-0);
+  --title-medium-line-height: var(--typography-primitives-line-height-24);
+  --title-medium-size: var(--typography-primitives-16);
   --type-chips-active-chip-fill-default: var(--brand-primary);
   --type-chips-active-chip-fill-hover-and-press: var(--brand-secondary);
   --type-chips-active-chip-text-and-icon-default: var(--always-peak-alpha);
@@ -253,7 +271,6 @@
   --typography-primitives-semi-bold: 600;
   --vibe-tertiary-alpha-10: var(--palette-tertiary-alpha-2);
   --vibe-tertiary-alpha-5: var(--palette-tertiary-alpha-1);
-  --vibe-violet: var(--palette-violet-9);
 }
 [data-color-scheme="light"] {
   --alternative-primary-fill-default: var(--contrast-primary-fill-default);
@@ -271,8 +288,9 @@
   --border-primary-default: var(--palette-primary-alpha-2);
   --border-primary-quaternary: var(--palette-primary-9);
   --border-secondary-quaternary: var(--palette-secondary-9);
+  --brand-attention-10: var(--palette-attention-2);
   --brand-error: var(--palette-error-9);
-  --brand-error-40: var(--palette-error-5);
+  --brand-error-10: var(--palette-error-2);
   --brand-error-alpha-10: var(--palette-error-alpha-2);
   --brand-error-alpha-5: var(--palette-error-alpha-1);
   --brand-primary: var(--palette-primary-9);
@@ -280,11 +298,13 @@
   --brand-primary-alpha-5: var(--palette-primary-alpha-1);
   --brand-primary-ink: var(--palette-primary-11);
   --brand-secondary: var(--palette-secondary-9);
+  --brand-secondary-10: var(--palette-secondary-2);
   --brand-secondary-20: var(--palette-secondary-3);
   --brand-secondary-alpha-10: var(--palette-secondary-alpha-2);
   --brand-secondary-alpha-20: var(--palette-secondary-alpha-3);
   --brand-secondary-alpha-5: var(--palette-secondary-alpha-1);
   --brand-secondary-alpha-70: var(--palette-secondary-alpha-7);
+  --brand-success-10: var(--palette-success-2);
   --contrast-neutral-border: var(--border-bottom-quaternary);
   --contrast-neutral-fill-default: var(--type-neutral-fill-default);
   --contrast-neutral-fill-hover-and-press: var(--type-neutral-fill-hover-and-press);
@@ -307,6 +327,8 @@
   --ghost-secondary-fill-hover-and-press: var(--outlined-secondary-fill-hover-and-press);
   --ghost-secondary-text-and-icon-default: var(--contrast-secondary-text-and-icon-ghost);
   --ghost-secondary-text-and-icon-hover-and-press: var(--contrast-secondary-text-and-icon-ghost);
+  --neutral-bottom-10: var(--palette-bottom-2);
+  --neutral-bottom-5: var(--palette-bottom-1);
   --neutral-bottom-alpha-10: var(--palette-bottom-alpha-2);
   --neutral-bottom-alpha-20: var(--palette-bottom-alpha-3);
   --neutral-bottom-alpha-40: var(--palette-bottom-alpha-5);
@@ -316,18 +338,18 @@
   --semantic-button-fill-default: var(--ghost-info-fill-default);
   --semantic-button-fill-hover-and-press: var(--ghost-info-fill-hover-and-press);
   --semantic-text-and-icon: var(--ghost-info-text-and-icon);
-  --surface-lvl-1-peak-60: var(--palette-peak-lvl-1-7);
   --system-black: var(--palette-system-black);
   --system-gradient-midnight-mid-1: var(--palette-gradient-midnight-mid-1);
   --system-gradient-midnight-mid-2: var(--palette-gradient-midnight-mid-2);
+  --system-link-default: var(--palette-secondary-11);
+  --text-attention-default: var(--palette-attention-9);
   --text-bottom-default: var(--palette-control-b-5);
   --text-bottom-quaternary: var(--palette-control-b-1);
   --text-bottom-secondary: var(--palette-control-b-4);
   --text-bottom-tertiary: var(--palette-control-b-3);
   --text-error-default: var(--palette-error-9);
-  --text-peak-default: var(--palette-control-wh-5);
-  --text-peak-secondary: var(--palette-control-wh-4);
   --text-secondary-default: var(--palette-secondary-11);
+  --text-success-default: var(--palette-success-9);
   --text-tertiary-default: var(--palette-tertiary-9);
   --type-chips-active-chip-fill-default: var(--brand-primary);
   --type-chips-active-chip-fill-hover-and-press: var(--brand-secondary);
@@ -339,13 +361,16 @@
   --type-neutral-fill-hover-and-press: var(--ghost-neutral-fill-hover-and-press);
   --vibe-tertiary-alpha-10: var(--palette-tertiary-alpha-2);
   --vibe-tertiary-alpha-5: var(--palette-tertiary-alpha-1);
-  --vibe-violet: var(--palette-violet-9);
 }
 [data-color-scheme="light"] {
+  --palette-attention-2: #fff1e5;
+  --palette-attention-9: #ff811a;
   --palette-backgrounds-grouped-primary: #f4f5f8;
   --palette-backgrounds-grouped-secondary: #ffffff;
   --palette-backgrounds-grouped-tertiary: #f4f5f8;
+  --palette-bottom-1: #f3f4f6;
   --palette-bottom-10: #152149;
+  --palette-bottom-2: #e8e9ed;
   --palette-bottom-alpha-1: rgba(21,33,73,0.05);
   --palette-bottom-alpha-2: rgba(21,33,73,0.1);
   --palette-bottom-alpha-3: rgba(21,33,73,0.2);
@@ -354,33 +379,32 @@
   --palette-control-b-3: rgba(21,33,73,0.5);
   --palette-control-b-4: rgba(21,33,73,0.66);
   --palette-control-b-5: #152149;
-  --palette-control-wh-4: rgba(255,255,255,0.7);
-  --palette-control-wh-5: #ffffff;
-  --palette-error-5: #ff9ab0;
+  --palette-error-2: #ffe6eb;
   --palette-error-9: #ff0239;
   --palette-error-alpha-1: rgba(255,2,57,0.05);
   --palette-error-alpha-2: rgba(255,2,57,0.1);
   --palette-gradient-midnight-mid-1: var(--palette-primary-9);
   --palette-gradient-midnight-mid-2: var(--palette-tertiary-6);
   --palette-peak-always-alpha-10: #ffffff;
-  --palette-peak-lvl-1-7: rgba(255,255,255,0.6);
   --palette-primary-11: #0042b8;
   --palette-primary-9: #005bff;
   --palette-primary-alpha-1: rgba(43,118,255,0.06);
   --palette-primary-alpha-2: rgba(23,106,255,0.11);
   --palette-secondary-11: #0072eb;
+  --palette-secondary-2: #e5f2ff;
   --palette-secondary-3: #cce4ff;
   --palette-secondary-9: #007aff;
   --palette-secondary-alpha-1: rgba(0,122,255,0.05);
   --palette-secondary-alpha-2: rgba(0,122,255,0.1);
   --palette-secondary-alpha-3: rgba(0,122,255,0.2);
   --palette-secondary-alpha-7: rgba(0,122,255,0.7);
+  --palette-success-2: #e5f5ec;
+  --palette-success-9: #00a043;
   --palette-system-black: rgba(0,0,0,0.5);
   --palette-tertiary-6: #85ccff;
   --palette-tertiary-9: #0b99ff;
   --palette-tertiary-alpha-1: rgba(11,153,255,0.05);
   --palette-tertiary-alpha-2: rgba(11,153,255,0.1);
-  --palette-violet-9: #aa5aff;
 }
 [data-semantic="error"] {
   --semantic-button-fill-default: var(--ghost-error-fill-default);
@@ -389,9 +413,6 @@
 }
 [data-size-icon="20"] {
   --icon-size: var(--icon-size-20);
-}
-[data-size-icon="24"] {
-  --icon-size: var(--icon-size-24);
 }
 [data-typography="main"] {
   --body-font-family: var(--typography-primitives-inter);
@@ -408,6 +429,11 @@
   --caption-font-weight: var(--typography-primitives-regular);
   --caption-letter-spacing: var(--typography-primitives-letter-spacing-0);
   --caption-line-height: var(--typography-primitives-line-height-16);
+  --caption-medium-font-family: var(--typography-primitives-inter);
+  --caption-medium-font-weight: var(--typography-primitives-medium);
+  --caption-medium-letter-spacing: var(--typography-primitives-letter-spacing-0);
+  --caption-medium-line-height: var(--typography-primitives-line-height-16);
+  --caption-medium-size: var(--typography-primitives-12);
   --caption-size: var(--typography-primitives-12);
   --h1-strong-font-family: var(--typography-primitives-inter-display);
   --h1-strong-font-weight: var(--typography-primitives-bold);
@@ -434,6 +460,11 @@
   --note-medium-line-height: var(--typography-primitives-line-height-20);
   --note-medium-size: var(--typography-primitives-14);
   --note-size: var(--typography-primitives-14);
+  --title-medium-font-family: var(--typography-primitives-inter);
+  --title-medium-font-weight: var(--typography-primitives-semi-bold);
+  --title-medium-letter-spacing: var(--typography-primitives-letter-spacing-0);
+  --title-medium-line-height: var(--typography-primitives-line-height-24);
+  --title-medium-size: var(--typography-primitives-16);
 }
 [data-responsive="desktop"] {
   --comp-home-indicator-h: 5px;
@@ -485,6 +516,14 @@
    Типографика (.t-*), кнопки (.btn*) и поле (.input) взяты из css/components.css стенда Стаса
    (boostra-prj/uix-prototype-demo) и дополнены размерами и состояниями из макета. */
 
+/* ---------- Effect styles ДС: тени ----------
+   В tokens.css стенда теней нет (в стенде они тоже записаны числами). Значения сняты с effect styles макета */
+.ds {
+  --shadow-floating-1: 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 1px 6px 0 rgba(0, 0, 0, 0.03), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  --shadow-floating-2: 0 5px 15px 0 rgba(0, 0, 0, 0.08), 0 1px 6px 0 rgba(0, 0, 0, 0.03), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+  --shadow-floating-3: 0 8px 26px 0 rgba(0, 0, 0, 0.05), 0 1px 6px 0 rgba(0, 0, 0, 0.04), 0 3px 8px 0 rgba(0, 0, 0, 0.04), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+}
+
 /* ---------- Текстовые стили ДС ---------- */
 .t-h1-strong {
   font-family: var(--h1-strong-font-family);
@@ -521,12 +560,13 @@
   line-height: var(--note-line-height);
   letter-spacing: var(--note-letter-spacing);
 }
-.t-note-medium {
-  font-family: var(--note-medium-font-family);
-  font-weight: var(--note-medium-font-weight);
-  font-size: var(--note-medium-size);
-  line-height: var(--note-medium-line-height);
-  letter-spacing: var(--note-medium-letter-spacing);
+/* Title/Title Strong: в токенах стенда этот стиль называется title-medium */
+.t-title-medium {
+  font-family: var(--title-medium-font-family);
+  font-weight: var(--title-medium-font-weight);
+  font-size: var(--title-medium-size);
+  line-height: var(--title-medium-line-height);
+  letter-spacing: var(--title-medium-letter-spacing);
 }
 .t-caption {
   font-family: var(--caption-font-family);
@@ -534,6 +574,13 @@
   font-size: var(--caption-size);
   line-height: var(--caption-line-height);
   letter-spacing: var(--caption-letter-spacing);
+}
+.t-caption-medium {
+  font-family: var(--caption-medium-font-family);
+  font-weight: var(--caption-medium-font-weight);
+  font-size: var(--caption-medium-size);
+  line-height: var(--caption-medium-line-height);
+  letter-spacing: var(--caption-medium-letter-spacing);
 }
 .t-caps-small-strong {
   font-family: var(--caps-small-strong-font-family);
@@ -806,13 +853,12 @@
 
 /* ---------- Bottom sheet (локальный компонент 2234:16960) ---------- */
 .bottom-sheet {
-  --shadow-floating-2: 0 5px 15px 0 rgba(0, 0, 0, 0.08), 0 1px 6px 0 rgba(0, 0, 0, 0.03), 0 2px 4px 0 rgba(0, 0, 0, 0.02); /* effect style Shadow/Floating/2 level, переменной в tokens.css нет */
   display: flex;
   flex-direction: column;
   padding-bottom: var(--space-2xl);
   border-radius: var(--radius-5xl) var(--radius-5xl) 0 0;
   background: var(--bg-grouped-secondary-w);
-  box-shadow: var(--shadow-floating-2);
+  box-shadow: var(--shadow-floating-2); /* Shadow/Floating/2 level */
   color: var(--text-bottom-default);
 }
 .bottom-sheet__grabber {
@@ -897,57 +943,155 @@
   background: var(--brand-secondary);
 }
 
-/* ---------- 🚧 Product card (.Cadr + .Status) ---------- */
-.product-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-radius: var(--radius-4xl);
-  background: var(--brand-primary);
+/* ---------- Иконка-маска (из стенда Стаса): цвет берётся из currentColor ---------- */
+.ico {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  background: currentColor;
+  -webkit-mask: center / 100% 100% no-repeat;
+  mask: center / 100% 100% no-repeat;
 }
-/* обводка внутрь поверх содержимого, как stroke INSIDE в макете */
-.product-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--text-peak-secondary);
-  border-radius: inherit;
-  pointer-events: none;
-}
-.product-card[data-product="il"] { background: var(--vibe-violet); }
-.product-card[data-wasted="on"] { background: var(--brand-error); }
-.product-card__cadr {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 164px; /* высота верхней части карточки: нет токена */
-  padding: var(--space-lg) var(--space-lg) var(--space-2xl);
-  color: var(--text-peak-default);
-}
-.product-card__mkk {
-  display: flex;
+.ico-clock-hour-3 { -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJJY29uIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTEwLjMzMzMgOEg4VjQuNjY2NjdNMiA4QzIgOC43ODc5MyAyLjE1NTE5IDkuNTY4MTUgMi40NTY3MiAxMC4yOTYxQzIuNzU4MjUgMTEuMDI0MSAzLjIwMDIxIDExLjY4NTUgMy43NTczNiAxMi4yNDI2QzQuMzE0NTEgMTIuNzk5OCA0Ljk3NTk1IDEzLjI0MTcgNS43MDM5IDEzLjU0MzNDNi40MzE4NSAxMy44NDQ4IDcuMjEyMDcgMTQgOCAxNEM4Ljc4NzkzIDE0IDkuNTY4MTUgMTMuODQ0OCAxMC4yOTYxIDEzLjU0MzNDMTEuMDI0MSAxMy4yNDE3IDExLjY4NTUgMTIuNzk5OCAxMi4yNDI2IDEyLjI0MjZDMTIuNzk5OCAxMS42ODU1IDEzLjI0MTcgMTEuMDI0MSAxMy41NDMzIDEwLjI5NjFDMTMuODQ0OCA5LjU2ODE1IDE0IDguNzg3OTMgMTQgOEMxNCA3LjIxMjA3IDEzLjg0NDggNi40MzE4NSAxMy41NDMzIDUuNzAzOUMxMy4yNDE3IDQuOTc1OTUgMTIuNzk5OCA0LjMxNDUxIDEyLjI0MjYgMy43NTczNkMxMS42ODU1IDMuMjAwMjEgMTEuMDI0MSAyLjc1ODI1IDEwLjI5NjEgMi40NTY3MkM5LjU2ODE1IDIuMTU1MTkgOC43ODc5MyAyIDggMkM3LjIxMjA3IDIgNi40MzE4NSAyLjE1NTE5IDUuNzAzOSAyLjQ1NjcyQzQuOTc1OTUgMi43NTgyNSA0LjMxNDUxIDMuMjAwMjEgMy43NTczNiAzLjc1NzM2QzMuMjAwMjEgNC4zMTQ1MSAyLjc1ODI1IDQuOTc1OTUgMi40NTY3MiA1LjcwMzlDMi4xNTUxOSA2LjQzMTg1IDIgNy4yMTIwNyAyIDhaIiBzdHJva2U9IiNGRjAyMzkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo="); mask-image: url("data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJJY29uIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTEwLjMzMzMgOEg4VjQuNjY2NjdNMiA4QzIgOC43ODc5MyAyLjE1NTE5IDkuNTY4MTUgMi40NTY3MiAxMC4yOTYxQzIuNzU4MjUgMTEuMDI0MSAzLjIwMDIxIDExLjY4NTUgMy43NTczNiAxMi4yNDI2QzQuMzE0NTEgMTIuNzk5OCA0Ljk3NTk1IDEzLjI0MTcgNS43MDM5IDEzLjU0MzNDNi40MzE4NSAxMy44NDQ4IDcuMjEyMDcgMTQgOCAxNEM4Ljc4NzkzIDE0IDkuNTY4MTUgMTMuODQ0OCAxMC4yOTYxIDEzLjU0MzNDMTEuMDI0MSAxMy4yNDE3IDExLjY4NTUgMTIuNzk5OCAxMi4yNDI2IDEyLjI0MjZDMTIuNzk5OCAxMS42ODU1IDEzLjI0MTcgMTEuMDI0MSAxMy41NDMzIDEwLjI5NjFDMTMuODQ0OCA5LjU2ODE1IDE0IDguNzg3OTMgMTQgOEMxNCA3LjIxMjA3IDEzLjg0NDggNi40MzE4NSAxMy41NDMzIDUuNzAzOUMxMy4yNDE3IDQuOTc1OTUgMTIuNzk5OCA0LjMxNDUxIDEyLjI0MjYgMy43NTczNkMxMS42ODU1IDMuMjAwMjEgMTEuMDI0MSAyLjc1ODI1IDEwLjI5NjEgMi40NTY3MkM5LjU2ODE1IDIuMTU1MTkgOC43ODc5MyAyIDggMkM3LjIxMjA3IDIgNi40MzE4NSAyLjE1NTE5IDUuNzAzOSAyLjQ1NjcyQzQuOTc1OTUgMi43NTgyNSA0LjMxNDUxIDMuMjAwMjEgMy43NTczNiAzLjc1NzM2QzMuMjAwMjEgNC4zMTQ1MSAyLjc1ODI1IDQuOTc1OTUgMi40NTY3MiA1LjcwMzlDMi4xNTUxOSA2LjQzMTg1IDIgNy4yMTIwNyAyIDhaIiBzdHJva2U9IiNGRjAyMzkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo="); }
+
+/* ---------- 🚧 Local Component/Label time (State: More than 3 days / 3 days or less / Overdue / Promo) ---------- */
+.label-time {
+  display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
-  justify-content: space-between;
-}
-.product-card__mkk-name { display: flex; align-items: center; gap: var(--space-xs); white-space: nowrap; }
-.product-card__logo { display: block; width: var(--icon-size); height: var(--icon-size); flex-shrink: 0; } /* Icon/WH: размер задаёт data-size-icon */
-.product-card__money { display: flex; flex-direction: column; }
-.product-card__amount { display: flex; align-items: flex-end; gap: var(--space-sm); white-space: nowrap; }
-.product-card__currency { display: flex; align-items: center; width: 18px; height: 34px; }
-.product-card__status {
-  display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: var(--space-xs);
-  flex: 1 0 auto;
-  padding: var(--space-lg);
-  background: var(--surface-lvl-1-peak-60);
-  color: var(--text-bottom-default);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  background: var(--brand-success-10);
+  color: var(--text-success-default);
   white-space: nowrap;
 }
-.product-card[data-wasted="on"] .product-card__status { background: var(--brand-error-40); }
-.product-card__row { display: flex; align-items: center; justify-content: space-between; }
-.product-card__date { display: flex; align-items: center; gap: 4px; } /* в компоненте число, нет токена */
+.label-time[data-state="3-days-or-less"] { background: var(--brand-attention-10); color: var(--text-attention-default); }
+.label-time[data-state="overdue"] { background: var(--brand-error-10); color: var(--text-error-default); }
+.label-time[data-state="promo"] { background: var(--brand-secondary-10); color: var(--text-secondary-default); }
+.label-time > .ico { width: 16px; height: 16px; } /* иконка 16: размер в компоненте числом, нет токена */
+/* плашка по содержимому; если карточка уже плашки (экран уже 375), текст обрезается многоточием */
+.label-time { max-width: 100%; }
+.label-time__text { min-width: 0; overflow: hidden; text-align: center; text-overflow: ellipsis; }
+
+/* ---------- Link button / Modern, Size=12 ---------- */
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--system-link-default);
+  white-space: nowrap;
+}
+
+/* ---------- 🚧 Local Component/Card MKK (Product: PDL / IL, Active: Off / On) ----------
+   Свой размер компонента 300 × 186. В ЛК (её App) карточку растягивает слот: 343 × 240 */
+.card-mkk {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 186px;
+  padding: var(--space-xs);
+  border-radius: var(--radius-4xl);
+  background: var(--bg-grouped-secondary-w);
+  box-shadow: var(--shadow-floating-1); /* Active=Off: Shadow/Floating/1 level */
+  color: var(--text-bottom-default);
+}
+.card-mkk[data-active="on"] { box-shadow: var(--shadow-floating-3); } /* Active=On: Shadow/Floating/3 level */
+.card-mkk__body {
+  display: flex;
+  flex: 1 0 0;
+  min-height: 0;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: var(--space-sm);
+  overflow: hidden;
+  border-radius: var(--radius-3xl);
+  /* градиент подложки: угол и остановки из макета, цвета Neutral/Bottom/10 и Neutral/Bottom/5 */
+  background-image: linear-gradient(260.72deg, var(--neutral-bottom-10) 8.8432%, var(--neutral-bottom-5) 83.354%);
+}
+.card-mkk__logo {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 0 var(--space-md);
+  overflow: hidden;
+}
+.card-mkk__mkk-logo { display: block; width: 16px; height: 16px; flex-shrink: 0; } /* логотип 16: размер числом, нет токена */
+.card-mkk__mkk { color: var(--text-bottom-secondary); white-space: nowrap; }
+.card-mkk__content {
+  display: flex;
+  flex: 1 0 0;
+  min-height: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding: var(--space-sm) var(--space-lg);
+  overflow: hidden;
+  border-radius: var(--radius-4xl) var(--radius-4xl) var(--radius-3xl) var(--radius-3xl);
+  background: var(--bg-grouped-secondary-w);
+}
+/* Product=PDL: плашка срока, сумма, две подписи */
+.card-mkk__amount-block {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  text-align: center;
+}
+.card-mkk__amount { color: var(--text-bottom-default); white-space: nowrap; }
+.card-mkk__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xxs);
+  width: 100%;
+  color: var(--text-bottom-secondary);
+}
+.card-mkk__info > * { width: 100%; }
+/* Product=IL: текущий и следующий платёж, ссылка «График платежей» */
+.card-mkk[data-product="il"] .card-mkk__content { align-items: flex-end; gap: var(--space-xs); }
+.card-mkk__payments {
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  width: 100%;
+}
+.card-mkk__payment {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.card-mkk__payment-label { width: 100%; color: var(--text-bottom-secondary); text-align: center; }
+.card-mkk__payment[data-payment="current"] .card-mkk__payment-label { color: var(--text-secondary-default); }
+.card-mkk__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xxs);
+  width: 100%;
+  padding: var(--space-sm) var(--space-xs);
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--neutral-bottom-5);
+  text-align: center;
+}
+.card-mkk__payment[data-payment="current"] .card-mkk__tile { background: var(--brand-secondary-20); }
+.card-mkk__progress { display: block; width: 16px; height: 16px; flex-shrink: 0; } /* индикатор 16: размер числом, нет токена */
+.card-mkk__payment-amount { width: 100%; color: var(--text-bottom-default); }
+.card-mkk__payment-date { width: 100%; color: var(--text-bottom-secondary); }
+.card-mkk__schedule-link { display: flex; flex-shrink: 0; align-items: center; gap: var(--space-xs); }
+.card-mkk__schedule-link > img { display: block; width: 16px; height: 16px; flex-shrink: 0; } /* иконка 16: размер числом, нет токена */
 
 /* ---------- Pay block и Pay option ---------- */
 .pay-block {
@@ -1169,15 +1313,16 @@ button { font: inherit; color: inherit; }
   justify-content: space-between;
   width: calc(100% - 32px); /* 343 при ширине 375: в App ширина ряда числом */
 }
+/* ряд карточек не обрезается: тени карточек ложатся на соседние блоки, как в макете; края соседних карточек обрезает экран */
 .lk-cards {
   display: flex;
   align-self: stretch;
   justify-content: center;
   gap: var(--space-xs);
-  height: 240px; /* высота карточки в макете: нет токена */
-  overflow: hidden;
+  height: 240px; /* высота слота карточки в App: нет токена */
 }
-.lk-cards > .product-card { flex: 0 0 calc(100% - 32px); } /* 343 при ширине 375 */
+/* слот 343 × 240 при ширине 375; min-width: на узком экране длинная плашка не раздвигает карточку */
+.lk-cards > .card-mkk { flex: 0 0 calc(100% - 32px); width: auto; min-width: 0; height: auto; }
 .lk > .pay-block { align-self: stretch; }
 .lk-content {
   display: flex;
@@ -1559,40 +1704,84 @@ button { font: inherit; color: inherit; }
                 </div>
 
                 <div class="lk-cards">
-                  <div class="product-card" data-product="pdl" aria-hidden="true">
-                    <div class="product-card__cadr"></div>
-                    <div class="product-card__status"></div>
-                  </div>
-
-                  <article class="product-card" data-product="pdl" data-wasted="on">
-                    <div class="product-card__cadr">
-                      <div class="product-card__mkk">
-                        <div class="product-card__mkk-name t-body"><span>ООО МКК</span><span>«РУСЗАЙМСЕРВИС»</span></div>
-                        <img class="product-card__logo" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSImIzI0MDsmIzE1OTsmIzE1NDsmIzE2NzsgTG9jYWwgQ29tcG9uZW50L2xvZ28tTUtLIj4KPHBhdGggaWQ9IlZlY3RvciIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMy45MTA1IDE5LjIxMDZDMTMuODE5OSAxOS4xOTc0IDEzLjYyNTUgMTkuMTQ5IDEzLjQ3NTIgMTkuMTAwNUMxMy4yNzg1IDE5LjAzNjYgMTMuMTAxNyAxOS4wMjM0IDEyLjgxMjIgMTkuMDQ5OEMxMS40MjY2IDE5LjE3NTQgMTAuNTgyNCAxOS4xMzc5IDkuODc1MjEgMTguOTEzM0M5LjY4OTU4IDE4Ljg1NiA5LjQ5MDY4IDE4LjgwNzUgOS40MzEwMSAxOC44MDc1QzkuMzczNTYgMTguODA3NSA5LjIzMjEyIDE4Ljc1OTEgOS4xMTcyIDE4LjY5NzRDOS4wMDQ1IDE4LjYzNTcgOC44NjUyNyAxOC41ODczIDguODA3ODEgMTguNTg3M0M4Ljc1MjU3IDE4LjU4NzMgOC42NDIwNyAxOC41Mzg4IDguNTY0NzIgMTguNDc3MUM4LjQ4NzM3IDE4LjQxNTQgOC4zOTIzNSAxOC4zNjcgOC4zNTAzNiAxOC4zNjdDOC4wMTAwMyAxOC4zNjQ4IDYuMjA0NTIgMTYuODczNSA1Ljc0NzA2IDE2LjIxOTNDNS42OTQwMiAxNi4xNDQ0IDUuNTkwMTYgMTUuOTk2OCA1LjUxMjgxIDE1Ljg5MUM1LjQzNzY3IDE1Ljc4NzUgNS4zNzU3OSAxNS42NzMgNS4zNzU3OSAxNS42Mzc3QzUuMzc1NzkgMTUuNjAwMyA1LjMzNjAxIDE1LjUzODYgNS4yODk2MSAxNS40OTg5QzUuMTkwMTYgMTUuNDE3NCA0Ljc5NDU4IDE0LjYwOSA0LjczNDkxIDE0LjM2NjdDNC43MTI4MSAxNC4yODA4IDQuNjUwOTQgMTQuMTIyMiA0LjU5MzQ4IDE0LjAxNjVDNC41MzgyMyAxMy45MTA3IDQuNDkxODIgMTMuNzg1MiA0LjQ5MTgyIDEzLjczNDVDNC40OTE4MiAxMy42ODYgNC40NDA5OSAxMy40ODc4IDQuMzc2OSAxMy4yOTRDNC4yNDY1MiAxMi44OTc0IDQuMjAyMzIgMTAuODIyNCA0LjMxMjgyIDEwLjMyNjhDNC40NDA5OSA5Ljc1NjI3IDQuNTU1OTEgOS4zNTMxNiA0LjYzMTA1IDkuMjE2NTlDNC42Nzc0NiA5LjEzNzI5IDQuNzEyODEgOS4wMzU5NiA0LjcxMjgxIDguOTk0MTFDNC43MTI4MSA4Ljg1MzEzIDUuMTY1ODUgNy45OTE4NCA1LjUyMTY1IDcuNDU4NzZDNi40OTg0NCA1Ljk5MzkxIDcuOTU0NzggNC45Njk2MSA5Ljg1MDkgNC40MTQ1MUMxMC42Mzc2IDQuMTg1NDIgMTMuMDQ4NyA0LjE5ODYzIDEzLjYxODggNC40MzY1NEMxMy43NjAzIDQuNDk2MDEgMTMuOTI2IDQuNTQ0NDcgMTMuOTg1NyA0LjU0NDQ3QzE0LjA0NTMgNC41NDQ0NyAxNC4yMDIzIDQuNTkyOTMgMTQuMzM0OCA0LjY1MjQxQzE0LjQ2NTIgNC43MTQwOSAxNC42MjY2IDQuNzYyNTUgMTQuNjkyOSA0Ljc2MjU1QzE0Ljc1NjkgNC43NjQ3NSAxNC44NDA5IDQuODAyMiAxNC44Nzg1IDQuODQ2MjVDMTQuOTE2MSA0Ljg5MjUxIDE0Ljk5MTIgNC45Mjk5NiAxNS4wNDQyIDQuOTI5OTZDMTUuMDk3MyA0LjkyOTk2IDE1LjE5ODkgNC45NzYyMiAxNS4yNzE5IDUuMDMzNDlDMTUuMzQ0OCA1LjA4ODU2IDE1LjQ2NjMgNS4xNTQ2NCAxNS41NDE1IDUuMTc4ODhDMTUuNjE2NiA1LjIwMDkgMTUuNzgwMSA1LjMwMDAzIDE1Ljg5OTUgNS4zOTQ3NUMxNi4wMjEgNS40ODk0NyAxNi4yMjQzIDUuNjM3MDYgMTYuMzQ4MSA1LjcxODU2QzE3LjA5NTEgNi4yMTQxOSAxOC42MzU0IDguMjQ1MTYgMTguNjM1NCA4LjczMTk3QzE4LjYzNTQgOC43ODcwNCAxOC42NTk3IDguODQ4NzIgMTguNjkwNiA4Ljg2NjM0QzE4LjcxOTMgOC44ODYxNyAxOC43ODM0IDkuMDM1OTYgMTguODMyMSA5LjE5ODk3QzE4Ljg4MDcgOS4zNjQxNyAxOC45NDAzIDkuNTExNzYgMTguOTY0NyA5LjUyNzE4QzE4Ljk5MTIgOS41NDI2IDE5LjAyODcgOS42ODU3OCAxOS4wNDg2IDkuODQ0MzhDMTkuMDcwNyAxMC4wMDMgMTkuMTIzOCAxMC4yODA1IDE5LjE2OCAxMC40NTY4QzE5LjI4MDcgMTAuOTAzOSAxOS4yNzYzIDEyLjUwNTQgMTkuMTYxMyAxMi44ODJDMTkuMTE0OSAxMy4wMzE4IDE5LjA3NzQgMTMuMjMwMSAxOS4wNzc0IDEzLjMyNDhDMTkuMDc3NCAxMy40MTczIDE5LjAyODcgMTMuNTg2OSAxOC45NjY5IDEzLjcwMTVDMTguOTA1IDEzLjgxMzggMTguODU2NCAxMy45NTI2IDE4Ljg1NjQgMTQuMDA5OUMxOC44NTY0IDE0LjEwNDYgMTguNzQzNyAxNC4zODQzIDE4LjQ1MTkgMTUuMDA3N0MxOC4yNzA3IDE1LjM5NTQgMTguMDI5OSAxNS43MjM2IDE3LjkyNiAxNS43MjM2QzE3Ljg3MjkgMTUuNzIzNiAxNy43MzgxIDE1LjYwMDMgMTcuNjI1NCAxNS40NTA1TDE3LjQyMjEgMTUuMTc3M0wxNy41MzI2IDE0Ljk0MTZDMTcuNTkyMyAxNC44MTE3IDE3LjcxMzggMTQuNTcxNiAxNy44MDQ0IDE0LjQwODZDMTcuODkyOCAxNC4yNDU2IDE3Ljk4MzQgMTQuMDM0MSAxOC4wMDMzIDEzLjkzOTRDMTguMDIzMiAxMy44NDY5IDE4LjA2MDggMTMuNzQxMSAxOC4wODczIDEzLjcxMDNDMTguMTEzOCAxMy42NzcyIDE4LjE3MTMgMTMuNDc5IDE4LjIxNTUgMTMuMjY3NUMxOC4yNTk3IDEzLjA1ODMgMTguMzIzOCAxMi44MTU5IDE4LjM1NDcgMTIuNzMyMkMxOC40NjA4IDEyLjQ1NDcgMTguNDI3NiAxMC45NjM0IDE4LjMwMzkgMTAuNDYzNEMxOC4yNDQyIDEwLjIyMTEgMTguMTkzNCA5Ljk4NzU2IDE4LjE5MzQgOS45NDEzMUMxOC4xOTM0IDkuODIwMTUgMTcuODE3NyA4Ljg3NTE2IDE3LjY5MTcgOC42NzQ3QzE3LjY2MyA4LjYyODQ0IDE3LjYxIDguNTI5MzIgMTcuNTcyNCA4LjQ1NDQyQzE3LjI2NzQgNy44NDQyNSAxNi4yODE4IDYuNzQ1MDYgMTUuNzA3MiA2LjM3NDk5QzE1LjUzOTMgNi4yNjcwNSAxNS4zNzc5IDYuMTUwMzEgMTUuMzQ3IDYuMTE3MjZDMTUuMjE4OCA1Ljk3NDA4IDEzLjc1MTQgNS4zMTU0NSAxMy41NjM2IDUuMzE1NDVDMTMuNTAzOSA1LjMxNTQ1IDEzLjMzNiA1LjI2MjU4IDEzLjE5MjMgNS4xOTg3QzEyLjgyNzcgNS4wMzc5IDEwLjcwMTcgNS4wMjAyNyAxMC4yOTI5IDUuMTc0NDdDMTAuMTU1OSA1LjIyNTEzIDkuOTE5NDEgNS4zMDAwMyA5Ljc2OTEzIDUuMzQxODhDOC45ODkwMyA1LjU1MTE1IDguMTM4MjEgNS45ODczIDcuNzQwNDIgNi4zNzQ5OUM3LjY4NTE3IDYuNDI3ODYgNy42MTAwMyA2LjQ3MTkxIDcuNTcwMjUgNi40NzE5MUM3LjQ5NTEyIDYuNDcxOTEgNi40ODA3NiA3LjQ2MzE3IDYuNDgwNzYgNy41MzgwNkM2LjQ4MDc2IDcuNTYyMjkgNi4zOTY3OCA3LjY4NTY1IDYuMjk1MTIgNy44MTEyMUM2LjE5MTI2IDcuOTM4OTcgNi4wNjA4NyA4LjEyNjIxIDYuMDAzNDEgOC4yMjk3NEM1LjY2MzA4IDguODQ4NzIgNS41OTY3OSA4Ljk4MDg5IDUuNTk2NzkgOS4wMzE1NUM1LjU5Njc5IDkuMDY0NTkgNS41NDU5NiA5LjE4MTM0IDUuNDg2MjkgOS4yOTU4OUM1LjQyNDQxIDkuNDA4MjMgNS4zNzU3OSA5LjU1MTQxIDUuMzc1NzkgOS42MTUyOUM1LjM3NTc5IDkuNjc2OTcgNS4zMjcxNyA5Ljg0NDM4IDUuMjY5NzIgOS45ODUzNkM0LjkwNTA4IDEwLjg3NzUgNS4wMTc3OCAxMi44NiA1LjQ5MjkyIDEzLjk0ODJDNS41NTAzOCAxNC4wNzgxIDUuNTk2NzkgMTQuMjMyMyA1LjU5Njc5IDE0LjI4OTZDNS41OTY3OSAxNC4zNDkxIDUuNjIzMzEgMTQuNDEzIDUuNjU4NjYgMTQuNDMyOEM1LjY5MTgxIDE0LjQ1MjYgNS43NTU5IDE0LjU0NzMgNS44MDAxIDE0LjY0MjFDNi4xNTE0OCAxNS4zNzc4IDYuODgyOTcgMTYuMjUwMSA3LjY0MDk3IDE2LjgyOTRDOC4wMTIyNCAxNy4xMTM2IDguMzMwNDcgMTcuMzIwNiA4LjM5Njc3IDE3LjMyMDZDOC40Mjk5MiAxNy4zMjA2IDguNDg1MTYgMTcuMzU1OSA4LjUyMjczIDE3LjM5OTlDOC41NTgwOSAxNy40NDQgOC42NTk3NSAxNy40OTQ3IDguNzQ1OTQgMTcuNTEyM0M4LjgzMjEyIDE3LjUzMjEgOC45MzE1NyAxNy41ODI4IDguOTY2OTMgMTcuNjIyNEM5LjAwMjI5IDE3LjY2NDMgOS4xMDgzNyAxNy43MTcxIDkuMjA1NiAxNy43MzdDOS4zMDI4NCAxNy43NTkgOS40MzEwMSAxNy44MDk3IDkuNDkwNjggMTcuODUxNUM5LjU1MDM1IDE3Ljg5MzQgOS42ODczNyAxNy45MjY0IDkuNzkzNDQgMTcuOTI4NkM5LjkwMTczIDE3LjkzMDggMTAuMDg5NiAxNy45NzA1IDEwLjIxMTEgMTguMDE4OUMxMC41NDcgMTguMTUzMyAxMi4yOTI5IDE4LjE4ODUgMTIuNTgyNCAxOC4wNjk2QzEyLjg0OTggMTcuOTU3MyAxMy4wNjE5IDE3Ljk1NzMgMTMuMzIwNSAxOC4wNzE4QzEzLjY3NjMgMTguMjI4MiAxNS4wMzk4IDE4LjIwMTggMTUuNDMzMiAxOC4wMjk5QzE2LjQyMSAxNy42MDA0IDE2LjcyMTYgMTYuNjkwNyAxNi4wNDUzIDE2LjE3NTJDMTUuODA4OSAxNS45OTQ2IDE1LjI4OTUgMTUuNzIzNiAxNS4xNzY4IDE1LjcyMzZDMTUuMTMyNiAxNS43MjM2IDE0Ljk1NTggMTUuNjc1MiAxNC43ODEzIDE1LjYxMzVDMTQuNjA4OSAxNS41NTE4IDE0LjQxNjYgMTUuNTAzMyAxNC4zNTQ3IDE1LjUwMzNDMTQuMjkyOSAxNS41MDMzIDE0LjE0OTIgMTUuNDU0OSAxNC4wMzQzIDE1LjM5MzJDMTMuOTIxNiAxNS4zMzE1IDEzLjc3NzkgMTUuMjgzMSAxMy43MTYxIDE1LjI4MzFDMTMuNTYxNCAxNS4yODMxIDEzLjAzNzYgMTUuMDMxOSAxMi42ODYyIDE0Ljc4OTZDMTIuNDE0NCAxNC42MDI0IDEyLjAzODcgMTQuMTk5MyAxMS4zNDI2IDEzLjM1NTZDMTEuMTc0NiAxMy4xNTA4IDEwLjk1MTQgMTIuODc5OCAxMC44NDU0IDEyLjc0OTlDMTAuNzM5MyAxMi42MTk5IDEwLjUwMDYgMTIuMzQ5IDEwLjMxNSAxMi4xNDYzQzkuNjg5NTggMTEuNDY1NiA5LjY4OTU4IDExLjQ2NTYgMTAuNzg3OSAxMS40NTI0QzEyLjEyNzEgMTEuNDM0OCAxMi41MTM5IDExLjMwOTIgMTIuOTU1OSAxMC43NTQxQzEzLjEyMzggMTAuNTQyNyAxMy4xMzkzIDEwLjQ4NTQgMTMuMTU3IDEwLjA3NTdDMTMuMTg1NyA5LjQyODA2IDEyLjk0NDggOS4wNTU3OCAxMi4zMTUgOC43NTYyTDExLjk5NjcgOC42MDY0MUwxMC42OTk1IDguNjM1MDVDOS44MTc3NSA4LjY1MjY3IDkuMzgwMTkgOC42ODEzMSA5LjMzNTk5IDguNzI1MzdDOS4yODk1OCA4Ljc3MTYyIDkuMjcxOSA5LjYyNjMxIDkuMjcxOSAxMS45ODMzQzkuMjcxOSAxNC43NjEgOS4yNjA4NSAxNS4xODM5IDkuMTg3OTIgMTUuMjMwMkM5LjE0MTUxIDE1LjI1ODggOC44Njk2OSAxNS4yNzY1IDguNTgwMTkgMTUuMjY5OUw4LjA1NDIzIDE1LjI1NjZMOC4wNDA5NyAxMS40ODk5QzguMDI5OTIgOC42MTc0MyA4LjA0MzE4IDcuNzAzMjcgOC4wOTQwMSA3LjY0MzhDOC4yMTMzNCA3LjQ5ODQxIDEyLjE1NTkgNy41NzU1MSAxMi41NzEzIDcuNzI5N0MxMi43NDM3IDcuNzk1NzkgMTIuOTI0OSA3Ljg0ODY2IDEyLjk2OTEgNy44NDg2NkMxMy4xMDM5IDcuODQ4NjYgMTMuNzE2MSA4LjI5MzYyIDEzLjkxMDUgOC41MzU5M0MxNC40NzYzIDkuMjI3NiAxNC41NDcgMTAuNDc0NCAxNC4wNjUyIDExLjI1NDJDMTMuOTM3MSAxMS40NjM0IDEzLjQzMSAxMS45Nzg5IDEzLjM1MzYgMTEuOTc4OUMxMy4zMTgzIDExLjk3ODkgMTMuMjYwOCAxMi4wMTQxIDEzLjIyMzMgMTIuMDU4MkMxMy4xODc5IDEyLjEwMjIgMTMuMDc5NiAxMi4xNTI5IDEyLjk4MjQgMTIuMTcyN0MxMi43MTI4IDEyLjIyNTYgMTIuMzE5NCAxMi4zNzMyIDEyLjIzMSAxMi40NTI1QzEyLjE0MDQgMTIuNTM2MiAxMi4xNDA0IDEyLjUzNjIgMTIuNjI4OCAxMy4xMTU1QzEyLjk5NzggMTMuNTQ5NSAxMy4wNjE5IDEzLjU3MTUgMTMuMTIxNiAxMy4yODUxQzEzLjE5MjMgMTIuOTQ1OSAxMy40OTczIDEyLjQxMDYgMTMuNzQ3IDEyLjE4NTlDMTQuMzgzNSAxMS42MTU0IDE2LjI2NjMgMTEuNjM1MiAxNy4wMDQ0IDEyLjIyMTJDMTcuMTY1OCAxMi4zNTEyIDE3LjEyMTYgMTIuNTU4MiAxNi44Njc0IDEyLjg1MzRDMTYuNzQzNyAxMi45OTg4IDE2LjY0ODYgMTIuOTc5IDE2LjA4NzMgMTIuNjg4MkMxNS43NTE0IDEyLjUxNjQgMTQuOTc1NyAxMi41NDA2IDE0LjY5OTUgMTIuNzMyMkMxNC40NDUzIDEyLjkwNjMgMTQuMjE1NSAxMy4yNzE5IDE0LjIxNTUgMTMuNDk4OEMxNC4yMTU1IDEzLjgxNiAxNC43MjgyIDE0LjMzMzcgMTUuMTQzNyAxNC40Mzk0QzE1LjM0NDggMTQuNDg3OSAxNS44NjQxIDE0LjcyOCAxNS44OTk1IDE0Ljc4NzRDMTUuOTE3MiAxNC44MTE3IDE2LjAwNzggMTQuODUxMyAxNi4xMDUgMTQuODczM0MxNi40MTQ0IDE0LjkzOTQgMTcuMTkyMyAxNS41Mjc2IDE3LjM3MTMgMTUuODI5NEMxNy41MDM5IDE2LjA1MTggMTcuNjQwOSAxNi41MzIgMTcuNjQwOSAxNi43N0MxNy42NDA5IDE3LjAwNzkgMTcuNDc3NCAxNy42NjY1IDE3LjM5NTYgMTcuNzYxMkMxNy4zNTU4IDE3LjgwNzUgMTcuMzA1IDE3Ljg5NzggMTcuMjg1MSAxNy45NjM5QzE3LjI2NTIgMTguMDI5OSAxNy4xMDE3IDE4LjIyMTYgMTYuOTIwNSAxOC4zODY4QzE2LjE4OSAxOS4wNjMxIDE1LjA4NCAxOS4zNjQ4IDEzLjkxMDUgMTkuMjEwNloiIGZpbGw9IndoaXRlIi8+CjwvZz4KPC9zdmc+Cg==" alt="" data-size-icon="24">
+                  <!-- слева: Card MKK, Product=PDL, Active=Off -->
+                  <div class="card-mkk" data-product="pdl" data-active="off" aria-hidden="true">
+                    <div class="card-mkk__body">
+                      <div class="card-mkk__logo">
+                        <img class="card-mkk__mkk-logo" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJNS0sgbG9nbyIgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzBfMzg4NikiPgo8cGF0aCBpZD0iVmVjdG9yIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTkuOTEwNTQgMTUuMjEwNkM5LjgxOTkzIDE1LjE5NzQgOS42MjU0NiAxNS4xNDkgOS40NzUxOSAxNS4xMDA1QzkuMjc4NSAxNS4wMzY2IDkuMTAxNzEgMTUuMDIzNCA4LjgxMjIxIDE1LjA0OThDNy40MjY1OCAxNS4xNzU0IDYuNTgyMzkgMTUuMTM3OSA1Ljg3NTIxIDE0LjkxMzNDNS42ODk1OCAxNC44NTYgNS40OTA2OCAxNC44MDc1IDUuNDMxMDEgMTQuODA3NUM1LjM3MzU2IDE0LjgwNzUgNS4yMzIxMiAxNC43NTkxIDUuMTE3MiAxNC42OTc0QzUuMDA0NSAxNC42MzU3IDQuODY1MjcgMTQuNTg3MyA0LjgwNzgxIDE0LjU4NzNDNC43NTI1NyAxNC41ODczIDQuNjQyMDcgMTQuNTM4OCA0LjU2NDcyIDE0LjQ3NzFDNC40ODczNyAxNC40MTU0IDQuMzkyMzUgMTQuMzY3IDQuMzUwMzYgMTQuMzY3QzQuMDEwMDMgMTQuMzY0OCAyLjIwNDUyIDEyLjg3MzUgMS43NDcwNiAxMi4yMTkzQzEuNjk0MDIgMTIuMTQ0NCAxLjU5MDE2IDExLjk5NjggMS41MTI4MSAxMS44OTFDMS40Mzc2NyAxMS43ODc1IDEuMzc1NzkgMTEuNjczIDEuMzc1NzkgMTEuNjM3N0MxLjM3NTc5IDExLjYwMDMgMS4zMzYwMSAxMS41Mzg2IDEuMjg5NjEgMTEuNDk4OUMxLjE5MDE2IDExLjQxNzQgMC43OTQ1ODIgMTAuNjA5IDAuNzM0OTEzIDEwLjM2NjdDMC43MTI4MTQgMTAuMjgwOCAwLjY1MDkzNiAxMC4xMjIyIDAuNTkzNDc4IDEwLjAxNjVDMC41MzgyMjkgOS45MTA3MyAwLjQ5MTgyMSA5Ljc4NTE3IDAuNDkxODIxIDkuNzM0NTFDMC40OTE4MjEgOS42ODYwNSAwLjQ0MDk5MyA5LjQ4NzggMC4zNzY5MDUgOS4yOTM5NUMwLjI0NjUxOSA4Ljg5NzQ1IDAuMjAyMzIgNi44MjI0MiAwLjMxMjgxNyA2LjMyNjc5QzAuNDQwOTkzIDUuNzU2MjcgMC41NTU5MDkgNS4zNTMxNiAwLjYzMTA0NyA1LjIxNjU5QzAuNjc3NDU1IDUuMTM3MjkgMC43MTI4MTQgNS4wMzU5NiAwLjcxMjgxNCA0Ljk5NDExQzAuNzEyODE0IDQuODUzMTMgMS4xNjU4NSAzLjk5MTg0IDEuNTIxNjUgMy40NTg3NkMyLjQ5ODQ0IDEuOTkzOTEgMy45NTQ3OCAwLjk2OTYxIDUuODUwOSAwLjQxNDUwOEM2LjYzNzY0IDAuMTg1NDE4IDkuMDQ4NjcgMC4xOTg2MzQgOS42MTg4MyAwLjQzNjUzNkM5Ljc2MDI3IDAuNDk2MDExIDkuOTI2MDEgMC41NDQ0NzIgOS45ODU2OCAwLjU0NDQ3MkMxMC4wNDUzIDAuNTQ0NDcyIDEwLjIwMjMgMC41OTI5MzQgMTAuMzM0OCAwLjY1MjQwOUMxMC40NjUyIDAuNzE0MDg3IDEwLjYyNjYgMC43NjI1NDggMTAuNjkyOSAwLjc2MjU0OEMxMC43NTY5IDAuNzY0NzUxIDEwLjg0MDkgMC44MDIxOTkgMTAuODc4NSAwLjg0NjI1NUMxMC45MTYxIDAuODkyNTEzIDEwLjk5MTIgMC45Mjk5NiAxMS4wNDQyIDAuOTI5OTZDMTEuMDk3MyAwLjkyOTk2IDExLjE5ODkgMC45NzYyMTkgMTEuMjcxOSAxLjAzMzQ5QzExLjM0NDggMS4wODg1NiAxMS40NjYzIDEuMTU0NjQgMTEuNTQxNSAxLjE3ODg4QzExLjYxNjYgMS4yMDA5IDExLjc4MDEgMS4zMDAwMyAxMS44OTk1IDEuMzk0NzVDMTIuMDIxIDEuNDg5NDcgMTIuMjI0MyAxLjYzNzA2IDEyLjM0ODEgMS43MTg1NkMxMy4wOTUxIDIuMjE0MTkgMTQuNjM1NCA0LjI0NTE2IDE0LjYzNTQgNC43MzE5N0MxNC42MzU0IDQuNzg3MDQgMTQuNjU5NyA0Ljg0ODcyIDE0LjY5MDYgNC44NjYzNEMxNC43MTkzIDQuODg2MTcgMTQuNzgzNCA1LjAzNTk2IDE0LjgzMjEgNS4xOTg5N0MxNC44ODA3IDUuMzY0MTcgMTQuOTQwMyA1LjUxMTc2IDE0Ljk2NDcgNS41MjcxOEMxNC45OTEyIDUuNTQyNiAxNS4wMjg3IDUuNjg1NzggMTUuMDQ4NiA1Ljg0NDM4QzE1LjA3MDcgNi4wMDI5OCAxNS4xMjM4IDYuMjgwNTMgMTUuMTY4IDYuNDU2NzZDMTUuMjgwNyA2LjkwMzkyIDE1LjI3NjMgOC41MDUzNSAxNS4xNjEzIDguODgyMDNDMTUuMTE0OSA5LjAzMTgyIDE1LjA3NzQgOS4yMzAwNyAxNS4wNzc0IDkuMzI0NzlDMTUuMDc3NCA5LjQxNzMxIDE1LjAyODcgOS41ODY5MiAxNC45NjY5IDkuNzAxNDdDMTQuOTA1IDkuODEzODEgMTQuODU2NCA5Ljk1MjU4IDE0Ljg1NjQgMTAuMDA5OUMxNC44NTY0IDEwLjEwNDYgMTQuNzQzNyAxMC4zODQzIDE0LjQ1MTkgMTEuMDA3N0MxNC4yNzA3IDExLjM5NTQgMTQuMDI5OSAxMS43MjM2IDEzLjkyNiAxMS43MjM2QzEzLjg3MjkgMTEuNzIzNiAxMy43MzgxIDExLjYwMDMgMTMuNjI1NCAxMS40NTA1TDEzLjQyMjEgMTEuMTc3M0wxMy41MzI2IDEwLjk0MTZDMTMuNTkyMyAxMC44MTE3IDEzLjcxMzggMTAuNTcxNiAxMy44MDQ0IDEwLjQwODZDMTMuODkyOCAxMC4yNDU2IDEzLjk4MzQgMTAuMDM0MSAxNC4wMDMzIDkuOTM5MzdDMTQuMDIzMiA5Ljg0Njg1IDE0LjA2MDggOS43NDExMiAxNC4wODczIDkuNzEwMjhDMTQuMTEzOCA5LjY3NzI0IDE0LjE3MTMgOS40Nzg5OCAxNC4yMTU1IDkuMjY3NTJDMTQuMjU5NyA5LjA1ODI1IDE0LjMyMzggOC44MTU5NCAxNC4zNTQ3IDguNzMyMjRDMTQuNDYwOCA4LjQ1NDY5IDE0LjQyNzYgNi45NjM0IDE0LjMwMzkgNi40NjMzN0MxNC4yNDQyIDYuMjIxMDYgMTQuMTkzNCA1Ljk4NzU2IDE0LjE5MzQgNS45NDEzMUMxNC4xOTM0IDUuODIwMTUgMTMuODE3NyA0Ljg3NTE2IDEzLjY5MTcgNC42NzQ3QzEzLjY2MyA0LjYyODQ0IDEzLjYxIDQuNTI5MzIgMTMuNTcyNCA0LjQ1NDQyQzEzLjI2NzQgMy44NDQyNSAxMi4yODE4IDIuNzQ1MDYgMTEuNzA3MiAyLjM3NDk5QzExLjUzOTMgMi4yNjcwNSAxMS4zNzc5IDIuMTUwMzEgMTEuMzQ3IDIuMTE3MjZDMTEuMjE4OCAxLjk3NDA4IDkuNzUxNDMgMS4zMTU0NSA5LjU2MzU4IDEuMzE1NDVDOS41MDM5MSAxLjMxNTQ1IDkuMzM1OTYgMS4yNjI1OCA5LjE5MjMxIDEuMTk4N0M4LjgyNzY4IDEuMDM3OSA2LjcwMTcyIDEuMDIwMjcgNi4yOTI4OSAxLjE3NDQ3QzYuMTU1ODcgMS4yMjUxMyA1LjkxOTQxIDEuMzAwMDMgNS43NjkxMyAxLjM0MTg4QzQuOTg5MDMgMS41NTExNSA0LjEzODIxIDEuOTg3MyAzLjc0MDQyIDIuMzc0OTlDMy42ODUxNyAyLjQyNzg2IDMuNjEwMDMgMi40NzE5MSAzLjU3MDI1IDIuNDcxOTFDMy40OTUxMiAyLjQ3MTkxIDIuNDgwNzYgMy40NjMxNyAyLjQ4MDc2IDMuNTM4MDZDMi40ODA3NiAzLjU2MjI5IDIuMzk2NzggMy42ODU2NSAyLjI5NTEyIDMuODExMjFDMi4xOTEyNiAzLjkzODk3IDIuMDYwODcgNC4xMjYyMSAyLjAwMzQxIDQuMjI5NzRDMS42NjMwOCA0Ljg0ODcyIDEuNTk2NzkgNC45ODA4OSAxLjU5Njc5IDUuMDMxNTVDMS41OTY3OSA1LjA2NDU5IDEuNTQ1OTYgNS4xODEzNCAxLjQ4NjI5IDUuMjk1ODlDMS40MjQ0MSA1LjQwODIzIDEuMzc1NzkgNS41NTE0MSAxLjM3NTc5IDUuNjE1MjlDMS4zNzU3OSA1LjY3Njk3IDEuMzI3MTcgNS44NDQzOCAxLjI2OTcyIDUuOTg1MzZDMC45MDUwNzggNi44Nzc0OSAxLjAxNzc4IDguODYgMS40OTI5MiA5Ljk0ODE4QzEuNTUwMzggMTAuMDc4MSAxLjU5Njc5IDEwLjIzMjMgMS41OTY3OSAxMC4yODk2QzEuNTk2NzkgMTAuMzQ5MSAxLjYyMzMxIDEwLjQxMyAxLjY1ODY2IDEwLjQzMjhDMS42OTE4MSAxMC40NTI2IDEuNzU1OSAxMC41NDczIDEuODAwMSAxMC42NDIxQzIuMTUxNDggMTEuMzc3OCAyLjg4Mjk3IDEyLjI1MDEgMy42NDA5NyAxMi44Mjk0QzQuMDEyMjQgMTMuMTEzNiA0LjMzMDQ3IDEzLjMyMDYgNC4zOTY3NyAxMy4zMjA2QzQuNDI5OTIgMTMuMzIwNiA0LjQ4NTE2IDEzLjM1NTkgNC41MjI3MyAxMy4zOTk5QzQuNTU4MDkgMTMuNDQ0IDQuNjU5NzUgMTMuNDk0NyA0Ljc0NTk0IDEzLjUxMjNDNC44MzIxMiAxMy41MzIxIDQuOTMxNTcgMTMuNTgyOCA0Ljk2NjkzIDEzLjYyMjRDNS4wMDIyOSAxMy42NjQzIDUuMTA4MzcgMTMuNzE3MSA1LjIwNTYgMTMuNzM3QzUuMzAyODQgMTMuNzU5IDUuNDMxMDEgMTMuODA5NyA1LjQ5MDY4IDEzLjg1MTVDNS41NTAzNSAxMy44OTM0IDUuNjg3MzcgMTMuOTI2NCA1Ljc5MzQ0IDEzLjkyODZDNS45MDE3MyAxMy45MzA4IDYuMDg5NTcgMTMuOTcwNSA2LjIxMTEyIDE0LjAxODlDNi41NDcwMyAxNC4xNTMzIDguMjkyODcgMTQuMTg4NSA4LjU4MjM3IDE0LjA2OTZDOC44NDk3OCAxMy45NTczIDkuMDYxOTMgMTMuOTU3MyA5LjMyMDQ5IDE0LjA3MThDOS42NzYyOSAxNC4yMjgyIDExLjAzOTggMTQuMjAxOCAxMS40MzMyIDE0LjAyOTlDMTIuNDIxIDEzLjYwMDQgMTIuNzIxNiAxMi42OTA3IDEyLjA0NTMgMTIuMTc1MkMxMS44MDg5IDExLjk5NDYgMTEuMjg5NSAxMS43MjM2IDExLjE3NjggMTEuNzIzNkMxMS4xMzI2IDExLjcyMzYgMTAuOTU1OCAxMS42NzUyIDEwLjc4MTMgMTEuNjEzNUMxMC42MDg5IDExLjU1MTggMTAuNDE2NiAxMS41MDMzIDEwLjM1NDcgMTEuNTAzM0MxMC4yOTI5IDExLjUwMzMgMTAuMTQ5MiAxMS40NTQ5IDEwLjAzNDMgMTEuMzkzMkM5LjkyMTU5IDExLjMzMTUgOS43Nzc5NSAxMS4yODMxIDkuNzE2MDcgMTEuMjgzMUM5LjU2MTM3IDExLjI4MzEgOS4wMzc2MiAxMS4wMzE5IDguNjg2MjQgMTAuNzg5NkM4LjQxNDQyIDEwLjYwMjQgOC4wMzg3MyAxMC4xOTkzIDcuMzQyNiA5LjM1NTYzQzcuMTc0NjUgOS4xNTA3NyA2Ljk1MTQ1IDguODc5ODMgNi44NDUzNyA4Ljc0OTg2QzYuNzM5MjkgOC42MTk5IDYuNTAwNjIgOC4zNDg5NSA2LjMxNDk5IDguMTQ2M0M1LjY4OTU4IDcuNDY1NjMgNS42ODk1OCA3LjQ2NTY0IDYuNzg3OTEgNy40NTI0MkM4LjEyNzEzIDcuNDM0OCA4LjUxMzg3IDcuMzA5MjQgOC45NTU4NSA2Ljc1NDEzQzkuMTIzODEgNi41NDI2NyA5LjEzOTI4IDYuNDg1MzkgOS4xNTY5NiA2LjA3NTY4QzkuMTg1NjggNS40MjgwNiA4Ljk0NDggNS4wNTU3OCA4LjMxNDk3IDQuNzU2Mkw3Ljk5Njc0IDQuNjA2NDFMNi42OTk1MSA0LjYzNTA1QzUuODE3NzUgNC42NTI2NyA1LjM4MDE5IDQuNjgxMzEgNS4zMzU5OSA0LjcyNTM3QzUuMjg5NTggNC43NzE2MiA1LjI3MTkgNS42MjYzMSA1LjI3MTkgNy45ODMyOUM1LjI3MTkgMTAuNzYxIDUuMjYwODUgMTEuMTgzOSA1LjE4NzkyIDExLjIzMDJDNS4xNDE1MSAxMS4yNTg4IDQuODY5NjkgMTEuMjc2NSA0LjU4MDE5IDExLjI2OTlMNC4wNTQyMyAxMS4yNTY2TDQuMDQwOTcgNy40ODk4N0M0LjAyOTkyIDQuNjE3NDMgNC4wNDMxOCAzLjcwMzI3IDQuMDk0MDEgMy42NDM4QzQuMjEzMzQgMy40OTg0MSA4LjE1NTg2IDMuNTc1NTEgOC41NzEzMiAzLjcyOTdDOC43NDM3IDMuNzk1NzkgOC45MjQ5MSAzLjg0ODY2IDguOTY5MTEgMy44NDg2NkM5LjEwMzkyIDMuODQ4NjYgOS43MTYwNyA0LjI5MzYyIDkuOTEwNTQgNC41MzU5M0MxMC40NzYzIDUuMjI3NiAxMC41NDcgNi40NzQzOCAxMC4wNjUyIDcuMjU0MTdDOS45MzcwNiA3LjQ2MzQzIDkuNDMwOTkgNy45Nzg4OCA5LjM1MzY0IDcuOTc4ODhDOS4zMTgyOCA3Ljk3ODg4IDkuMjYwODIgOC4wMTQxMyA5LjIyMzI1IDguMDU4MTlDOS4xODc4OSA4LjEwMjI0IDkuMDc5NjEgOC4xNTI5MSA4Ljk4MjM3IDguMTcyNzNDOC43MTI3NiA4LjIyNTYgOC4zMTkzOSA4LjM3MzE4IDguMjMxIDguNDUyNDhDOC4xNDAzOSA4LjUzNjE5IDguMTQwMzkgOC41MzYxOSA4LjYyODc4IDkuMTE1NTJDOC45OTc4NCA5LjU0OTQ3IDkuMDYxOTMgOS41NzE1IDkuMTIxNiA5LjI4NTE0QzkuMTkyMzEgOC45NDU5MSA5LjQ5NzI5IDguNDEwNjMgOS43NDcwMSA4LjE4NTk1QzEwLjM4MzUgNy42MTU0MiAxMi4yNjYzIDcuNjM1MjUgMTMuMDA0NCA4LjIyMTE5QzEzLjE2NTggOC4zNTExNiAxMy4xMjE2IDguNTU4MjIgMTIuODY3NCA4Ljg1MzM5QzEyLjc0MzcgOC45OTg3OCAxMi42NDg2IDguOTc4OTUgMTIuMDg3MyA4LjY4ODE4QzExLjc1MTQgOC41MTYzNyAxMC45NzU3IDguNTQwNiAxMC42OTk1IDguNzMyMjRDMTAuNDQ1MyA4LjkwNjI2IDEwLjIxNTUgOS4yNzE5MiAxMC4yMTU1IDkuNDk4ODFDMTAuMjE1NSA5LjgxNjAxIDEwLjcyODIgMTAuMzMzNyAxMS4xNDM3IDEwLjQzOTRDMTEuMzQ0OCAxMC40ODc5IDExLjg2NDEgMTAuNzI4IDExLjg5OTUgMTAuNzg3NEMxMS45MTcyIDEwLjgxMTcgMTIuMDA3OCAxMC44NTEzIDEyLjEwNSAxMC44NzMzQzEyLjQxNDQgMTAuOTM5NCAxMy4xOTIzIDExLjUyNzYgMTMuMzcxMyAxMS44Mjk0QzEzLjUwMzkgMTIuMDUxOCAxMy42NDA5IDEyLjUzMiAxMy42NDA5IDEyLjc3QzEzLjY0MDkgMTMuMDA3OSAxMy40Nzc0IDEzLjY2NjUgMTMuMzk1NiAxMy43NjEyQzEzLjM1NTggMTMuODA3NSAxMy4zMDUgMTMuODk3OCAxMy4yODUxIDEzLjk2MzlDMTMuMjY1MiAxNC4wMjk5IDEzLjEwMTcgMTQuMjIxNiAxMi45MjA1IDE0LjM4NjhDMTIuMTg5IDE1LjA2MzEgMTEuMDg0IDE1LjM2NDggOS45MTA1NCAxNS4yMTA2WiIgZmlsbD0iIzE1MjE0OSIgZmlsbC1vcGFjaXR5PSIwLjY2Ii8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMF8zODg2Ij4KPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=" alt="">
+                        <span class="card-mkk__mkk t-note">ООО МКК «РУСЗАЙМСЕРВИС»</span>
                       </div>
-                      <div class="product-card__money">
-                        <span class="t-note">Остаток долга</span>
-                        <div class="product-card__amount">
-                          <span class="t-h1-strong">20&nbsp;000</span>
-                          <span class="product-card__currency t-h3-strong">₽</span>
+                      <div class="card-mkk__content">
+                        <span class="label-time" data-state="3-days-or-less">
+                          <span class="ico ico-clock-hour-3"></span>
+                          <span class="label-time__text t-caption-medium">До&nbsp;погашения осталось 2&nbsp;дня 15&nbsp;часов</span>
+                        </span>
+                        <div class="card-mkk__amount-block">
+                          <span class="card-mkk__amount t-h1-strong">12&nbsp;700&nbsp;₽</span>
+                          <div class="card-mkk__info t-note">
+                            <span>Остаток задолженности</span>
+                            <span>Верните до&nbsp;16&nbsp;сентября, 23:59&nbsp;МСК</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="product-card__status">
-                      <div class="product-card__row t-note">
-                        <span>Вернуть до</span>
-                        <span class="product-card__date"><span id="dueDate">23.09.26</span><span>23:59&nbsp;МСК</span></span>
+                  </div>
+
+                  <!-- по центру: Card MKK, Product=PDL, Active=On, плашка Label time в состоянии Overdue -->
+                  <article class="card-mkk" data-product="pdl" data-active="on">
+                    <div class="card-mkk__body">
+                      <div class="card-mkk__logo">
+                        <img class="card-mkk__mkk-logo" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJNS0sgbG9nbyIgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzBfMzg4NikiPgo8cGF0aCBpZD0iVmVjdG9yIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTkuOTEwNTQgMTUuMjEwNkM5LjgxOTkzIDE1LjE5NzQgOS42MjU0NiAxNS4xNDkgOS40NzUxOSAxNS4xMDA1QzkuMjc4NSAxNS4wMzY2IDkuMTAxNzEgMTUuMDIzNCA4LjgxMjIxIDE1LjA0OThDNy40MjY1OCAxNS4xNzU0IDYuNTgyMzkgMTUuMTM3OSA1Ljg3NTIxIDE0LjkxMzNDNS42ODk1OCAxNC44NTYgNS40OTA2OCAxNC44MDc1IDUuNDMxMDEgMTQuODA3NUM1LjM3MzU2IDE0LjgwNzUgNS4yMzIxMiAxNC43NTkxIDUuMTE3MiAxNC42OTc0QzUuMDA0NSAxNC42MzU3IDQuODY1MjcgMTQuNTg3MyA0LjgwNzgxIDE0LjU4NzNDNC43NTI1NyAxNC41ODczIDQuNjQyMDcgMTQuNTM4OCA0LjU2NDcyIDE0LjQ3NzFDNC40ODczNyAxNC40MTU0IDQuMzkyMzUgMTQuMzY3IDQuMzUwMzYgMTQuMzY3QzQuMDEwMDMgMTQuMzY0OCAyLjIwNDUyIDEyLjg3MzUgMS43NDcwNiAxMi4yMTkzQzEuNjk0MDIgMTIuMTQ0NCAxLjU5MDE2IDExLjk5NjggMS41MTI4MSAxMS44OTFDMS40Mzc2NyAxMS43ODc1IDEuMzc1NzkgMTEuNjczIDEuMzc1NzkgMTEuNjM3N0MxLjM3NTc5IDExLjYwMDMgMS4zMzYwMSAxMS41Mzg2IDEuMjg5NjEgMTEuNDk4OUMxLjE5MDE2IDExLjQxNzQgMC43OTQ1ODIgMTAuNjA5IDAuNzM0OTEzIDEwLjM2NjdDMC43MTI4MTQgMTAuMjgwOCAwLjY1MDkzNiAxMC4xMjIyIDAuNTkzNDc4IDEwLjAxNjVDMC41MzgyMjkgOS45MTA3MyAwLjQ5MTgyMSA5Ljc4NTE3IDAuNDkxODIxIDkuNzM0NTFDMC40OTE4MjEgOS42ODYwNSAwLjQ0MDk5MyA5LjQ4NzggMC4zNzY5MDUgOS4yOTM5NUMwLjI0NjUxOSA4Ljg5NzQ1IDAuMjAyMzIgNi44MjI0MiAwLjMxMjgxNyA2LjMyNjc5QzAuNDQwOTkzIDUuNzU2MjcgMC41NTU5MDkgNS4zNTMxNiAwLjYzMTA0NyA1LjIxNjU5QzAuNjc3NDU1IDUuMTM3MjkgMC43MTI4MTQgNS4wMzU5NiAwLjcxMjgxNCA0Ljk5NDExQzAuNzEyODE0IDQuODUzMTMgMS4xNjU4NSAzLjk5MTg0IDEuNTIxNjUgMy40NTg3NkMyLjQ5ODQ0IDEuOTkzOTEgMy45NTQ3OCAwLjk2OTYxIDUuODUwOSAwLjQxNDUwOEM2LjYzNzY0IDAuMTg1NDE4IDkuMDQ4NjcgMC4xOTg2MzQgOS42MTg4MyAwLjQzNjUzNkM5Ljc2MDI3IDAuNDk2MDExIDkuOTI2MDEgMC41NDQ0NzIgOS45ODU2OCAwLjU0NDQ3MkMxMC4wNDUzIDAuNTQ0NDcyIDEwLjIwMjMgMC41OTI5MzQgMTAuMzM0OCAwLjY1MjQwOUMxMC40NjUyIDAuNzE0MDg3IDEwLjYyNjYgMC43NjI1NDggMTAuNjkyOSAwLjc2MjU0OEMxMC43NTY5IDAuNzY0NzUxIDEwLjg0MDkgMC44MDIxOTkgMTAuODc4NSAwLjg0NjI1NUMxMC45MTYxIDAuODkyNTEzIDEwLjk5MTIgMC45Mjk5NiAxMS4wNDQyIDAuOTI5OTZDMTEuMDk3MyAwLjkyOTk2IDExLjE5ODkgMC45NzYyMTkgMTEuMjcxOSAxLjAzMzQ5QzExLjM0NDggMS4wODg1NiAxMS40NjYzIDEuMTU0NjQgMTEuNTQxNSAxLjE3ODg4QzExLjYxNjYgMS4yMDA5IDExLjc4MDEgMS4zMDAwMyAxMS44OTk1IDEuMzk0NzVDMTIuMDIxIDEuNDg5NDcgMTIuMjI0MyAxLjYzNzA2IDEyLjM0ODEgMS43MTg1NkMxMy4wOTUxIDIuMjE0MTkgMTQuNjM1NCA0LjI0NTE2IDE0LjYzNTQgNC43MzE5N0MxNC42MzU0IDQuNzg3MDQgMTQuNjU5NyA0Ljg0ODcyIDE0LjY5MDYgNC44NjYzNEMxNC43MTkzIDQuODg2MTcgMTQuNzgzNCA1LjAzNTk2IDE0LjgzMjEgNS4xOTg5N0MxNC44ODA3IDUuMzY0MTcgMTQuOTQwMyA1LjUxMTc2IDE0Ljk2NDcgNS41MjcxOEMxNC45OTEyIDUuNTQyNiAxNS4wMjg3IDUuNjg1NzggMTUuMDQ4NiA1Ljg0NDM4QzE1LjA3MDcgNi4wMDI5OCAxNS4xMjM4IDYuMjgwNTMgMTUuMTY4IDYuNDU2NzZDMTUuMjgwNyA2LjkwMzkyIDE1LjI3NjMgOC41MDUzNSAxNS4xNjEzIDguODgyMDNDMTUuMTE0OSA5LjAzMTgyIDE1LjA3NzQgOS4yMzAwNyAxNS4wNzc0IDkuMzI0NzlDMTUuMDc3NCA5LjQxNzMxIDE1LjAyODcgOS41ODY5MiAxNC45NjY5IDkuNzAxNDdDMTQuOTA1IDkuODEzODEgMTQuODU2NCA5Ljk1MjU4IDE0Ljg1NjQgMTAuMDA5OUMxNC44NTY0IDEwLjEwNDYgMTQuNzQzNyAxMC4zODQzIDE0LjQ1MTkgMTEuMDA3N0MxNC4yNzA3IDExLjM5NTQgMTQuMDI5OSAxMS43MjM2IDEzLjkyNiAxMS43MjM2QzEzLjg3MjkgMTEuNzIzNiAxMy43MzgxIDExLjYwMDMgMTMuNjI1NCAxMS40NTA1TDEzLjQyMjEgMTEuMTc3M0wxMy41MzI2IDEwLjk0MTZDMTMuNTkyMyAxMC44MTE3IDEzLjcxMzggMTAuNTcxNiAxMy44MDQ0IDEwLjQwODZDMTMuODkyOCAxMC4yNDU2IDEzLjk4MzQgMTAuMDM0MSAxNC4wMDMzIDkuOTM5MzdDMTQuMDIzMiA5Ljg0Njg1IDE0LjA2MDggOS43NDExMiAxNC4wODczIDkuNzEwMjhDMTQuMTEzOCA5LjY3NzI0IDE0LjE3MTMgOS40Nzg5OCAxNC4yMTU1IDkuMjY3NTJDMTQuMjU5NyA5LjA1ODI1IDE0LjMyMzggOC44MTU5NCAxNC4zNTQ3IDguNzMyMjRDMTQuNDYwOCA4LjQ1NDY5IDE0LjQyNzYgNi45NjM0IDE0LjMwMzkgNi40NjMzN0MxNC4yNDQyIDYuMjIxMDYgMTQuMTkzNCA1Ljk4NzU2IDE0LjE5MzQgNS45NDEzMUMxNC4xOTM0IDUuODIwMTUgMTMuODE3NyA0Ljg3NTE2IDEzLjY5MTcgNC42NzQ3QzEzLjY2MyA0LjYyODQ0IDEzLjYxIDQuNTI5MzIgMTMuNTcyNCA0LjQ1NDQyQzEzLjI2NzQgMy44NDQyNSAxMi4yODE4IDIuNzQ1MDYgMTEuNzA3MiAyLjM3NDk5QzExLjUzOTMgMi4yNjcwNSAxMS4zNzc5IDIuMTUwMzEgMTEuMzQ3IDIuMTE3MjZDMTEuMjE4OCAxLjk3NDA4IDkuNzUxNDMgMS4zMTU0NSA5LjU2MzU4IDEuMzE1NDVDOS41MDM5MSAxLjMxNTQ1IDkuMzM1OTYgMS4yNjI1OCA5LjE5MjMxIDEuMTk4N0M4LjgyNzY4IDEuMDM3OSA2LjcwMTcyIDEuMDIwMjcgNi4yOTI4OSAxLjE3NDQ3QzYuMTU1ODcgMS4yMjUxMyA1LjkxOTQxIDEuMzAwMDMgNS43NjkxMyAxLjM0MTg4QzQuOTg5MDMgMS41NTExNSA0LjEzODIxIDEuOTg3MyAzLjc0MDQyIDIuMzc0OTlDMy42ODUxNyAyLjQyNzg2IDMuNjEwMDMgMi40NzE5MSAzLjU3MDI1IDIuNDcxOTFDMy40OTUxMiAyLjQ3MTkxIDIuNDgwNzYgMy40NjMxNyAyLjQ4MDc2IDMuNTM4MDZDMi40ODA3NiAzLjU2MjI5IDIuMzk2NzggMy42ODU2NSAyLjI5NTEyIDMuODExMjFDMi4xOTEyNiAzLjkzODk3IDIuMDYwODcgNC4xMjYyMSAyLjAwMzQxIDQuMjI5NzRDMS42NjMwOCA0Ljg0ODcyIDEuNTk2NzkgNC45ODA4OSAxLjU5Njc5IDUuMDMxNTVDMS41OTY3OSA1LjA2NDU5IDEuNTQ1OTYgNS4xODEzNCAxLjQ4NjI5IDUuMjk1ODlDMS40MjQ0MSA1LjQwODIzIDEuMzc1NzkgNS41NTE0MSAxLjM3NTc5IDUuNjE1MjlDMS4zNzU3OSA1LjY3Njk3IDEuMzI3MTcgNS44NDQzOCAxLjI2OTcyIDUuOTg1MzZDMC45MDUwNzggNi44Nzc0OSAxLjAxNzc4IDguODYgMS40OTI5MiA5Ljk0ODE4QzEuNTUwMzggMTAuMDc4MSAxLjU5Njc5IDEwLjIzMjMgMS41OTY3OSAxMC4yODk2QzEuNTk2NzkgMTAuMzQ5MSAxLjYyMzMxIDEwLjQxMyAxLjY1ODY2IDEwLjQzMjhDMS42OTE4MSAxMC40NTI2IDEuNzU1OSAxMC41NDczIDEuODAwMSAxMC42NDIxQzIuMTUxNDggMTEuMzc3OCAyLjg4Mjk3IDEyLjI1MDEgMy42NDA5NyAxMi44Mjk0QzQuMDEyMjQgMTMuMTEzNiA0LjMzMDQ3IDEzLjMyMDYgNC4zOTY3NyAxMy4zMjA2QzQuNDI5OTIgMTMuMzIwNiA0LjQ4NTE2IDEzLjM1NTkgNC41MjI3MyAxMy4zOTk5QzQuNTU4MDkgMTMuNDQ0IDQuNjU5NzUgMTMuNDk0NyA0Ljc0NTk0IDEzLjUxMjNDNC44MzIxMiAxMy41MzIxIDQuOTMxNTcgMTMuNTgyOCA0Ljk2NjkzIDEzLjYyMjRDNS4wMDIyOSAxMy42NjQzIDUuMTA4MzcgMTMuNzE3MSA1LjIwNTYgMTMuNzM3QzUuMzAyODQgMTMuNzU5IDUuNDMxMDEgMTMuODA5NyA1LjQ5MDY4IDEzLjg1MTVDNS41NTAzNSAxMy44OTM0IDUuNjg3MzcgMTMuOTI2NCA1Ljc5MzQ0IDEzLjkyODZDNS45MDE3MyAxMy45MzA4IDYuMDg5NTcgMTMuOTcwNSA2LjIxMTEyIDE0LjAxODlDNi41NDcwMyAxNC4xNTMzIDguMjkyODcgMTQuMTg4NSA4LjU4MjM3IDE0LjA2OTZDOC44NDk3OCAxMy45NTczIDkuMDYxOTMgMTMuOTU3MyA5LjMyMDQ5IDE0LjA3MThDOS42NzYyOSAxNC4yMjgyIDExLjAzOTggMTQuMjAxOCAxMS40MzMyIDE0LjAyOTlDMTIuNDIxIDEzLjYwMDQgMTIuNzIxNiAxMi42OTA3IDEyLjA0NTMgMTIuMTc1MkMxMS44MDg5IDExLjk5NDYgMTEuMjg5NSAxMS43MjM2IDExLjE3NjggMTEuNzIzNkMxMS4xMzI2IDExLjcyMzYgMTAuOTU1OCAxMS42NzUyIDEwLjc4MTMgMTEuNjEzNUMxMC42MDg5IDExLjU1MTggMTAuNDE2NiAxMS41MDMzIDEwLjM1NDcgMTEuNTAzM0MxMC4yOTI5IDExLjUwMzMgMTAuMTQ5MiAxMS40NTQ5IDEwLjAzNDMgMTEuMzkzMkM5LjkyMTU5IDExLjMzMTUgOS43Nzc5NSAxMS4yODMxIDkuNzE2MDcgMTEuMjgzMUM5LjU2MTM3IDExLjI4MzEgOS4wMzc2MiAxMS4wMzE5IDguNjg2MjQgMTAuNzg5NkM4LjQxNDQyIDEwLjYwMjQgOC4wMzg3MyAxMC4xOTkzIDcuMzQyNiA5LjM1NTYzQzcuMTc0NjUgOS4xNTA3NyA2Ljk1MTQ1IDguODc5ODMgNi44NDUzNyA4Ljc0OTg2QzYuNzM5MjkgOC42MTk5IDYuNTAwNjIgOC4zNDg5NSA2LjMxNDk5IDguMTQ2M0M1LjY4OTU4IDcuNDY1NjMgNS42ODk1OCA3LjQ2NTY0IDYuNzg3OTEgNy40NTI0MkM4LjEyNzEzIDcuNDM0OCA4LjUxMzg3IDcuMzA5MjQgOC45NTU4NSA2Ljc1NDEzQzkuMTIzODEgNi41NDI2NyA5LjEzOTI4IDYuNDg1MzkgOS4xNTY5NiA2LjA3NTY4QzkuMTg1NjggNS40MjgwNiA4Ljk0NDggNS4wNTU3OCA4LjMxNDk3IDQuNzU2Mkw3Ljk5Njc0IDQuNjA2NDFMNi42OTk1MSA0LjYzNTA1QzUuODE3NzUgNC42NTI2NyA1LjM4MDE5IDQuNjgxMzEgNS4zMzU5OSA0LjcyNTM3QzUuMjg5NTggNC43NzE2MiA1LjI3MTkgNS42MjYzMSA1LjI3MTkgNy45ODMyOUM1LjI3MTkgMTAuNzYxIDUuMjYwODUgMTEuMTgzOSA1LjE4NzkyIDExLjIzMDJDNS4xNDE1MSAxMS4yNTg4IDQuODY5NjkgMTEuMjc2NSA0LjU4MDE5IDExLjI2OTlMNC4wNTQyMyAxMS4yNTY2TDQuMDQwOTcgNy40ODk4N0M0LjAyOTkyIDQuNjE3NDMgNC4wNDMxOCAzLjcwMzI3IDQuMDk0MDEgMy42NDM4QzQuMjEzMzQgMy40OTg0MSA4LjE1NTg2IDMuNTc1NTEgOC41NzEzMiAzLjcyOTdDOC43NDM3IDMuNzk1NzkgOC45MjQ5MSAzLjg0ODY2IDguOTY5MTEgMy44NDg2NkM5LjEwMzkyIDMuODQ4NjYgOS43MTYwNyA0LjI5MzYyIDkuOTEwNTQgNC41MzU5M0MxMC40NzYzIDUuMjI3NiAxMC41NDcgNi40NzQzOCAxMC4wNjUyIDcuMjU0MTdDOS45MzcwNiA3LjQ2MzQzIDkuNDMwOTkgNy45Nzg4OCA5LjM1MzY0IDcuOTc4ODhDOS4zMTgyOCA3Ljk3ODg4IDkuMjYwODIgOC4wMTQxMyA5LjIyMzI1IDguMDU4MTlDOS4xODc4OSA4LjEwMjI0IDkuMDc5NjEgOC4xNTI5MSA4Ljk4MjM3IDguMTcyNzNDOC43MTI3NiA4LjIyNTYgOC4zMTkzOSA4LjM3MzE4IDguMjMxIDguNDUyNDhDOC4xNDAzOSA4LjUzNjE5IDguMTQwMzkgOC41MzYxOSA4LjYyODc4IDkuMTE1NTJDOC45OTc4NCA5LjU0OTQ3IDkuMDYxOTMgOS41NzE1IDkuMTIxNiA5LjI4NTE0QzkuMTkyMzEgOC45NDU5MSA5LjQ5NzI5IDguNDEwNjMgOS43NDcwMSA4LjE4NTk1QzEwLjM4MzUgNy42MTU0MiAxMi4yNjYzIDcuNjM1MjUgMTMuMDA0NCA4LjIyMTE5QzEzLjE2NTggOC4zNTExNiAxMy4xMjE2IDguNTU4MjIgMTIuODY3NCA4Ljg1MzM5QzEyLjc0MzcgOC45OTg3OCAxMi42NDg2IDguOTc4OTUgMTIuMDg3MyA4LjY4ODE4QzExLjc1MTQgOC41MTYzNyAxMC45NzU3IDguNTQwNiAxMC42OTk1IDguNzMyMjRDMTAuNDQ1MyA4LjkwNjI2IDEwLjIxNTUgOS4yNzE5MiAxMC4yMTU1IDkuNDk4ODFDMTAuMjE1NSA5LjgxNjAxIDEwLjcyODIgMTAuMzMzNyAxMS4xNDM3IDEwLjQzOTRDMTEuMzQ0OCAxMC40ODc5IDExLjg2NDEgMTAuNzI4IDExLjg5OTUgMTAuNzg3NEMxMS45MTcyIDEwLjgxMTcgMTIuMDA3OCAxMC44NTEzIDEyLjEwNSAxMC44NzMzQzEyLjQxNDQgMTAuOTM5NCAxMy4xOTIzIDExLjUyNzYgMTMuMzcxMyAxMS44Mjk0QzEzLjUwMzkgMTIuMDUxOCAxMy42NDA5IDEyLjUzMiAxMy42NDA5IDEyLjc3QzEzLjY0MDkgMTMuMDA3OSAxMy40Nzc0IDEzLjY2NjUgMTMuMzk1NiAxMy43NjEyQzEzLjM1NTggMTMuODA3NSAxMy4zMDUgMTMuODk3OCAxMy4yODUxIDEzLjk2MzlDMTMuMjY1MiAxNC4wMjk5IDEzLjEwMTcgMTQuMjIxNiAxMi45MjA1IDE0LjM4NjhDMTIuMTg5IDE1LjA2MzEgMTEuMDg0IDE1LjM2NDggOS45MTA1NCAxNS4yMTA2WiIgZmlsbD0iIzE1MjE0OSIgZmlsbC1vcGFjaXR5PSIwLjY2Ii8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMF8zODg2Ij4KPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=" alt="">
+                        <span class="card-mkk__mkk t-note">ООО МКК «РУСЗАЙМСЕРВИС»</span>
                       </div>
-                      <div class="product-card__row t-note-medium">
-                        <span>Просрочен на</span>
-                        <span id="overdue">2&nbsp;дня</span>
+                      <div class="card-mkk__content">
+                        <span class="label-time" data-state="overdue">
+                          <span class="ico ico-clock-hour-3" aria-hidden="true"></span>
+                          <span class="label-time__text t-caption-medium" id="labelTime">Заём просрочен на&nbsp;2&nbsp;дня 15&nbsp;часов</span>
+                        </span>
+                        <div class="card-mkk__amount-block">
+                          <span class="card-mkk__amount t-h1-strong">20&nbsp;000&nbsp;₽</span>
+                          <div class="card-mkk__info t-note">
+                            <span>Остаток задолженности</span>
+                            <span id="deadline">Верните до&nbsp;23&nbsp;сентября, 23:59&nbsp;МСК</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </article>
 
-                  <div class="product-card" data-product="il" aria-hidden="true">
-                    <div class="product-card__cadr"></div>
-                    <div class="product-card__status"></div>
+                  <!-- справа: Card MKK, Product=IL, Active=Off -->
+                  <div class="card-mkk" data-product="il" data-active="off" aria-hidden="true">
+                    <div class="card-mkk__body">
+                      <div class="card-mkk__logo">
+                        <img class="card-mkk__mkk-logo" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJNS0sgbG9nbyIgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzBfMzg4NikiPgo8cGF0aCBpZD0iVmVjdG9yIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTkuOTEwNTQgMTUuMjEwNkM5LjgxOTkzIDE1LjE5NzQgOS42MjU0NiAxNS4xNDkgOS40NzUxOSAxNS4xMDA1QzkuMjc4NSAxNS4wMzY2IDkuMTAxNzEgMTUuMDIzNCA4LjgxMjIxIDE1LjA0OThDNy40MjY1OCAxNS4xNzU0IDYuNTgyMzkgMTUuMTM3OSA1Ljg3NTIxIDE0LjkxMzNDNS42ODk1OCAxNC44NTYgNS40OTA2OCAxNC44MDc1IDUuNDMxMDEgMTQuODA3NUM1LjM3MzU2IDE0LjgwNzUgNS4yMzIxMiAxNC43NTkxIDUuMTE3MiAxNC42OTc0QzUuMDA0NSAxNC42MzU3IDQuODY1MjcgMTQuNTg3MyA0LjgwNzgxIDE0LjU4NzNDNC43NTI1NyAxNC41ODczIDQuNjQyMDcgMTQuNTM4OCA0LjU2NDcyIDE0LjQ3NzFDNC40ODczNyAxNC40MTU0IDQuMzkyMzUgMTQuMzY3IDQuMzUwMzYgMTQuMzY3QzQuMDEwMDMgMTQuMzY0OCAyLjIwNDUyIDEyLjg3MzUgMS43NDcwNiAxMi4yMTkzQzEuNjk0MDIgMTIuMTQ0NCAxLjU5MDE2IDExLjk5NjggMS41MTI4MSAxMS44OTFDMS40Mzc2NyAxMS43ODc1IDEuMzc1NzkgMTEuNjczIDEuMzc1NzkgMTEuNjM3N0MxLjM3NTc5IDExLjYwMDMgMS4zMzYwMSAxMS41Mzg2IDEuMjg5NjEgMTEuNDk4OUMxLjE5MDE2IDExLjQxNzQgMC43OTQ1ODIgMTAuNjA5IDAuNzM0OTEzIDEwLjM2NjdDMC43MTI4MTQgMTAuMjgwOCAwLjY1MDkzNiAxMC4xMjIyIDAuNTkzNDc4IDEwLjAxNjVDMC41MzgyMjkgOS45MTA3MyAwLjQ5MTgyMSA5Ljc4NTE3IDAuNDkxODIxIDkuNzM0NTFDMC40OTE4MjEgOS42ODYwNSAwLjQ0MDk5MyA5LjQ4NzggMC4zNzY5MDUgOS4yOTM5NUMwLjI0NjUxOSA4Ljg5NzQ1IDAuMjAyMzIgNi44MjI0MiAwLjMxMjgxNyA2LjMyNjc5QzAuNDQwOTkzIDUuNzU2MjcgMC41NTU5MDkgNS4zNTMxNiAwLjYzMTA0NyA1LjIxNjU5QzAuNjc3NDU1IDUuMTM3MjkgMC43MTI4MTQgNS4wMzU5NiAwLjcxMjgxNCA0Ljk5NDExQzAuNzEyODE0IDQuODUzMTMgMS4xNjU4NSAzLjk5MTg0IDEuNTIxNjUgMy40NTg3NkMyLjQ5ODQ0IDEuOTkzOTEgMy45NTQ3OCAwLjk2OTYxIDUuODUwOSAwLjQxNDUwOEM2LjYzNzY0IDAuMTg1NDE4IDkuMDQ4NjcgMC4xOTg2MzQgOS42MTg4MyAwLjQzNjUzNkM5Ljc2MDI3IDAuNDk2MDExIDkuOTI2MDEgMC41NDQ0NzIgOS45ODU2OCAwLjU0NDQ3MkMxMC4wNDUzIDAuNTQ0NDcyIDEwLjIwMjMgMC41OTI5MzQgMTAuMzM0OCAwLjY1MjQwOUMxMC40NjUyIDAuNzE0MDg3IDEwLjYyNjYgMC43NjI1NDggMTAuNjkyOSAwLjc2MjU0OEMxMC43NTY5IDAuNzY0NzUxIDEwLjg0MDkgMC44MDIxOTkgMTAuODc4NSAwLjg0NjI1NUMxMC45MTYxIDAuODkyNTEzIDEwLjk5MTIgMC45Mjk5NiAxMS4wNDQyIDAuOTI5OTZDMTEuMDk3MyAwLjkyOTk2IDExLjE5ODkgMC45NzYyMTkgMTEuMjcxOSAxLjAzMzQ5QzExLjM0NDggMS4wODg1NiAxMS40NjYzIDEuMTU0NjQgMTEuNTQxNSAxLjE3ODg4QzExLjYxNjYgMS4yMDA5IDExLjc4MDEgMS4zMDAwMyAxMS44OTk1IDEuMzk0NzVDMTIuMDIxIDEuNDg5NDcgMTIuMjI0MyAxLjYzNzA2IDEyLjM0ODEgMS43MTg1NkMxMy4wOTUxIDIuMjE0MTkgMTQuNjM1NCA0LjI0NTE2IDE0LjYzNTQgNC43MzE5N0MxNC42MzU0IDQuNzg3MDQgMTQuNjU5NyA0Ljg0ODcyIDE0LjY5MDYgNC44NjYzNEMxNC43MTkzIDQuODg2MTcgMTQuNzgzNCA1LjAzNTk2IDE0LjgzMjEgNS4xOTg5N0MxNC44ODA3IDUuMzY0MTcgMTQuOTQwMyA1LjUxMTc2IDE0Ljk2NDcgNS41MjcxOEMxNC45OTEyIDUuNTQyNiAxNS4wMjg3IDUuNjg1NzggMTUuMDQ4NiA1Ljg0NDM4QzE1LjA3MDcgNi4wMDI5OCAxNS4xMjM4IDYuMjgwNTMgMTUuMTY4IDYuNDU2NzZDMTUuMjgwNyA2LjkwMzkyIDE1LjI3NjMgOC41MDUzNSAxNS4xNjEzIDguODgyMDNDMTUuMTE0OSA5LjAzMTgyIDE1LjA3NzQgOS4yMzAwNyAxNS4wNzc0IDkuMzI0NzlDMTUuMDc3NCA5LjQxNzMxIDE1LjAyODcgOS41ODY5MiAxNC45NjY5IDkuNzAxNDdDMTQuOTA1IDkuODEzODEgMTQuODU2NCA5Ljk1MjU4IDE0Ljg1NjQgMTAuMDA5OUMxNC44NTY0IDEwLjEwNDYgMTQuNzQzNyAxMC4zODQzIDE0LjQ1MTkgMTEuMDA3N0MxNC4yNzA3IDExLjM5NTQgMTQuMDI5OSAxMS43MjM2IDEzLjkyNiAxMS43MjM2QzEzLjg3MjkgMTEuNzIzNiAxMy43MzgxIDExLjYwMDMgMTMuNjI1NCAxMS40NTA1TDEzLjQyMjEgMTEuMTc3M0wxMy41MzI2IDEwLjk0MTZDMTMuNTkyMyAxMC44MTE3IDEzLjcxMzggMTAuNTcxNiAxMy44MDQ0IDEwLjQwODZDMTMuODkyOCAxMC4yNDU2IDEzLjk4MzQgMTAuMDM0MSAxNC4wMDMzIDkuOTM5MzdDMTQuMDIzMiA5Ljg0Njg1IDE0LjA2MDggOS43NDExMiAxNC4wODczIDkuNzEwMjhDMTQuMTEzOCA5LjY3NzI0IDE0LjE3MTMgOS40Nzg5OCAxNC4yMTU1IDkuMjY3NTJDMTQuMjU5NyA5LjA1ODI1IDE0LjMyMzggOC44MTU5NCAxNC4zNTQ3IDguNzMyMjRDMTQuNDYwOCA4LjQ1NDY5IDE0LjQyNzYgNi45NjM0IDE0LjMwMzkgNi40NjMzN0MxNC4yNDQyIDYuMjIxMDYgMTQuMTkzNCA1Ljk4NzU2IDE0LjE5MzQgNS45NDEzMUMxNC4xOTM0IDUuODIwMTUgMTMuODE3NyA0Ljg3NTE2IDEzLjY5MTcgNC42NzQ3QzEzLjY2MyA0LjYyODQ0IDEzLjYxIDQuNTI5MzIgMTMuNTcyNCA0LjQ1NDQyQzEzLjI2NzQgMy44NDQyNSAxMi4yODE4IDIuNzQ1MDYgMTEuNzA3MiAyLjM3NDk5QzExLjUzOTMgMi4yNjcwNSAxMS4zNzc5IDIuMTUwMzEgMTEuMzQ3IDIuMTE3MjZDMTEuMjE4OCAxLjk3NDA4IDkuNzUxNDMgMS4zMTU0NSA5LjU2MzU4IDEuMzE1NDVDOS41MDM5MSAxLjMxNTQ1IDkuMzM1OTYgMS4yNjI1OCA5LjE5MjMxIDEuMTk4N0M4LjgyNzY4IDEuMDM3OSA2LjcwMTcyIDEuMDIwMjcgNi4yOTI4OSAxLjE3NDQ3QzYuMTU1ODcgMS4yMjUxMyA1LjkxOTQxIDEuMzAwMDMgNS43NjkxMyAxLjM0MTg4QzQuOTg5MDMgMS41NTExNSA0LjEzODIxIDEuOTg3MyAzLjc0MDQyIDIuMzc0OTlDMy42ODUxNyAyLjQyNzg2IDMuNjEwMDMgMi40NzE5MSAzLjU3MDI1IDIuNDcxOTFDMy40OTUxMiAyLjQ3MTkxIDIuNDgwNzYgMy40NjMxNyAyLjQ4MDc2IDMuNTM4MDZDMi40ODA3NiAzLjU2MjI5IDIuMzk2NzggMy42ODU2NSAyLjI5NTEyIDMuODExMjFDMi4xOTEyNiAzLjkzODk3IDIuMDYwODcgNC4xMjYyMSAyLjAwMzQxIDQuMjI5NzRDMS42NjMwOCA0Ljg0ODcyIDEuNTk2NzkgNC45ODA4OSAxLjU5Njc5IDUuMDMxNTVDMS41OTY3OSA1LjA2NDU5IDEuNTQ1OTYgNS4xODEzNCAxLjQ4NjI5IDUuMjk1ODlDMS40MjQ0MSA1LjQwODIzIDEuMzc1NzkgNS41NTE0MSAxLjM3NTc5IDUuNjE1MjlDMS4zNzU3OSA1LjY3Njk3IDEuMzI3MTcgNS44NDQzOCAxLjI2OTcyIDUuOTg1MzZDMC45MDUwNzggNi44Nzc0OSAxLjAxNzc4IDguODYgMS40OTI5MiA5Ljk0ODE4QzEuNTUwMzggMTAuMDc4MSAxLjU5Njc5IDEwLjIzMjMgMS41OTY3OSAxMC4yODk2QzEuNTk2NzkgMTAuMzQ5MSAxLjYyMzMxIDEwLjQxMyAxLjY1ODY2IDEwLjQzMjhDMS42OTE4MSAxMC40NTI2IDEuNzU1OSAxMC41NDczIDEuODAwMSAxMC42NDIxQzIuMTUxNDggMTEuMzc3OCAyLjg4Mjk3IDEyLjI1MDEgMy42NDA5NyAxMi44Mjk0QzQuMDEyMjQgMTMuMTEzNiA0LjMzMDQ3IDEzLjMyMDYgNC4zOTY3NyAxMy4zMjA2QzQuNDI5OTIgMTMuMzIwNiA0LjQ4NTE2IDEzLjM1NTkgNC41MjI3MyAxMy4zOTk5QzQuNTU4MDkgMTMuNDQ0IDQuNjU5NzUgMTMuNDk0NyA0Ljc0NTk0IDEzLjUxMjNDNC44MzIxMiAxMy41MzIxIDQuOTMxNTcgMTMuNTgyOCA0Ljk2NjkzIDEzLjYyMjRDNS4wMDIyOSAxMy42NjQzIDUuMTA4MzcgMTMuNzE3MSA1LjIwNTYgMTMuNzM3QzUuMzAyODQgMTMuNzU5IDUuNDMxMDEgMTMuODA5NyA1LjQ5MDY4IDEzLjg1MTVDNS41NTAzNSAxMy44OTM0IDUuNjg3MzcgMTMuOTI2NCA1Ljc5MzQ0IDEzLjkyODZDNS45MDE3MyAxMy45MzA4IDYuMDg5NTcgMTMuOTcwNSA2LjIxMTEyIDE0LjAxODlDNi41NDcwMyAxNC4xNTMzIDguMjkyODcgMTQuMTg4NSA4LjU4MjM3IDE0LjA2OTZDOC44NDk3OCAxMy45NTczIDkuMDYxOTMgMTMuOTU3MyA5LjMyMDQ5IDE0LjA3MThDOS42NzYyOSAxNC4yMjgyIDExLjAzOTggMTQuMjAxOCAxMS40MzMyIDE0LjAyOTlDMTIuNDIxIDEzLjYwMDQgMTIuNzIxNiAxMi42OTA3IDEyLjA0NTMgMTIuMTc1MkMxMS44MDg5IDExLjk5NDYgMTEuMjg5NSAxMS43MjM2IDExLjE3NjggMTEuNzIzNkMxMS4xMzI2IDExLjcyMzYgMTAuOTU1OCAxMS42NzUyIDEwLjc4MTMgMTEuNjEzNUMxMC42MDg5IDExLjU1MTggMTAuNDE2NiAxMS41MDMzIDEwLjM1NDcgMTEuNTAzM0MxMC4yOTI5IDExLjUwMzMgMTAuMTQ5MiAxMS40NTQ5IDEwLjAzNDMgMTEuMzkzMkM5LjkyMTU5IDExLjMzMTUgOS43Nzc5NSAxMS4yODMxIDkuNzE2MDcgMTEuMjgzMUM5LjU2MTM3IDExLjI4MzEgOS4wMzc2MiAxMS4wMzE5IDguNjg2MjQgMTAuNzg5NkM4LjQxNDQyIDEwLjYwMjQgOC4wMzg3MyAxMC4xOTkzIDcuMzQyNiA5LjM1NTYzQzcuMTc0NjUgOS4xNTA3NyA2Ljk1MTQ1IDguODc5ODMgNi44NDUzNyA4Ljc0OTg2QzYuNzM5MjkgOC42MTk5IDYuNTAwNjIgOC4zNDg5NSA2LjMxNDk5IDguMTQ2M0M1LjY4OTU4IDcuNDY1NjMgNS42ODk1OCA3LjQ2NTY0IDYuNzg3OTEgNy40NTI0MkM4LjEyNzEzIDcuNDM0OCA4LjUxMzg3IDcuMzA5MjQgOC45NTU4NSA2Ljc1NDEzQzkuMTIzODEgNi41NDI2NyA5LjEzOTI4IDYuNDg1MzkgOS4xNTY5NiA2LjA3NTY4QzkuMTg1NjggNS40MjgwNiA4Ljk0NDggNS4wNTU3OCA4LjMxNDk3IDQuNzU2Mkw3Ljk5Njc0IDQuNjA2NDFMNi42OTk1MSA0LjYzNTA1QzUuODE3NzUgNC42NTI2NyA1LjM4MDE5IDQuNjgxMzEgNS4zMzU5OSA0LjcyNTM3QzUuMjg5NTggNC43NzE2MiA1LjI3MTkgNS42MjYzMSA1LjI3MTkgNy45ODMyOUM1LjI3MTkgMTAuNzYxIDUuMjYwODUgMTEuMTgzOSA1LjE4NzkyIDExLjIzMDJDNS4xNDE1MSAxMS4yNTg4IDQuODY5NjkgMTEuMjc2NSA0LjU4MDE5IDExLjI2OTlMNC4wNTQyMyAxMS4yNTY2TDQuMDQwOTcgNy40ODk4N0M0LjAyOTkyIDQuNjE3NDMgNC4wNDMxOCAzLjcwMzI3IDQuMDk0MDEgMy42NDM4QzQuMjEzMzQgMy40OTg0MSA4LjE1NTg2IDMuNTc1NTEgOC41NzEzMiAzLjcyOTdDOC43NDM3IDMuNzk1NzkgOC45MjQ5MSAzLjg0ODY2IDguOTY5MTEgMy44NDg2NkM5LjEwMzkyIDMuODQ4NjYgOS43MTYwNyA0LjI5MzYyIDkuOTEwNTQgNC41MzU5M0MxMC40NzYzIDUuMjI3NiAxMC41NDcgNi40NzQzOCAxMC4wNjUyIDcuMjU0MTdDOS45MzcwNiA3LjQ2MzQzIDkuNDMwOTkgNy45Nzg4OCA5LjM1MzY0IDcuOTc4ODhDOS4zMTgyOCA3Ljk3ODg4IDkuMjYwODIgOC4wMTQxMyA5LjIyMzI1IDguMDU4MTlDOS4xODc4OSA4LjEwMjI0IDkuMDc5NjEgOC4xNTI5MSA4Ljk4MjM3IDguMTcyNzNDOC43MTI3NiA4LjIyNTYgOC4zMTkzOSA4LjM3MzE4IDguMjMxIDguNDUyNDhDOC4xNDAzOSA4LjUzNjE5IDguMTQwMzkgOC41MzYxOSA4LjYyODc4IDkuMTE1NTJDOC45OTc4NCA5LjU0OTQ3IDkuMDYxOTMgOS41NzE1IDkuMTIxNiA5LjI4NTE0QzkuMTkyMzEgOC45NDU5MSA5LjQ5NzI5IDguNDEwNjMgOS43NDcwMSA4LjE4NTk1QzEwLjM4MzUgNy42MTU0MiAxMi4yNjYzIDcuNjM1MjUgMTMuMDA0NCA4LjIyMTE5QzEzLjE2NTggOC4zNTExNiAxMy4xMjE2IDguNTU4MjIgMTIuODY3NCA4Ljg1MzM5QzEyLjc0MzcgOC45OTg3OCAxMi42NDg2IDguOTc4OTUgMTIuMDg3MyA4LjY4ODE4QzExLjc1MTQgOC41MTYzNyAxMC45NzU3IDguNTQwNiAxMC42OTk1IDguNzMyMjRDMTAuNDQ1MyA4LjkwNjI2IDEwLjIxNTUgOS4yNzE5MiAxMC4yMTU1IDkuNDk4ODFDMTAuMjE1NSA5LjgxNjAxIDEwLjcyODIgMTAuMzMzNyAxMS4xNDM3IDEwLjQzOTRDMTEuMzQ0OCAxMC40ODc5IDExLjg2NDEgMTAuNzI4IDExLjg5OTUgMTAuNzg3NEMxMS45MTcyIDEwLjgxMTcgMTIuMDA3OCAxMC44NTEzIDEyLjEwNSAxMC44NzMzQzEyLjQxNDQgMTAuOTM5NCAxMy4xOTIzIDExLjUyNzYgMTMuMzcxMyAxMS44Mjk0QzEzLjUwMzkgMTIuMDUxOCAxMy42NDA5IDEyLjUzMiAxMy42NDA5IDEyLjc3QzEzLjY0MDkgMTMuMDA3OSAxMy40Nzc0IDEzLjY2NjUgMTMuMzk1NiAxMy43NjEyQzEzLjM1NTggMTMuODA3NSAxMy4zMDUgMTMuODk3OCAxMy4yODUxIDEzLjk2MzlDMTMuMjY1MiAxNC4wMjk5IDEzLjEwMTcgMTQuMjIxNiAxMi45MjA1IDE0LjM4NjhDMTIuMTg5IDE1LjA2MzEgMTEuMDg0IDE1LjM2NDggOS45MTA1NCAxNS4yMTA2WiIgZmlsbD0iIzE1MjE0OSIgZmlsbC1vcGFjaXR5PSIwLjY2Ii8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMF8zODg2Ij4KPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=" alt="">
+                        <span class="card-mkk__mkk t-note">ООО МКК «РУСЗАЙМСЕРВИС»</span>
+                      </div>
+                      <div class="card-mkk__content">
+                        <div class="card-mkk__payments">
+                          <div class="card-mkk__payment" data-payment="current">
+                            <span class="card-mkk__payment-label t-caption">Текущий</span>
+                            <div class="card-mkk__tile">
+                              <img class="card-mkk__progress" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJQcm9ncmVzcyIgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzBfMzkwMykiPgo8Y2lyY2xlIGlkPSJSaW5nIiBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgc3Ryb2tlPSIjMDA3MkVCIi8+CjxwYXRoIGlkPSJTbGljZSIgZD0iTTggMEM5LjQwNDI5IC02LjEzODM2ZS0wOCAxMC43ODM4IDAuMzY5NjUgMTIgMS4wNzE4QzEzLjIxNjIgMS43NzM5NCAxNC4yMjYxIDIuNzgzODUgMTQuOTI4MiA0TDggOEw4IDBaIiBmaWxsPSIjMDA3MkVCIi8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMF8zOTAzIj4KPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=" alt="">
+                              <span class="card-mkk__payment-amount t-title-medium">10&nbsp;267,33&nbsp;₽</span>
+                              <span class="card-mkk__payment-date t-note">21&nbsp;августа</span>
+                            </div>
+                          </div>
+                          <div class="card-mkk__payment" data-payment="next">
+                            <span class="card-mkk__payment-label t-caption">Следующий</span>
+                            <div class="card-mkk__tile">
+                              <img class="card-mkk__progress" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJQcm9ncmVzcyIgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzBfMzkwMCkiPgo8Y2lyY2xlIGlkPSJSaW5nIiBjeD0iOCIgY3k9IjgiIHI9IjcuNSIgc3Ryb2tlPSIjMTUyMTQ5IiBzdHJva2Utb3BhY2l0eT0iMC42NiIvPgo8cGF0aCBpZD0iU2xpY2UiIGQ9Ik04IDBDOS40MDQyOSAtNi4xMzgzNmUtMDggMTAuNzgzOCAwLjM2OTY1IDEyIDEuMDcxOEMxMy4yMTYyIDEuNzczOTQgMTQuMjI2MSAyLjc4Mzg1IDE0LjkyODIgNEMxNS42MzAzIDUuMjE2MTUgMTYgNi41OTU3MSAxNiA4QzE2IDkuNDA0MjkgMTUuNjMwMyAxMC43ODM4IDE0LjkyODIgMTJMOCA4TDggMFoiIGZpbGw9IiMxNTIxNDkiIGZpbGwtb3BhY2l0eT0iMC42NiIvPgo8L2c+CjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzBfMzkwMCI+CjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K" alt="">
+                              <span class="card-mkk__payment-amount t-title-medium">10&nbsp;267,33&nbsp;₽</span>
+                              <span class="card-mkk__payment-date t-note">3&nbsp;сентября</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-mkk__schedule-link">
+                          <span class="link-button t-caption">График платежей</span>
+                          <img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJJY29uIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTMuMzMzMzMgOEgxMi42NjY3TTguNjY2NjcgNEwxMi42NjY3IDhMOC42NjY2NyAxMiIgc3Ryb2tlPSIjMDA3MkVCIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K" alt="">
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -1790,31 +1979,31 @@ button { font: inherit; color: inherit; }
   window.addEventListener('resize', fit);
   if (mobileMq.addEventListener) mobileMq.addEventListener('change', fit);
 
-  /* ---------- Тексты диалога (  = неразрывный пробел, как в макете) ---------- */
+  /* ---------- Тексты диалога (\u00A0 = неразрывный пробел, как в макете) ---------- */
   var T = {
     start: 'Не могу заплатить сейчас',
-    tech: 'Просрочка 2 дня. Первые 3 дня она считается технической. Если оплатите в этот срок, это не повлияет на будущие выдачи',
-    ask: 'Расскажите, что мешает оплатить. Подберём решение под вашу ситуацию 🤝',
-    noMoney: 'Не обязательно возвращать всё сразу 🙂 Продлите заём, оплатите часть или выберите удобный день оплаты',
-    payDate: 'Выберите день, когда вам удобно оплатить 📅 Срок по договору не меняется. Проценты начисляются до дня оплаты',
-    partial: 'Внесите столько, сколько получается сейчас 👍 Долг станет меньше. Заём останется просроченным, пока долг не погашен полностью',
-    method: 'Выберите способ оплаты 👇',
-    failed: 'Так бывает из-за лимита банка или нехватки средств на карте. Оплатите другим способом 💳',
-    other: 'Расскажите о своей проблеме ✍️',
-    sent1: 'Спасибо, что поделились 🙏 Мы передали ваше сообщение в поддержку',
-    sent2: 'Заём пока остаётся к оплате. Расскажите, что мешает оплатить, и мы подберём решение 🤝',
-    sample: 'Мне подключили дополнительные услуги, с суммой не согласен',
+    tech: 'Просрочка 2\u00A0дня. Первые 3\u00A0дня она считается технической. Если оплатите в\u00A0этот срок, это не повлияет на\u00A0будущие выдачи',
+    ask: 'Расскажите, что мешает оплатить. Подберём решение под\u00A0вашу ситуацию\u00A0🤝',
+    noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂 Продлите заём, оплатите часть или выберите удобный день оплаты',
+    payDate: 'Выберите день, когда вам удобно оплатить\u00A0📅 Срок по\u00A0договору не меняется. Проценты начисляются до\u00A0дня оплаты',
+    partial: 'Внесите столько, сколько получается сейчас\u00A0👍 Долг станет меньше. Заём останется просроченным, пока долг не погашен полностью',
+    method: 'Выберите способ оплаты\u00A0👇',
+    failed: 'Так бывает из-за\u00A0лимита банка или нехватки средств на\u00A0карте. Оплатите другим способом\u00A0💳',
+    other: 'Расскажите о\u00A0своей проблеме\u00A0✍️',
+    sent1: 'Спасибо, что поделились\u00A0🙏 Мы передали ваше сообщение в\u00A0поддержку',
+    sent2: 'Заём пока остаётся к\u00A0оплате. Расскажите, что мешает оплатить, и мы подберём решение\u00A0🤝',
+    sample: 'Мне подключили дополнительные услуги, с\u00A0суммой не согласен',
     placeholder: 'Напишите сообщение',
     emptyError: 'Напишите сообщение'
   };
   function payDateDone(ctx) {
-    return ['Запомнили день оплаты: ' + ctx.date + '.2026 ✅ Оплатить можно и раньше, в личном кабинете'];
+    return ['Запомнили день оплаты:\u00A0' + ctx.date + '.2026\u00A0✅ Оплатить можно и раньше, в\u00A0личном кабинете'];
   }
 
-  /* Просрочка: сегодня в макете 25.09.2026, дата возврата = сегодня минус просрочка */
+  /* Просрочка: плашка Label time и срок на карточке займа; tech = реплика про техническую просрочку */
   var DPD = {
-    early: { overdue: '2 дня', due: '23.09.26', tech: true },
-    late: { overdue: '5 дней', due: '20.09.26', tech: false }
+    early: { label: 'Заём просрочен на\u00A02\u00A0дня 15\u00A0часов', deadline: 'Верните до\u00A023\u00A0сентября, 23:59\u00A0МСК', tech: true },
+    late: { label: 'Заём просрочен на\u00A05\u00A0дней 15\u00A0часов', deadline: 'Верните до\u00A020\u00A0сентября, 23:59\u00A0МСК', tech: false }
   };
 
   /* ---------- Шаги диалога ----------
@@ -1825,15 +2014,15 @@ button { font: inherit; color: inherit; }
     { label: 'Сумма больше, чем ожидалось', go: 'partial' },
     { label: 'Хочу оплатить другим способом', go: 'otherMethod' },
     { label: 'Платёж не прошёл', go: 'payFailed' },
-    { label: 'Я уже оплатил', exit: 'Загрузка чека об оплате', scenario: '6' },
-    { label: 'У меня другая проблема', go: 'otherProblem' }
+    { label: 'Я уже оплатил', exit: 'Загрузка чека об\u00A0оплате', scenario: '6' },
+    { label: 'У\u00A0меня другая проблема', go: 'otherProblem' }
   ];
   var STEPS = {
     reasons: { scenario: '1', bot: [T.ask], chips: REASONS },
     noMoney: {
       scenario: '2', bot: [T.noMoney],
       chips: [
-        { label: 'Продлить с оплатой %', exit: 'Продление займа' },
+        { label: 'Продлить с\u00A0оплатой\u00A0%', exit: 'Продление займа' },
         { label: 'Оплатить частично', go: 'partial' },
         { label: 'Выбрать день оплаты', go: 'payDate' },
         OTHER_REASON
@@ -1842,7 +2031,7 @@ button { font: inherit; color: inherit; }
     payDate: {
       scenario: '2a', bot: [T.payDate],
       chips: [
-        { label: 'Завтра, 26.09', go: 'payDateDone', date: '26.09' },
+        { label: 'Завтра,\u00A026.09', go: 'payDateDone', date: '26.09' },
         { label: '27.09', go: 'payDateDone', date: '27.09' },
         { label: '28.09', go: 'payDateDone', date: '28.09' },
         { label: '29.09', go: 'payDateDone', date: '29.09' },
@@ -1853,7 +2042,7 @@ button { font: inherit; color: inherit; }
     payDateDone: {
       scenario: '2b', bot: payDateDone,
       chips: [{ label: 'Изменить день', go: 'payDate' }],
-      button: { label: 'В личный кабинет', close: true }
+      button: { label: 'В\u00A0личный кабинет', close: true }
     },
     partial: {
       scenario: '3', bot: [T.partial],
@@ -1865,14 +2054,14 @@ button { font: inherit; color: inherit; }
       chips: [
         { label: 'СБП', exit: 'Оплата' },
         { label: 'Банковская карта', exit: 'Оплата' },
-        { label: 'По реквизитам', exit: 'Способы оплаты и реквизиты' },
+        { label: 'По\u00A0реквизитам', exit: 'Способы оплаты и реквизиты' },
         OTHER_REASON
       ]
     },
     payFailed: {
       scenario: '5', bot: [T.failed],
       chips: [
-        { label: 'Оплатить через СБП', exit: 'Оплата' },
+        { label: 'Оплатить через\u00A0СБП', exit: 'Оплата' },
         { label: 'Оплатить другой картой', exit: 'Карты и счета: добавить карту' },
         OTHER_REASON
       ]
@@ -2291,8 +2480,8 @@ button { font: inherit; color: inherit; }
   function setDpd(id) {
     state.dpd = id;
     markChips($('#dpdChips'), 'data-dpd', id);
-    $('#dueDate').textContent = DPD[id].due;
-    $('#overdue').textContent = DPD[id].overdue;
+    $('#labelTime').textContent = DPD[id].label;
+    $('#deadline').textContent = DPD[id].deadline;
     if (state.scenario !== 'entry') applyScenario(state.scenario);
   }
 
