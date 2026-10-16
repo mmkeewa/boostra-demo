@@ -1354,19 +1354,6 @@ body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial
 button { font: inherit; color: inherit; }
 [hidden] { display: none !important; }
 
-/* ---------- Гейт (как в lk-web/, цвета через токены ДС) ---------- */
-.gate { position: fixed; inset: 0; z-index: 100; background: #0d1430; display: flex; align-items: center; justify-content: center; padding: 24px; }
-.gate-card { width: 320px; max-width: 100%; background: var(--bg-grouped-secondary-w); border-radius: 24px; padding: 32px 24px; display: flex; flex-direction: column; gap: 12px; text-align: center; }
-.gate-logo { font-size: 26px; font-weight: 800; letter-spacing: -.5px; color: var(--text-bottom-default); }
-.gate-logo span { color: var(--brand-primary); }
-.gate-card h1 { margin: 0; font-size: 20px; line-height: 28px; font-weight: 600; color: var(--text-bottom-default); }
-.gate-card p { margin: 0; font-size: 14px; line-height: 20px; color: var(--text-bottom-secondary); }
-.gate-card input { font: 600 24px/32px "Inter", sans-serif; text-align: center; letter-spacing: 8px;
-  border: 0; border-bottom: 2px solid var(--neutral-bottom-alpha-20); border-radius: 0; outline: 0; padding: 4px 0; color: var(--text-bottom-default); background: none; }
-.gate-card input:focus { border-color: var(--brand-primary); }
-.gate-err { color: var(--text-error-default) !important; }
-.gate-card .btn-primary { width: 100%; margin-top: 8px; }
-
 /* ---------- Страница: сетка дашборда ----------
    Фон Backgrounds (Grouped)/Primary. Отступы от краёв окна и между плитками одинаковые: --dash-gap.
    Левая колонка: плитка «Флоу», около 44% ширины; правая не уже своего содержимого (теги и график в один ряд) */
@@ -1730,6 +1717,9 @@ button { font: inherit; color: inherit; }
 .chat__replies.is-pending { pointer-events: none; opacity: 0; transition: none; }
 .chat__replies.is-locked { pointer-events: none; opacity: 0.5; }
 .chat__chips { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+/* «Другая причина»: Button / Secondary, Size=Medium, иконка arrow-left (как в макете с 16.10.2026) */
+.btn[data-size-button="medium"] { border-radius: var(--circle-button-radius-m-s); }
+.btn > svg { display: block; width: var(--size-button-icon-wh); height: var(--size-button-icon-wh); flex-shrink: 0; }
 .chat__input-row { display: flex; align-items: flex-start; gap: var(--space-sm); margin: 0; }
 .chat__replies > .btn { width: 100%; }
 .chat-bubble.is-new { animation: bubble-in 0.24s ease both; }
@@ -1789,39 +1779,31 @@ button { font: inherit; color: inherit; }
 .kb__key--space { font-size: 16px; }
 .kb__key svg { display: block; }
 
-/* ---------- Заглушка выхода в существующий флоу: не интерфейс продукта ---------- */
+/* ---------- Конец сценария: выход в существующий флоу ----------
+   Как её экран «Переход на следующий шаг» (Выдача, 861:60928): шапка сайта и жирный текст 22 / 32 по центру с градиентом синего */
 .flow-stub {
   position: absolute;
   inset: 0;
   z-index: 25;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-2xl);
-}
-.flow-stub__card {
-  display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: var(--space-lg);
-  width: 100%;
-  max-width: 327px;
-  padding: var(--space-2xl);
-  border: var(--border-width-1) dashed var(--neutral-bottom-alpha-40);
-  border-radius: var(--radius-4xl);
   background: var(--bg-grouped-primary);
-  color: var(--text-bottom-default);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   animation: fade-in 0.2s ease both;
 }
-.flow-stub__tag {
-  align-self: flex-start;
-  padding: var(--space-xxs) var(--space-sm);
-  border-radius: var(--radius-sm);
-  background: var(--neutral-bottom-alpha-10);
-  color: var(--text-bottom-secondary);
+.flow-stub[hidden] { display: none; }
+.flow-stub__header { flex: none; }
+.flow-stub__body { flex: 1 1 auto; display: flex; align-items: center; justify-content: center; padding: 0 var(--space-lg) var(--space-6xl, 64px); }
+.flow-end {
+  margin: 0;
+  font: 700 22px/32px "Inter", sans-serif; /* размер и межстрочный из макета, текст-стиля ДС с градиентом нет */
+  text-align: center;
+  background: linear-gradient(90deg, var(--brand-primary, #005bff) 0%, #5aa7ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
-.flow-stub__text { margin: 0; }
-.flow-stub__text strong { font-weight: var(--typography-primitives-semi-bold); }
 
 /* ---------- Правая колонка: плитка «Сценарий» и четыре малые плитки ----------
    На окне от 1280 всё помещается по высоте (при высоте до 880 включается плотный режим, см. ниже).
@@ -1850,15 +1832,16 @@ button { font: inherit; color: inherit; }
 }
 .scenario-head {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  grid-template-areas: "label dpdlabel dpd" "title title title";
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "label switches" "title title";
   align-items: center;
   column-gap: var(--space-sm);
   row-gap: var(--space-xs);
 }
 .scenario-head__label { grid-area: label; }
-.scenario-head__dpd-label { grid-area: dpdlabel; }
-.scenario-head .segmented-control { grid-area: dpd; }
+/* переключатели «Просрочка» и «Клиент»: подпись слева от Segmented Control */
+.scenario-switches { grid-area: switches; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-sm) var(--space-lg); }
+.scenario-switch { display: flex; align-items: center; gap: var(--space-sm); }
 /* название сценария: H1/H1 Strong */
 .scenario-head__title {
   grid-area: title;
@@ -1882,7 +1865,7 @@ button { font: inherit; color: inherit; }
 }
 .scenario-tags {
   display: grid;
-  grid-template-rows: repeat(6, auto);
+  grid-template-rows: repeat(7, auto);
   grid-auto-flow: column;
   grid-auto-columns: max-content;
   justify-items: start;
@@ -2004,7 +1987,7 @@ button { font: inherit; color: inherit; }
   .tile--scenario { gap: var(--space-md); }
   .scenario-head {
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "label dpdlabel" "title dpd";
+    grid-template-areas: "label switches" "title switches";
     row-gap: var(--space-xxs);
   }
   .scenario-head__title {
@@ -2047,11 +2030,11 @@ button { font: inherit; color: inherit; }
 @media (max-width: 959px), (pointer: coarse) {
   .scenario-head {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "label" "title" "dpdlabel" "dpd";
+    grid-template-areas: "label" "title" "switches";
     justify-items: start;
   }
   .scenario-head__title { white-space: normal; }
-  .scenario-head__dpd-label { margin-top: var(--space-sm); }
+  .scenario-switches { justify-content: flex-start; margin-top: var(--space-sm); }
   .scenario-body { grid-template-columns: minmax(0, 1fr); }
   .scenario-tags { grid-template-rows: none; grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); }
   .tile-grid { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; }
@@ -2161,23 +2144,149 @@ button { font: inherit; color: inherit; }
 }
 
 </style>
+<style>
+/* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
+   Файл только перекрашивает оболочку и добавляет шапку. Экран телефона (.screen.ds) объявляет свои светлые токены заново
+   и не меняется. На телефоне и тач-устройствах (прототип на весь экран) оболочки нет: всё остаётся как в styles.css. */
+.stand-top { display: none; }
+
+@media (min-width: 768px) and (pointer: fine) {
+  .stand[data-shell="glass"] {
+    /* токены ДС, которыми пользуется оболочка: плитки, чипы, сегменты, бейджи, столбики */
+    --bg-grouped-primary: transparent;
+    --bg-grouped-secondary-w: rgba(255, 255, 255, .06);
+    --bg-grouped-tertiary: rgba(255, 255, 255, .048);
+    --text-bottom-default: #fff;
+    --text-bottom-secondary: rgba(255, 255, 255, .612);
+    --text-bottom-tertiary: rgba(255, 255, 255, .414);
+    --brand-primary-alpha-5: rgba(255, 255, 255, .048);
+    --brand-primary-alpha-10: rgba(255, 255, 255, .084);
+    --brand-secondary: #fff;
+    --brand-secondary-alpha-5: rgba(255, 255, 255, .117);
+    --brand-secondary-ink: #ededed;
+    --brand-secondary-alpha-70: rgba(255, 255, 255, .7);
+    --brand-attention-alpha-5: rgba(255, 129, 26, .2);
+    --brand-attention-ink: #ffc793;
+    --neutral-bottom-alpha-40: rgba(255, 255, 255, .27);
+    --neutral-bottom-20: rgba(255, 255, 255, .198);
+    --type-chips-not-active-chip-fill-default: rgba(255, 255, 255, .048);
+    --type-chips-not-active-chip-fill-hover-and-press: rgba(255, 255, 255, .108);
+    --type-chips-not-active-chip-text-and-icon-default: #e6e6e6;
+    --type-chips-active-chip-fill-default: rgba(255, 255, 255, .24);
+    --type-chips-active-chip-text-and-icon-default: #fff;
+
+    grid-template-rows: auto minmax(0, 1fr);
+    isolation: isolate;
+    background: #000;
+  }
+  /* свечения и точечная сетка */
+  .stand[data-shell="glass"]::before {
+    content: ""; position: absolute; inset: -18%; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(30% 28% at 50% -6%, rgba(29, 60, 255, .26), transparent 70%),
+      radial-gradient(26% 30% at 100% 104%, rgba(29, 60, 255, .12), transparent 70%);
+    filter: blur(48px);
+    animation: glass-drift 28s ease-in-out infinite alternate;
+  }
+  .stand[data-shell="glass"]::after {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background-image: radial-gradient(rgba(255, 255, 255, .102) 1px, transparent 1px);
+    background-size: 28px 28px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 38%, #000 28%, transparent 82%);
+    mask-image: radial-gradient(ellipse at 50% 38%, #000 28%, transparent 82%);
+  }
+
+  /* ---------- Шапка: путь, название сценария, теги ---------- */
+  .stand[data-shell="glass"] .stand-top {
+    grid-column: 1 / -1;
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 28px 40px 0;   /* крошки на 28 / 40 от края окна, как на карте стенда */
+    animation: glass-rise .7s cubic-bezier(.2, .8, .2, 1) backwards;
+  }
+  .stand-crumbs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 13px; line-height: 20px; color: rgba(255, 255, 255, .396); }
+  .stand-crumbs b { font-weight: 400; opacity: .6; }
+  .stand-crumbs a { color: inherit; text-decoration: none; transition: color .2s; }
+  .stand-crumbs a:hover { color: #fff; }
+  .stand-top__row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+  .stand-top__title { margin: 0; font-size: 28px; line-height: 34px; font-weight: 700; letter-spacing: -.02em; color: #fff; }
+  .stand-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .stand-tag {
+    display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 8px; white-space: nowrap;
+    font-size: 12px; line-height: 22px; font-weight: 500; color: #fff;
+    background: rgba(255, 255, 255, .15); border: 1px solid transparent;
+  }
+  .stand-tag--status { color: #b9a4ff; gap: 7px; }
+  .stand-tag--status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #b9a4ff; box-shadow: 0 0 10px #b9a4ff; }
+  .stand-link {
+    margin-left: auto; display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px;
+    font-size: 13px; line-height: 18px; font-weight: 600; color: #fff; text-decoration: none;
+    background: rgba(255, 255, 255, .24); border-radius: 16px;
+    transition: background .2s, color .2s, transform .25s cubic-bezier(.2, .8, .2, 1);
+  }
+  .stand-link:hover { background: rgba(255, 255, 255, .32); color: #fff; transform: translateY(-2px); }
+
+  /* ---------- Плитки ---------- */
+  .stand[data-shell="glass"] .tile {
+    border: 1px solid rgba(255, 255, 255, .15);
+    background: rgba(255, 255, 255, .055);
+    -webkit-backdrop-filter: blur(18px) saturate(150%); backdrop-filter: blur(18px) saturate(150%);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .5);
+    animation: glass-rise .7s cubic-bezier(.2, .8, .2, 1) backwards;
+  }
+  .stand[data-shell="glass"] .tile--flow {
+    background: radial-gradient(70% 60% at 50% 42%, rgba(29, 60, 255, .3), transparent 72%), rgba(255, 255, 255, .055);
+    animation-delay: .06s;
+  }
+  .stand[data-shell="glass"] .tile--scenario { animation-delay: .14s; }
+  .stand[data-shell="glass"] .tile-grid .tile:nth-child(1) { animation-delay: .22s; }
+  .stand[data-shell="glass"] .tile-grid .tile:nth-child(2) { animation-delay: .28s; }
+  .stand[data-shell="glass"] .tile-grid .tile:nth-child(3) { animation-delay: .34s; }
+  .stand[data-shell="glass"] .tile-grid .tile:nth-child(4) { animation-delay: .4s; }
+
+  /* рамка телефона: в styles.css она залита токеном текста, на тёмной оболочке он светлый */
+  .stand[data-shell="glass"] .device {
+    background: #111;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 255, 255, .15), 0 0 70px rgba(29, 60, 255, .35);
+  }
+
+  /* выбранный сегмент: в ДС белая плашка, на стекле серая */
+  .stand[data-shell="glass"] .panel .segment[aria-pressed="true"] {
+    background: rgba(255, 255, 255, .24); color: #fff;
+  }
+  .stand[data-shell="glass"] .panel .chip-active { box-shadow: none; }
+  .stand[data-shell="glass"] .panel .progress-linear__indicator:not([data-tone]) { box-shadow: 0 0 10px rgba(255, 255, 255, .36); }
+}
+
+@keyframes glass-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(3%, -3%, 0) scale(1.08); }
+}
+@keyframes glass-rise { from { opacity: 0; transform: translateY(16px) scale(.97); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .stand[data-shell="glass"]::before, .stand[data-shell="glass"] .tile, .stand[data-shell="glass"] .stand-top { animation: none !important; }
+}
+
+</style>
 </head>
 <body>
 
-<!-- ===== Гейт с паролем ===== -->
-<div class="gate ds" id="gate" data-color-scheme="light" data-typography="main" data-responsive="desktop">
-  <div class="gate-card">
-    <div class="gate-logo">b<span>oo</span>stra</div>
-    <h1>Не могу заплатить сейчас</h1>
-    <p>Прототип по&nbsp;задаче&nbsp;92815. Введите код доступа</p>
-    <input id="gateInput" inputmode="numeric" autocomplete="one-time-code" placeholder="•••••" aria-label="Код доступа">
-    <p class="gate-err" id="gateErr" hidden>Неверный код. Попробуйте ещё&nbsp;раз</p>
-    <button class="btn btn-primary" id="gateBtn" type="button" data-size-button="xlarge">Войти</button>
-  </div>
-</div>
+<div id="app">
+  <div class="stand ds" id="stand" data-shell="glass" data-color-scheme="light" data-typography="main" data-responsive="desktop">
 
-<div id="app" hidden>
-  <div class="stand ds" id="stand" data-color-scheme="light" data-typography="main" data-responsive="desktop">
+    <!-- ===== Шапка стенда: путь, сценарий, теги. Видна только на десктопе, стиль в glass.css ===== -->
+    <header class="stand-top">
+      <div class="stand-top__row">
+        <h1 class="stand-top__title">Не&nbsp;могу заплатить сейчас</h1>
+        <div class="stand-tags">
+          <span class="stand-tag">Концепт</span>
+          <span class="stand-tag">PDL</span>
+          <span class="stand-tag">IL</span>
+          <span class="stand-tag">ID&nbsp;92815</span>
+          <span class="stand-tag">12&nbsp;экранов</span>
+        </div>
+      </div>
+    </header>
 
     <!-- ===== Плитка «Флоу»: телефон в рамке (формат стенда Стаса), фон Gradient/Midnight/Midnight Low ===== -->
     <section class="tile tile--flow" aria-label="Флоу">
@@ -2377,12 +2486,21 @@ button { font: inherit; color: inherit; }
               <!-- Экранная клавиатура: только на десктопе, на тач-устройстве открывается системная -->
               <div class="kb" id="kb" aria-hidden="true"></div>
 
-              <!-- Заглушка выхода в существующий флоу -->
-              <div class="flow-stub" id="stub" hidden>
-                <div class="flow-stub__card">
-                  <span class="flow-stub__tag t-caps-small-strong">Прототип</span>
-                  <p class="flow-stub__text t-body">Дальше существующий флоу: <strong id="stubName"></strong></p>
-                  <button class="btn btn-secondary" id="stubBack" type="button" data-size-button="xlarge">Вернуться в&nbsp;диалог</button>
+              <!-- Конец сценария: выход в существующий флоу. Шапка и текст по центру, как её «Переход на следующий шаг» (Выдача, 861:60928).
+                   Нажатие: в стенде открывает этот флоу на карте, отдельно возвращает в диалог -->
+              <div class="flow-stub" id="stub" role="button" tabindex="0" aria-label="Дальше по флоу" hidden>
+                <header class="lk-header site-header flow-stub__header" aria-hidden="true">
+                  <div class="site-header__bar">
+                    <div class="site-header__content">
+                      <img class="site-header__logo" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzgiIGhlaWdodD0iMTciIHZpZXdCb3g9IjAgMCA3OCAxNyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjYzNjk3IDBMMC4yOTA1OTIgMTEuMzg5N0MwLjEyMTI2NiAxMi4xNDQzIDAuMDAwMzE4MDA2IDEyLjg3NTMgMC4wMDAzMTgwMDYgMTMuNjUzNEMtMC4wMjM4NzE1IDE1LjY4MTQgMS4zMzA3NCAxNy4wMDIgNC40NzUzOCAxNy4wMDJDMTAuMDM5IDE3LjAwMiAxMi41MzA1IDEyLjczMzggMTIuNTMwNSA4Ljg5MDA3QzEyLjUzMDUgNi44MTQ5MyAxMS4zNjk0IDQuODgxMjggOC45NTA0NCA0Ljg4MTI4QzcuNTQ3NDUgNC44ODEyOCA2LjI4OTU5IDUuNDQ3MjMgNS40OTEzNCA2LjIyNTQxSDUuNDQyOTZMNi43NzMzOCAwSDIuNjM2OTdaTTI1Ljk5MzEgNy45MDM5NUMyNi4wMTg0IDcuODgzNCAyNi4wNDM5IDcuODYyNzggMjYuMDY5NiA3Ljg0MjA4QzMwLjEyNzUgNC41ODI3OSAzMS44ODM5IDQuNTgyNzkgMzMuNDE4NCA0LjU4Mjc5QzM2LjYxMTUgNC41ODI3OSAzOC42MTkyIDYuNjEwNzYgMzguNjE5MiA5LjM0NjE3QzM4LjYxOTIgMTMuODUwMiAzNS40NzQ1IDE2LjcwMzUgMzEuMzEzOSAxNi43MDM1QzI4LjM5OTUgMTYuNzAzNSAyNy4yOTE2IDE1LjE1NSAyNS41NDMxIDEzLjQ1MDdDMjUuNTIwMSAxMy40MjgzIDI1LjQ5NTkgMTMuNDA1NSAyNS40NzA5IDEzLjM4MjNDMjUuNDQ1NiAxMy40MDI5IDI1LjQyMDIgMTMuNDIzNSAyNS4zOTQ0IDEzLjQ0NDJDMjEuMzM2NSAxNi43MDM1IDE5LjU0ODkgMTYuNzAzNSAxOC4wNDU2IDE2LjcwMzVDMTQuODUyNiAxNi43MDM1IDEyLjg0NDggMTQuNjc1NSAxMi44NDQ4IDExLjk0MDFDMTIuODQ0OCA3LjQzNjEgMTUuOTg5NSA0LjU4Mjc5IDIwLjE1MDEgNC41ODI3OUMyMi45NzkzIDQuNTgyNzkgMjQuMTcyNCA2LjEzMTI4IDI1LjkyMDkgNy44MzU1MkMyNS45NDQgNy44NTc5NiAyNS45NjgxIDcuODgwNzYgMjUuOTkzMSA3LjkwMzk1Wk00LjU3MjE0IDEwLjg0NzNDNC45MTA3OSA5LjEyNTg4IDUuOTI2NzUgOC4xMzU0NyA2Ljk0MjcxIDguMTM1NDdDNy43ODkzNCA4LjEzNTQ3IDguMjAwNTYgOC43OTU3NCA4LjIwMDU2IDkuNzg2MTVDOC4yMDA1NiAxMS41NzgzIDYuOTQyNzEgMTMuOTgzNiA1LjM3MDM5IDEzLjk4MzZDNC43NDE0NiAxMy45ODM2IDQuMzA2MDUgMTMuNjA2MyA0LjI4MTg2IDEyLjg5ODlDNC4yMzM0OCAxMi40NTA4IDQuMzMwMjQgMTIuMDQ5OSA0LjQwMjgxIDExLjY3MjZMNC41NzIxNCAxMC44NDczWk0xOS4xNTI1IDEyLjc2NkMxNy44MzIzIDEyLjc2NiAxNy4yODMxIDExLjY4NzIgMTcuMjgzMSAxMC43MjA0QzE3LjI4MzEgOS41ODUxIDE4LjIzNzEgOC4yODg3MyAxOS45MzA0IDguMjg4NzNDMjEuNTQ1MSA4LjI4ODczIDIzLjIyNDQgMTAuNzc4OSAyMy4yMjQ0IDEwLjcyMDRDMjMuMjI0NCAxMC42NDYxIDIwLjkxODMgMTIuNzY2IDE5LjE1MjUgMTIuNzY2Wk0zMi4zNzggOC4yODg3M0MzMy42OTgzIDguMjg4NzMgMzQuMjQ3NCA5LjM2NzU2IDM0LjI0NzQgMTAuMzM0NEMzNC4yNDc0IDExLjQ2OTYgMzMuMjkzNCAxMi43NjYgMzEuNjAwMiAxMi43NjZDMjkuOTg1NCAxMi43NjYgMjguMzA2MiAxMC4yNzU4IDI4LjMwNjIgMTAuMzM0NEMyOC4zMDYyIDEwLjQwODYgMzAuNjEyMiA4LjI4ODczIDMyLjM3OCA4LjI4ODczWk0zNy44NTk2IDE2LjAzNTFDMzguNjMzNyAxNi41Nzc1IDQwLjE4MTggMTYuOTU0OCA0MS43NzgzIDE3LjAwMkM0NS4xODkgMTcuMDI1NSA0Ny42MzIyIDE1LjUzOTkgNDcuNjMyMiAxMi43ODA5QzQ3LjYzMjIgMTEuMDM1OSA0Ni4wNTk4IDEwLjE2MzQgNDQuNzc3OCA5LjU3MzkyQzQzLjg1ODYgOS4xNzMwNCA0My40MjMyIDguODE5MzMgNDMuNDIzMiA4LjQ4OTE5QzQzLjQyMzIgOC4wMTc1NyA0My45MzEyIDcuNzgxNzYgNDQuNzA1MiA3Ljc4MTc2QzQ1LjgxNzkgNy43ODE3NiA0Ni42ODg4IDguMDY0NzMgNDcuMjIwOSA4LjI3Njk2TDQ4LjE2NDMgNS40OTQzOUM0Ny41MzU0IDUuMTY0MjYgNDYuMzk4NSA0Ljg4MTI4IDQ0Ljg3NDUgNC44ODEyOEM0MS41ODQ4IDQuODgxMjggMzkuMjYyNiA2LjQ4NDggMzkuMjYyNiA5LjA1NTE0QzM5LjI2MjYgMTAuNTg3OSA0MC41Njg4IDExLjU1NDcgNDEuOTIzNCAxMi4xOTE0QzQyLjk2MzYgMTIuNjM5NSA0My4zMjY0IDEyLjk2OTYgNDMuMzI2NCAxMy4zOTQxQzQzLjMyNjQgMTMuNzcxNCA0Mi45ODc4IDE0LjA3NzkgNDIuMTY1MyAxNC4wNzc5QzQwLjkzMTcgMTQuMTAxNSAzOS41NTI5IDEzLjU4MjcgMzguODI3MiAxMy4yNTI2TDM3Ljg1OTYgMTYuMDM1MVpNNTAuOTAzOSAyLjk0NzY0TDUwLjQ5MjcgNS4xNDA2OEg0OS4wNDEzTDQ4LjQzNjYgOC4xODI2NEg0OS44ODhMNDkuMDY1NSAxMi4yMzg2QzQ4Ljg5NjIgMTMuMTU4MiA0OC44MjM2IDEzLjc3MTQgNDguODIzNiAxNC4zODQ1QzQ4LjgyMzYgMTUuOTQwOCA0OS45MzY0IDE3LjAwMiA1Mi4xODYgMTcuMDAyQzUyLjk4NDIgMTcuMDAyIDUzLjk1MTggMTYuOTA3NiA1NC40NTk4IDE2LjcxOUw1NC45OTIgMTMuNTU5MUM1NC42NTMzIDEzLjYwNjMgNTQuMzE0NyAxMy42MDYzIDU0LjAyNDQgMTMuNjA2M0M1My4yNzQ1IDEzLjYwNjMgNTMuMDU2OCAxMy4yMDU0IDUzLjA1NjggMTIuNjg2NkM1My4wNTY4IDEyLjM1NjUgNTMuMTUzNiAxMS43NjcgNTMuMjI2MSAxMS4zODk3TDUzLjkwMzQgOC4xODI2NEg1Ni4zMjI0TDU2LjkyNzEgNS4xNDA2OEg1NC41MDgyTDU1LjEzNzEgMS44MzkzMkw1MC45MDM5IDIuOTQ3NjRaTTU5Ljc4NzcgMTYuNzQyNkw2MC41Mzc2IDEyLjc4MDlDNjAuOTQ4OCAxMC42NTg3IDYxLjc3MTIgOC43OTU3NCA2NC4yMTQ0IDguNzk1NzRINjQuNzQ2NUw2NS41NjkgNC45MDQ4N0M2NS4zMjcxIDQuODgxMjggNjUuMTA5NCA0Ljg4MTI4IDY0Ljg2NzUgNC44ODEyOEM2My4yMjI2IDQuODgxMjggNjEuODkyMiA1Ljk0MjQzIDYxLjAyMTQgNy40NTE2Mkg2MC45NDg4QzYxLjAyMTQgNi42NzM0NSA2MS4wNjk3IDUuOTE4ODUgNjEuMTE4MSA1LjE0MDY4SDU3LjU2MjNDNTcuNDQxMyA2LjEwNzUgNTcuMjk2MiA4LjIyOTggNTYuOTU3NSAxMC4wNjkxTDU1LjY1MTMgMTYuNzQyNkg1OS43ODc3Wk03NS41NjU1IDE2Ljc0MjZDNzUuNTE3MSAxNS4yMzM0IDc1Ljc4MzIgMTIuODUxNyA3Ni4wMjUxIDExLjYwMTlMNzcuMjgyOSA1LjUxNzk3Qzc2LjIxODYgNS4xODc4NCA3NC41OTc5IDQuODgxMjggNzMuMDQ5NyA0Ljg4MTI4QzY2LjkwNTYgNC44ODEyOCA2NC40MTQxIDkuMDMxNTYgNjQuNDE0MSAxMi44NzUzQzY0LjQxNDEgMTUuMzk4NCA2NS45MzggMTcuMDAyIDY4LjA5MDkgMTcuMDAyQzY5LjM0ODcgMTcuMDAyIDcwLjgyNDMgMTYuNDU5NiA3MS44NDAzIDE0LjczODJINzEuODg4NkM3MS44NjQ1IDE1LjM5ODQgNzEuODE2MSAxNi4wODIzIDcxLjc5MTkgMTYuNzQyNkg3NS41NjU1Wk03Mi4xNzg5IDEwLjMwNDlDNzEuNjQ2OCAxMy4wNDAzIDcwLjY1NSAxMy43NzE0IDY5LjkwNTEgMTMuNzcxNEM2OS4xNzk0IDEzLjc3MTQgNjguNzE5OCAxMy4yMDU0IDY4LjcxOTggMTIuMTIwN0M2OC43MTk4IDEwLjQyMjggNjkuOTc3NyA3Ljg5OTY2IDcxLjkxMjggNy44OTk2NkM3Mi4xMDY0IDcuODk5NjYgNzIuMzk2NiA3LjkyMzI0IDcyLjY2MjcgNy45NzA0MUw3Mi4xNzg5IDEwLjMwNDlaIiBmaWxsPSIjMTUyMTQ5Ii8+Cjwvc3ZnPgo=" width="77" height="17" alt="">
+                      <img class="site-header__slash" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSIyMyIgdmlld0JveD0iMCAwIDkgMjMiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik04LjE1MzA4IDBMMi4wMTAzNSAyMi44MjEySDBMNi4xNDI3MyAwSDguMTUzMDhaIiBmaWxsPSIjMTUyMTQ5Ii8+Cjwvc3ZnPgo=" width="8" height="23" alt="">
+                      <span class="site-header__catalog">Каталог финансовых<br>продуктов</span>
+                    </div>
+                    <span class="site-header__login t-note">Выйти</span>
+                  </div>
+                </header>
+                <div class="flow-stub__body">
+                  <p class="flow-end"><span id="stubName"></span><br><span>(существующий флоу)</span></p>
                 </div>
               </div>
 
@@ -2413,16 +2531,27 @@ button { font: inherit; color: inherit; }
       <section class="tile tile--scenario" aria-labelledby="scenarioLabel">
         <header class="scenario-head">
           <p class="tile__label scenario-head__label t-caption" id="scenarioLabel">Сценарий</p>
-          <p class="tile__label scenario-head__dpd-label t-caption" id="dpdLabel">Просрочка</p>
-          <!-- Segmented Control / Basic, Size=40 -->
-          <div class="segmented-control" id="dpdSwitch" role="group" aria-labelledby="dpdLabel" data-size-segmented-control="40">
-            <button class="segment" type="button" data-dpd="early" aria-pressed="true">До&nbsp;3&nbsp;дней</button>
-            <button class="segment" type="button" data-dpd="late" aria-pressed="false">Больше 3&nbsp;дней</button>
+          <!-- Segmented Control / Basic, Size=40: просрочка и тип клиента (развилка «Хороший клиент?» в сценарии 3) -->
+          <div class="scenario-switches">
+            <div class="scenario-switch">
+              <p class="tile__label t-caption" id="dpdLabel">Просрочка</p>
+              <div class="segmented-control" id="dpdSwitch" role="group" aria-labelledby="dpdLabel" data-size-segmented-control="40">
+                <button class="segment" type="button" data-dpd="early" aria-pressed="true">До&nbsp;3&nbsp;дней</button>
+                <button class="segment" type="button" data-dpd="late" aria-pressed="false">Больше 3&nbsp;дней</button>
+              </div>
+            </div>
+            <div class="scenario-switch">
+              <p class="tile__label t-caption" id="clientLabel">Клиент</p>
+              <div class="segmented-control" id="clientSwitch" role="group" aria-labelledby="clientLabel" data-size-segmented-control="40">
+                <button class="segment" type="button" data-client="regular" aria-pressed="true">Обычный</button>
+                <button class="segment" type="button" data-client="good" aria-pressed="false">Хороший</button>
+              </div>
+            </div>
           </div>
           <h2 class="scenario-head__title" id="scenarioTitle" aria-live="polite">Вход</h2>
         </header>
         <div class="scenario-body">
-          <!-- Chip / Active и Chip / Inactive, Size=Small: две колонки по шесть -->
+          <!-- Chip / Active и Chip / Inactive, Size=Small: две колонки по семь -->
           <div class="scenario-tags" id="scenarioChips" role="group" aria-labelledby="scenarioLabel">
             <button class="chip chip-active" type="button" data-scenario="entry" aria-pressed="true">Вход</button>
             <button class="chip chip-inactive" type="button" data-scenario="1" aria-pressed="false">1. Причины</button>
@@ -2431,6 +2560,7 @@ button { font: inherit; color: inherit; }
             <button class="chip chip-inactive" type="button" data-scenario="2b" aria-pressed="false">2b. День оплаты · готово</button>
             <button class="chip chip-inactive" type="button" data-scenario="2c" aria-pressed="false">2c. Кабинет · день выбран</button>
             <button class="chip chip-inactive" type="button" data-scenario="3" aria-pressed="false">3. Частичная оплата</button>
+            <button class="chip chip-inactive" type="button" data-scenario="3a" aria-pressed="false">3a. Скидка хорошему клиенту</button>
             <button class="chip chip-inactive" type="button" data-scenario="4" aria-pressed="false">4. Другой способ</button>
             <button class="chip chip-inactive" type="button" data-scenario="5" aria-pressed="false">5. Платёж не&nbsp;прошёл</button>
             <button class="chip chip-inactive" type="button" data-scenario="6" aria-pressed="false">6. Я&nbsp;уже оплатил</button>
@@ -2485,28 +2615,7 @@ button { font: inherit; color: inherit; }
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-  /* ---------- Гейт: код доступа 92815 ---------- */
-  var CODE = '92815';
-  var gate = $('#gate'), gateInput = $('#gateInput'), app = $('#app');
-  function unlock() { gate.hidden = true; app.hidden = false; if (stage) fit(); }
-  function tryCode() {
-    if (gateInput.value === CODE) {
-      try { sessionStorage.setItem('cantPayGate', '1'); } catch (e) {}
-      unlock();
-    } else {
-      $('#gateErr').hidden = false;
-      gateInput.value = ''; gateInput.focus();
-    }
-  }
-  try { if (sessionStorage.getItem('cantPayGate') === '1') unlock(); } catch (e) {}
-  $('#gateBtn').addEventListener('click', tryCode);
-  gateInput.addEventListener('input', function () {
-    $('#gateErr').hidden = true;
-    gateInput.value = gateInput.value.replace(/\D/g, '').slice(0, 5);
-    if (gateInput.value.length === 5) tryCode();
-  });
-  gateInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryCode(); });
-  if (!gate.hidden) setTimeout(function () { try { gateInput.focus(); } catch (e) {} }, 300);
+  /* Кода доступа нет: её просьба 2026-10-14 «убери вход по паролю с прототипа» */
 
   /* ---------- Узлы ---------- */
   var stand = $('#stand'), stage = $('#stage'), holder = $('#deviceHolder'), device = $('#device');
@@ -2554,6 +2663,7 @@ button { font: inherit; color: inherit; }
     noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂 Выберите удобный день оплаты, продлите заём или оплатите часть',
     payDate: 'Выберите день, когда вам удобно оплатить\u00A0📅 Срок по\u00A0договору не меняется. Проценты начисляются до\u00A0дня оплаты',
     partial: 'Внесите столько, сколько получается сейчас\u00A0👍',
+    discount: 'Понимаем, сумма вышла больше, чем вы\u00A0ждали\u00A0🙏 Прямо сейчас можем сделать вам скидку 15\u00A0000\u00A0₽. Итого к\u00A0оплате 60\u00A0000\u00A0₽',
     method: 'Выберите способ оплаты\u00A0👇',
     failed: 'Так бывает из-за\u00A0лимита банка или нехватки средств на\u00A0карте. Оплатите другим способом\u00A0💳',
     other: 'Расскажите о\u00A0своей проблеме\u00A0✍️',
@@ -2578,10 +2688,11 @@ button { font: inherit; color: inherit; }
 
   /* ---------- Шаги диалога ----------
      go: следующий шаг · exit: выход в существующий флоу (заглушка) · close: закрыть шторку */
-  var OTHER_REASON = { label: 'Выбрать другую причину', go: 'reasons' };
+  /* возврат к списку причин: Button / Secondary со стрелкой, на всех вторых шагах одинаковый (макет 16.10.2026) */
+  var OTHER_REASON = { label: 'Другая причина', go: 'reasons', back: true };
   var REASONS = [
     { label: 'Не хватает денег', go: 'noMoney' },
-    { label: 'Сумма больше ожидаемой', go: 'partial' },
+    { label: 'Сумма больше ожидаемой', go: 'amount' }, /* развилка «Хороший клиент?»: да → скидка (3a), нет → частичная оплата (3) */
     { label: 'Оплачу другим способом', go: 'otherMethod' },
     { label: 'Платёж не прошёл', go: 'payFailed' },
     { label: 'Я уже оплатил', exit: 'Загрузка чека об\u00A0оплате', scenario: '6' },
@@ -2619,6 +2730,11 @@ button { font: inherit; color: inherit; }
       chips: [OTHER_REASON],
       button: { label: 'Оплатить частично', exit: 'Блок оплаты: Оплатить частично' }
     },
+    discount: {
+      scenario: '3a', bot: [T.discount],
+      chips: [OTHER_REASON],
+      button: { label: 'Оплатить', exit: 'Оплата' }
+    },
     otherMethod: {
       scenario: '4', bot: [T.method],
       chips: [
@@ -2645,7 +2761,24 @@ button { font: inherit; color: inherit; }
 
   /* payDate: выбранный день оплаты («30.09»), живёт, пока его не изменят или не сбросит тег сценария;
      pending: ответ сервиса на текущий шаг ещё не пришёл */
-  var state = { dpd: 'early', scenario: 'entry', step: null, payDate: null, pending: false, stub: null };
+  var state = { dpd: 'early', client: 'regular', scenario: 'entry', step: null, payDate: null, pending: false, stub: null, log: [], exited: false };
+  /* развилка «Хороший клиент?» после чипа «Сумма больше ожидаемой» */
+  function resolve(id) { return id === 'amount' ? (state.client === 'good' ? 'discount' : 'partial') : id; }
+
+  /* ---------- Контекст диалога в рамках сессии ----------
+     Переписка сохраняется: клиент вышел из шторки или из кабинета и вернулся, история диалога на месте.
+     На проде переписка хранится на сервере и выгружается файлом для анализа причин; в прототипе — sessionStorage вкладки */
+  var STORE_KEY = 'cantPay.dialog';
+  function save() {
+    try {
+      sessionStorage.setItem(STORE_KEY, JSON.stringify({
+        log: state.log, step: state.step, payDate: state.payDate, pending: state.pending, exited: state.exited
+      }));
+    } catch (e) {}
+  }
+  function load() {
+    try { return JSON.parse(sessionStorage.getItem(STORE_KEY) || 'null'); } catch (e) { return null; }
+  }
 
   /* ---------- Таймеры диалога: сбрасываются, когда состояние ставит тег сценария ---------- */
   var timers = [];
@@ -2714,6 +2847,8 @@ button { font: inherit; color: inherit; }
     pinBottom();
   }
   function say(from, text, isNew) {
+    state.log.push({ from: from, text: text });
+    save();
     messagesEl.appendChild(bubbleEl(from, text, isNew));
     refreshAvatars();
     scrollBottom(isNew);
@@ -2726,6 +2861,14 @@ button { font: inherit; color: inherit; }
     repliesEl.className = 'chat__replies';
     state.step = null;
     state.pending = false;
+    state.exited = false;
+    state.log = [];
+    save();
+  }
+  function addAlert() {
+    messagesEl.appendChild(alertEl());
+    state.log.push({ alert: true });
+    save();
   }
   /* переписка держится у нижнего края, когда меняется высота зоны ответа или открывается клавиатура */
   if (window.ResizeObserver) new ResizeObserver(function () { scrollBottom(); }).observe(messagesEl);
@@ -2742,9 +2885,18 @@ button { font: inherit; color: inherit; }
       step.chips.forEach(function (c, i) {
         var b = document.createElement('button');
         b.type = 'button';
-        b.className = 'chip chip-inactive';
         b.dataset.i = i;
-        b.textContent = c.label;
+        if (c.back) {
+          b.className = 'btn btn-secondary';
+          b.dataset.sizeButton = 'medium';
+          b.dataset.role = 'reply';
+          b.innerHTML = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M15.8333 10H4.16667M8.33333 5L4.16667 10L8.33333 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+          b.appendChild(document.createTextNode(c.label));
+        } else {
+          b.className = 'chip chip-inactive';
+          b.dataset.role = 'reply';
+          b.textContent = c.label;
+        }
         chips.appendChild(b);
       });
       repliesEl.appendChild(chips);
@@ -2815,6 +2967,7 @@ button { font: inherit; color: inherit; }
   function botTexts(step) { return typeof step.bot === 'function' ? step.bot() : step.bot; }
   /* шаг: зона ответа сразу занимает своё место (скрыта), после паузы приходит ответ бота, зона проявляется */
   function goStep(id) {
+    id = resolve(id);
     var step = STEPS[id];
     state.step = id;
     setScenario(step.scenario);
@@ -2823,19 +2976,62 @@ button { font: inherit; color: inherit; }
        открывается только из обработчика нажатия, на десктопе нарисованная ведёт себя так же */
     if (step.input) { revealReplies(); openInput(); }
     state.pending = true;
-    botSay(botTexts(step), function () { state.pending = false; revealReplies(); });
+    save();
+    botSay(botTexts(step), function () { state.pending = false; save(); revealReplies(); });
   }
   function startDialog() {
     cancelTimers();
     hideStub();
     resetChat();
-    if (DPD[state.dpd].tech) messagesEl.appendChild(alertEl());
+    if (DPD[state.dpd].tech) addAlert();
     say('client', T.start, false);
     state.step = 'reasons';
     setScenario('1');
     renderReplies(true);
     openSheet();
-    botSay([T.ask], revealReplies);
+    state.pending = true;
+    save();
+    botSay([T.ask], function () { state.pending = false; save(); revealReplies(); });
+  }
+  /* повторный вход в диалог: история на месте. Ушёл посреди шага — продолжаем этот шаг;
+     ушёл в оплату или другой флоу — под историей начинается новый круг с той же кнопки */
+  function resumeDialog() {
+    cancelTimers();
+    hideStub();
+    closeKb();
+    if (state.exited || !STEPS[state.step]) {
+      state.exited = false;
+      say('client', T.start, false);
+      state.step = 'reasons';
+      state.pending = true;
+    }
+    var step = STEPS[state.step];
+    setScenario(step.scenario);
+    renderReplies(state.pending);
+    openSheet();
+    if (state.pending) {
+      botSay(botTexts(step), function () { state.pending = false; save(); revealReplies(); });
+    } else {
+      revealReplies();
+      if (step.input) openInput();
+    }
+  }
+  /* перезагрузка страницы в той же сессии: переписка собирается из сохранённой */
+  function restore() {
+    var saved = load();
+    if (!saved || !saved.log || !saved.log.length) return;
+    screen.classList.add('no-anim');
+    saved.log.forEach(function (m) {
+      if (m.alert) messagesEl.appendChild(alertEl());
+      else messagesEl.appendChild(bubbleEl(m.from, m.text, false));
+    });
+    state.log = saved.log;
+    state.step = saved.step;
+    state.pending = !!saved.pending;
+    state.exited = !!saved.exited;
+    refreshAvatars();
+    if (saved.payDate) setPayDate(saved.payDate);
+    setTimeout(function () { screen.classList.remove('no-anim'); }, 80);
   }
   function onChip(c) {
     say('client', c.label, true);
@@ -2872,7 +3068,7 @@ button { font: inherit; color: inherit; }
   repliesEl.addEventListener('click', function (e) {
     var step = STEPS[state.step];
     if (!step) return;
-    var chip = e.target.closest('.chip');
+    var chip = e.target.closest('[data-role="reply"]');
     if (chip) { onChip(step.chips[+chip.dataset.i]); return; }
     if (e.target.closest('[data-role="action"]')) onAction(step.button);
   });
@@ -2907,6 +3103,7 @@ button { font: inherit; color: inherit; }
   /* выбранный день: меняет реплику сервиса и текст кнопки в\u00A0кабинете */
   function setPayDate(date) {
     state.payDate = date;
+    save();
     $('#openChat').textContent = entryLabel();
   }
   /* кнопка «Я заплачу …»: диалог открывается на\u00A0состоянии «день выбран», история сохранена.
@@ -2928,13 +3125,17 @@ button { font: inherit; color: inherit; }
     openSheet();
   }
   $('#openChat').addEventListener('click', function () {
-    if (state.payDate) openPayDate(); else startDialog();
+    if (state.payDate) openPayDate();
+    else if (state.log.length) resumeDialog();
+    else startDialog();
   });
   $('#sheetClose').addEventListener('click', closeDialog);
 
   /* ---------- Заглушка: выход в существующий флоу, которого нет в этих макетах ---------- */
   function showStub(name) {
     state.stub = name;
+    state.exited = true;
+    save();
     stubName.textContent = name;
     closeSheet();
     lk.setAttribute('inert', '');
@@ -2946,13 +3147,19 @@ button { font: inherit; color: inherit; }
     stub.hidden = true;
     screen.classList.remove('is-stub');
   }
-  $('#stubBack').addEventListener('click', function () {
+  /* нажатие на конец сценария: в стенде (прототип в iframe) стенд открывает этот флоу, отдельно прототип возвращается в диалог */
+  function stubNext() {
+    if (window.parent !== window) { try { window.parent.postMessage({ type: 'stand:next', to: state.stub }, location.origin); return; } catch (e) {} }
     hideStub();
+    state.exited = false;
+    save();
     repliesEl.classList.remove('is-locked');
     setScenario(STEPS[state.step].scenario);
     openSheet();
     if (STEPS[state.step].input) openInput();
-  });
+  }
+  stub.addEventListener('click', stubNext);
+  stub.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); stubNext(); } });
 
   /* ---------- Поле сообщения и клавиатура ---------- */
   function focusInput() {
@@ -3133,6 +3340,7 @@ button { font: inherit; color: inherit; }
       goal: 'Доля вошедших в\u00A0диалог, которые оплатили: в\u00A0том же визите и за\u00A07\u00A0дней. С\u00A0разбивкой по\u00A0типу оплаты.',
       events: 'Новое событие одно: клик по\u00A0«Не могу заплатить сейчас». Оплата уже размечена: `dl_repayment_success_payment`, тип в\u00A0`repayment_type` (полное, продление, частичное).',
       newEvents: true,
+      context: true,
       estimate: { value: '480–\u20601\u00A0080', caption: 'дополнительных оплат в\u00A0месяц', ranges: true }
     },
     noMoney: {
@@ -3155,6 +3363,13 @@ button { font: inherit; color: inherit; }
       goal: 'Переходы в\u00A0частичную оплату из\u00A0диалога и успешные оплаты после них.',
       events: 'После входа: `dl_repayment_success_payment` с\u00A0`repayment_type = loan_repayment_partial`.',
       estimate: { value: '≈70', caption: EST + '730\u00A0договорам' }
+    },
+    discount: {
+      reasons: ['wrongAmount'],
+      now: { value: '11,0%', badge: '3\u00A0178\u00A0ответов', caption: '«Ошибся суммой платежа»', share: 11.0 },
+      goal: 'Доля оплативших со\u00A0скидкой от\u00A0увидевших предложение. Сравниваем с\u00A0частичной оплатой у\u00A0обычных клиентов.',
+      events: 'После входа: `dl_repayment_success_payment`. Отдельного признака оплаты со\u00A0скидкой нет.',
+      estimate: { text: 'Посчитаем, когда будут размер скидки и\u00A0критерий «хорошего клиента»' }
     },
     otherMethod: {
       reasons: ['otherMethod'],
@@ -3187,7 +3402,7 @@ button { font: inherit; color: inherit; }
   };
   var ANALYTICS_BY_SCENARIO = {
     entry: 'start', '1': 'start', '2': 'noMoney', '2a': 'payDate', '2b': 'payDate', '2c': 'payDate',
-    '3': 'partial', '4': 'otherMethod', '5': 'payFailed', '6': 'paid', '7': 'otherProblem', '7a': 'otherProblem'
+    '3': 'partial', '3a': 'discount', '4': 'otherMethod', '5': 'payFailed', '6': 'paid', '7': 'otherProblem', '7a': 'otherProblem'
   };
 
   function num(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0'); } /* 1080 → «1 080» с\u00A0неразрывным пробелом */
@@ -3271,7 +3486,7 @@ button { font: inherit; color: inherit; }
     show(part(tileNow, 'meterLabel'), now.meterLabel);
     /* «Ожидаем» и\u00A0«События» */
     part(tileGoal, 'text').textContent = data.goal;
-    fillText(part(tileEvents, 'text'), data.events);
+    fillText(part(tileEvents, 'text'), data.events + (data.context ? ' Переписка сохраняется в\u00A0рамках сессии и\u00A0выгружается файлом для\u00A0анализа причин.' : ''));
     part(tileEvents, 'badge').hidden = !data.newEvents;
     /* «Оценка»: число с\u00A0подписью или текст, если оплаты в\u00A0сценарии нет */
     part(tileEstimate, 'value').hidden = !est.value;
@@ -3280,6 +3495,14 @@ button { font: inherit; color: inherit; }
     part(tileEstimate, 'ranges').hidden = !est.ranges;
     part(tileEstimate, 'note').hidden = !est.value;
     show(part(tileEstimate, 'text'), est.text);
+  }
+  /* тип клиента: в сценариях 3 и 3a сразу переключает ветку, в остальных действует со следующего выбора «Сумма больше ожидаемой» */
+  var clientSwitch = $('#clientSwitch');
+  function setClient(id, silent) {
+    state.client = id;
+    markSegments(clientSwitch, 'data-client', id);
+    if (silent) return;
+    if (state.scenario === '3' || state.scenario === '3a') applyScenario(id === 'good' ? '3a' : '3');
   }
   function setDpd(id) {
     state.dpd = id;
@@ -3301,8 +3524,8 @@ button { font: inherit; color: inherit; }
     var c = chipTo(stepId, go, date);
     say('client', c.label, false);
     if (c.date) setPayDate(c.date);
-    state.step = go;
-    botTexts(STEPS[go]).forEach(function (t) { say('bot', t, false); });
+    state.step = resolve(go);
+    botTexts(STEPS[state.step]).forEach(function (t) { say('bot', t, false); });
   }
   var PATHS = {
     '1': [],
@@ -3310,7 +3533,8 @@ button { font: inherit; color: inherit; }
     '2a': [['reasons', 'noMoney'], ['noMoney', 'payDate']],
     '2b': [['reasons', 'noMoney'], ['noMoney', 'payDate'], ['payDate', 'payDateDone', DEFAULT_DATE]],
     '2c': [['reasons', 'noMoney'], ['noMoney', 'payDate'], ['payDate', 'payDateDone', DEFAULT_DATE]],
-    '3': [['reasons', 'partial']],
+    '3': [['reasons', 'amount']],
+    '3a': [['reasons', 'amount']],
     '4': [['reasons', 'otherMethod']],
     '5': [['reasons', 'payFailed']],
     '6': [],
@@ -3319,6 +3543,7 @@ button { font: inherit; color: inherit; }
   };
   /* date: день для сценариев 2b и 2c, если он уже выбран (смена просрочки не меняет выбранный день) */
   function applyScenario(id, date) {
+    if (id === '3' || id === '3a') setClient(id === '3a' ? 'good' : 'regular', true);
     cancelTimers();
     screen.classList.add('no-anim');
     hideStub();
@@ -3328,7 +3553,7 @@ button { font: inherit; color: inherit; }
     if (id === 'entry') {
       closeSheet();
     } else {
-      if (DPD[state.dpd].tech) messagesEl.appendChild(alertEl());
+      if (DPD[state.dpd].tech) addAlert();
       say('client', T.start, false);
       say('bot', T.ask, false);
       state.step = 'reasons';
@@ -3361,6 +3586,10 @@ button { font: inherit; color: inherit; }
   panelToggle.addEventListener('click', openPanel);
   $('#panelClose').addEventListener('click', closePanel);
   $('#panelScrim').addEventListener('click', closePanel);
+  clientSwitch.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-client]');
+    if (c) setClient(c.dataset.client);
+  });
   dpdSwitch.addEventListener('click', function (e) {
     var c = e.target.closest('[data-dpd]');
     if (c) setDpd(c.dataset.dpd);
@@ -3373,6 +3602,7 @@ button { font: inherit; color: inherit; }
   });
 
   renderDashboard(state.scenario);
+  restore();
   /* плитка «Флоу» меняет размер вместе с\u00A0окном и\u00A0шрифтами правой колонки: масштаб телефона пересчитывается */
   if (window.ResizeObserver) new ResizeObserver(fit).observe(stage);
   fit();
