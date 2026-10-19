@@ -3291,7 +3291,7 @@ button.coins-nav__btn { cursor: pointer; }
                     </div>
                   </div>
                   <div class="input-field">
-                    <div class="input" data-size-input="large" data-read-only="true">12&nbsp;700&nbsp;₽</div>
+                    <div class="input" id="payAmount" data-size-input="large" data-read-only="true">12&nbsp;700&nbsp;₽</div>
                   </div>
                   <div class="coins-pay">
                     <div class="coins-pay__row" id="coinsRow">
@@ -3362,7 +3362,7 @@ button.coins-nav__btn { cursor: pointer; }
                     <div class="alert" data-semantic="info" id="frozenAlert" hidden>
                       <div class="alert__state">
                         <span class="alert__icon"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJpbmZvLWNpcmNsZSI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0xMCA3LjVIMTAuMDA4M005LjE2NjY3IDEwSDEwVjEzLjMzMzNIMTAuODMzM00yLjUgMTBDMi41IDEwLjk4NDkgMi42OTM5OSAxMS45NjAyIDMuMDcwOSAxMi44NzAxQzMuNDQ3ODEgMTMuNzgwMSA0LjAwMDI2IDE0LjYwNjkgNC42OTY3IDE1LjMwMzNDNS4zOTMxNCAxNS45OTk3IDYuMjE5OTMgMTYuNTUyMiA3LjEyOTg3IDE2LjkyOTFDOC4wMzk4MiAxNy4zMDYgOS4wMTUwOSAxNy41IDEwIDE3LjVDMTAuOTg0OSAxNy41IDExLjk2MDIgMTcuMzA2IDEyLjg3MDEgMTYuOTI5MUMxMy43ODAxIDE2LjU1MjIgMTQuNjA2OSAxNS45OTk3IDE1LjMwMzMgMTUuMzAzM0MxNS45OTk3IDE0LjYwNjkgMTYuNTUyMiAxMy43ODAxIDE2LjkyOTEgMTIuODcwMUMxNy4zMDYgMTEuOTYwMiAxNy41IDEwLjk4NDkgMTcuNSAxMEMxNy41IDguMDEwODggMTYuNzA5OCA2LjEwMzIyIDE1LjMwMzMgNC42OTY3QzEzLjg5NjggMy4yOTAxOCAxMS45ODkxIDIuNSAxMCAyLjVDOC4wMTA4OCAyLjUgNi4xMDMyMiAzLjI5MDE4IDQuNjk2NyA0LjY5NjdDMy4yOTAxOCA2LjEwMzIyIDIuNSA4LjAxMDg4IDIuNSAxMFoiIHN0cm9rZT0iIzBCOTlGRiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" alt=""></span>
-                        <span class="alert__text"><span class="alert__title t-note-medium">1&nbsp;000 бустракоинов начислены</span><span class="alert__description t-note" id="frozenDate">Потратить можно с&nbsp;1&nbsp;ноября</span></span>
+                        <span class="alert__text"><span class="alert__title t-note-medium">1&nbsp;000 бустракоинов ожидают</span><span class="alert__description t-note" id="frozenDate">Потратить можно с&nbsp;1&nbsp;ноября</span></span>
                       </div>
                     </div>
                   </section>
@@ -3576,11 +3576,11 @@ button.coins-nav__btn { cursor: pointer; }
     none: { title: 'Нет бустракоинов и друзей', balance: '0 бустракоинов', sub: 'Пригласите друга, и' + NB + 'за' + NB + 'его первый заём начислим 1' + NB + '000',
       badge: 'пригласите друга', badgeLink: true, on: false, off: true, frozen: null, lists: false },
     frozen: { title: 'Начислены, ждём 17 дней', balance: '0 бустракоинов', sub: 'Можно потратить на' + NB + 'оплату процентов или продление займа',
-      badge: 'с 1 ноября', on: false, off: true, frozen: 'Потратить можно с' + NB + '1' + NB + 'ноября', lists: true },
+      badge: 'с 1 ноября', on: false, off: true, frozen: 'Зачислятся 1' + NB + 'ноября', spend: 0, lists: true },
     available: { title: 'Можно тратить', balance: '1' + NB + '000 бустракоинов', sub: 'Можно потратить на' + NB + 'оплату процентов или продление займа',
-      badge: 'Списать 1 000', on: true, off: false, frozen: null, lists: true },
+      badge: 'Списать 1 000', on: true, off: false, frozen: null, spend: 1000, lists: true },
     both: { title: 'Можно тратить и есть начисленные', balance: '1' + NB + '300 бустракоинов', sub: 'Можно потратить на' + NB + 'оплату процентов или продление займа',
-      badge: 'Списать 1 300', on: true, off: false, frozen: 'Потратить можно с' + NB + '20' + NB + 'ноября', lists: true }
+      badge: 'Списать 1 300', on: true, off: false, frozen: 'Зачислятся 20' + NB + 'ноября', spend: 1300, lists: true }
   };
   /* «Друзья» по месяцам (макет 19.10.2026): у текущего месяца «Можно пригласить ещё N», у прошлых без подписи.
      Строка: [имя, подпись, бейдж, тон бейджа] */
@@ -3644,6 +3644,15 @@ button.coins-nav__btn { cursor: pointer; }
     badge.disabled = !(state.friend || s.badgeLink);
     sw.disabled = state.friend || s.off;
     sw.setAttribute('aria-checked', String(!state.friend && s.on));
+    updateAmount();
+  }
+
+  /* Сумма к оплате в блоке оплаты: при включённом свитче уменьшается на списание (её решение 2026-10-19) */
+  var PAY_TOTAL = 12700;
+  function updateAmount() {
+    var on = $('#coinsSwitch').getAttribute('aria-checked') === 'true';
+    var spend = on ? (STATES[state.coins].spend || 0) : 0;
+    $('#payAmount').textContent = num(PAY_TOTAL - spend) + NB + '₽';
   }
 
   /* ---------- Экраны ---------- */
@@ -3686,6 +3695,7 @@ button.coins-nav__btn { cursor: pointer; }
   $('#coinsSwitch').addEventListener('click', function () {
     var on = this.getAttribute('aria-checked') !== 'true';
     this.setAttribute('aria-checked', String(on));
+    updateAmount();
   });
   $('#payBtn').addEventListener('click', function () {
     var withCoins = $('#coinsSwitch').getAttribute('aria-checked') === 'true';
