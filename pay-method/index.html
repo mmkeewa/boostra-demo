@@ -2414,6 +2414,47 @@ button { font: inherit; color: inherit; }
 </head>
 <body>
 
+<!-- ===== Вход по коду доступа 92813 (как у lk-web/): отметка payMethodGate в sessionStorage, стенд ставит её сам ===== -->
+<style>
+.gate{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;background:#0d1430;font-family:"Inter",system-ui,sans-serif}
+.gate[hidden]{display:none}
+.gate-card{display:flex;flex-direction:column;gap:12px;width:320px;padding:32px 24px;border-radius:24px;background:#fff;text-align:center;color:#152149}
+.gate-logo{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.gate-logo span{color:#005bff}
+.gate-card h1{margin:0;font-size:20px;line-height:28px}
+.gate-card p{margin:0;font-size:14px;line-height:20px;color:rgba(21,33,73,.66)}
+.gate-card input{padding:4px 0;border:0;border-bottom:2px solid rgba(21,33,73,.2);outline:0;font:600 24px/32px "Inter",sans-serif;letter-spacing:8px;text-align:center;color:#152149}
+.gate-card input:focus{border-color:#005bff}
+.gate-err{color:#ff0239!important}
+.gate-btn{height:52px;margin-top:8px;border:0;border-radius:16px;background:#005bff;color:#fff;font:500 14px/20px "Inter",sans-serif;cursor:pointer}
+</style>
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-logo">b<span>oo</span>stra</div>
+    <h1>Прототип: способ оплаты до&nbsp;кнопки</h1>
+    <p>Введите код доступа, чтобы открыть прототип</p>
+    <input id="gateInput" inputmode="numeric" autocomplete="one-time-code" placeholder="•••••" aria-label="Код доступа">
+    <p class="gate-err" id="gateErr" hidden>Неверный код. Попробуйте ещё&nbsp;раз</p>
+    <button class="gate-btn" id="gateBtn" type="button">Войти</button>
+  </div>
+</div>
+<script>
+(function () {
+  var CODE = '92813', KEY = 'payMethodGate';
+  var gate = document.getElementById('gate'), input = document.getElementById('gateInput'), err = document.getElementById('gateErr');
+  function unlock() { gate.hidden = true; }
+  function tryCode() {
+    if (input.value === CODE) { try { sessionStorage.setItem(KEY, '1'); } catch (e) {} unlock(); }
+    else { err.hidden = false; input.value = ''; input.focus(); }
+  }
+  try { if (sessionStorage.getItem(KEY) === '1') unlock(); } catch (e) {}
+  document.getElementById('gateBtn').addEventListener('click', tryCode);
+  input.addEventListener('input', function () { err.hidden = true; input.value = input.value.replace(/\D/g, '').slice(0, 5); if (input.value.length === 5) tryCode(); });
+  input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryCode(); });
+  if (!gate.hidden) setTimeout(function () { try { input.focus(); } catch (e) {} }, 300);
+})();
+</script>
+
 <div id="app">
   <div class="stand ds" id="stand" data-shell="glass" data-mode="tobe" data-client="saved" data-color-scheme="light" data-typography="main" data-responsive="desktop">
 
