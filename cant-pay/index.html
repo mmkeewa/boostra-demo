@@ -1865,7 +1865,7 @@ button { font: inherit; color: inherit; }
 }
 .scenario-tags {
   display: grid;
-  grid-template-rows: repeat(7, auto);
+  grid-template-rows: repeat(8, auto);
   grid-auto-flow: column;
   grid-auto-columns: max-content;
   justify-items: start;
@@ -2267,6 +2267,24 @@ button { font: inherit; color: inherit; }
   .stand[data-shell="glass"]::before, .stand[data-shell="glass"] .tile, .stand[data-shell="glass"] .stand-top { animation: none !important; }
 }
 
+/* «Назад» к просроченному клиенту и «Дальше» к оплате: по бокам телефона, приглушённо (как на stand/view.html) */
+.v-nav { display: none; }
+@media (min-width: 768px) and (pointer: fine) {
+  .stand[data-shell="glass"] .tile--flow { position: relative; container-type: inline-size; }
+  .stand[data-shell="glass"] .v-nav {
+    position: absolute; top: 50%; z-index: 2; display: flex; flex-direction: column; gap: 6px; max-width: 170px; padding: 12px 14px;
+    border-radius: 16px; color: rgba(255, 255, 255, .6); text-decoration: none; opacity: .55; transform: translateY(-50%);
+    transition: opacity .2s, background .2s, color .2s;
+  }
+  .stand[data-shell="glass"] .v-nav:hover, .stand[data-shell="glass"] .v-nav:focus-visible { opacity: 1; color: #fff; background: rgba(255, 255, 255, .06); outline: none; }
+  .stand[data-shell="glass"] .v-nav--prev { left: 12px; align-items: flex-start; text-align: left; }
+  .stand[data-shell="glass"] .v-nav--next { right: 12px; align-items: flex-end; text-align: right; }
+  .stand[data-shell="glass"] .v-nav__dir { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; letter-spacing: .04em; text-transform: uppercase; }
+  .stand[data-shell="glass"] .v-nav__dir svg { width: 16px; height: 16px; flex: none; }
+  .stand[data-shell="glass"] .v-nav__title { font-size: 14px; line-height: 20px; font-weight: 600; }
+  @container (max-width: 700px) { .stand[data-shell="glass"] .v-nav__title { display: none; } .stand[data-shell="glass"] .v-nav { padding: 10px; } }
+}
+
 </style>
 </head>
 <body>
@@ -2283,13 +2301,14 @@ button { font: inherit; color: inherit; }
           <span class="stand-tag">PDL</span>
           <span class="stand-tag">IL</span>
           <span class="stand-tag">ID&nbsp;92815</span>
-          <span class="stand-tag">12&nbsp;экранов</span>
+          <span class="stand-tag">14&nbsp;экранов</span>
         </div>
       </div>
     </header>
 
     <!-- ===== Плитка «Флоу»: телефон в рамке (формат стенда Стаса), фон Gradient/Midnight/Midnight Low ===== -->
     <section class="tile tile--flow" aria-label="Флоу">
+      <!-- переходы по карте стенда: назад к просроченному клиенту, вперёд к оплате (как «Назад» и «Дальше» на view.html) -->
     <main class="stage" id="stage">
       <div class="device-holder" id="deviceHolder">
         <div class="device" id="device">
@@ -2559,6 +2578,7 @@ button { font: inherit; color: inherit; }
             <button class="chip chip-inactive" type="button" data-scenario="2a" aria-pressed="false">2a. День оплаты</button>
             <button class="chip chip-inactive" type="button" data-scenario="2b" aria-pressed="false">2b. День оплаты · готово</button>
             <button class="chip chip-inactive" type="button" data-scenario="2c" aria-pressed="false">2c. Кабинет · день выбран</button>
+            <button class="chip chip-inactive" type="button" data-scenario="2d" aria-pressed="false">2d. Продление с&nbsp;оплатой&nbsp;%</button>
             <button class="chip chip-inactive" type="button" data-scenario="3" aria-pressed="false">3. Частичная оплата</button>
             <button class="chip chip-inactive" type="button" data-scenario="3a" aria-pressed="false">3a. Скидка хорошему клиенту</button>
             <button class="chip chip-inactive" type="button" data-scenario="4" aria-pressed="false">4. Другой способ</button>
@@ -2663,6 +2683,8 @@ button { font: inherit; color: inherit; }
     noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂 Выберите удобный день оплаты, продлите заём или оплатите часть',
     payDate: 'Выберите день, когда вам удобно оплатить\u00A0📅 Срок по\u00A0договору не меняется. Проценты начисляются до\u00A0дня оплаты',
     partial: 'Внесите столько, сколько получается сейчас\u00A0👍',
+    extend: 'Отличное решение\u00A0👍 Оплатите проценты и\u00A0пользуйтесь деньгами дальше. Возвращать всё сразу не\u00A0нужно',
+    paid: 'Если вы оплатили заём полностью другим способом, загрузите чек об\u00A0оплате\u00A0🧾',
     discount: 'Понимаем, сумма вышла больше, чем вы\u00A0ждали\u00A0🙏 Прямо сейчас можем сделать вам скидку 15\u00A0000\u00A0₽. Итого к\u00A0оплате 60\u00A0000\u00A0₽',
     method: 'Выберите способ оплаты\u00A0👇',
     failed: 'Так бывает из-за\u00A0лимита банка или нехватки средств на\u00A0карте. Оплатите другим способом\u00A0💳',
@@ -2695,7 +2717,7 @@ button { font: inherit; color: inherit; }
     { label: 'Сумма больше ожидаемой', go: 'amount' }, /* развилка «Хороший клиент?»: да → скидка (3a), нет → частичная оплата (3) */
     { label: 'Оплачу другим способом', go: 'otherMethod' },
     { label: 'Платёж не прошёл', go: 'payFailed' },
-    { label: 'Я уже оплатил', exit: 'Загрузка чека об\u00A0оплате', scenario: '6' },
+    { label: 'Я уже оплатил', go: 'alreadyPaid' }, /* сначала ответ: чек загружают только при полной оплате (её правка 19.10.2026) */
     { label: 'У\u00A0меня другая проблема', go: 'otherProblem' }
   ];
   var STEPS = {
@@ -2704,7 +2726,7 @@ button { font: inherit; color: inherit; }
       scenario: '2', bot: [T.noMoney],
       chips: [
         { label: 'Выбрать день оплаты', go: 'payDate' },
-        { label: 'Продлить с\u00A0оплатой\u00A0%', exit: 'Продление займа' },
+        { label: 'Продлить с\u00A0оплатой\u00A0%', go: 'extend' }, /* сначала ответ бота, потом переход (её правка 19.10.2026) */
         { label: 'Оплатить частично', go: 'partial' },
         OTHER_REASON
       ]
@@ -2730,6 +2752,16 @@ button { font: inherit; color: inherit; }
       chips: [OTHER_REASON],
       button: { label: 'Оплатить частично', exit: 'Блок оплаты: Оплатить частично' }
     },
+    extend: {
+      scenario: '2d', bot: [T.extend],
+      chips: [OTHER_REASON],
+      button: { label: 'Продлить с\u00A0оплатой\u00A0%', exit: 'Продление займа' }
+    },
+    alreadyPaid: {
+      scenario: '6', bot: [T.paid],
+      chips: [OTHER_REASON],
+      button: { label: 'Загрузить чек', exit: 'Загрузка чека об\u00A0оплате' }
+    },
     discount: {
       scenario: '3a', bot: [T.discount],
       chips: [OTHER_REASON],
@@ -2752,7 +2784,8 @@ button { font: inherit; color: inherit; }
         OTHER_REASON
       ]
     },
-    otherProblem: { scenario: '7', bot: [T.other], input: true },
+    /* «Другая причина» над полем: без неё из ввода сообщения не выйти (её баг 19.10.2026) */
+    otherProblem: { scenario: '7', bot: [T.other], chips: [OTHER_REASON], input: true },
     otherProblemSent: { scenario: '7a', bot: [T.sent], chips: REASONS }
   };
 
@@ -3034,6 +3067,8 @@ button { font: inherit; color: inherit; }
     setTimeout(function () { screen.classList.remove('no-anim'); }, 80);
   }
   function onChip(c) {
+    var input = messageInput();
+    if (input) { input.blur(); closeKb(); } /* уходим с шага ввода: клавиатура закрывается */
     say('client', c.label, true);
     if (c.exit) {
       repliesEl.classList.add('is-locked');
@@ -3389,7 +3424,7 @@ button { font: inherit; color: inherit; }
       reasons: [],
       now: { value: 'меньше\u00A01%', badge: '13\u00A0ответов', caption: '«Уже оплатил», ещё около\u00A0200 написали об\u00A0этом текстом', share: 0, meter: 'меньше\u00A01%' },
       goal: 'Клиент загружает чек сам, без\u00A0обращения в\u00A0поддержку.',
-      events: 'Оплаты нет: клиент уходит в\u00A0загрузку чека.',
+      events: 'Оплаты нет: после ответа бота клиент нажимает «Загрузить чек» и уходит в\u00A0загрузку чека.',
       estimate: { text: 'Оплаты нет: клиент уходит в\u00A0загрузку чека' }
     },
     otherProblem: {
@@ -3401,7 +3436,7 @@ button { font: inherit; color: inherit; }
     }
   };
   var ANALYTICS_BY_SCENARIO = {
-    entry: 'start', '1': 'start', '2': 'noMoney', '2a': 'payDate', '2b': 'payDate', '2c': 'payDate',
+    entry: 'start', '1': 'start', '2': 'noMoney', '2a': 'payDate', '2b': 'payDate', '2c': 'payDate', '2d': 'noMoney',
     '3': 'partial', '3a': 'discount', '4': 'otherMethod', '5': 'payFailed', '6': 'paid', '7': 'otherProblem', '7a': 'otherProblem'
   };
 
@@ -3537,7 +3572,8 @@ button { font: inherit; color: inherit; }
     '3a': [['reasons', 'amount']],
     '4': [['reasons', 'otherMethod']],
     '5': [['reasons', 'payFailed']],
-    '6': [],
+    '6': [['reasons', 'alreadyPaid']],
+    '2d': [['reasons', 'noMoney'], ['noMoney', 'extend']],
     '7': [['reasons', 'otherProblem']],
     '7a': [['reasons', 'otherProblem']]
   };
@@ -3564,11 +3600,7 @@ button { font: inherit; color: inherit; }
         STEPS.otherProblemSent.bot.forEach(function (t) { say('bot', t, false); });
       }
       renderReplies(false);
-      if (id === '6') {
-        var paid = REASONS.filter(function (c) { return c.scenario === '6'; })[0];
-        say('client', paid.label, false);
-        showStub(paid.exit);
-      } else if (id === '2c') {
+      if (id === '2c') {
         closeSheet(); /* день выбран, клиент вернулся в\u00A0кабинет */
       } else {
         openSheet();
