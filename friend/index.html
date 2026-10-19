@@ -3712,13 +3712,13 @@ button.coins-nav__btn { cursor: pointer; }
     $('#estimateChart').appendChild(li);
   });
 
-  var METRIC = 'Главная: рост оплат займов с\u00A0бустракоинами, ₽ в\u00A0месяц. Программу берёт в\u00A0работу взыскание. Рядом: доля новых клиентов, пришедших по\u00A0ссылке друга.';
+  var METRIC = 'Главная: рост оплат займов с\u00A0бустракоинами, ₽ в\u00A0месяц.';
   var EST_MAIN = { value: '≈240', caption: 'новых клиентов в месяц: около 6,3 млн ₽ выдачи, +1,5% к выдаче НК', ranges: true };
   var NOW_ZERO = { value: '0', badge: 'программы нет', caption: 'рефералов сейчас, активных клиентов около 40 тыс. в месяц', share: 0, meter: '0%', meterLabel: 'пригласили' };
   var ANALYTICS = {
     entry: {
       steps: ['active'], now: NOW_ZERO,
-      goal: METRIC + ' На входе: доля открывших раздел из баннера и строки «Бустракоины».',
+      goal: METRIC,
       events: 'Баннер и бейдж «пригласите друга» не размечены. Оплата размечена: `dl_repayment_click_pay`, `dl_repayment_success_payment`.',
       estimate: EST_MAIN
     },
