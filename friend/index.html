@@ -2983,6 +2983,14 @@ button.coins-nav__btn { cursor: pointer; }
 /* девять тегов: две колонки, пять и четыре */
 #scenarioChips { grid-template-rows: repeat(5, auto); }
 
+/* ---------- «Друзья» по месяцам: её компонент Friends month ---------- */
+.friends-months { display: flex; flex-direction: column; gap: var(--space-xl); }
+.friends-month { display: flex; flex-direction: column; gap: var(--space-md); }
+.friends-month__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-xs); }
+.friends-month__head .t-caption { color: var(--text-bottom-secondary); }
+.friends-month__empty { margin: 0; color: var(--text-bottom-secondary); }
+.badge--success { background: var(--brand-success-10); color: var(--text-success-default); }
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -3346,11 +3354,8 @@ button.coins-nav__btn { cursor: pointer; }
 
                     <div class="coins-pane" data-pane="friends" hidden>
                       <p class="coins-empty t-note" data-empty>Друзья появятся здесь, когда зарегистрируются по&nbsp;вашей ссылке</p>
-                      <ul class="coins-list" data-full>
-                        <li><span class="coins-ic coins-ic--round"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ1c2VyIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTUgMTcuNVYxNS44MzMzQzUgMTQuOTQ5MyA1LjM1MTE5IDE0LjEwMTQgNS45NzYzMSAxMy40NzYzQzYuNjAxNDMgMTIuODUxMiA3LjQ0OTI4IDEyLjUgOC4zMzMzMyAxMi41SDExLjY2NjdDMTIuNTUwNyAxMi41IDEzLjM5ODYgMTIuODUxMiAxNC4wMjM3IDEzLjQ3NjNDMTQuNjQ4OCAxNC4xMDE0IDE1IDE0Ljk0OTMgMTUgMTUuODMzM1YxNy41TTYuNjY2NjcgNS44MzMzM0M2LjY2NjY3IDYuNzE3MzkgNy4wMTc4NiA3LjU2NTIzIDcuNjQyOTggOC4xOTAzNkM4LjI2ODEgOC44MTU0OCA5LjExNTk0IDkuMTY2NjcgMTAgOS4xNjY2N0MxMC44ODQxIDkuMTY2NjcgMTEuNzMxOSA4LjgxNTQ4IDEyLjM1NyA4LjE5MDM2QzEyLjk4MjEgNy41NjUyMyAxMy4zMzMzIDYuNzE3MzkgMTMuMzMzMyA1LjgzMzMzQzEzLjMzMzMgNC45NDkyOCAxMi45ODIxIDQuMTAxNDMgMTIuMzU3IDMuNDc2MzFDMTEuNzMxOSAyLjg1MTE5IDEwLjg4NDEgMi41IDEwIDIuNUM5LjExNTk0IDIuNSA4LjI2ODEgMi44NTExOSA3LjY0Mjk4IDMuNDc2MzFDNy4wMTc4NiA0LjEwMTQzIDYuNjY2NjcgNC45NDkyOCA2LjY2NjY3IDUuODMzMzNaIiBzdHJva2U9IiMxNTIxNDkiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K" alt=""></span><span class="coins-list__text"><b class="t-note-medium">Друг 1</b><span class="t-caption">Взял заём 15&nbsp;октября</span></span><span class="badge badge--info t-caps-xsmall-strong" data-size-badge="20">С&nbsp;1&nbsp;ноября</span></li>
-                        <li><span class="coins-ic coins-ic--round"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ1c2VyIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTUgMTcuNVYxNS44MzMzQzUgMTQuOTQ5MyA1LjM1MTE5IDE0LjEwMTQgNS45NzYzMSAxMy40NzYzQzYuNjAxNDMgMTIuODUxMiA3LjQ0OTI4IDEyLjUgOC4zMzMzMyAxMi41SDExLjY2NjdDMTIuNTUwNyAxMi41IDEzLjM5ODYgMTIuODUxMiAxNC4wMjM3IDEzLjQ3NjNDMTQuNjQ4OCAxNC4xMDE0IDE1IDE0Ljk0OTMgMTUgMTUuODMzM1YxNy41TTYuNjY2NjcgNS44MzMzM0M2LjY2NjY3IDYuNzE3MzkgNy4wMTc4NiA3LjU2NTIzIDcuNjQyOTggOC4xOTAzNkM4LjI2ODEgOC44MTU0OCA5LjExNTk0IDkuMTY2NjcgMTAgOS4xNjY2N0MxMC44ODQxIDkuMTY2NjcgMTEuNzMxOSA4LjgxNTQ4IDEyLjM1NyA4LjE5MDM2QzEyLjk4MjEgNy41NjUyMyAxMy4zMzMzIDYuNzE3MzkgMTMuMzMzMyA1LjgzMzMzQzEzLjMzMzMgNC45NDkyOCAxMi45ODIxIDQuMTAxNDMgMTIuMzU3IDMuNDc2MzFDMTEuNzMxOSAyLjg1MTE5IDEwLjg4NDEgMi41IDEwIDIuNUM5LjExNTk0IDIuNSA4LjI2ODEgMi44NTExOSA3LjY0Mjk4IDMuNDc2MzFDNy4wMTc4NiA0LjEwMTQzIDYuNjY2NjcgNC45NDkyOCA2LjY2NjY3IDUuODMzMzNaIiBzdHJva2U9IiMxNTIxNDkiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K" alt=""></span><span class="coins-list__text"><b class="t-note-medium">Друг 2</b><span class="t-caption">Зарегистрировался, ждём первый заём</span></span><span class="badge badge--marine t-caps-xsmall-strong" data-size-badge="20">Ждём заём</span></li>
-                        <li><span class="coins-ic coins-ic--round"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ1c2VyIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTUgMTcuNVYxNS44MzMzQzUgMTQuOTQ5MyA1LjM1MTE5IDE0LjEwMTQgNS45NzYzMSAxMy40NzYzQzYuNjAxNDMgMTIuODUxMiA3LjQ0OTI4IDEyLjUgOC4zMzMzMyAxMi41SDExLjY2NjdDMTIuNTUwNyAxMi41IDEzLjM5ODYgMTIuODUxMiAxNC4wMjM3IDEzLjQ3NjNDMTQuNjQ4OCAxNC4xMDE0IDE1IDE0Ljk0OTMgMTUgMTUuODMzM1YxNy41TTYuNjY2NjcgNS44MzMzM0M2LjY2NjY3IDYuNzE3MzkgNy4wMTc4NiA3LjU2NTIzIDcuNjQyOTggOC4xOTAzNkM4LjI2ODEgOC44MTU0OCA5LjExNTk0IDkuMTY2NjcgMTAgOS4xNjY2N0MxMC44ODQxIDkuMTY2NjcgMTEuNzMxOSA4LjgxNTQ4IDEyLjM1NyA4LjE5MDM2QzEyLjk4MjEgNy41NjUyMyAxMy4zMzMzIDYuNzE3MzkgMTMuMzMzMyA1LjgzMzMzQzEzLjMzMzMgNC45NDkyOCAxMi45ODIxIDQuMTAxNDMgMTIuMzU3IDMuNDc2MzFDMTEuNzMxOSAyLjg1MTE5IDEwLjg4NDEgMi41IDEwIDIuNUM5LjExNTk0IDIuNSA4LjI2ODEgMi44NTExOSA3LjY0Mjk4IDMuNDc2MzFDNy4wMTc4NiA0LjEwMTQzIDYuNjY2NjcgNC45NDkyOCA2LjY2NjY3IDUuODMzMzNaIiBzdHJva2U9IiMxNTIxNDkiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K" alt=""></span><span class="coins-list__text"><b class="t-note-medium">Друг 3</b><span class="t-caption">Уже был клиентом Boostra</span></span><span class="badge badge--neutral t-caps-xsmall-strong" data-size-badge="20">Не&nbsp;засчитан</span></li>
-                      </ul>
+                      <!-- группы по месяцам: её компонент Friends month (3470:1594), строки собирает app.js по состоянию -->
+                      <div class="friends-months" id="friendsMonths" data-full></div>
                     </div>
 
                     <div class="coins-pane" data-pane="history" hidden>
@@ -3529,6 +3534,35 @@ button.coins-nav__btn { cursor: pointer; }
     both: { title: 'Можно тратить и есть начисленные', balance: '3' + NB + '300 бустракоинов', sub: 'Можно потратить на' + NB + 'оплату процентов или продление займа',
       badge: 'Списать 3 300', on: true, off: false, frozen: 'Потратить можно с' + NB + '20' + NB + 'ноября', lists: true }
   };
+  /* «Друзья» по месяцам (макет 19.10.2026): у текущего месяца «Можно пригласить ещё N», у прошлых без подписи.
+     Строка: [имя, подпись, бейдж, тон бейджа] */
+  var R_LOAN15 = ['Друг 1', 'Взял заём 15' + NB + 'октября'];
+  var R_WAIT = ['Друг 2', 'Зарегистрировался, ждём первый заём', 'Ждём заём', 'marine'];
+  var R_OLD = ['Друг 3', 'Уже был клиентом Boostra', 'Не' + NB + 'засчитан', 'neutral'];
+  var MONTHS = {
+    none: [],
+    frozen: [{ month: 'Октябрь', status: 'Можно пригласить ещё 3', rows: [R_LOAN15.concat(['С' + NB + '1' + NB + 'ноября', 'info']), R_WAIT, R_OLD] }],
+    available: [
+      { month: 'Ноябрь', status: 'Можно пригласить 5', empty: 'В этом месяце вы ещё не' + NB + 'приглашали друзей' },
+      { month: 'Октябрь', rows: [R_LOAN15.concat(['Начислено', 'success']), R_WAIT, R_OLD] }
+    ],
+    both: [
+      { month: 'Ноябрь', status: 'Можно пригласить ещё 4', rows: [['Друг 1', 'Взял заём 3' + NB + 'ноября', 'С' + NB + '20' + NB + 'ноября', 'info']] },
+      { month: 'Октябрь', rows: [R_LOAN15.concat(['Начислено', 'success']), ['Друг 2', 'Взял заём 19' + NB + 'октября', 'С' + NB + '5' + NB + 'ноября', 'info'], R_OLD] }
+    ]
+  };
+  function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function renderMonths(id) {
+    $('#friendsMonths').innerHTML = MONTHS[id].map(function (m) {
+      return '<section class="friends-month"><header class="friends-month__head"><b class="t-note-medium">' + m.month + '</b>' +
+        (m.status ? '<span class="t-caption">' + esc(m.status) + '</span>' : '') + '</header>' +
+        (m.empty ? '<p class="friends-month__empty t-note">' + esc(m.empty) + '</p>' : '') +
+        (m.rows ? '<ul class="coins-list">' + m.rows.map(function (r) {
+          return '<li><span class="coins-ic coins-ic--round"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ1c2VyIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTUgMTcuNVYxNS44MzMzQzUgMTQuOTQ5MyA1LjM1MTE5IDE0LjEwMTQgNS45NzYzMSAxMy40NzYzQzYuNjAxNDMgMTIuODUxMiA3LjQ0OTI4IDEyLjUgOC4zMzMzMyAxMi41SDExLjY2NjdDMTIuNTUwNyAxMi41IDEzLjM5ODYgMTIuODUxMiAxNC4wMjM3IDEzLjQ3NjNDMTQuNjQ4OCAxNC4xMDE0IDE1IDE0Ljk0OTMgMTUgMTUuODMzM1YxNy41TTYuNjY2NjcgNS44MzMzM0M2LjY2NjY3IDYuNzE3MzkgNy4wMTc4NiA3LjU2NTIzIDcuNjQyOTggOC4xOTAzNkM4LjI2ODEgOC44MTU0OCA5LjExNTk0IDkuMTY2NjcgMTAgOS4xNjY2N0MxMC44ODQxIDkuMTY2NjcgMTEuNzMxOSA4LjgxNTQ4IDEyLjM1NyA4LjE5MDM2QzEyLjk4MjEgNy41NjUyMyAxMy4zMzMzIDYuNzE3MzkgMTMuMzMzMyA1LjgzMzMzQzEzLjMzMzMgNC45NDkyOCAxMi45ODIxIDQuMTAxNDMgMTIuMzU3IDMuNDc2MzFDMTEuNzMxOSAyLjg1MTE5IDEwLjg4NDEgMi41IDEwIDIuNUM5LjExNTk0IDIuNSA4LjI2ODEgMi44NTExOSA3LjY0Mjk4IDMuNDc2MzFDNy4wMTc4NiA0LjEwMTQzIDYuNjY2NjcgNC45NDkyOCA2LjY2NjY3IDUuODMzMzNaIiBzdHJva2U9IiMxNTIxNDkiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K" alt=""></span><span class="coins-list__text"><b class="t-note-medium">' + esc(r[0]) +
+            '</b><span class="t-caption">' + esc(r[1]) + '</span></span><span class="badge badge--' + r[3] + ' t-caps-xsmall-strong" data-size-badge="20">' + esc(r[2]) + '</span></li>';
+        }).join('') + '</ul>' : '') + '</section>';
+    }).join('');
+  }
   var state = { coins: 'none', scenario: 'entry', view: 'lk', tab: 'invite', friend: false };
 
   function applyState() {
@@ -3536,6 +3570,7 @@ button.coins-nav__btn { cursor: pointer; }
     $('#balance').textContent = s.balance;
     $('#balanceSub').textContent = s.sub;
     $('#frozenAlert').hidden = !s.frozen;
+    renderMonths(state.coins);
     if (s.frozen) $('#frozenDate').textContent = s.frozen;
     $$('.coins-pane[data-pane="friends"], .coins-pane[data-pane="history"]').forEach(function (p) { p.dataset.emptyState = s.lists ? 'off' : 'on'; });
     var badge = $('#coinsBadge'), sw = $('#coinsSwitch');
