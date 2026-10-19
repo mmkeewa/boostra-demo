@@ -2913,7 +2913,8 @@ button.coins-nav__btn { cursor: pointer; }
 .coins-balance { gap: var(--space-xs); }
 .coins-balance__head { display: flex; align-items: center; justify-content: space-between; }
 .coins-balance .alert { margin-top: var(--space-sm); }
-.coins-tabs .segmented-control { align-self: stretch; }
+/* селектор как в ДС, шире области: заходит в поля карточки, по бокам 8 вместо 16 (её правка 2026-10-19, макет Coins tabs) */
+.coins-tabs .segmented-control { align-self: stretch; margin: 0 calc(var(--space-sm) - var(--space-lg)); }
 .coins-tabs .segment { flex: 1 1 0; }
 .coins-pane { display: flex; flex-direction: column; gap: var(--space-md); }
 .coins-pane[hidden] { display: none; }
