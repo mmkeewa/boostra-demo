@@ -2994,6 +2994,10 @@ button.coins-nav__btn { cursor: pointer; }
 .friends-month__empty { margin: 0; color: var(--text-bottom-secondary); }
 .badge--success { background: var(--brand-success-10); color: var(--text-success-default); }
 
+/* Плитка «Эффект»: второй эффект (оплаты с бустракоинами) под первым, через разделитель */
+.stat__second { display: flex; flex-direction: column; gap: var(--space-xs); padding-top: var(--space-sm); border-top: 1px solid var(--border-bottom-default); }
+.stat__second[hidden] { display: none; }
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -3483,6 +3487,10 @@ button.coins-nav__btn { cursor: pointer; }
           <p class="stat__value" data-role="value"><span class="stat__number" data-role="number"></span><span class="badge badge--info t-caps-xsmall-strong" data-size-badge="20" data-role="badge">3%</span></p>
           <p class="stat__caption t-caption" data-role="caption"></p>
           <ul class="range-chart" id="estimateChart" aria-label="Новые клиенты в месяц по доле пригласивших" data-role="ranges"></ul>
+          <div class="stat__second" data-role="second" hidden>
+            <p class="stat__value"><span class="stat__number" data-role="number2"></span></p>
+            <p class="stat__caption t-caption" data-role="caption2"></p>
+          </div>
           <p class="stat__text t-note" data-role="text"></p>
         </section>
       </div>
@@ -3712,8 +3720,8 @@ button.coins-nav__btn { cursor: pointer; }
     $('#estimateChart').appendChild(li);
   });
 
-  var METRIC = 'Главная: рост оплат займов с\u00A0бустракоинами, ₽ в\u00A0месяц.';
-  var EST_MAIN = { value: '≈240', caption: 'новых клиентов в месяц: около 6,3 млн ₽ выдачи, +1,5% к выдаче НК', ranges: true };
+  var METRIC = 'Главная: рост оплат займов с\u00A0бустракоинами, ₽ в\u00A0месяц. Второстепенная: рост выдачи новым клиентам на\u00A01,5%.';
+  var EST_MAIN = { value: '≈240', caption: 'Эффект 1: новых клиентов в\u00A0месяц, около 6,3\u00A0млн\u00A0₽ выдачи, +1,5% к\u00A0выдаче НК', ranges: true, second: { value: 'до +0,6%', caption: 'Эффект 2: оплат займов в\u00A0месяц, до\u00A0≈240 оплат со\u00A0списанием бустракоинов из\u00A0≈40\u00A0тыс. активных клиентов' } };
   var NOW_ZERO = { value: '0', badge: 'программы нет', caption: 'рефералов сейчас, активных клиентов около 40 тыс. в месяц', share: 0, meter: '0%', meterLabel: 'пригласили' };
   var ANALYTICS = {
     entry: {
@@ -3725,7 +3733,7 @@ button.coins-nav__btn { cursor: pointer; }
     invite: {
       steps: ['active', 'invited'], now: NOW_ZERO, newEvents: true,
       goal: METRIC,
-      events: 'В разделе событий нет. Новое событие одно: нажатие «Копировать» или «Пригласить друга», способ в параметре; название даёт datahints. Открытие раздела, табы и правила не размечаем.',
+      events: 'Разметить кнопки «Копировать» и\u00A0«Пригласить друга» событием `dl_referral_click_share`, способ в\u00A0параметре `share_method` (`copy` или `share`). Открытие раздела, табы и\u00A0правила не\u00A0размечаем.',
       estimate: EST_MAIN
     },
     rules: {
@@ -3743,13 +3751,13 @@ button.coins-nav__btn { cursor: pointer; }
     pay: {
       steps: ['spent'], now: { value: '0 ₽', badge: 'программы нет', caption: 'списано бустракоинами', share: 0, meter: '0%', meterLabel: 'списали' },
       goal: 'Главная метрика программы: рост оплат и\u00A0продлений займов со\u00A0списанием бустракоинов. Вторая: берут ли эти клиенты следующий заём.',
-      events: 'Оплата размечена: `dl_repayment_click_pay`, `dl_repayment_success_payment`, тип в\u00A0`repayment_type`. Datahints: добавить в\u00A0параметры оплаты сумму списания бустракоинами и\u00A0отправлять `dl_repayment_success_payment`, даже когда бустракоины покрывают всю сумму и\u00A0оплаты через банк нет.',
-      estimate: { value: '≈240 тыс. ₽', caption: 'бустракоинов в месяц: 1 000 ₽ за нового клиента' }
+      events: 'Разметить переключатель «Списать бустракоины» событием `dl_repayment_switch_coins`, параметры `switch_state` (`on` или\u00A0`off`) и\u00A0`coins_amount`. В\u00A0`dl_repayment_success_payment` добавить параметр `coins_amount` и\u00A0отправлять событие, даже когда бустракоины покрывают всю сумму.',
+      estimate: { value: 'до +0,6%', caption: 'Эффект 2: оплат займов в\u00A0месяц, до\u00A0≈240 оплат со\u00A0списанием бустракоинов', second: { value: '≈240\u00A0тыс.\u00A0₽', caption: 'бустракоинов в\u00A0месяц спишем: 1\u00A0000\u00A0₽ за\u00A0нового клиента' } }
     },
     friend: {
       steps: ['friends', 'loans'], now: { value: '0', badge: 'программы нет', caption: 'новых клиентов по ссылке', share: 0, meter: '0%', meterLabel: 'выдано' },
       goal: 'Снижаем стоимость привлечения новых клиентов: растёт доля НК, пришедших по\u00A0ссылке друга. Целевой прирост доли пока не\u00A0задан.',
-      events: 'Регистрация друга размечена воронкой `dl_reg_*`. Разработка: сохранить реферальный код в\u00A0заявке, это связь «пригласивший → друг». Datahints: добавить в\u00A0параметры воронки `dl_reg_*` признак перехода по\u00A0ссылке друга, чтобы рефералы были видны в\u00A0CJM-дашборде.',
+      events: 'Регистрация друга размечена воронкой `dl_reg_*`. Разработка: сохранить реферальный код в\u00A0заявке, это связь «пригласивший → друг». Datahints: добавить в\u00A0параметры воронки `dl_reg_*` параметр `ref_source = friend_link`, чтобы рефералы были видны в\u00A0CJM-дашборде.',
       estimate: { text: 'Цена для друга: скидка 50% на проценты первого займа по правилам программы, размер ещё уточняется. В оценку выше не входит.' }
     }
   };
@@ -3780,6 +3788,9 @@ button.coins-nav__btn { cursor: pointer; }
     part(tileEstimate, 'ranges').hidden = !est.ranges;
     part(tileEstimate, 'note').hidden = !est.ranges;
     show(part(tileEstimate, 'text'), est.text);
+    /* второй эффект в той же плитке */
+    part(tileEstimate, 'second').hidden = !est.second;
+    if (est.second) { part(tileEstimate, 'number2').textContent = est.second.value; part(tileEstimate, 'caption2').textContent = est.second.caption; }
   }
   function markChips(id) {
     $$('#scenarioChips .chip').forEach(function (c) {
