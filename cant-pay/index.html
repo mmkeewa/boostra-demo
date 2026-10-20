@@ -3267,12 +3267,12 @@ button { font: inherit; color: inherit; }
       chips: [OTHER_REASON]
     },
     payFailed: {
-      scenario: '5', bot: [T.failed], /* её решение 20.10.2026: без красного баннера */
-      chips: [
-        { label: 'Оплатить через\u00A0СБП', exit: 'Оплата' },
-        { label: 'Оплатить новой картой', exit: 'Карты и счета: добавить карту' },
-        OTHER_REASON
-      ]
+      scenario: '5', bot: [T.failed, { info: 'payFailed' }], /* её решения 20.10.2026: без красного баннера, способы списком в диалоге */
+      options: [
+        { label: 'Оплатить через\u00A0СБП', img: 'data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE1LjgwNCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE1LjgwNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9Ik1hcmsiIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8wXzEwMikiPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNNC41ODc5MSA4Ljk5NzhMMi4yMDkzMyAxMC4zNTE2TDAgMTQuMTI4NEw5LjAwNjU1IDguOTk3OEg0LjU4NzkxWiIgZmlsbD0iIzhGNDc5NCIvPgo8cGF0aCBpZD0iVmVjdG9yXzIiIGQ9Ik0xMS4zODQ4IDUuMTMwNkw5LjAwNjIgNi40ODQzNUw2Ljc5NjkgMTAuMjYxMkwxNS44MDM0IDUuMTMwNkgxMS4zODQ4WiIgZmlsbD0iI0U0MDY0NiIvPgo8cGF0aCBpZD0iVmVjdG9yXzMiIGQ9Ik05LjAwNjIgMy43NzY4OUw2Ljc5NjkgMFY3LjczODhWMTAuMjYxMlYxOEw5LjAwNjIgMTQuMjIzMVYzLjc3Njg5WiIgZmlsbD0iI0Y5QjQyOSIvPgo8cGF0aCBpZD0iVmVjdG9yXzQiIGQ9Ik02Ljc5NjkgMEw5LjAwNjIgMy43NzY4OUwxMS4zODQ4IDUuMTMwNkgxNS44MDM0TDYuNzk2OSAwWiIgZmlsbD0iI0VGODAxOSIvPgo8cGF0aCBpZD0iVmVjdG9yXzUiIGQ9Ik02Ljc5NjkgNy43Mzg3NVYxOEw5LjAwNjIgMTQuMjIzMVYxMS41MTU2TDYuNzk2OSA3LjczODc1WiIgZmlsbD0iIzc4QjcyQSIvPgo8cGF0aCBpZD0iVmVjdG9yXzYiIGQ9Ik0xMS4zODQ4IDEyLjg2OTRMOS4wMDYyIDE0LjIyMzFMNi43OTY5IDE4TDE1LjgwMzQgMTIuODY5NEgxMS4zODQ4WiIgZmlsbD0iIzAwODUzRiIvPgo8cGF0aCBpZD0iVmVjdG9yXzciIGQ9Ik0wIDMuODcxNThWMTQuMTI4M0wyLjIwOTMzIDEwLjM1NTlWNy42NDM5NUwwIDMuODcxNThaIiBmaWxsPSIjNUI1N0EyIi8+CjxwYXRoIGlkPSJWZWN0b3JfOCIgZD0iTTYuNzk3MjUgNy43Mzg3TDYuODAxOCA3Ljc0MzI1TDAgMy44NzE1OEwyLjIwOTMzIDcuNjQzOTVMMTEuMzg1MSAxMi44Njk0SDE1LjgwMzhMNi43OTcyNSA3LjczODdaIiBmaWxsPSIjMDY5OEQ2Ii8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMF8xMDIiPgo8cmVjdCB3aWR0aD0iMTUuODA0IiBoZWlnaHQ9IjE4IiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=', logo: 'sbp', exit: 'Оплата' },
+        { label: 'Оплатить новой картой', img: 'data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJJY29uIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTIgNi42NjY2N0gxNE00LjY2NjY3IDEwSDQuNjczMzNNNy4zMzMzMyAxMEg4LjY2NjY3TTIgNS4zMzMzM0MyIDQuODAyOSAyLjIxMDcxIDQuMjk0MTkgMi41ODU3OSAzLjkxOTEyQzIuOTYwODYgMy41NDQwNSAzLjQ2OTU3IDMuMzMzMzMgNCAzLjMzMzMzSDEyQzEyLjUzMDQgMy4zMzMzMyAxMy4wMzkxIDMuNTQ0MDUgMTMuNDE0MiAzLjkxOTEyQzEzLjc4OTMgNC4yOTQxOSAxNCA0LjgwMjkgMTQgNS4zMzMzM1YxMC42NjY3QzE0IDExLjE5NzEgMTMuNzg5MyAxMS43MDU4IDEzLjQxNDIgMTIuMDgwOUMxMy4wMzkxIDEyLjQ1NiAxMi41MzA0IDEyLjY2NjcgMTIgMTIuNjY2N0g0QzMuNDY5NTcgMTIuNjY2NyAyLjk2MDg2IDEyLjQ1NiAyLjU4NTc5IDEyLjA4MDlDMi4yMTA3MSAxMS43MDU4IDIgMTEuMTk3MSAyIDEwLjY2NjdWNS4zMzMzM1oiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K', logo: 'card', exit: 'Карты и счета: добавить карту' }
+      ],
+      chips: [OTHER_REASON]
     },
     /* «Другая причина» над полем: без неё из ввода сообщения не выйти (её баг 19.10.2026) */
     otherProblem: { scenario: '7', bot: [T.other], chips: [OTHER_REASON], input: true },
