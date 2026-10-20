@@ -2355,6 +2355,20 @@ button { font: inherit; color: inherit; }
 .ci-ok { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--text-success-default); color: var(--text-peak-default); }
 .ci-ok svg path { stroke-width: 1.2; } /* глиф на сетке 16 в размере 24: линия 1,8 px, как у Icon из ДС в макете */
 
+/* Предложения списком в диалоге: List row (её 2159:3759) с плиткой card-sbp, как в pay-method */
+.chat-info--list { padding: var(--space-xs) var(--space-lg); background: var(--bg-grouped-secondary-w); border: var(--border-width-1) solid var(--border-primary-default); }
+.ci-methods { display: flex; flex-direction: column; }
+.ci-methods .list-row { display: flex; align-items: center; gap: var(--space-md); width: 100%; padding: var(--space-md) 0; border: 0; background: none; color: var(--text-bottom-default); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.ci-methods .list-row__label { flex: 1 1 0; min-width: 0; margin: 0; }
+.ci-methods .list-row > .cs-icon { color: var(--text-bottom-tertiary); }
+.ci-divider { height: 1px; margin: 0; border: 0; background: var(--neutral-bottom-alpha-10); }
+.card-sbp { display: flex; flex-shrink: 0; align-items: center; justify-content: center; width: 42px; height: 28px; overflow: hidden; border: var(--border-width-1) solid var(--border-primary-default); border-radius: var(--radius-md); background: var(--bg-grouped-secondary-w); color: var(--text-bottom-default); }
+.card-sbp[data-logo="icon"] { width: 32px; height: 32px; border: 0; border-radius: var(--radius-full); background: var(--brand-secondary-10); color: var(--text-secondary-default); } /* действие, а не способ оплаты: круглая плитка, как иконки в сценах */
+.card-sbp > img { display: block; flex-shrink: 0; }
+.card-sbp[data-logo="sbp"] > img { width: 15.804px; height: 18px; }
+.card-sbp[data-logo="card"] > img { width: 16px; height: 16px; }
+.card-sbp .cs-icon[data-size="16"] svg[viewBox="0 0 40 40"] path { stroke-width: 3.33; } /* глиф на сетке 40 в размере 16: линия 1,33 px */
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -3041,10 +3055,22 @@ button { font: inherit; color: inherit; }
         '<span class="t-caption cs-error ci-foot">Это может помешать получить кредит, рассрочку или ипотеку</span>';
     }
   };
+  /* Предложения списком внутри диалога (её решение 20.10.2026): строки её List row (2159:3759) с плиткой card-sbp и шевроном.
+     Строки задаёт app.js в ChatScenes.lists[тип]: { label, img | icon, go | exit }; нажатие обрабатывает app.js по data-opt */
+  var lists = {};
+  function list(type) {
+    return '<span class="ci-methods">' + lists[type].map(function (o, i) {
+      var tile = o.img ? '<img src="' + o.img + '" alt="">' : icon(o.icon, 16);
+      return (i ? '<hr class="ci-divider">' : '') +
+        '<button class="list-row" type="button" data-opt="' + i + '"><span class="card-sbp"' + (o.logo ? ' data-logo="' + o.logo + '"' : ' data-logo="icon"') + '>' + tile + '</span>' +
+        '<span class="list-row__label t-body">' + o.label + '</span>' + icon('chevron-right', 20) + '</button>';
+    }).join('') + '</span>';
+  }
   function info(type) {
     var el = document.createElement('div');
-    el.className = 'chat-info chat-info--' + type;
-    el.innerHTML = INFO[type]();
+    el.className = 'chat-info chat-info--' + (lists[type] ? 'list' : type);
+    el.dataset.list = lists[type] ? type : '';
+    el.innerHTML = lists[type] ? list(type) : INFO[type]();
     return el;
   }
 
@@ -3057,7 +3083,7 @@ button { font: inherit; color: inherit; }
     return el;
   }
 
-  window.ChatScenes = { scene: scene, info: info, typing: typing };
+  window.ChatScenes = { scene: scene, info: info, typing: typing, lists: lists };
 })();
 
 </script>
@@ -3192,13 +3218,13 @@ button { font: inherit; color: inherit; }
   var STEPS = {
     reasons: { scenario: '1', bot: [T.ask], chips: REASONS },
     noMoney: {
-      scenario: '2', bot: [T.noMoney],
-      chips: [
-        { label: 'Выбрать день оплаты', go: 'payDate' },
-        { label: 'Продлить за 3\u00A0500\u00A0₽', go: 'extend' }, /* сначала ответ бота, потом переход (её правка 19.10.2026) */
-        { label: 'Оплатить частично', go: 'partial' },
-        OTHER_REASON
-      ]
+      scenario: '2', bot: [T.noMoney, { info: 'noMoney' }], /* её решение 20.10.2026: варианты списком в диалоге, а не чипами */
+      options: [
+        { label: 'Выбрать день оплаты', icon: 'calendar', go: 'payDate' },
+        { label: 'Продлить за 3\u00A0500\u00A0₽', icon: 'calendar-check', go: 'extend' }, /* сначала ответ бота, потом переход (её правка 19.10.2026) */
+        { label: 'Оплатить частично', icon: 'pig-money', go: 'partial' }
+      ],
+      chips: [OTHER_REASON]
     },
     payDate: {
       /* дни выбираются в карточке внутри чата (Chat infographic, Type=Date picker; её правка 20.10.2026) */
@@ -3232,16 +3258,16 @@ button { font: inherit; color: inherit; }
       chips: [OTHER_REASON] /* кнопка «Оплатить сейчас» внутри баннера */
     },
     otherMethod: {
-      scenario: '4', bot: [T.method, CHOICES],
-      chips: [
-        { label: 'СБП', exit: 'Оплата' },
-        { label: 'Банковская карта', exit: 'Оплата' },
-        { label: 'По\u00A0реквизитам', exit: 'Способы оплаты и реквизиты' },
-        OTHER_REASON
-      ]
+      scenario: '4', bot: [T.method, { info: 'otherMethod' }], /* её решение 20.10.2026: способы списком (List row), без красного баннера */
+      options: [
+        { label: 'СБП', img: 'data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE1LjgwNCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE1LjgwNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9Ik1hcmsiIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8wXzEwMikiPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNNC41ODc5MSA4Ljk5NzhMMi4yMDkzMyAxMC4zNTE2TDAgMTQuMTI4NEw5LjAwNjU1IDguOTk3OEg0LjU4NzkxWiIgZmlsbD0iIzhGNDc5NCIvPgo8cGF0aCBpZD0iVmVjdG9yXzIiIGQ9Ik0xMS4zODQ4IDUuMTMwNkw5LjAwNjIgNi40ODQzNUw2Ljc5NjkgMTAuMjYxMkwxNS44MDM0IDUuMTMwNkgxMS4zODQ4WiIgZmlsbD0iI0U0MDY0NiIvPgo8cGF0aCBpZD0iVmVjdG9yXzMiIGQ9Ik05LjAwNjIgMy43NzY4OUw2Ljc5NjkgMFY3LjczODhWMTAuMjYxMlYxOEw5LjAwNjIgMTQuMjIzMVYzLjc3Njg5WiIgZmlsbD0iI0Y5QjQyOSIvPgo8cGF0aCBpZD0iVmVjdG9yXzQiIGQ9Ik02Ljc5NjkgMEw5LjAwNjIgMy43NzY4OUwxMS4zODQ4IDUuMTMwNkgxNS44MDM0TDYuNzk2OSAwWiIgZmlsbD0iI0VGODAxOSIvPgo8cGF0aCBpZD0iVmVjdG9yXzUiIGQ9Ik02Ljc5NjkgNy43Mzg3NVYxOEw5LjAwNjIgMTQuMjIzMVYxMS41MTU2TDYuNzk2OSA3LjczODc1WiIgZmlsbD0iIzc4QjcyQSIvPgo8cGF0aCBpZD0iVmVjdG9yXzYiIGQ9Ik0xMS4zODQ4IDEyLjg2OTRMOS4wMDYyIDE0LjIyMzFMNi43OTY5IDE4TDE1LjgwMzQgMTIuODY5NEgxMS4zODQ4WiIgZmlsbD0iIzAwODUzRiIvPgo8cGF0aCBpZD0iVmVjdG9yXzciIGQ9Ik0wIDMuODcxNThWMTQuMTI4M0wyLjIwOTMzIDEwLjM1NTlWNy42NDM5NUwwIDMuODcxNThaIiBmaWxsPSIjNUI1N0EyIi8+CjxwYXRoIGlkPSJWZWN0b3JfOCIgZD0iTTYuNzk3MjUgNy43Mzg3TDYuODAxOCA3Ljc0MzI1TDAgMy44NzE1OEwyLjIwOTMzIDcuNjQzOTVMMTEuMzg1MSAxMi44Njk0SDE1LjgwMzhMNi43OTcyNSA3LjczODdaIiBmaWxsPSIjMDY5OEQ2Ii8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMF8xMDIiPgo8cmVjdCB3aWR0aD0iMTUuODA0IiBoZWlnaHQ9IjE4IiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=', logo: 'sbp', exit: 'Оплата' },
+        { label: 'Банковская карта', img: 'data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJJY29uIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTIgNi42NjY2N0gxNE00LjY2NjY3IDEwSDQuNjczMzNNNy4zMzMzMyAxMEg4LjY2NjY3TTIgNS4zMzMzM0MyIDQuODAyOSAyLjIxMDcxIDQuMjk0MTkgMi41ODU3OSAzLjkxOTEyQzIuOTYwODYgMy41NDQwNSAzLjQ2OTU3IDMuMzMzMzMgNCAzLjMzMzMzSDEyQzEyLjUzMDQgMy4zMzMzMyAxMy4wMzkxIDMuNTQ0MDUgMTMuNDE0MiAzLjkxOTEyQzEzLjc4OTMgNC4yOTQxOSAxNCA0LjgwMjkgMTQgNS4zMzMzM1YxMC42NjY3QzE0IDExLjE5NzEgMTMuNzg5MyAxMS43MDU4IDEzLjQxNDIgMTIuMDgwOUMxMy4wMzkxIDEyLjQ1NiAxMi41MzA0IDEyLjY2NjcgMTIgMTIuNjY2N0g0QzMuNDY5NTcgMTIuNjY2NyAyLjk2MDg2IDEyLjQ1NiAyLjU4NTc5IDEyLjA4MDlDMi4yMTA3MSAxMS43MDU4IDIgMTEuMTk3MSAyIDEwLjY2NjdWNS4zMzMzM1oiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K', logo: 'card', exit: 'Оплата' },
+        { label: 'По\u00A0реквизитам', icon: 'building-bank', logo: 'bank', exit: 'Способы оплаты и реквизиты' }
+      ],
+      chips: [OTHER_REASON]
     },
     payFailed: {
-      scenario: '5', bot: [T.failed, CHOICES],
+      scenario: '5', bot: [T.failed], /* её решение 20.10.2026: без красного баннера */
       chips: [
         { label: 'Оплатить через\u00A0СБП', exit: 'Оплата' },
         { label: 'Оплатить новой картой', exit: 'Карты и счета: добавить карту' },
@@ -3269,6 +3295,8 @@ button { font: inherit; color: inherit; }
     treeThinking: { scenario: '8c', bot: [{ scene: 'scales' }, T.thinking, T.thinking2, { scene: 'solution' }, T.thinkingEnd],
       chips: SOLUTIONS.concat([OTHER_REASON]) }
   };
+  /* списки предложений в диалоге (List row): шаги с полем options */
+  Object.keys(STEPS).forEach(function (k) { if (STEPS[k].options) ChatScenes.lists[k] = STEPS[k].options; });
 
   var PAUSE = 240;      /* пауза перед тем, как бот начнёт печатать ответ */
   var PAUSE_NEXT = 200; /* пауза между репликами бота в серии */
@@ -3635,6 +3663,13 @@ button { font: inherit; color: inherit; }
       say('client', ext.textContent.trim(), true);
       repliesEl.classList.add('is-locked');
       later(function () { showStub('Продление займа'); }, PAUSE);
+      return;
+    }
+    var opt = e.target.closest('[data-opt]');
+    if (opt && !state.pending && !state.stub) {
+      var box = opt.closest('[data-list]');
+      if (!box || box.dataset.list !== state.step) return; /* старые списки выше по переписке не нажимаются */
+      onChip(STEPS[state.step].options[+opt.dataset.opt]);
       return;
     }
     var offer = e.target.closest('[data-offer]');
@@ -4113,7 +4148,7 @@ button { font: inherit; color: inherit; }
   /* Сценарий ставит телефон в состояние сразу, с перепиской, какой она была бы у клиента */
   var DEFAULT_DATE = '30.09';
   function chipTo(stepId, go, date) {
-    return (STEPS[stepId].chips || []).concat(STEPS[stepId].dates || []).filter(function (c) { return c.go === go && (!date || c.date === date); })[0];
+    return (STEPS[stepId].chips || []).concat(STEPS[stepId].dates || [], STEPS[stepId].options || []).filter(function (c) { return c.go === go && (!date || c.date === date); })[0];
   }
   function replay(stepId, go, date) {
     var c = chipTo(stepId, go, date);
