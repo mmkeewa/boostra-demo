@@ -2369,6 +2369,11 @@ button { font: inherit; color: inherit; }
 .card-sbp[data-logo="card"] > img { width: 16px; height: 16px; }
 .card-sbp .cs-icon[data-size="16"] svg[viewBox="0 0 40 40"] path { stroke-width: 3.33; } /* глиф на сетке 40 в размере 16: линия 1,33 px */
 
+/* Сумма частичной оплаты в диалоге: карточка, как у списка предложений */
+.chat-info--amount { padding: var(--space-md) var(--space-lg) var(--space-lg); background: var(--bg-grouped-secondary-w); border: var(--border-width-1) solid var(--border-primary-default); }
+.chat-info--amount .input-field { gap: var(--space-sm); }
+.chat-info--amount .input-caption { margin-top: calc(var(--space-xs) - var(--space-sm)); }
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -3026,6 +3031,13 @@ button { font: inherit; color: inherit; }
           '<button class="btn btn-primary" type="button" data-size-button="large" data-offer>Оплатить сейчас</button>' +
         '</span>';
     },
+    /* «Оплатить частично» (её просьба 20.10.2026): поле суммы прямо в диалоге, сумма уходит в кнопку «Оплатить N ₽».
+       Input / Input из ДС, размер Medium; подпись под полем показывает задолженность и ошибку */
+    amount: function () {
+      return '<label class="input-field"><span class="t-note-medium">Сумма платежа</span>' +
+        '<input class="input" data-size-input="medium" data-amount type="text" inputmode="numeric" autocomplete="off" placeholder="Введите сумму">' +
+        '<span class="input-caption" data-amount-caption>Задолженность 20\u00A0000\u00A0₽</span></label>';
+    },
     /* выбор дня внутри чата (Chat infographic, Type=Date picker 3576:6992): месяц и пять дней плитками */
     dates: function () {
       return '<span class="t-caps-xsmall-strong cs-muted">Сентябрь</span><span class="ci-days">' +
@@ -3140,7 +3152,7 @@ button { font: inherit; color: inherit; }
     alertTitle: 'Оплатите до 3\u00A0дня просрочки',
     alertText: 'Просрочка пока небольшая. Оплатите сейчас, и\u00A0она не\u00A0повлияет на\u00A0новые займы',
     ask: 'Расскажите, что мешает оплатить. Подберём решение под\u00A0вашу ситуацию\u00A0🤝',
-    noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂 Выберите удобный день оплаты, продлите заём или оплатите часть',
+    noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂',
     payDate: 'Выберите день, когда вам удобно оплатить\u00A0📅 Срок по\u00A0договору не меняется. Проценты начисляются до\u00A0дня оплаты',
     partial: 'Внесите столько, сколько получается сейчас\u00A0👍',
     extend: 'Отличное решение\u00A0👍 Просрочка сразу остановится',
@@ -3244,9 +3256,9 @@ button { font: inherit; color: inherit; }
       button: PAY_NOW /* её правка 20.10.2026: после выбора дня оставляем «Оплатить сейчас»; шторка закрывается крестиком */
     },
     partial: {
-      scenario: '3', bot: [T.partial], /* её решение 20.10.2026: на частичной оплате красный баннер не показываем */
+      scenario: '3', bot: [T.partial, { info: 'amount' }], /* её решения 20.10.2026: без красного баннера; сумма вводится в диалоге и встаёт в кнопку */
       chips: [OTHER_REASON],
-      button: { label: 'Оплатить частично', exit: 'Блок оплаты: Оплатить частично' }
+      button: { label: 'Оплатить', exit: 'Оплата', amount: true }
     },
     extend: {
       scenario: '2d', bot: [T.extend], /* её решение 20.10.2026: на продлении красный баннер не показываем */
@@ -3620,7 +3632,37 @@ button { font: inherit; color: inherit; }
     if (c.date) setPayDate(c.date);
     goStep(c.go);
   }
+  /* Частичная оплата: сумма из поля в диалоге. Кнопка всегда активна, ошибка по нажатию */
+  var DEBT = 20000;
+  function amountInput() { return state.step === 'partial' ? $$('[data-amount]', messagesEl).pop() : null; }
+  function amountValue() { var i = amountInput(); return i ? +(i.value.replace(/\D/g, '') || 0) : 0; }
+  function money(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0') + '\u00A0₽'; }
+  function amountError(text) {
+    var i = amountInput(); if (!i) return;
+    var cap = i.parentNode.querySelector('[data-amount-caption]');
+    i.dataset.state = text ? 'error' : '';
+    cap.dataset.state = text ? 'error' : '';
+    cap.textContent = text || 'Задолженность ' + money(DEBT);
+  }
+  messagesEl.addEventListener('input', function (e) {
+    var i = e.target.closest('[data-amount]'); if (!i) return;
+    var n = +(i.value.replace(/\D/g, '') || 0);
+    i.value = n ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : '';
+    amountError('');
+    var btn = $('[data-role="action"]', repliesEl);
+    if (btn) btn.textContent = n ? 'Оплатить ' + money(n) : 'Оплатить';
+  });
   function onAction(a) {
+    if (a.amount) {
+      var n = amountValue();
+      if (!n) { amountError('Введите сумму'); return; }
+      if (n >= DEBT) { amountError('Для частичной оплаты сумма меньше ' + money(DEBT)); return; }
+      var inp = amountInput(); if (inp) inp.blur();
+      say('client', 'Оплатить ' + money(n), true);
+      repliesEl.classList.add('is-locked');
+      later(function () { showStub(a.exit); }, PAUSE);
+      return;
+    }
     if (a.exit) { showStub(a.exit); return; }
     if (a.go) { say('client', a.label, true); goStep(a.go); return; }
     if (a.close) closeDialog();
@@ -3653,7 +3695,7 @@ button { font: inherit; color: inherit; }
   /* строки баннера «Просрочка продолжается» работают как чипы: реплика клиента и ветка дерева */
   messagesEl.addEventListener('click', function (e) {
     var day = e.target.closest('[data-date]');
-    if (day && !state.pending && !state.stub && state.step === 'payDate') {
+    if (day && !state.pending && !state.stub) { /* день можно перевыбрать и из старой карточки выше */
       var dc = STEPS.payDate.dates.filter(function (d) { return d.date === day.dataset.date; })[0];
       if (dc) onChip(dc);
       return;
@@ -3668,8 +3710,9 @@ button { font: inherit; color: inherit; }
     var opt = e.target.closest('[data-opt]');
     if (opt && !state.pending && !state.stub) {
       var box = opt.closest('[data-list]');
-      if (!box || box.dataset.list !== state.step) return; /* старые списки выше по переписке не нажимаются */
-      onChip(STEPS[state.step].options[+opt.dataset.opt]);
+      if (!box || !STEPS[box.dataset.list]) return;
+      /* её решение 20.10.2026: списки выше по переписке тоже нажимаются, клиент может передумать (частично → день → продлить) */
+      onChip(STEPS[box.dataset.list].options[+opt.dataset.opt]);
       return;
     }
     var offer = e.target.closest('[data-offer]');
