@@ -2989,6 +2989,26 @@ p, h1, h2 { margin: 0; }
 
 </style>
 <style>
+/* ===== Плитка «Эффект» на страницах-дашбордах 93123 (card/, passport/, timer/) =====
+   Оценка в деньгах для планирования: три сценария роста конверсии шага и итог в выдаче НК в месяц.
+   Сидит в .tile-grid рядом с «Сейчас» и «События», на всю ширину сетки. */
+.tile--effect { grid-column: 1 / -1; display: flex; flex-direction: column; gap: var(--space-sm); }
+.effect__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-xxs) var(--space-md); }
+.effect__title { margin: 0; font-family: var(--body-medium-font-family); font-weight: var(--body-medium-font-weight); font-size: var(--body-medium-size); line-height: var(--body-medium-line-height); }
+.effect__note { margin: 0; color: var(--text-bottom-secondary); }
+.effect__value { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-sm); margin: 0; }
+.effect__number { white-space: nowrap; font-family: var(--h1-strong-font-family); font-weight: var(--h1-strong-font-weight); font-size: var(--h1-strong-size); line-height: var(--h1-strong-line-height); letter-spacing: var(--h1-strong-letter-spacing); }
+.effect__unit { color: var(--text-bottom-secondary); }
+.effect__table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.effect__table th, .effect__table td { padding: var(--space-xxs) 0; text-align: right; font-weight: inherit; white-space: nowrap; }
+.effect__table th:first-child, .effect__table td:first-child { text-align: left; }
+.effect__table thead th { color: var(--text-bottom-secondary); }
+.effect__table tr.is-base td { color: var(--text-bottom-default); font-weight: 600; }
+.effect__table tbody td { color: var(--text-bottom-secondary); }
+.effect__text { margin: 0; color: var(--text-bottom-secondary); }
+
+</style>
+<style>
 /* ===== Окно «Код анимации для Flutter» на страницах-дашбордах (card/, timer/) =====
    Кнопка стоит в верхней строке оболочки (.stand-top), окно открывается поверх всей страницы.
    На телефоне и в узком iframe стенда оболочки нет, поэтому и кнопки нет. */
@@ -3231,6 +3251,13 @@ p, h1, h2 { margin: 0; }
         <section class="tile tile--stat" id="tileEvents" aria-labelledby="eventsTitle">
           <header class="stat__head stat__head--split"><h3 class="stat__title" id="eventsTitle">События</h3><span class="stat__note t-caption">уже размечены, новых нет</span></header>
           <ul class="events" id="eventsList"></ul>
+        </section>
+        <!-- Плитка «Эффект»: оценка в деньгах для планирования (её просьба 2026-10-20), стили ../core2/effect-tile.css -->
+        <section class="tile tile--stat tile--effect" id="tileEffect" aria-labelledby="effectTitle">
+          <header class="effect__head"><h3 class="effect__title" id="effectTitle">Эффект</h3><p class="effect__note t-caption">НК, выдачи 15–28 сентября 2026, DataLens</p></header>
+          <p class="effect__value"><span class="effect__number">+9 млн ₽</span><span class="effect__unit t-note">в месяц, базовый сценарий</span></p>
+          <table class="effect__table t-note"><thead><tr><th>Сценарий</th><th>CR шага</th><th>К выдаче НК</th><th>Выдач в месяц</th><th>В месяц</th></tr></thead><tbody><tr><td>Осторожно</td><td>84%</td><td>+1,6%</td><td>+233</td><td>+5,3 млн ₽</td></tr><tr class="is-base"><td>База</td><td>85%</td><td>+2,9%</td><td>+405</td><td>+9,2 млн ₽</td></tr><tr><td>Смело</td><td>87%</td><td>+5,3%</td><td>+748</td><td>+17 млн ₽</td></tr></tbody></table>
+          <p class="effect__text t-caption">Сейчас CR шага 82,6%: 40 919 загрузили фото, 33 815 привязали карту. Выдачи НК 15–28 сентября 2026: 6 619 займов на 150,4 млн ₽, средний чек 22 726 ₽, в месяц около 322 млн ₽. Допущение: спасённые клиенты проходят скоринг и выдачу так же, как остальные (до выдачи доходят 19,6% привязавших карту).</p>
         </section>
       </div>
     </aside>
