@@ -3060,7 +3060,7 @@ button { font: inherit; color: inherit; }
   var PAY_NOW = { label: 'Оплатить сейчас', exit: 'Оплата' };
   /* решения в ветке банкротства */
   var SOLUTIONS = [
-    { label: 'Продлить с\u00A0оплатой\u00A0%', go: 'extend' },
+    { label: 'Продлить за 3\u00A0500\u00A0₽', go: 'extend' },
     { label: 'Оплатить частично', go: 'partial' },
     { label: 'Выбрать день оплаты', go: 'payDate' }
   ];
@@ -3084,7 +3084,7 @@ button { font: inherit; color: inherit; }
       scenario: '2', bot: [T.noMoney],
       chips: [
         { label: 'Выбрать день оплаты', go: 'payDate' },
-        { label: 'Продлить с\u00A0оплатой\u00A0%', go: 'extend' }, /* сначала ответ бота, потом переход (её правка 19.10.2026) */
+        { label: 'Продлить за 3\u00A0500\u00A0₽', go: 'extend' }, /* сначала ответ бота, потом переход (её правка 19.10.2026) */
         { label: 'Оплатить частично', go: 'partial' },
         OTHER_REASON
       ]
@@ -3113,7 +3113,7 @@ button { font: inherit; color: inherit; }
     extend: {
       scenario: '2d', bot: [T.extend],
       chips: [OTHER_REASON],
-      button: { label: 'Продлить с\u00A0оплатой\u00A0%', exit: 'Продление займа' }
+      button: { label: 'Продлить за 3\u00A0500\u00A0₽', exit: 'Продление займа' }
     },
     alreadyPaid: {
       scenario: '6', bot: [T.paid],
