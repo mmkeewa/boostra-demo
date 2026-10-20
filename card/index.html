@@ -2988,6 +2988,49 @@ p, h1, h2 { margin: 0; }
 }
 
 </style>
+<style>
+/* ===== Окно «Код анимации для Flutter» на страницах-дашбордах (card/, timer/) =====
+   Кнопка стоит в верхней строке оболочки (.stand-top), окно открывается поверх всей страницы.
+   На телефоне и в узком iframe стенда оболочки нет, поэтому и кнопки нет. */
+.code-open { display: none; }
+@media (min-width: 768px) and (pointer: fine) {
+  .code-open {
+    display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 0; cursor: pointer;
+    font: 600 13px/18px Inter, system-ui, sans-serif; color: #fff;
+    background: rgba(255, 255, 255, .24); border-radius: 16px;
+    transition: background .2s, transform .25s cubic-bezier(.2, .8, .2, 1);
+  }
+  .code-open:hover { background: rgba(255, 255, 255, .32); transform: translateY(-2px); }
+  .code-open:first-of-type { margin-left: auto; }
+  .code-open svg { width: 16px; height: 16px; }
+}
+
+.code-modal { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 32px; background: rgba(0, 0, 0, .64); }
+.code-modal[hidden] { display: none; }
+.code-modal__dialog {
+  display: flex; flex-direction: column; width: min(880px, 100%); max-height: 100%;
+  border-radius: 24px; background: #141414; color: #fff; box-shadow: 0 24px 80px rgba(0, 0, 0, .6);
+  font-family: Inter, system-ui, sans-serif; overflow: hidden;
+}
+.code-modal__head { display: flex; align-items: flex-start; gap: 16px; padding: 24px 24px 16px; }
+.code-modal__titles { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1 1 auto; }
+.code-modal__title { margin: 0; font-size: 20px; line-height: 28px; font-weight: 700; }
+.code-modal__file { margin: 0; font-size: 13px; line-height: 18px; color: rgba(255, 255, 255, .56); }
+.code-modal__btn {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px; padding: 0 14px; border: 0; cursor: pointer;
+  font: 600 13px/18px Inter, system-ui, sans-serif; color: #fff; background: rgba(255, 255, 255, .16); border-radius: 16px;
+}
+.code-modal__btn:hover { background: rgba(255, 255, 255, .26); }
+.code-modal__btn--icon { width: 36px; padding: 0; }
+.code-modal__btn svg { width: 18px; height: 18px; }
+.code-modal__hint { margin: 0 24px 12px; font-size: 13px; line-height: 18px; color: rgba(255, 255, 255, .72); }
+.code-modal__code {
+  flex: 1 1 auto; min-height: 0; margin: 0 24px 24px; padding: 16px; overflow: auto;
+  border-radius: 16px; background: #000; color: #e6e6e6;
+  font: 12px/18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; tab-size: 2;
+}
+
+</style>
 </head>
 <body>
 
@@ -3013,6 +3056,7 @@ p, h1, h2 { margin: 0; }
           <span class="stand-tag">Концепт</span>
           <span class="stand-tag">ID&nbsp;93123</span>
         </div>
+        <button class="code-open" type="button" data-code="#code-salute" data-code-title="Код салюта для Flutter" data-code-file="cookie_salute.dart · виджет CookieSalute" data-code-hint="Кладётся в Stack поверх экрана «Карта добавлена»: Positioned.fill(child: CookieSalute(active: isSuccessShown)). Параметры совпадают с прототипом."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Код салюта</button>
       </div>
     </header>
 
@@ -3193,6 +3237,337 @@ p, h1, h2 { margin: 0; }
   </div>
 </div>
 
+<script type="text/plain" id="code-salute">
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
+/// Салют печеньками на экране «Успешно! Карта добавлена».
+///
+/// 12 печенек вылетают снизу залпом, тормозят о воздух, падают
+/// и снова подпрыгивают снизу, пока открыт экран. От боковых краёв
+/// отскакивают. Нажатия не перехватывает, на флоу не влияет.
+///
+/// Кладётся в Stack поверх экрана успеха:
+///   Positioned.fill(child: CookieSalute(active: isSuccessShown))
+///
+/// Параметры один в один перенесены из веб-прототипа
+/// (payments-hypotheses/card/app.js, fireCookieSalute).
+/// Макет: Figma «Выдача {Boostra}», страница «ID-93123 — Добавить карту»,
+/// экран NDL 16, группа `Horray`; кадры анимации в секции «Анимация».
+
+class CookieSaluteSpec {
+  /// Размеры печенек, px: как у 12 инстансов `Cookie` в группе Horray на NDL 16.
+  static const List<double> sizes = [
+    18, 14.7, 22.3, 13.9, 13.3, 12.2, 13.9, 12.8, 13.7, 12.3, 11.5, 10.3,
+  ];
+
+  /// Физика в px за кадр при 60 fps, как в вебе.
+  static const double gravity = 0.09;
+  static const double drag = 0.99;
+
+  /// Стартовая скорость: печенька долетает почти до верха экрана,
+  /// на 60–180 px ниже края. Множитель 1,55 даёт запас на сопротивление.
+  static const double launchBoost = 1.55;
+  static const double topGapMin = 60, topGapRange = 120;
+
+  /// Повторный подскок: 75–110 % от стартовой скорости.
+  static const double relaunchMin = 0.75, relaunchRange = 0.35;
+
+  /// Залп не одновременный: задержка i × 25 мс плюс до 120 мс случайно.
+  static const int delayStepMs = 25, delayRandomMs = 120;
+
+  /// Через одну: синяя и зелёная, как у компонента Cookie в макете.
+  /// Синяя — Text & icons/Secondary/Default, зелёная — Text & icons/Success/Default.
+  static const Color blue = Color(0xFF0072EB);
+  static const Color green = Color(0xFF00A043);
+}
+
+class CookieSalute extends StatefulWidget {
+  const CookieSalute({super.key, required this.active});
+
+  /// true, пока на экране «Карта добавлена». false останавливает и прячет салют.
+  final bool active;
+
+  @override
+  State<CookieSalute> createState() => _CookieSaluteState();
+}
+
+class _CookieSaluteState extends State<CookieSalute>
+    with SingleTickerProviderStateMixin {
+  final _random = math.Random();
+  final List<_Cookie> _cookies = [];
+  Ticker? _ticker;
+  Duration _prev = Duration.zero;
+  Size _size = Size.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = createTicker(_tick);
+  }
+
+  @override
+  void didUpdateWidget(CookieSalute old) {
+    super.didUpdateWidget(old);
+    if (widget.active && !old.active) _fire();
+    if (!widget.active && old.active) _stop();
+  }
+
+  @override
+  void dispose() {
+    _ticker?.dispose();
+    super.dispose();
+  }
+
+  double _launchV() {
+    final h = _size.height;
+    final climb = h -
+        CookieSaluteSpec.topGapMin -
+        _random.nextDouble() * CookieSaluteSpec.topGapRange;
+    return CookieSaluteSpec.launchBoost *
+        math.sqrt(2 * CookieSaluteSpec.gravity * math.max(climb, 0));
+  }
+
+  void _fire() {
+    if (_size.isEmpty) {
+      // размер ещё не известен: стартуем после первого кадра
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.active) _fire();
+      });
+      return;
+    }
+    _cookies.clear();
+    final w = _size.width, h = _size.height;
+    for (var i = 0; i < CookieSaluteSpec.sizes.length; i++) {
+      _cookies.add(_Cookie(
+        x: w * (0.08 + _random.nextDouble() * 0.84),
+        y: h + 20,
+        vx: (_random.nextDouble() - 0.5) * 1.4,
+        vy: -_launchV(),
+        size: CookieSaluteSpec.sizes[i],
+        rotation: _random.nextDouble() * math.pi,
+        spin: (_random.nextDouble() - 0.5) * 0.08,
+        color: i.isOdd ? CookieSaluteSpec.green : CookieSaluteSpec.blue,
+        delayMs: i * CookieSaluteSpec.delayStepMs +
+            _random.nextDouble() * CookieSaluteSpec.delayRandomMs,
+      ));
+    }
+    _prev = Duration.zero;
+    if (!(_ticker?.isActive ?? false)) _ticker?.start();
+  }
+
+  void _stop() {
+    _ticker?.stop();
+    setState(_cookies.clear);
+  }
+
+  void _tick(Duration elapsed) {
+    // dt в кадрах по 16,67 мс, не больше 2,2 (как в вебе после паузы вкладки)
+    final ms = (elapsed - _prev).inMicroseconds / 1000.0;
+    _prev = elapsed;
+    final dt = math.min(2.2, ms / 16.67);
+    final dragK = math.pow(CookieSaluteSpec.drag, dt).toDouble();
+    final w = _size.width, h = _size.height;
+
+    for (final p in _cookies) {
+      if (p.delayMs > 0) {
+        p.delayMs -= dt * 16.67;
+        continue;
+      }
+      p.vy = (p.vy + CookieSaluteSpec.gravity * dt) * dragK;
+      p.vx *= dragK;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.rotation += p.spin * dt;
+
+      // отскок от боковых краёв
+      if (p.x < p.size) {
+        p.x = p.size;
+        p.vx = p.vx.abs();
+      }
+      if (p.x > w - p.size) {
+        p.x = w - p.size;
+        p.vx = -p.vx.abs();
+      }
+      // упала за низ экрана: снова подпрыгивает
+      if (p.y > h + p.size) {
+        p.y = h + p.size;
+        p.vy = -_launchV() *
+            (CookieSaluteSpec.relaunchMin +
+                _random.nextDouble() * CookieSaluteSpec.relaunchRange);
+        p.vx = (_random.nextDouble() - 0.5) * 1.6;
+      }
+    }
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: LayoutBuilder(builder: (context, constraints) {
+        _size = constraints.biggest;
+        if (widget.active && _cookies.isEmpty) _fire();
+        return CustomPaint(
+          size: constraints.biggest,
+          painter: _CookiePainter(_cookies),
+        );
+      }),
+    );
+  }
+}
+
+class _Cookie {
+  _Cookie({
+    required this.x,
+    required this.y,
+    required this.vx,
+    required this.vy,
+    required this.size,
+    required this.rotation,
+    required this.spin,
+    required this.color,
+    required this.delayMs,
+  });
+
+  double x, y, vx, vy, rotation, delayMs;
+  final double size, spin;
+  final Color color;
+}
+
+class _CookiePainter extends CustomPainter {
+  _CookiePainter(this.cookies);
+
+  final List<_Cookie> cookies;
+  static final Path _shape = _cookiePath();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    for (final p in cookies) {
+      if (p.delayMs > 0) continue;
+      paint.color = p.color;
+      final k = p.size / 10; // форма задана в квадрате 10 × 10
+      canvas
+        ..save()
+        ..translate(p.x, p.y)
+        ..rotate(p.rotation)
+        ..scale(k)
+        ..translate(-5, -5)
+        ..drawPath(_shape, paint)
+        ..restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(_CookiePainter oldDelegate) => true;
+}
+
+/// Печенька 10 × 10: восьмилепестковый контур компонента
+/// `🚧 Local Component/Cookie` (тот же путь, что в прототипе и в catch_me_game.dart).
+Path _cookiePath() {
+  const d = <double>[
+    9.1856, 3.4938,
+    9.6938, 3.8263, 10, 4.3927, 10, 5,
+    10, 5.6073, 9.6938, 6.1737, 9.1856, 6.5062,
+    9.0572, 6.5902, 8.9933, 6.7444, 9.0247, 6.8946,
+    9.1489, 7.4891, 8.965, 8.1061, 8.5355, 8.5355,
+    8.1061, 8.965, 7.4891, 9.1489, 6.8946, 9.0247,
+    6.7444, 8.9933, 6.5902, 9.0572, 6.5062, 9.1856,
+    6.1737, 9.6938, 5.6073, 10, 5, 10,
+    4.3927, 10, 3.8263, 9.6938, 3.4938, 9.1856,
+    3.4098, 9.0572, 3.2556, 8.9933, 3.1054, 9.0247,
+    2.5109, 9.1489, 1.8939, 8.965, 1.4645, 8.5355,
+    1.035, 8.1061, 0.8511, 7.4891, 0.9753, 6.8946,
+    1.0067, 6.7444, 0.9428, 6.5902, 0.8144, 6.5062,
+    0.3062, 6.1737, 0, 5.6073, 0, 5,
+    0, 4.3927, 0.3062, 3.8263, 0.8144, 3.4938,
+    0.9428, 3.4098, 1.0067, 3.2556, 0.9753, 3.1054,
+    0.8511, 2.5109, 1.035, 1.8939, 1.4645, 1.4645,
+    1.8939, 1.035, 2.5109, 0.8511, 3.1054, 0.9753,
+    3.2556, 1.0067, 3.4098, 0.9428, 3.4938, 0.8144,
+    3.8263, 0.3062, 4.3927, 0, 5, 0,
+    5.6073, 0, 6.1737, 0.3062, 6.5062, 0.8144,
+    6.5902, 0.9428, 6.7444, 1.0067, 6.8946, 0.9753,
+    7.4891, 0.8511, 8.1061, 1.035, 8.5355, 1.4645,
+    8.965, 1.8939, 9.1489, 2.5109, 9.0247, 3.1054,
+    8.9933, 3.2556, 9.0572, 3.4098, 9.1856, 3.4938,
+  ];
+  final path = Path()..moveTo(d[0], d[1]);
+  for (var i = 2; i < d.length; i += 6) {
+    path.cubicTo(d[i], d[i + 1], d[i + 2], d[i + 3], d[i + 4], d[i + 5]);
+  }
+  return path..close();
+}
+</script>
+<script>
+/* ===== Окно «Код анимации для Flutter» (card/, timer/) =====
+   Кнопка: <button class="code-open" data-code="#idКода" data-code-title="…" data-code-file="…" data-code-hint="…">.
+   Код лежит в <script type="text/plain" id="idКода" data-src="../flutter/….dart"></script>:
+   build_93123.py вшивает туда текст файла, локально (стенд, localhost) пустой тег дочитывается по data-src. */
+(function () {
+  var modal = null, current = null;
+
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  var ICON_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+  function build() {
+    modal = el('div', 'code-modal'); modal.hidden = true; modal.setAttribute('role', 'dialog'); modal.setAttribute('aria-modal', 'true');
+    var d = el('div', 'code-modal__dialog');
+    var head = el('div', 'code-modal__head');
+    var titles = el('div', 'code-modal__titles');
+    var title = el('h2', 'code-modal__title'); var file = el('p', 'code-modal__file');
+    titles.appendChild(title); titles.appendChild(file);
+    var copy = el('button', 'code-modal__btn', 'Скопировать'); copy.type = 'button';
+    var close = el('button', 'code-modal__btn code-modal__btn--icon'); close.type = 'button'; close.setAttribute('aria-label', 'Закрыть'); close.innerHTML = ICON_X;
+    head.appendChild(titles); head.appendChild(copy); head.appendChild(close);
+    var hint = el('p', 'code-modal__hint');
+    var pre = el('pre', 'code-modal__code');
+    d.appendChild(head); d.appendChild(hint); d.appendChild(pre); modal.appendChild(d);
+    document.body.appendChild(modal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) hide(); });
+    close.addEventListener('click', hide);
+    copy.addEventListener('click', function () {
+      var text = pre.textContent;
+      var done = function () { copy.textContent = 'Скопировано'; setTimeout(function () { copy.textContent = 'Скопировать'; }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
+      function fallback() { var r = document.createRange(); r.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); done(); } catch (e) {} }
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) hide(); });
+    modal._t = title; modal._f = file; modal._h = hint; modal._p = pre;
+  }
+
+  function hide() { modal.hidden = true; if (current) current.focus(); }
+
+  function load(src, cb) {
+    var tag = document.querySelector(src);
+    if (!tag) return cb('Код не найден');
+    var text = tag.textContent.replace(/^\n/, '');
+    if (text.trim()) return cb(text);
+    var url = tag.getAttribute('data-src');
+    if (!url || !window.fetch) return cb('Код не вшит в страницу');
+    fetch(url).then(function (r) { return r.text(); }).then(function (t) { tag.textContent = t; cb(t); }, function () { cb('Не получилось загрузить ' + url); });
+  }
+
+  function show(btn) {
+    if (!modal) build();
+    current = btn;
+    modal._t.textContent = btn.getAttribute('data-code-title') || 'Код анимации';
+    modal._f.textContent = btn.getAttribute('data-code-file') || '';
+    var h = btn.getAttribute('data-code-hint') || ''; modal._h.textContent = h; modal._h.hidden = !h;
+    modal._p.textContent = 'Загружаем…';
+    modal.hidden = false;
+    load(btn.getAttribute('data-code'), function (t) { modal._p.textContent = t; modal._p.scrollTop = 0; });
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.code-open');
+    if (b) { e.preventDefault(); show(b); }
+  });
+})();
+
+</script>
 <script>
 /* ===== Boostra · Привязка карты (концепт, задача 93123) · поведение =====
    Источник: «Выдача {Boostra}», страница «ID-93123 — Добавить карту» (1102:65642), секция «Добавление карты» (1102:67693), «Mobile» (1105:91425).

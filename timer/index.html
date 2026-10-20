@@ -3046,6 +3046,49 @@ button { font: inherit; color: inherit; }
 }
 
 </style>
+<style>
+/* ===== Окно «Код анимации для Flutter» на страницах-дашбордах (card/, timer/) =====
+   Кнопка стоит в верхней строке оболочки (.stand-top), окно открывается поверх всей страницы.
+   На телефоне и в узком iframe стенда оболочки нет, поэтому и кнопки нет. */
+.code-open { display: none; }
+@media (min-width: 768px) and (pointer: fine) {
+  .code-open {
+    display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 0; cursor: pointer;
+    font: 600 13px/18px Inter, system-ui, sans-serif; color: #fff;
+    background: rgba(255, 255, 255, .24); border-radius: 16px;
+    transition: background .2s, transform .25s cubic-bezier(.2, .8, .2, 1);
+  }
+  .code-open:hover { background: rgba(255, 255, 255, .32); transform: translateY(-2px); }
+  .code-open:first-of-type { margin-left: auto; }
+  .code-open svg { width: 16px; height: 16px; }
+}
+
+.code-modal { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 32px; background: rgba(0, 0, 0, .64); }
+.code-modal[hidden] { display: none; }
+.code-modal__dialog {
+  display: flex; flex-direction: column; width: min(880px, 100%); max-height: 100%;
+  border-radius: 24px; background: #141414; color: #fff; box-shadow: 0 24px 80px rgba(0, 0, 0, .6);
+  font-family: Inter, system-ui, sans-serif; overflow: hidden;
+}
+.code-modal__head { display: flex; align-items: flex-start; gap: 16px; padding: 24px 24px 16px; }
+.code-modal__titles { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1 1 auto; }
+.code-modal__title { margin: 0; font-size: 20px; line-height: 28px; font-weight: 700; }
+.code-modal__file { margin: 0; font-size: 13px; line-height: 18px; color: rgba(255, 255, 255, .56); }
+.code-modal__btn {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px; padding: 0 14px; border: 0; cursor: pointer;
+  font: 600 13px/18px Inter, system-ui, sans-serif; color: #fff; background: rgba(255, 255, 255, .16); border-radius: 16px;
+}
+.code-modal__btn:hover { background: rgba(255, 255, 255, .26); }
+.code-modal__btn--icon { width: 36px; padding: 0; }
+.code-modal__btn svg { width: 18px; height: 18px; }
+.code-modal__hint { margin: 0 24px 12px; font-size: 13px; line-height: 18px; color: rgba(255, 255, 255, .72); }
+.code-modal__code {
+  flex: 1 1 auto; min-height: 0; margin: 0 24px 24px; padding: 16px; overflow: auto;
+  border-radius: 16px; background: #000; color: #e6e6e6;
+  font: 12px/18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; tab-size: 2;
+}
+
+</style>
 </head>
 <body>
 
@@ -3071,6 +3114,7 @@ button { font: inherit; color: inherit; }
           <span class="stand-tag">Концепт</span>
           <span class="stand-tag">ID&nbsp;93123</span>
         </div>
+        <button class="code-open" type="button" data-code="#code-catchme" data-code-title="Код игры «Поймай меня» для Flutter" data-code-file="catch_me_game.dart · виджет CatchMeGame" data-code-hint="Кладётся в Stack поверх экрана ожидания: Positioned.fill(child: CatchMeGame(active: isWaiting)). Картинка Бустрочки: boostrochka.png 93 × 96. Параметры совпадают с прототипом."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Код игры</button>
       </div>
     </header>
 
@@ -3208,6 +3252,465 @@ button { font: inherit; color: inherit; }
   </div>
 </div>
 
+<script type="text/plain" id="code-catchme">
+import 'dart:async';
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
+/// Пасхалка «Поймай меня» на экране ожидания решения «Проверяем корректность данных».
+///
+/// Пока идёт проверка, Бустрочка выглядывает в случайном месте экрана.
+/// Нажал: она рассыпается печеньками и прячется, через паузу появляется снова.
+/// Очков, наград и событий аналитики нет, на флоу игра не влияет.
+///
+/// Кладётся в Stack поверх экрана проверки:
+///   Positioned.fill(child: CatchMeGame(active: isChecking))
+///
+/// Параметры один в один перенесены из веб-прототипа
+/// (payments-hypotheses/sms/app.js, блок «Пасхалка «Поймай меня»»).
+/// Макет: Figma «Выдача {Boostra}», страница «ID-93123 — Добавить карту»,
+/// секция «Таймер» (ожидание решения перед оффером), экраны
+/// `Card check / Catch me` и `Card check / Caught`, кадры в секции «Анимация».
+
+class CatchMeSpec {
+  static const String bubbleText = 'Поймай меня';
+
+  /// Картинка 93 × 96, лежит в прототипе: sms/img/boostrochka.png.
+  static const String asset = 'assets/images/boostrochka.png';
+
+  /// Ширина Бустрочки, px: случайная при каждом появлении, 36–80.
+  static const double sizeMin = 36, sizeRange = 44;
+
+  /// Где появиться. Левый верхний угол:
+  /// x от 16 до (ширина − размер − 32), y от 20 до (высота − размер − 120).
+  static const double left = 16, cutX = 48, top = 20, cutY = 140;
+
+  /// Сколько видна, если не поймали: 1,6–3 с.
+  static const int visibleMs = 1600, visibleRangeMs = 1400;
+
+  /// Появление: пружинка 0,3 → 1 за 300 мс. Исчезновение: 1 → 0,3 за 250 мс.
+  static const Duration appear = Duration(milliseconds: 300);
+  static const Duration disappear = Duration(milliseconds: 250);
+  static const Curve appearCurve = Cubic(0.34, 1.56, 0.64, 1);
+  static const double startScale = 0.3;
+
+  /// Печеньки. Скорости в px за кадр при 60 fps, как в вебе.
+  static const int cookies = 18;
+  static const double speedMin = 5, speedRange = 8, lift = 2;
+  static const double gravity = 0.25, spin = 0.5;
+  static const double cookieMin = 9, cookieRange = 9;
+  static const double fadePerFrame = 0.016; // гаснут примерно за 1 с
+
+  /// Через одну: синяя и зелёная, как у компонента Cookie в макете.
+  static const List<Color> colors = [Color(0xFF0072EB), Color(0xFF00A043)];
+
+  /// Пауза перед появлением: рваный ритм.
+  static Duration nextPause(math.Random r) {
+    final p = r.nextDouble();
+    final double ms;
+    if (p < 0.35) {
+      ms = 500 + r.nextDouble() * 900; // почти сразу: 0,5–1,4 с
+    } else if (p < 0.8) {
+      ms = 1500 + r.nextDouble() * 2000; // обычно: 1,5–3,5 с
+    } else {
+      ms = 4500 + r.nextDouble() * 4000; // долго: 4,5–8,5 с
+    }
+    return Duration(milliseconds: ms.round());
+  }
+}
+
+class CatchMeGame extends StatefulWidget {
+  const CatchMeGame({super.key, required this.active});
+
+  /// true, пока открыт экран проверки. false останавливает игру.
+  final bool active;
+
+  @override
+  State<CatchMeGame> createState() => _CatchMeGameState();
+}
+
+class _CatchMeGameState extends State<CatchMeGame>
+    with TickerProviderStateMixin {
+  final _random = math.Random();
+  final _peekKey = GlobalKey();
+  final List<_Cookie> _cookies = [];
+
+  late final AnimationController _pop = AnimationController(
+    vsync: this,
+    duration: CatchMeSpec.appear,
+    reverseDuration: CatchMeSpec.disappear,
+  );
+  late final Animation<double> _popCurve = CurvedAnimation(
+    parent: _pop,
+    curve: CatchMeSpec.appearCurve,
+    reverseCurve: Curves.ease,
+  );
+
+  Timer? _showTimer, _hideTimer;
+  Ticker? _ticker;
+  Duration _lastTick = Duration.zero;
+  Size _area = Size.zero;
+
+  bool _visible = false;
+  double _left = 0, _top = 0, _size = 56;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.active) _scheduleNext();
+  }
+
+  @override
+  void didUpdateWidget(CatchMeGame old) {
+    super.didUpdateWidget(old);
+    if (widget.active && !old.active) _scheduleNext();
+    if (!widget.active && old.active) _stop();
+  }
+
+  void _scheduleNext() {
+    _showTimer?.cancel();
+    _showTimer = Timer(CatchMeSpec.nextPause(_random), _show);
+  }
+
+  void _show() {
+    if (!mounted || !widget.active || _area.isEmpty) return;
+    final size =
+        CatchMeSpec.sizeMin + _random.nextDouble() * CatchMeSpec.sizeRange;
+    final spanX = math.max(0.0, _area.width - size - CatchMeSpec.cutX);
+    final spanY = math.max(0.0, _area.height - size - CatchMeSpec.cutY);
+    setState(() {
+      _size = size;
+      _left = CatchMeSpec.left + _random.nextDouble() * spanX;
+      _top = CatchMeSpec.top + _random.nextDouble() * spanY;
+      _visible = true;
+    });
+    _pop.forward(from: 0);
+    _hideTimer?.cancel();
+    _hideTimer = Timer(
+      Duration(
+        milliseconds: CatchMeSpec.visibleMs +
+            _random.nextInt(CatchMeSpec.visibleRangeMs),
+      ),
+      () => _hide(reschedule: true),
+    );
+  }
+
+  Future<void> _hide({required bool reschedule}) async {
+    _hideTimer?.cancel();
+    if (!_visible) return;
+    if (reschedule) _scheduleNext();
+    await _pop.reverse();
+    if (mounted) setState(() => _visible = false);
+  }
+
+  void _stop() {
+    _showTimer?.cancel();
+    _hideTimer?.cancel();
+    _pop.value = 0;
+    _visible = false;
+  }
+
+  /// Нажали на Бустрочку: печеньки из её центра во все стороны.
+  void _catch() {
+    final box = _peekKey.currentContext?.findRenderObject() as RenderBox?;
+    if (box == null) return;
+    final cx = _left + box.size.width / 2;
+    final cy = _top + box.size.height / 2;
+
+    for (var i = 0; i < CatchMeSpec.cookies; i++) {
+      final angle = _random.nextDouble() * math.pi * 2;
+      final speed =
+          CatchMeSpec.speedMin + _random.nextDouble() * CatchMeSpec.speedRange;
+      _cookies.add(_Cookie(
+        x: cx,
+        y: cy,
+        vx: math.cos(angle) * speed,
+        vy: math.sin(angle) * speed - CatchMeSpec.lift,
+        size: CatchMeSpec.cookieMin +
+            _random.nextDouble() * CatchMeSpec.cookieRange,
+        rotation: _random.nextDouble() * math.pi,
+        spin: (_random.nextDouble() - 0.5) * CatchMeSpec.spin,
+        color: CatchMeSpec.colors[i % 2],
+      ));
+    }
+
+    _ticker ??= createTicker(_onTick);
+    if (!_ticker!.isActive) {
+      _lastTick = Duration.zero;
+      _ticker!.start();
+    }
+    _hide(reschedule: true);
+  }
+
+  void _onTick(Duration now) {
+    // Шаг в «кадрах при 60 fps». Ограничение 2.2 гасит рывок после лага.
+    final dt = ((now - _lastTick).inMicroseconds / 16667.0).clamp(0.0, 2.2);
+    _lastTick = now;
+
+    for (var i = _cookies.length - 1; i >= 0; i--) {
+      final p = _cookies[i];
+      p.vy += CatchMeSpec.gravity * dt;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.rotation += p.spin * dt;
+      p.life -= CatchMeSpec.fadePerFrame * dt;
+      if (p.life <= 0) _cookies.removeAt(i);
+    }
+    if (_cookies.isEmpty) _ticker?.stop();
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _showTimer?.cancel();
+    _hideTimer?.cancel();
+    _pop.dispose();
+    _ticker?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _area = constraints.biggest;
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // Печеньки под Бустрочкой и не ловят нажатия.
+            Positioned.fill(
+              child: IgnorePointer(
+                child: CustomPaint(painter: _CookiePainter(_cookies)),
+              ),
+            ),
+            if (_visible)
+              Positioned(
+                left: _left,
+                top: _top,
+                child: GestureDetector(
+                  onTap: _catch,
+                  child: AnimatedBuilder(
+                    animation: _popCurve,
+                    builder: (context, child) {
+                      final t = _popCurve.value;
+                      return Opacity(
+                        opacity: t.clamp(0.0, 1.0),
+                        child: Transform.scale(
+                          scale: CatchMeSpec.startScale +
+                              (1 - CatchMeSpec.startScale) * t,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: _Peek(key: _peekKey, size: _size),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// Подпись «Поймай меня» и Бустрочка под ней.
+class _Peek extends StatelessWidget {
+  const _Peek({super.key, required this.size});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          // Spacing (Gap)/Base/sm 8 · Base/xs 4
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.white, // Backgrounds (Grouped)/Secondary W
+            borderRadius: BorderRadius.circular(999), // Radius/full
+            boxShadow: const [
+              // Shadow/Floating/2 level
+              BoxShadow(
+                  color: Color(0x14000000), offset: Offset(0, 5), blurRadius: 15),
+              BoxShadow(
+                  color: Color(0x08000000), offset: Offset(0, 1), blurRadius: 6),
+              BoxShadow(
+                  color: Color(0x05000000), offset: Offset(0, 2), blurRadius: 4),
+            ],
+          ),
+          child: const Text(
+            CatchMeSpec.bubbleText,
+            // Caption/Caption Strong: Inter Medium 12/16
+            // Цвет: Text & icons/Bottom/Default
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 12,
+              height: 16 / 12,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF152149),
+            ),
+          ),
+        ),
+        const SizedBox(height: 4), // Spacing (Gap)/Base/xs
+        Image.asset(CatchMeSpec.asset, width: size),
+      ],
+    );
+  }
+}
+
+class _Cookie {
+  _Cookie({
+    required this.x,
+    required this.y,
+    required this.vx,
+    required this.vy,
+    required this.size,
+    required this.rotation,
+    required this.spin,
+    required this.color,
+  });
+
+  double x, y, vx, vy, rotation;
+  final double size, spin;
+  final Color color;
+  double life = 1.0;
+}
+
+class _CookiePainter extends CustomPainter {
+  _CookiePainter(this.cookies);
+
+  final List<_Cookie> cookies;
+  static final Path _shape = _cookiePath();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    for (final p in cookies) {
+      paint.color = p.color.withOpacity(p.life.clamp(0.0, 1.0));
+      final k = p.size / 10; // форма задана в квадрате 10 × 10
+      canvas
+        ..save()
+        ..translate(p.x, p.y)
+        ..rotate(p.rotation)
+        ..scale(k)
+        ..translate(-5, -5)
+        ..drawPath(_shape, paint)
+        ..restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(_CookiePainter oldDelegate) => true;
+}
+
+/// Печенька 10 × 10: восьмилепестковый контур компонента
+/// `🚧 Local Component/Cookie` (тот же путь, что в прототипе).
+Path _cookiePath() {
+  const d = <double>[
+    9.1856, 3.4938,
+    9.6938, 3.8263, 10, 4.3927, 10, 5,
+    10, 5.6073, 9.6938, 6.1737, 9.1856, 6.5062,
+    9.0572, 6.5902, 8.9933, 6.7444, 9.0247, 6.8946,
+    9.1489, 7.4891, 8.965, 8.1061, 8.5355, 8.5355,
+    8.1061, 8.965, 7.4891, 9.1489, 6.8946, 9.0247,
+    6.7444, 8.9933, 6.5902, 9.0572, 6.5062, 9.1856,
+    6.1737, 9.6938, 5.6073, 10, 5, 10,
+    4.3927, 10, 3.8263, 9.6938, 3.4938, 9.1856,
+    3.4098, 9.0572, 3.2556, 8.9933, 3.1054, 9.0247,
+    2.5109, 9.1489, 1.8939, 8.965, 1.4645, 8.5355,
+    1.035, 8.1061, 0.8511, 7.4891, 0.9753, 6.8946,
+    1.0067, 6.7444, 0.9428, 6.5902, 0.8144, 6.5062,
+    0.3062, 6.1737, 0, 5.6073, 0, 5,
+    0, 4.3927, 0.3062, 3.8263, 0.8144, 3.4938,
+    0.9428, 3.4098, 1.0067, 3.2556, 0.9753, 3.1054,
+    0.8511, 2.5109, 1.035, 1.8939, 1.4645, 1.4645,
+    1.8939, 1.035, 2.5109, 0.8511, 3.1054, 0.9753,
+    3.2556, 1.0067, 3.4098, 0.9428, 3.4938, 0.8144,
+    3.8263, 0.3062, 4.3927, 0, 5, 0,
+    5.6073, 0, 6.1737, 0.3062, 6.5062, 0.8144,
+    6.5902, 0.9428, 6.7444, 1.0067, 6.8946, 0.9753,
+    7.4891, 0.8511, 8.1061, 1.035, 8.5355, 1.4645,
+    8.965, 1.8939, 9.1489, 2.5109, 9.0247, 3.1054,
+    8.9933, 3.2556, 9.0572, 3.4098, 9.1856, 3.4938,
+  ];
+  final path = Path()..moveTo(d[0], d[1]);
+  for (var i = 2; i < d.length; i += 6) {
+    path.cubicTo(d[i], d[i + 1], d[i + 2], d[i + 3], d[i + 4], d[i + 5]);
+  }
+  return path..close();
+}
+</script>
+<script>
+/* ===== Окно «Код анимации для Flutter» (card/, timer/) =====
+   Кнопка: <button class="code-open" data-code="#idКода" data-code-title="…" data-code-file="…" data-code-hint="…">.
+   Код лежит в <script type="text/plain" id="idКода" data-src="../flutter/….dart"></script>:
+   build_93123.py вшивает туда текст файла, локально (стенд, localhost) пустой тег дочитывается по data-src. */
+(function () {
+  var modal = null, current = null;
+
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  var ICON_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+  function build() {
+    modal = el('div', 'code-modal'); modal.hidden = true; modal.setAttribute('role', 'dialog'); modal.setAttribute('aria-modal', 'true');
+    var d = el('div', 'code-modal__dialog');
+    var head = el('div', 'code-modal__head');
+    var titles = el('div', 'code-modal__titles');
+    var title = el('h2', 'code-modal__title'); var file = el('p', 'code-modal__file');
+    titles.appendChild(title); titles.appendChild(file);
+    var copy = el('button', 'code-modal__btn', 'Скопировать'); copy.type = 'button';
+    var close = el('button', 'code-modal__btn code-modal__btn--icon'); close.type = 'button'; close.setAttribute('aria-label', 'Закрыть'); close.innerHTML = ICON_X;
+    head.appendChild(titles); head.appendChild(copy); head.appendChild(close);
+    var hint = el('p', 'code-modal__hint');
+    var pre = el('pre', 'code-modal__code');
+    d.appendChild(head); d.appendChild(hint); d.appendChild(pre); modal.appendChild(d);
+    document.body.appendChild(modal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) hide(); });
+    close.addEventListener('click', hide);
+    copy.addEventListener('click', function () {
+      var text = pre.textContent;
+      var done = function () { copy.textContent = 'Скопировано'; setTimeout(function () { copy.textContent = 'Скопировать'; }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
+      function fallback() { var r = document.createRange(); r.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); done(); } catch (e) {} }
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) hide(); });
+    modal._t = title; modal._f = file; modal._h = hint; modal._p = pre;
+  }
+
+  function hide() { modal.hidden = true; if (current) current.focus(); }
+
+  function load(src, cb) {
+    var tag = document.querySelector(src);
+    if (!tag) return cb('Код не найден');
+    var text = tag.textContent.replace(/^\n/, '');
+    if (text.trim()) return cb(text);
+    var url = tag.getAttribute('data-src');
+    if (!url || !window.fetch) return cb('Код не вшит в страницу');
+    fetch(url).then(function (r) { return r.text(); }).then(function (t) { tag.textContent = t; cb(t); }, function () { cb('Не получилось загрузить ' + url); });
+  }
+
+  function show(btn) {
+    if (!modal) build();
+    current = btn;
+    modal._t.textContent = btn.getAttribute('data-code-title') || 'Код анимации';
+    modal._f.textContent = btn.getAttribute('data-code-file') || '';
+    var h = btn.getAttribute('data-code-hint') || ''; modal._h.textContent = h; modal._h.hidden = !h;
+    modal._p.textContent = 'Загружаем…';
+    modal.hidden = false;
+    load(btn.getAttribute('data-code'), function (t) { modal._p.textContent = t; modal._p.scrollTop = 0; });
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.code-open');
+    if (b) { e.preventDefault(); show(b); }
+  });
+})();
+
+</script>
 <script>
 /* ===== Boostra · «Ожидание решения с игрой» (концепт, задача 93123) · поведение =====
    Экран ожидания решения по займу перед оффером. Таймер 05:00 считает вниз, пока ждём, идёт пасхалка «Поймай меня».
