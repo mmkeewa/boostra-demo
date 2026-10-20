@@ -2109,6 +2109,187 @@ button { font: inherit; color: inherit; }
 
 </style>
 <style>
+/* Сцены, инфографика и «печатает» в дереве последствий. Макет: секция «Can't pay now / Dialog tree» (3512:6416).
+   Токены ДС, которых нет в tokens.css прототипа: значения сняты с переменных ✦ Theme ✦ (Light) 20.10.2026 */
+.chat-scene, .chat-info {
+  --brand-error-5: #fff2f5;       /* Brand/Error/5 */
+  --brand-error-30: #ffb3c4;      /* Brand/Error/30 */
+  --brand-error-50: #ff809c;      /* Brand/Error/50 */
+  --brand-error-70: #ff4e74;      /* Brand/Error/70 */
+  --brand-error-deep: #91001f;    /* Brand/Error/Deep */
+  --brand-secondary-5: #f2f8ff;   /* Brand/Secondary/5 */
+  --brand-success-5: #e5f5ec;     /* Brand/Success/5 */
+  --brand-success-30: #b2e3c7;    /* Brand/Success/30 */
+  --brand-success: #00a043;       /* Brand/Success/Success */
+  --neutral-bottom-alpha-30: rgba(21, 33, 73, 0.3); /* Neutral/Bottom Alpha/30 */
+  flex-shrink: 0;
+  width: 280px; /* ширина сцены и инфографики в макете, как у пузыря без аватара; нет токена */
+  margin-left: calc(32px + var(--space-sm)); /* под ячейкой аватара: Avatar 32 + гэп реплики */
+  border-radius: var(--radius-2xl);
+}
+.chat-scene.is-new, .chat-info.is-new { animation: bubble-in 0.4s ease both; }
+.t-note-strong { /* Note/Note Strong: в tokens.css прототипа нет, размер и строка как у Note */
+  font-family: var(--note-font-family);
+  font-weight: var(--typography-primitives-semi-bold);
+  font-size: var(--note-size);
+  line-height: var(--note-line-height);
+  letter-spacing: var(--note-letter-spacing);
+}
+.cs-muted { color: var(--text-bottom-secondary); }
+.cs-error { color: var(--text-error-default); }
+.cs-icon { display: inline-flex; flex-shrink: 0; width: var(--icon); height: var(--icon); }
+.cs-icon svg { width: 100%; height: 100%; display: block; }
+
+/* ---------- 🚧 Local Component/Chat scene: 280 × 128, плавающие элементы ---------- */
+.chat-scene {
+  position: relative;
+  height: 128px; /* высота сцены в макете, нет токена */
+  overflow: hidden;
+  background: var(--brand-error-5);
+}
+.chat-scene[data-tone="secondary"] { background: var(--brand-secondary-5); }
+.chat-scene[data-tone="success"] { background: var(--brand-success-5); }
+.chat-scene > * { position: absolute; }
+/* петля кадров A ↔ B как Smart animate в Figma: A держится 0,6 с, переход 1,2 с, B держится 0,6 с, обратно 1,2 с */
+.cs-float {
+  --dx: 0px; --dy: 0px; --r0: 0deg; --r1: var(--r0); --s1: 1;
+  transform: rotate(var(--r0));
+  animation: cs-loop 3.6s ease-in-out infinite;
+}
+@keyframes cs-loop {
+  0%, 16.7% { transform: rotate(var(--r0)); }
+  50%, 66.7% { transform: translate(var(--dx), var(--dy)) rotate(var(--r1)) scale(var(--s1)); }
+  100% { transform: rotate(var(--r0)); }
+}
+.cs-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: var(--radius-xl);
+  background: var(--bg-grouped-secondary-w);
+  box-shadow: var(--shadow-floating-2);
+  color: var(--text-bottom-default);
+}
+.cs-card--center { align-items: center; }
+.cs-card--tight { gap: var(--space-xxs); }
+.cs-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+.cs-chip[data-tone="w"] { background: var(--bg-grouped-secondary-w); box-shadow: var(--shadow-floating-2); color: var(--text-bottom-default); }
+.cs-chip[data-tone="w"] .cs-icon { color: var(--text-error-default); }
+.chat-scene[data-tone="success"] .cs-chip[data-tone="w"] .cs-icon { color: var(--text-error-default); }
+.cs-chip[data-tone="error"] { background: var(--brand-error); color: var(--text-peak-default); }
+.cs-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size);
+  height: var(--size);
+  border-radius: var(--radius-full);
+}
+.cs-circle--w { background: var(--bg-grouped-secondary-w); box-shadow: var(--shadow-floating-2); color: var(--text-error-default); }
+.cs-circle--success { color: var(--text-success-default); }
+.cs-circle--secondary { background: var(--brand-secondary-10); color: var(--text-secondary-default); }
+.cs-circle--check { background: var(--brand-success); color: var(--text-peak-default); }
+.cs-ring { width: 88px; height: 88px; border-radius: var(--radius-full); background: var(--brand-error-10); }
+.cs-ring--outer { width: 116px; height: 116px; background: none; border: var(--border-width-2, 2px) solid var(--brand-error-10); }
+.cs-dot { width: var(--size); height: var(--size); border-radius: var(--radius-full); background: var(--bg-grouped-secondary-w); }
+.cs-dot--spark { background: var(--brand-success-30); }
+/* кредитная история: год и 12 месяцев точками */
+.cs-year { display: flex; align-items: center; gap: var(--space-sm); color: var(--text-bottom-secondary); }
+.cs-months { display: flex; gap: var(--space-xs); }
+.cs-month { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--brand-success); }
+.cs-month[data-kind="now"] { background: var(--brand-error); animation: cs-pulse 3.6s ease-in-out infinite; }
+.cs-month[data-kind="ahead"] { background: none; box-shadow: inset 0 0 0 2px var(--brand-error-30); }
+@keyframes cs-pulse { 0%, 16.7%, 100% { transform: none; } 50%, 66.7% { transform: scale(1.25); } }
+/* весы */
+.cs-post { width: 6px; height: 64px; border-radius: var(--radius-full); background: var(--neutral-bottom-alpha-30); }
+.cs-base { width: 72px; height: 6px; border-radius: var(--radius-full); background: var(--neutral-bottom-alpha-30); }
+.cs-beam { width: 240px; height: 64px; }
+.cs-bar { position: absolute; left: 20px; top: 0; width: 200px; height: 4px; border-radius: var(--radius-full); background: var(--neutral-bottom-alpha-30); }
+.cs-pan {
+  position: absolute;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-xl);
+}
+.cs-pan[data-tone="secondary"] { background: var(--brand-secondary-10); color: var(--text-secondary-default); }
+.cs-pan[data-tone="error"] { background: var(--brand-error-10); color: var(--text-error-default); }
+
+/* ---------- 🚧 Local Component/Chat infographic ---------- */
+.chat-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--brand-error-5);
+  color: var(--text-bottom-default);
+}
+.chat-info p { margin: 0; }
+.ci-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm); }
+.ci-badge { flex-shrink: 0; padding: var(--space-xxs) var(--space-sm); border-radius: var(--radius-full); background: var(--brand-error); color: var(--text-peak-default); }
+.ci-segments { display: flex; gap: var(--space-xs); }
+.ci-segments i { flex: 1; height: 6px; border-radius: var(--radius-full); background: var(--brand-error); }
+.ci-steps { display: flex; flex-direction: column; gap: var(--space-md); margin: 0; padding: 0; list-style: none; }
+.ci-steps li { display: flex; align-items: flex-start; gap: var(--space-sm); }
+.ci-steps li > span { display: flex; flex-direction: column; }
+.ci-steps i, .ci-legend i { flex-shrink: 0; width: 8px; height: 8px; margin-top: var(--space-xs); border-radius: var(--radius-full); }
+[data-step="30"] { background: var(--brand-error-30); }
+[data-step="50"] { background: var(--brand-error-50); }
+[data-step="70"] { background: var(--brand-error-70); }
+[data-step="error"] { background: var(--brand-error); }
+[data-step="deep"] { background: var(--brand-error-deep); }
+.ci-stack { display: flex; gap: var(--space-xs); }
+.ci-stack i { height: 8px; border-radius: var(--radius-full); }
+.ci-legend { display: inline-flex; align-items: center; gap: var(--space-sm); }
+.ci-legend i { margin-top: 0; }
+.ci-track { display: block; height: 6px; border-radius: var(--radius-full); background: var(--neutral-bottom-alpha-10); }
+.ci-track i { display: block; height: 100%; border-radius: var(--radius-full); }
+/* баннер-корень дерева: строки нажимаются */
+.ci-head { display: flex; align-items: center; gap: var(--space-md); }
+.ci-head > span:last-child { display: flex; flex-direction: column; }
+.ci-alert { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--brand-error); color: var(--text-peak-default); }
+.ci-list { display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radius-xl); background: var(--bg-grouped-secondary-w); }
+.ci-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 0;
+  background: none;
+  color: var(--text-bottom-default);
+  text-align: left;
+  cursor: pointer;
+}
+.ci-option + .ci-option { box-shadow: inset 0 1px 0 var(--neutral-bottom-alpha-10); }
+.ci-option .cs-icon { color: var(--text-error-default); }
+.ci-option:hover, .ci-option:focus-visible { background: var(--brand-error-5); outline: none; }
+.ci-foot { text-align: center; }
+
+/* ---------- 🚧 Local Component/Typing ---------- */
+.chat-typing { gap: var(--space-xs); align-items: center; }
+.chat-typing i { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--text-bottom-quaternary); animation: cs-type 1s infinite; }
+.chat-typing i:nth-child(2) { animation-delay: 0.15s; }
+.chat-typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes cs-type { 0%, 60%, 100% { background: var(--text-bottom-quaternary); } 30% { background: var(--text-bottom-secondary); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-float, .cs-month[data-kind="now"], .chat-typing i { animation: none; }
+}
+.no-anim .chat-scene, .no-anim .chat-info { animation: none; }
+
+</style>
+<style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
    Файл только перекрашивает оболочку и добавляет шапку. Экран телефона (.screen.ds) объявляет свои светлые токены заново
    и не меняется. На телефоне и тач-устройствах (прототип на весь экран) оболочки нет: всё остаётся как в styles.css. */
@@ -2525,6 +2706,9 @@ button { font: inherit; color: inherit; }
             <button class="chip chip-inactive" type="button" data-scenario="6" aria-pressed="false">6. Я&nbsp;уже оплатил</button>
             <button class="chip chip-inactive" type="button" data-scenario="7" aria-pressed="false">7. Другая проблема</button>
             <button class="chip chip-inactive" type="button" data-scenario="7a" aria-pressed="false">7a. Другая проблема · отправлено</button>
+            <button class="chip chip-inactive" type="button" data-scenario="8a" aria-pressed="false">8a. Последствия · кредитная история</button>
+            <button class="chip chip-inactive" type="button" data-scenario="8b" aria-pressed="false">8b. Последствия · если не&nbsp;платить</button>
+            <button class="chip chip-inactive" type="button" data-scenario="8c" aria-pressed="false">8c. Последствия · банкротство</button>
           </div>
           <!-- График причин отмены оплаты: строки и выделение собирает app.js, столбики Progress indicator / Linear -->
           <div class="scenario-chart">
@@ -2566,6 +2750,212 @@ button { font: inherit; color: inherit; }
   </div>
 </div>
 
+<script>
+/* Boostra · «Не могу заплатить сейчас»: сцены, инфографика и индикатор «печатает» для дерева последствий (задача 92815)
+   Макеты: файл «Personal Account {Boostra}», секция «Can't pay now / Dialog tree» (3512:6416):
+   набор 🚧 Local Component/Chat scene (3539:6829), 🚧 Local Component/Chat infographic (3515:7050), 🚧 Local Component/Typing (3541:7099).
+   Координаты элементов сцены сняты с кадра Frame=A, сдвиг и поворот в анимации с кадра Frame=B (петля A ↔ B, как Smart animate в Figma). */
+(function () {
+  'use strict';
+
+  /* Иконки FTM UI Icons, экспорт из макета; цвет задаёт currentColor */
+  var P = 'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+  var ICON = {
+    'phone-calling': '<svg viewBox="0 0 32 32" fill="none"><path d="M20 9.33325V9.34659M24 9.33325V9.34659M28 9.33325V9.34659M6.66667 5.33325H12L14.6667 11.9999L11.3333 13.9999C12.7613 16.8953 15.1046 19.2386 18 20.6666L20 17.3333L26.6667 19.9999V25.3333C26.6667 26.0405 26.3857 26.7188 25.8856 27.2189C25.3855 27.719 24.7072 27.9999 24 27.9999C18.799 27.6839 13.8935 25.4752 10.2091 21.7908C6.52467 18.1064 4.31607 13.2009 4 7.99992C4 7.29267 4.28095 6.6144 4.78105 6.1143C5.28115 5.6142 5.95942 5.33325 6.66667 5.33325Z" ' + P + '/></svg>',
+    message: '<svg viewBox="0 0 16 16" fill="none"><path d="M5.33333 6.00008H10.6667M5.33333 8.66675H9.33333M12 2.66675C12.5304 2.66675 13.0391 2.87746 13.4142 3.25253C13.7893 3.62761 14 4.13631 14 4.66675V10.0001C14 10.5305 13.7893 11.0392 13.4142 11.4143C13.0391 11.7894 12.5304 12.0001 12 12.0001H8.66667L5.33333 14.0001V12.0001H4C3.46957 12.0001 2.96086 11.7894 2.58579 11.4143C2.21071 11.0392 2 10.5305 2 10.0001V4.66675C2 4.13631 2.21071 3.62761 2.58579 3.25253C2.96086 2.87746 3.46957 2.66675 4 2.66675H12Z" ' + P + '/></svg>',
+    mail: '<svg viewBox="0 0 16 16" fill="none"><path d="M2 4.66659C2 4.31296 2.14048 3.97382 2.39052 3.72378C2.64057 3.47373 2.97971 3.33325 3.33333 3.33325H12.6667C13.0203 3.33325 13.3594 3.47373 13.6095 3.72378C13.8595 3.97382 14 4.31296 14 4.66659M2 4.66659V11.3333C2 11.6869 2.14048 12.026 2.39052 12.2761C2.64057 12.5261 2.97971 12.6666 3.33333 12.6666H12.6667C13.0203 12.6666 13.3594 12.5261 13.6095 12.2761C13.8595 12.026 14 11.6869 14 11.3333V4.66659M2 4.66659L8 8.66658L14 4.66659" ' + P + '/></svg>',
+    user: '<svg viewBox="0 0 16 16" fill="none"><path d="M4 14V12.6667C4 11.9594 4.28095 11.2811 4.78105 10.781C5.28115 10.281 5.95942 10 6.66667 10H9.33333C10.0406 10 10.7189 10.281 11.219 10.781C11.719 11.2811 12 11.9594 12 12.6667V14M5.33333 4.66667C5.33333 5.37391 5.61428 6.05219 6.11438 6.55229C6.61448 7.05238 7.29276 7.33333 8 7.33333C8.70724 7.33333 9.38552 7.05238 9.88562 6.55229C10.3857 6.05219 10.6667 5.37391 10.6667 4.66667C10.6667 3.95942 10.3857 3.28115 9.88562 2.78105C9.38552 2.28095 8.70724 2 8 2C7.29276 2 6.61448 2.28095 6.11438 2.78105C5.61428 3.28115 5.33333 3.95942 5.33333 4.66667Z" ' + P + '/></svg>',
+    'building-bank': '<svg viewBox="0 0 40 40" fill="none"><path d="M5 35H35M5 16.6667H35M8.33333 10L20 5L31.6667 10M6.66667 16.6667V35M33.3333 16.6667V35M13.3333 23.3333V28.3333M20 23.3333V28.3333M26.6667 23.3333V28.3333" ' + P + '/></svg>',
+    'mood-sad': '<svg viewBox="0 0 40 40" fill="none"><path d="M15 16.6667H15.0167M25 16.6667H25.0167M15.8333 25.4167C16.3765 24.8623 17.0247 24.422 17.7402 24.1213C18.4557 23.8207 19.2239 23.6658 20 23.6658C20.7761 23.6658 21.5443 23.8207 22.2598 24.1213C22.9753 24.422 23.6235 24.8623 24.1667 25.4167M5 20C5 21.9698 5.38799 23.9204 6.14181 25.7403C6.89563 27.5601 8.00052 29.2137 9.3934 30.6066C10.7863 31.9995 12.4399 33.1044 14.2597 33.8582C16.0796 34.612 18.0302 35 20 35C21.9698 35 23.9204 34.612 25.7403 33.8582C27.5601 33.1044 29.2137 31.9995 30.6066 30.6066C31.9995 29.2137 33.1044 27.5601 33.8582 25.7403C34.612 23.9204 35 21.9698 35 20C35 18.0302 34.612 16.0796 33.8582 14.2597C33.1044 12.4399 31.9995 10.7863 30.6066 9.3934C29.2137 8.00052 27.5601 6.89563 25.7403 6.14181C23.9204 5.38799 21.9698 5 20 5C18.0302 5 16.0796 5.38799 14.2597 6.14181C12.4399 6.89563 10.7863 8.00052 9.3934 9.3934C8.00052 10.7863 6.89563 12.4399 6.14181 14.2597C5.38799 16.0796 5 18.0302 5 20Z" ' + P + '/></svg>',
+    'heart-handshake': '<svg viewBox="0 0 40 40" fill="none"><path d="M32.5002 20.9529L20.0002 33.3329L7.50018 20.9529C6.67569 20.1506 6.02625 19.1863 5.59276 18.1206C5.15926 17.055 4.95111 15.9111 4.98141 14.7611C5.0117 13.6111 5.27978 12.4798 5.76877 11.4385C6.25776 10.3971 6.95707 9.46832 7.82265 8.71053C8.68824 7.95274 9.70135 7.38238 10.7982 7.03536C11.895 6.68835 13.0519 6.5722 14.1958 6.69423C15.3397 6.81626 16.446 7.17382 17.445 7.74441C18.4439 8.31499 19.3139 9.08623 20.0002 10.0096C20.6894 9.09293 21.5604 8.32843 22.5587 7.7639C23.5569 7.19938 24.661 6.84698 25.8017 6.72876C26.9425 6.61055 28.0953 6.72906 29.1881 7.07688C30.281 7.42471 31.2902 7.99435 32.1528 8.75017C33.0153 9.50598 33.7126 10.4317 34.2009 11.4694C34.6892 12.5071 34.9581 13.6344 34.9907 14.7807C35.0233 15.9271 34.8189 17.0679 34.3904 18.1316C33.9619 19.1954 33.3184 20.1593 32.5002 20.9629M20 9.99957L14.5117 15.4879C14.1992 15.8005 14.0237 16.2243 14.0237 16.6662C14.0237 17.1082 14.1992 17.532 14.5117 17.8446L15.4167 18.7496C16.5667 19.8996 18.4334 19.8996 19.5834 18.7496L21.25 17.0829C22.2446 16.0884 23.5935 15.5296 25 15.5296C26.4066 15.5296 27.7555 16.0884 28.75 17.0829L32.5 20.8329M20.8334 25.8329L24.1667 29.1662M25.0001 21.6662L28.3334 24.9996" ' + P + '/></svg>',
+    check: '<svg viewBox="0 0 16 16" fill="none"><path d="M3.33301 8.00008L6.66634 11.3334L13.333 4.66675" ' + P + '/></svg>',
+    'calendar-check': '<svg viewBox="0 0 16 16" fill="none"><path d="M7.66699 14H4.00033C3.6467 14 3.30756 13.8595 3.05752 13.6095C2.80747 13.3594 2.66699 13.0203 2.66699 12.6667V4.66667C2.66699 4.31304 2.80747 3.97391 3.05752 3.72386C3.30756 3.47381 3.6467 3.33333 4.00033 3.33333H12.0003C12.3539 3.33333 12.6931 3.47381 12.9431 3.72386C13.1932 3.97391 13.3337 4.31304 13.3337 4.66667V8.66667M10.667 2V4.66667M5.33366 2V4.66667M2.66699 7.33333H13.3337M10.0003 12.6667L11.3337 14L14.0003 11.3333" ' + P + '/></svg>',
+    'pig-money': '<svg viewBox="0 0 16 16" fill="none"><path d="M10.0003 7.33326V7.33993M3.449 5.58526C3.1566 5.36053 2.93203 5.05933 2.80011 4.71495C2.66819 4.37057 2.63405 3.99642 2.70148 3.63385C2.7689 3.27128 2.93526 2.93441 3.18217 2.66048C3.42908 2.38655 3.74691 2.18622 4.10056 2.08163C4.4542 1.97704 4.82987 1.97227 5.18606 2.06784C5.54225 2.16341 5.86507 2.3556 6.11886 2.62317C6.37265 2.89074 6.54751 3.22327 6.62413 3.58401C6.70074 3.94474 6.67613 4.31964 6.553 4.66726M10.667 2.6666V5.20193C11.4921 5.67935 12.1202 6.4349 12.439 7.33326H13.333C13.5098 7.33326 13.6794 7.4035 13.8044 7.52853C13.9294 7.65355 13.9997 7.82312 13.9997 7.99993V9.33326C13.9997 9.51008 13.9294 9.67964 13.8044 9.80467C13.6794 9.92969 13.5098 9.99993 13.333 9.99993H12.4383C12.2143 10.6333 11.8337 11.1999 11.333 11.6486V12.9999C11.333 13.2651 11.2276 13.5195 11.0401 13.707C10.8526 13.8946 10.5982 13.9999 10.333 13.9999C10.0678 13.9999 9.81343 13.8946 9.62589 13.707C9.43836 13.5195 9.333 13.2651 9.333 12.9999V12.6113C9.1127 12.6482 8.88971 12.6667 8.66633 12.6666H5.99967C5.7763 12.6667 5.5533 12.6482 5.333 12.6113V12.9999C5.333 13.2651 5.22764 13.5195 5.04011 13.707C4.85257 13.8946 4.59822 13.9999 4.333 13.9999C4.06779 13.9999 3.81343 13.8946 3.62589 13.707C3.43836 13.5195 3.333 13.2651 3.333 12.9999V11.6486C2.72898 11.1086 2.30319 10.3979 2.11199 9.61051C1.92079 8.82316 1.97321 7.99631 2.2623 7.23941C2.55138 6.48251 3.06351 5.83124 3.73089 5.37182C4.39827 4.91239 5.18944 4.66647 5.99967 4.6666H7.66633L10.6663 2.6666H10.667Z" ' + P + '/></svg>',
+    calendar: '<svg viewBox="0 0 16 16" fill="none"><path d="M10.667 2V4.66667M5.33366 2V4.66667M2.66699 7.33333H13.3337M7.33366 10H8.00033V12M2.66699 4.66667C2.66699 4.31304 2.80747 3.97391 3.05752 3.72386C3.30756 3.47381 3.6467 3.33333 4.00033 3.33333H12.0003C12.3539 3.33333 12.6931 3.47381 12.9431 3.72386C13.1932 3.97391 13.3337 4.31304 13.3337 4.66667V12.6667C13.3337 13.0203 13.1932 13.3594 12.9431 13.6095C12.6931 13.8595 12.3539 14 12.0003 14H4.00033C3.6467 14 3.30756 13.8595 3.05752 13.6095C2.80747 13.3594 2.66699 13.0203 2.66699 12.6667V4.66667Z" ' + P + '/></svg>',
+    'alert-triangle-filled': '<svg viewBox="0 0 24 24" fill="none"><path d="M11.9898 1.96802C13.0128 1.96802 13.9598 2.48902 14.5018 3.32702L14.6048 3.49902L21.7048 15.749L21.7668 15.875C21.9442 16.3137 22.0153 16.7881 21.9743 17.2595C21.9333 17.7308 21.7814 18.1859 21.531 18.5873C21.2806 18.9888 20.9388 19.3253 20.5334 19.5695C20.1281 19.8136 19.6708 19.9584 19.1988 19.992L18.9998 20H4.99983L4.95083 19.997L4.83883 19.999C4.39343 19.9761 3.95874 19.8542 3.56641 19.6421C3.17408 19.43 2.83396 19.1331 2.57083 18.773L2.46183 18.613C2.22367 18.2388 2.07145 17.8165 2.01611 17.3764C1.96078 16.9364 2.00371 16.4895 2.14183 16.068L2.21383 15.874L2.27383 15.749L9.36583 3.51602C9.62522 3.04705 10.0055 2.65612 10.4671 2.38389C10.9288 2.11165 11.4549 1.96805 11.9908 1.96802H11.9898ZM12.0098 14L11.8828 14.007C11.6398 14.0359 11.4158 14.153 11.2532 14.336C11.0907 14.519 11.0009 14.7553 11.0009 15C11.0009 15.2448 11.0907 15.481 11.2532 15.6641C11.4158 15.8471 11.6398 15.9641 11.8828 15.993L11.9998 16L12.1268 15.993C12.3699 15.9641 12.5939 15.8471 12.7564 15.6641C12.9189 15.481 13.0087 15.2448 13.0087 15C13.0087 14.7553 12.9189 14.519 12.7564 14.336C12.5939 14.153 12.3699 14.0359 12.1268 14.007L12.0098 14ZM11.9998 8.00002C11.7549 8.00005 11.5185 8.08997 11.3355 8.25273C11.1524 8.41549 11.0355 8.63977 11.0068 8.88302L10.9998 9.00002V11L11.0068 11.117C11.0357 11.3601 11.1528 11.5841 11.3358 11.7466C11.5188 11.9091 11.7551 11.9989 11.9998 11.9989C12.2446 11.9989 12.4809 11.9091 12.6639 11.7466C12.8469 11.5841 12.9639 11.3601 12.9928 11.117L12.9998 11V9.00002L12.9928 8.88302C12.9642 8.63977 12.8472 8.41549 12.6642 8.25273C12.4812 8.08997 12.2448 8.00005 11.9998 8.00002Z" fill="currentColor"/></svg>',
+    'chevron-right': '<svg viewBox="0 0 24 24" fill="none"><path d="M9 6L15 12L9 18" ' + P + '/></svg>'
+  };
+  function icon(name, size) {
+    return '<span class="cs-icon" style="--icon:' + size + 'px" aria-hidden="true">' + ICON[name] + '</span>';
+  }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+  /* ---------- Сцены: 280 × 128, элементы стоят по кадру A, анимация уводит их в кадр B и обратно ----------
+     a: x, y и (необязательно) dx, dy, r0, r1 (поворот кадров A и B, в CSS знак обратный Figma), s (масштаб в кадре B) */
+  function at(x, y, a) {
+    a = a || {};
+    var st = 'left:' + x + 'px;top:' + y + 'px';
+    if (a.dx) st += ';--dx:' + a.dx + 'px';
+    if (a.dy) st += ';--dy:' + a.dy + 'px';
+    if (a.r0) st += ';--r0:' + a.r0 + 'deg';
+    if (a.r1 != null) st += ';--r1:' + a.r1 + 'deg';
+    if (a.s) st += ';--s1:' + a.s;
+    if (a.size) st += ';--size:' + a.size + 'px';
+    return ' style="' + st + '"';
+  }
+  function chip(label, iconName, tone, x, y, a) {
+    return '<span class="cs-chip cs-float" data-tone="' + tone + '"' + at(x, y, a) + '>' +
+      (iconName ? icon(iconName, 16) : '') + '<span class="t-caption-medium">' + esc(label) + '</span></span>';
+  }
+  function dots(year, row) {
+    var html = '';
+    for (var m = 0; m < 12; m += 1) {
+      var kind = row === 2 && m === 8 ? 'now' : row === 2 && m > 8 ? 'ahead' : 'paid';
+      html += '<i class="cs-month" data-kind="' + kind + '"></i>';
+    }
+    return '<span class="cs-year"><span class="t-caption">' + year + '</span><span class="cs-months">' + html + '</span></span>';
+  }
+  var SCENES = {
+    /* Кредитная история: годы точками по месяцам, текущая просрочка красная, впереди пустые кружки (рефы Rocket Money, Me+) */
+    history: { tone: 'error', label: 'Кредитная история хранится 7 лет', html: function () {
+      return '<span class="cs-card cs-float"' + at(20, 16, { dy: -6 }) + '>' +
+          '<span class="t-caps-xsmall-strong cs-muted">Кредитная история</span>' +
+          dots('2024', 0) + dots('2025', 1) + dots('2026', 2) +
+        '</span>' +
+        chip('7 лет в истории', null, 'error', 159, 8, { r1: 6 });
+    } },
+    /* Взыскание: звонок покачивается, вокруг расходятся кольца, каналы связи плавают (рефы Cleo, Setel) */
+    collection: { tone: 'error', label: 'Взыскание: звонки, СМС, письма, коллектор', html: function () {
+      return '<span class="cs-ring cs-ring--outer cs-float"' + at(82, 6, { s: 1.12 }) + '></span>' +
+        '<span class="cs-ring cs-float"' + at(96, 20, { s: 1.11 }) + '></span>' +
+        '<span class="cs-circle cs-circle--w cs-float"' + at(110, 34, { r1: 12, size: 60 }) + '>' + icon('phone-calling', 32) + '</span>' +
+        chip('СМС', 'message', 'w', 16, 20, { dy: -6 }) +
+        chip('Звонок', 'phone-calling', 'w', 12, 80, { dy: 4 }) +
+        chip('Письмо', 'mail', 'w', 194, 18, { dy: 4 }) +
+        chip('Коллектор', 'user', 'w', 180, 82, { dy: -6 });
+    } },
+    /* Суд: суммы цепочкой, к долгу добавляются пошлина и сбор (рефы Stake, Nutmeg) */
+    court: { tone: 'error', label: 'Суд: к долгу добавятся пошлина и сбор', html: function () {
+      return '<span class="cs-card cs-card--center cs-float"' + at(18, 18, { dy: -4 }) + '>' + icon('building-bank', 40) + '<span class="t-note-strong">Суд</span></span>' +
+        chip('Долг 20 000 ₽', null, 'w', 112, 14, { dy: -4 }) +
+        chip('+2 000 ₽ пошлина', null, 'error', 130, 48, { dx: 6 }) +
+        chip('+1 400 ₽ сбор', null, 'error', 148, 82, { dx: 10, r1: 4 });
+    } },
+    /* Банкротство: весы, управляющему больше, чем долг (рефы Zopa Bank, Beli) */
+    scales: { tone: 'error', label: 'Банкротство: управляющему больше, чем долг', html: function () {
+      return '<span class="cs-post"' + at(137, 44) + '></span>' +
+        '<span class="cs-base"' + at(104, 108) + '></span>' +
+        '<span class="cs-beam cs-float"' + at(20, 36, { r0: 4, r1: -3 }) + '>' +
+          '<span class="cs-bar"></span>' +
+          '<span class="cs-pan" data-tone="secondary" style="left:0"><span class="t-caption">Ваш долг</span><span class="t-note-strong">20 000 ₽</span></span>' +
+          '<span class="cs-pan" data-tone="error" style="right:0"><span class="t-caption">Управляющему</span><span class="t-note-strong">25 000 ₽</span></span>' +
+        '</span>' +
+        chip('5 лет сообщать', null, 'error', 156, 10, { dy: 6, r1: -5 });
+    } },
+    /* Сомнение: персонаж и мысль в пузыре (реф Finch) */
+    doubt: { tone: 'secondary', label: 'Банкротство или есть выход проще', html: function () {
+      return '<span class="cs-circle cs-circle--secondary cs-float"' + at(20, 44, { r1: -8, size: 64 }) + '>' + icon('mood-sad', 40) + '</span>' +
+        '<i class="cs-dot cs-float"' + at(72, 50, { dy: -3, size: 8 }) + '></i>' +
+        '<i class="cs-dot cs-float"' + at(82, 34, { dy: -5, size: 12 }) + '></i>' +
+        '<span class="cs-card cs-card--tight cs-float"' + at(98, 14, { dy: -6 }) + '>' +
+          '<span class="t-note-strong">Банкротство?</span><span class="t-caption cs-muted">Или есть выход проще?</span></span>';
+    } },
+    /* Решение: рукопожатие в центре, варианты парят вокруг, искры (реф Gojek) */
+    solution: { tone: 'success', label: 'Решение: продлить, оплатить частично, выбрать день', html: function () {
+      return '<span class="cs-circle cs-circle--w cs-circle--success cs-float"' + at(104, 28, { dy: -6, size: 72 }) + '>' + icon('heart-handshake', 40) + '</span>' +
+        '<span class="cs-circle cs-circle--check cs-float"' + at(160, 22, { s: 1.17, size: 24 }) + '>' + icon('check', 16) + '</span>' +
+        chip('Продлить', 'calendar-check', 'w', 14, 22, { dy: 4 }) +
+        chip('Частично', 'pig-money', 'w', 18, 84, { dy: -5 }) +
+        chip('День оплаты', 'calendar', 'w', 155, 84, { dy: -4 }) +
+        '<i class="cs-dot cs-dot--spark cs-float"' + at(92, 30, { dy: -6, s: 1.3, size: 6 }) + '></i>' +
+        '<i class="cs-dot cs-dot--spark cs-float"' + at(186, 60, { dy: 4, s: 0.75, size: 8 }) + '></i>' +
+        '<i class="cs-dot cs-dot--spark cs-float"' + at(84, 62, { dy: -6, s: 1.3, size: 6 }) + '></i>' +
+        '<i class="cs-dot cs-dot--spark cs-float"' + at(150, 112, { dy: 4, s: 0.5, size: 4 }) + '></i>';
+    } }
+  };
+  function scene(type) {
+    var s = SCENES[type];
+    var el = document.createElement('div');
+    el.className = 'chat-scene';
+    el.dataset.tone = s.tone;
+    el.setAttribute('role', 'img');
+    el.setAttribute('aria-label', s.label);
+    el.innerHTML = s.html();
+    return el;
+  }
+
+  /* ---------- Инфографика: 🚧 Local Component/Chat infographic ---------- */
+  function rows(list) { return list.join(''); }
+  var INFO = {
+    years: function () {
+      var seg = ''; for (var i = 0; i < 7; i += 1) seg += '<i></i>';
+      return '<span class="t-caps-xsmall-strong cs-error">Кредитная история</span>' +
+        '<span class="t-h1-strong cs-error">7 лет</span>' +
+        '<p class="t-note">столько хранится запись о просрочке. Её видят все, кто проверяет вашу историю</p>' +
+        '<span class="ci-segments">' + seg + '</span>' +
+        '<span class="ci-row t-caption cs-muted"><span>2026</span><span>2033</span></span>';
+    },
+    who: function () {
+      return '<span class="t-caps-xsmall-strong cs-error">Проверяют вашу историю</span>' +
+        rows(['Банки', 'МФО', 'Рассрочка и «плати частями»', 'Семейная ипотека'].map(function (n) {
+          return '<span class="ci-row"><span class="t-note-strong">' + n + '</span><span class="ci-badge t-caps-xsmall-strong">Могут отказать</span></span>';
+        }));
+    },
+    steps: function () {
+      return '<span class="t-caps-xsmall-strong cs-error">Если не платить</span>' +
+        '<ul class="ci-steps">' + rows([
+          ['30', 'С 1-го дня', 'Просрочка в бюро кредитных историй'],
+          ['50', 'Дальше', 'Звонки, сообщения и письма'],
+          ['70', 'Затем', 'Коллекторы и личные встречи'],
+          ['error', 'Суд', 'Госпошлина и исполнительский сбор'],
+          ['deep', 'Приставы', 'Арест счетов и запрет выезда']
+        ].map(function (r) {
+          return '<li><i data-step="' + r[0] + '"></i><span><span class="t-caption cs-error">' + r[1] + '</span><span class="t-note-medium">' + r[2] + '</span></span></li>';
+        })) + '</ul>';
+    },
+    court: function () {
+      return '<span class="t-caps-xsmall-strong cs-error">Если дойдёт до суда</span>' +
+        '<span class="t-h1-strong cs-error">23 400 ₽</span>' +
+        '<p class="t-note">заплатите вместо 20 000 ₽</p>' +
+        '<span class="ci-stack"><i data-step="30" style="flex:20"></i><i data-step="error" style="flex:2"></i><i data-step="deep" style="flex:1.4"></i></span>' +
+        rows([['30', 'Долг', '20 000 ₽'], ['error', 'Госпошлина', '2 000 ₽'], ['deep', 'Исполнительский сбор 7%', '1 400 ₽']].map(function (r) {
+          return '<span class="ci-row t-note"><span class="ci-legend"><i data-step="' + r[0] + '"></i>' + r[1] + '</span><span class="t-note-strong">' + r[2] + '</span></span>';
+        })) +
+        '<span class="t-caption cs-muted">Пример для долга 20 000 ₽</span>';
+    },
+    bankruptcy: function () {
+      return '<span class="t-caps-xsmall-strong cs-error">Банкротство</span>' +
+        '<span class="ci-row t-note"><span>Ваш долг</span><span class="t-note-strong">20 000 ₽</span></span>' +
+        '<span class="ci-track"><i data-step="30" style="width:80%"></i></span>' +
+        '<span class="ci-row t-note"><span>Только управляющему</span><span class="t-note-strong">25 000 ₽</span></span>' +
+        '<span class="ci-track"><i data-step="error" style="width:100%"></i></span>' +
+        '<span class="t-h1-strong cs-error">5 лет</span>' +
+        '<p class="t-note">нужно сообщать о банкротстве при каждом займе или кредите</p>';
+    },
+    /* корень дерева: баннер с вариантами выбора (реф Me+). Строки нажимаются, как чипы */
+    choices: function () {
+      return '<span class="ci-head"><span class="ci-alert">' + icon('alert-triangle-filled', 24) + '</span>' +
+          '<span><span class="t-note-strong cs-error">Просрочка продолжается</span><span class="t-caption cs-muted">С 1-го дня она в бюро кредитных историй</span></span></span>' +
+        '<span class="ci-list">' + rows([
+          ['treeHistory', 'Как работает кредитная история'],
+          ['treeNoPay', 'Что будет, если не платить'],
+          ['treeBankrupt', 'Я думаю о банкротстве']
+        ].map(function (r) {
+          return '<button class="ci-option t-note" type="button" data-tree="' + r[0] + '"><span>' + r[1] + '</span>' + icon('chevron-right', 20) + '</button>';
+        })) + '</span>' +
+        '<span class="t-caption cs-error ci-foot">Это может помешать получить кредит, рассрочку или ипотеку</span>';
+    }
+  };
+  function info(type) {
+    var el = document.createElement('div');
+    el.className = 'chat-info chat-info--' + type;
+    el.innerHTML = INFO[type]();
+    return el;
+  }
+
+  /* ---------- 🚧 Local Component/Typing: бот печатает, точки темнеют по очереди ---------- */
+  function typing() {
+    var el = document.createElement('div');
+    el.className = 'chat-bubble chat-bubble--bot is-new is-typing';
+    el.setAttribute('aria-label', 'Бот печатает');
+    el.innerHTML = '<div class="chat-bubble__avatar-slot"></div><div class="chat-bubble__bubble chat-typing"><i></i><i></i><i></i></div>';
+    return el;
+  }
+
+  window.ChatScenes = { scene: scene, info: info, typing: typing };
+})();
+
+</script>
 <script>
 /* Boostra · «Не могу заплатить сейчас»: прототип диалога в шторке (задача 92815)
    Макеты: файл «Personal Account {Boostra}», страница 2890:5307, секция 2988:5759. Тексты дословно из макета. */
@@ -2631,10 +3021,29 @@ button { font: inherit; color: inherit; }
     sent: 'Спасибо, что поделились\u00A0🙏 Мы передали ваше сообщение в\u00A0поддержку',
     sample: 'Мне подключили дополнительные услуги, с\u00A0суммой не согласен',
     placeholder: 'Напишите сообщение',
-    emptyError: 'Напишите сообщение'
+    emptyError: 'Напишите сообщение',
+    /* дерево последствий: тексты дословно из секции «Can't pay now / Dialog tree» (3512:6416), ждут взыскания и юристов */
+    history: 'По\u00A0закону мы передаём в\u00A0бюро кредитных историй все платежи по\u00A0займу: и\u00A0вовремя, и\u00A0с\u00A0опозданием. Каждый день просрочки попадает в\u00A0вашу историю\u00A0📄',
+    who: 'Её проверяют банки, МФО, сервисы рассрочки и\u00A0«плати частями», когда решают, дать ли вам деньги. Из-за\u00A0просрочки могут отказать даже в\u00A0льготных программах, например в\u00A0семейной ипотеке',
+    whoEnd: 'Чем дольше просрочка, тем выше риск отказа. Закройте её сейчас, чтобы она не\u00A0росла',
+    fix: 'Для части банков и\u00A0МФО любая просрочка уже повод отказать. Лучшее, что можно сделать: закрыть просрочку сейчас и\u00A0дальше платить строго в\u00A0срок',
+    fixEnd: 'Каждый день без\u00A0оплаты делает запись длиннее',
+    noPay: 'Если заём не\u00A0оплачен, мы начинаем взыскание по\u00A0закону 230-ФЗ: звонки, сообщения и\u00A0письма. К\u00A0работе могут подключиться коллекторы, возможны личные встречи',
+    sold: 'Решение принимаем по\u00A0каждому долгу отдельно. Долг могут продать коллекторскому агентству. Тогда платить нужно будет ему, а\u00A0не\u00A0нам',
+    soldEnd: 'После продажи договориться о\u00A0продлении или частичной оплате с\u00A0нами уже не\u00A0получится',
+    court: 'Такой сценарий возможен по\u00A0решению кредитора или коллекторов после продажи долга. Тогда на\u00A0вас лягут дополнительные расходы: госпошлина и\u00A0исполнительский сбор ФССП',
+    court2: 'Приставы могут арестовать счета и\u00A0запретить выезд за\u00A0границу. Даже долга в\u00A01\u00A0000\u00A0₽ достаточно, чтобы по\u00A0закону запустилось принудительное взыскание',
+    courtEnd: 'Сейчас долг можно закрыть без\u00A0суда и\u00A0лишних расходов',
+    bankrupt: 'Спасибо, что сказали. На\u00A0каком вы этапе?',
+    filed: 'Заявление ещё можно отозвать, пока суд не\u00A0признал вас банкротом. Если хотите закрыть заём без\u00A0процедуры, подберём решение: продление, частичная оплата или удобный день',
+    filed2: 'Если решение окончательное, пришлите номер дела в\u00A0поддержку, мы учтём его',
+    thinking: 'Мы не\u00A0советуем банкротство. Процедура длится месяцы и\u00A0стоит денег: только финансовому управляющему нужно заплатить 25\u00A0000\u00A0₽, это может быть больше вашего долга',
+    thinking2: 'После банкротства 5\u00A0лет при\u00A0любом займе или кредите нужно сообщать, что вы были банкротом, и\u00A0многие откажут. 3\u00A0года нельзя руководить компанией. Имущество, кроме единственного жилья, могут продать в\u00A0счёт долга',
+    thinkingEnd: 'Давайте лучше подберём, как закрыть заём без\u00A0этого\u00A0🤝'
   };
   function payDateDone() {
-    return ['Запомнили день оплаты:\u00A0' + state.payDate + '.2026\u00A0✅ Оплатить можно и раньше, в\u00A0личном кабинете'];
+    /* реплика как в макете 2b (3512:6506), под ней баннер-корень дерева последствий */
+    return ['Запомнили день оплаты:\u00A0' + state.payDate + '.2026\u00A0✅ Пока заём не\u00A0оплачен, просрочка продолжается и\u00A0передаётся в\u00A0бюро кредитных историй. Она может помешать получить кредит, рассрочку или ипотеку', { info: 'choices' }];
   }
   /* кнопка под «Перейти к\u00A0оплате»: пока день не выбран, открывает диалог; после выбора показывает день */
   function entryLabel() {
@@ -2651,6 +3060,20 @@ button { font: inherit; color: inherit; }
      go: следующий шаг · exit: выход в существующий флоу (заглушка) · close: закрыть шторку */
   /* возврат к списку причин: Button / Secondary со стрелкой, на всех вторых шагах одинаковый (макет 16.10.2026) */
   var OTHER_REASON = { label: 'Другая причина', go: 'reasons', back: true };
+  /* конец ветки дерева последствий: последствие и оплата сразу */
+  var PAY_NOW = { label: 'Оплатить сейчас', exit: 'Оплата' };
+  /* решения в ветке банкротства */
+  var SOLUTIONS = [
+    { label: 'Продлить с\u00A0оплатой\u00A0%', go: 'extend' },
+    { label: 'Оплатить частично', go: 'partial' },
+    { label: 'Выбрать день оплаты', go: 'payDate' }
+  ];
+  /* строки баннера «Просрочка продолжается»: подпись = реплика клиента */
+  var TREE_ROOT = {
+    treeHistory: 'Как работает кредитная история',
+    treeNoPay: 'Что будет, если не\u00A0платить',
+    treeBankrupt: 'Я\u00A0думаю о\u00A0банкротстве'
+  };
   var REASONS = [
     { label: 'Не хватает денег', go: 'noMoney' },
     { label: 'Сумма больше ожидаемой', go: 'amount' }, /* развилка «Хороший клиент?»: да → скидка (3a), нет → частичная оплата (3) */
@@ -2725,11 +3148,28 @@ button { font: inherit; color: inherit; }
     },
     /* «Другая причина» над полем: без неё из ввода сообщения не выйти (её баг 19.10.2026) */
     otherProblem: { scenario: '7', bot: [T.other], chips: [OTHER_REASON], input: true },
-    otherProblemSent: { scenario: '7a', bot: [T.sent], chips: REASONS }
+    otherProblemSent: { scenario: '7a', bot: [T.sent, { info: 'choices' }], chips: REASONS },
+
+    /* ---------- Дерево последствий (секция 3512:6416). Вход: строки баннера «Просрочка продолжается» после 2b и 7a.
+       Сцены и инфографика стоят в репликах бота: { scene } и { info }. Каждая ветка кончается последствием и «Оплатить сейчас» */
+    treeHistory: { scenario: '8a', bot: [{ scene: 'history' }, T.history], chips: [
+      { label: 'Кто смотрит кредитную историю', go: 'treeWho' }, { label: 'Как её исправить', go: 'treeFix' }, OTHER_REASON] },
+    treeWho: { scenario: '8a', bot: [T.who, { info: 'who' }, T.whoEnd], chips: [OTHER_REASON], button: PAY_NOW },
+    treeFix: { scenario: '8a', bot: [T.fix, { info: 'years' }, T.fixEnd], chips: [OTHER_REASON], button: PAY_NOW },
+    treeNoPay: { scenario: '8b', bot: [{ scene: 'collection' }, T.noPay, { info: 'steps' }], chips: [
+      { label: 'Передадут ли мой долг коллекторам', go: 'treeSold' }, { label: 'Будет ли суд', go: 'treeCourt' }, OTHER_REASON] },
+    treeSold: { scenario: '8b', bot: [T.sold, T.soldEnd], chips: [OTHER_REASON], button: PAY_NOW },
+    treeCourt: { scenario: '8b', bot: [{ scene: 'court' }, T.court, T.court2, { info: 'court' }, T.courtEnd], chips: [OTHER_REASON], button: PAY_NOW },
+    treeBankrupt: { scenario: '8c', bot: [{ scene: 'doubt' }, T.bankrupt], chips: [
+      { label: 'Уже подал заявление', go: 'treeFiled' }, { label: 'Пока только думаю', go: 'treeThinking' }, OTHER_REASON] },
+    treeFiled: { scenario: '8c', bot: [T.filed, T.filed2], chips: SOLUTIONS.concat([OTHER_REASON]),
+      button: { label: 'Написать в\u00A0поддержку', go: 'otherProblem' } },
+    treeThinking: { scenario: '8c', bot: [{ scene: 'scales' }, T.thinking, { info: 'bankruptcy' }, T.thinking2, { scene: 'solution' }, T.thinkingEnd],
+      chips: SOLUTIONS.concat([OTHER_REASON]) }
   };
 
-  var PAUSE = 420;      /* пауза перед ответом бота */
-  var PAUSE_NEXT = 360; /* пауза между репликами бота в серии */
+  var PAUSE = 240;      /* пауза перед тем, как бот начнёт печатать ответ */
+  var PAUSE_NEXT = 200; /* пауза между репликами бота в серии */
 
   /* payDate: выбранный день оплаты («30.09»), живёт, пока его не изменят или не сбросит тег сценария;
      pending: ответ сервиса на текущий шаг ещё не пришёл */
@@ -2762,7 +3202,7 @@ button { font: inherit; color: inherit; }
     }, ms);
     timers.push(id);
   }
-  function cancelTimers() { timers.forEach(clearTimeout); timers = []; }
+  function cancelTimers() { timers.forEach(clearTimeout); timers = []; if (typeof stopTyping === 'function') stopTyping(); }
 
   /* ---------- Реплики: компонент Chat bubble ---------- */
   function bubbleEl(from, text, isNew) {
@@ -2818,10 +3258,20 @@ button { font: inherit; color: inherit; }
     }
     pinBottom();
   }
-  function say(from, text, isNew) {
-    state.log.push({ from: from, text: text });
+  /* реплика бота: строка (Chat bubble) или { scene } / { info } (Chat scene, Chat infographic из scenes.js) */
+  function messageEl(m, isNew) {
+    if (m.scene || m.info) {
+      var el = m.scene ? ChatScenes.scene(m.scene) : ChatScenes.info(m.info);
+      if (isNew) el.classList.add('is-new');
+      return el;
+    }
+    return bubbleEl(m.from, m.text, isNew);
+  }
+  function say(from, item, isNew) {
+    var m = typeof item === 'string' ? { from: from, text: item } : { from: from, scene: item.scene, info: item.info };
+    state.log.push(m);
     save();
-    messagesEl.appendChild(bubbleEl(from, text, isNew));
+    messagesEl.appendChild(messageEl(m, isNew));
     refreshAvatars();
     scrollBottom(isNew);
   }
@@ -2926,13 +3376,25 @@ button { font: inherit; color: inherit; }
   function messageInput() { return $('.input', repliesEl); }
 
   /* ---------- Ход диалога ---------- */
+  /* перед каждой репликой бот «печатает» (🚧 Local Component/Typing): 600 мс перед текстом, 350 мс перед сценой
+     или инфографикой; потом реплика всплывает снизу */
+  var TYPING_TEXT = 600, TYPING_RICH = 350;
+  var typingEl = null;
+  function stopTyping() { if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl); typingEl = null; }
   function botSay(texts, done) {
     var i = 0;
     (function next() {
       later(function () {
-        say('bot', texts[i], true);
-        i += 1;
-        if (i < texts.length) next(); else if (done) done();
+        stopTyping();
+        typingEl = ChatScenes.typing();
+        messagesEl.appendChild(typingEl);
+        scrollBottom(true);
+        later(function () {
+          stopTyping();
+          say('bot', texts[i], true);
+          i += 1;
+          if (i < texts.length) next(); else if (done) done();
+        }, typeof texts[i] === 'string' ? TYPING_TEXT : TYPING_RICH);
       }, i === 0 ? PAUSE : PAUSE_NEXT);
     })();
   }
@@ -2995,7 +3457,7 @@ button { font: inherit; color: inherit; }
     screen.classList.add('no-anim');
     saved.log.forEach(function (m) {
       if (m.alert) messagesEl.appendChild(alertEl());
-      else messagesEl.appendChild(bubbleEl(m.from, m.text, false));
+      else messagesEl.appendChild(messageEl(m, false));
     });
     state.log = saved.log;
     state.step = saved.step;
@@ -3020,6 +3482,7 @@ button { font: inherit; color: inherit; }
   }
   function onAction(a) {
     if (a.exit) { showStub(a.exit); return; }
+    if (a.go) { say('client', a.label, true); goStep(a.go); return; }
     if (a.close) closeDialog();
   }
   function send() {
@@ -3045,6 +3508,15 @@ button { font: inherit; color: inherit; }
     var chip = e.target.closest('[data-role="reply"]');
     if (chip) { onChip(step.chips[+chip.dataset.i]); return; }
     if (e.target.closest('[data-role="action"]')) onAction(step.button);
+  });
+  /* строки баннера «Просрочка продолжается» работают как чипы: реплика клиента и ветка дерева */
+  messagesEl.addEventListener('click', function (e) {
+    var row = e.target.closest('[data-tree]');
+    if (!row || state.pending || state.stub) return;
+    var input = messageInput();
+    if (input) { input.blur(); closeKb(); }
+    say('client', TREE_ROOT[row.dataset.tree], true);
+    goStep(row.dataset.tree);
   });
   repliesEl.addEventListener('submit', function (e) { e.preventDefault(); send(); });
   repliesEl.addEventListener('input', function (e) {
@@ -3366,6 +3838,13 @@ button { font: inherit; color: inherit; }
       events: 'Оплаты нет: после ответа бота клиент нажимает «Загрузить чек» и уходит в\u00A0загрузку чека.',
       estimate: { text: 'Оплаты нет: клиент уходит в\u00A0загрузку чека' }
     },
+    tree: {
+      reasons: ['later', 'noFunds'],
+      now: NOW_LATER,
+      goal: 'Доля оплативших после ветки последствий от\u00A0открывших её. Ветки и\u00A0тексты ждут взыскания и\u00A0юристов.',
+      events: 'Событий на\u00A0ветках нет. Оплата: `dl_repayment_success_payment`, тип в\u00A0`repayment_type`.',
+      estimate: { text: 'Посчитаем, когда взыскание подтвердит ветки' }
+    },
     otherProblem: {
       reasons: ['ownText'],
       now: { value: '5,0%', badge: '1\u00A0446\u00A0ответов', caption: '«Свой текст»', share: 5.0 },
@@ -3376,7 +3855,8 @@ button { font: inherit; color: inherit; }
   };
   var ANALYTICS_BY_SCENARIO = {
     entry: 'start', '1': 'start', '2': 'noMoney', '2a': 'payDate', '2b': 'payDate', '2c': 'payDate', '2d': 'noMoney',
-    '3': 'partial', '3a': 'discount', '4': 'otherMethod', '5': 'payFailed', '6': 'paid', '7': 'otherProblem', '7a': 'otherProblem'
+    '3': 'partial', '3a': 'discount', '4': 'otherMethod', '5': 'payFailed', '6': 'paid', '7': 'otherProblem', '7a': 'otherProblem',
+    '8a': 'tree', '8b': 'tree', '8c': 'tree'
   };
 
   function num(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0'); } /* 1080 → «1 080» с\u00A0неразрывным пробелом */
@@ -3514,8 +3994,13 @@ button { font: inherit; color: inherit; }
     '6': [['reasons', 'alreadyPaid']],
     '2d': [['reasons', 'noMoney'], ['noMoney', 'extend']],
     '7': [['reasons', 'otherProblem']],
-    '7a': [['reasons', 'otherProblem']]
+    '7a': [['reasons', 'otherProblem']],
+    /* ветки дерева: путь до 2b, потом строка баннера */
+    '8a': [['reasons', 'noMoney'], ['noMoney', 'payDate'], ['payDate', 'payDateDone', DEFAULT_DATE]],
+    '8b': [['reasons', 'noMoney'], ['noMoney', 'payDate'], ['payDate', 'payDateDone', DEFAULT_DATE]],
+    '8c': [['reasons', 'noMoney'], ['noMoney', 'payDate'], ['payDate', 'payDateDone', DEFAULT_DATE]]
   };
+  var TREE_BY_SCENARIO = { '8a': 'treeHistory', '8b': 'treeNoPay', '8c': 'treeBankrupt' };
   /* date: день для сценариев 2b и 2c, если он уже выбран (смена просрочки не меняет выбранный день) */
   function applyScenario(id, date) {
     if (id === '3' || id === '3a') setClient(id === '3a' ? 'good' : 'regular', true);
@@ -3533,10 +4018,15 @@ button { font: inherit; color: inherit; }
       say('bot', T.ask, false);
       state.step = 'reasons';
       PATHS[id].forEach(function (p) { replay(p[0], p[1], p[2] && (date || p[2])); });
+      if (TREE_BY_SCENARIO[id]) {
+        state.step = TREE_BY_SCENARIO[id];
+        say('client', TREE_ROOT[state.step], false);
+        botTexts(STEPS[state.step]).forEach(function (t) { say('bot', t, false); });
+      }
       if (id === '7a') {
         say('client', T.sample, false);
         state.step = 'otherProblemSent';
-        STEPS.otherProblemSent.bot.forEach(function (t) { say('bot', t, false); });
+        botTexts(STEPS.otherProblemSent).forEach(function (t) { say('bot', t, false); });
       }
       renderReplies(false);
       if (id === '2c') {
