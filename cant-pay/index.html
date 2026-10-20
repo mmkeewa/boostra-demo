@@ -2341,6 +2341,14 @@ button { font: inherit; color: inherit; }
 .badge--error-solid { background: var(--brand-error); color: var(--text-peak-default); }
 .cs-inline { align-self: flex-start; }
 
+.tag[data-tone="success"] { background: var(--brand-success-alpha-5, rgba(0, 160, 67, 0.05)); color: var(--text-success-default); } /* Tag, Type Tag & Badge = Success */
+/* ---------- Выбор дня в чате (Chat infographic, Type=Date picker) ---------- */
+.chat-info--dates { gap: var(--space-sm); padding: var(--space-md); background: var(--brand-secondary-10); }
+.ci-days { display: flex; gap: var(--space-xs); }
+.ci-day { flex: 1; display: flex; flex-direction: column; align-items: center; padding: var(--space-sm) 0; border: 0; border-radius: var(--radius-xl); background: var(--bg-grouped-secondary-w); color: var(--text-bottom-default); cursor: pointer; }
+.ci-day:hover, .ci-day:focus-visible { outline: 2px solid var(--brand-secondary); outline-offset: -2px; }
+.t-title-strong { font-family: var(--title-medium-font-family); font-weight: var(--typography-primitives-semi-bold); font-size: var(--title-medium-size); line-height: var(--title-medium-line-height); letter-spacing: var(--title-medium-letter-spacing); } /* Title/Title Strong */
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -2858,7 +2866,8 @@ button { font: inherit; color: inherit; }
   /* плашки сцены: белые метки = Tag из ДС (иконка слева, без крестика), красные = Badge Error, Extra color=On (её правка 20.10.2026) */
   function chip(label, iconName, tone, x, y, a) {
     if (tone === 'error') return '<span class="badge badge--error-solid t-caps-small-strong cs-float"' + at(x, y, a) + '>' + esc(label) + '</span>';
-    return '<span class="tag t-note cs-float"' + at(x, y, a) + '>' + (iconName ? icon(iconName, 16) : '') + esc(label) + '</span>';
+    /* Tag: тон Danger, в сцене решения Success (её правка 20.10.2026) */
+    return '<span class="tag t-note cs-float"' + (tone === 'success' ? ' data-tone="success"' : '') + at(x, y, a) + '>' + (iconName ? icon(iconName, 16) : '') + esc(label) + '</span>';
   }
   var SCENES = {
     /* Кредитная история: условный отчёт без дат и данных клиента (её правка 20.10.2026: реальную историю мы не показываем),
@@ -2917,9 +2926,9 @@ button { font: inherit; color: inherit; }
     solution: { tone: 'success', label: 'Решение: продлить, оплатить частично, выбрать день', html: function () {
       return '<span class="cs-circle cs-circle--w cs-circle--success cs-float"' + at(104, 28, { dy: -6, size: 72 }) + '>' + icon('heart-handshake', 40) + '</span>' +
         '<span class="cs-circle cs-circle--check cs-float"' + at(160, 22, { s: 1.17, size: 24 }) + '>' + icon('check', 16) + '</span>' +
-        chip('Продлить', 'calendar-check', 'w', 14, 22, { dy: 4 }) +
-        chip('Частично', 'pig-money', 'w', 18, 84, { dy: -5 }) +
-        chip('День оплаты', 'calendar', 'w', 143, 84, { dy: -4 }) +
+        chip('Продлить', 'calendar-check', 'success', 14, 22, { dy: 4 }) +
+        chip('Частично', 'pig-money', 'success', 18, 84, { dy: -5 }) +
+        chip('День оплаты', 'calendar', 'success', 143, 84, { dy: -4 }) +
         '<i class="cs-dot cs-dot--spark cs-float"' + at(120, 14, { dy: -6, s: 1.3, size: 6 }) + '></i>' +
         '<i class="cs-dot cs-dot--spark cs-float"' + at(186, 60, { dy: 4, s: 0.75, size: 8 }) + '></i>' +
         '<i class="cs-dot cs-dot--spark cs-float"' + at(84, 62, { dy: -6, s: 1.3, size: 6 }) + '></i>' +
@@ -2996,6 +3005,13 @@ button { font: inherit; color: inherit; }
           '<span class="ci-perf" aria-hidden="true"></span>' +
           '<button class="btn btn-primary" type="button" data-size-button="large" data-offer>Оплатить сейчас</button>' +
         '</span>';
+    },
+    /* выбор дня внутри чата (Chat infographic, Type=Date picker 3576:6992): месяц и пять дней плитками */
+    dates: function () {
+      return '<span class="t-caps-xsmall-strong cs-muted">Сентябрь</span><span class="ci-days">' +
+        [['завтра', '26'], ['вс', '27'], ['пн', '28'], ['вт', '29'], ['ср', '30']].map(function (d) {
+          return '<button class="ci-day" type="button" data-date="' + d[1] + '.09"><span class="t-caption cs-muted">' + d[0] + '</span><span class="t-title-strong">' + d[1] + '</span></button>';
+        }).join('') + '</span>';
     },
     /* корень дерева: баннер с вариантами выбора (реф Me+). Строки нажимаются, как чипы */
     choices: function () {
@@ -3097,6 +3113,8 @@ button { font: inherit; color: inherit; }
     sample: 'Мне подключили дополнительные услуги, с\u00A0суммой не согласен',
     placeholder: 'Напишите сообщение',
     emptyError: 'Напишите сообщение',
+    /* после выбора дня: просрочку можно остановить продлением (предложение коллег, её правка 20.10.2026) */
+    stopNow: 'Пока заём не\u00A0оплачен, просрочка продолжается. Остановить её можно сейчас: продлите заём за\u00A03\u00A0500\u00A0₽',
     /* дерево последствий: тексты дословно из секции «Can't pay now / Dialog tree» (3512:6416), ждут взыскания и юристов */
     history: 'По\u00A0закону мы передаём в\u00A0бюро кредитных историй все платежи по\u00A0займу. Каждый день просрочки попадает в\u00A0вашу историю\u00A0📄',
     whoEnd: 'Чем дольше просрочка, тем выше риск отказа. Закройте её сейчас, чтобы она не\u00A0росла',
@@ -3117,7 +3135,7 @@ button { font: inherit; color: inherit; }
   };
   function payDateDone() {
     /* реплика как в макете 2b (3512:6506), под ней баннер-корень дерева последствий (её правка 20.10.2026: только подтверждение дня) */
-    return ['Запомнили день оплаты:\u00A0' + state.payDate + '.2026\u00A0✅', { info: 'choices' }];
+    return ['Запомнили день оплаты:\u00A0' + state.payDate + '.2026\u00A0✅', T.stopNow, { info: 'choices' }];
   }
   /* кнопка под «Перейти к\u00A0оплате»: пока день не выбран, открывает диалог; после выбора показывает день */
   function entryLabel() {
@@ -3169,19 +3187,21 @@ button { font: inherit; color: inherit; }
       ]
     },
     payDate: {
-      scenario: '2a', bot: [T.payDate],
-      chips: [
+      /* дни выбираются в карточке внутри чата (Chat infographic, Type=Date picker; её правка 20.10.2026) */
+      scenario: '2a', bot: [T.payDate, { info: 'dates' }],
+      dates: [
         { label: 'Завтра,\u00A026.09', go: 'payDateDone', date: '26.09' },
         { label: '27.09', go: 'payDateDone', date: '27.09' },
         { label: '28.09', go: 'payDateDone', date: '28.09' },
         { label: '29.09', go: 'payDateDone', date: '29.09' },
-        { label: '30.09', go: 'payDateDone', date: '30.09' },
-        OTHER_REASON
-      ]
+        { label: '30.09', go: 'payDateDone', date: '30.09' }
+      ],
+      chips: [OTHER_REASON]
     },
     payDateDone: {
       scenario: '2b', bot: payDateDone,
       chips: [{ label: 'Изменить день', go: 'payDate' }, OTHER_REASON],
+      secondary: { label: 'Продлить за\u00A03\u00A0500\u00A0₽', exit: 'Продление займа' },
       button: PAY_NOW /* её правка 20.10.2026: после выбора дня оставляем «Оплатить сейчас»; шторка закрывается крестиком */
     },
     partial: {
@@ -3392,6 +3412,16 @@ button { font: inherit; color: inherit; }
       });
       repliesEl.appendChild(chips);
     }
+    /* второстепенная кнопка над основной (Button / Secondary XLarge), например «Продлить за 3 500 ₽» после выбора дня */
+    if (step.secondary) {
+      var sec = document.createElement('button');
+      sec.type = 'button';
+      sec.className = 'btn btn-secondary';
+      sec.dataset.sizeButton = 'xlarge';
+      sec.dataset.role = 'secondary';
+      sec.textContent = step.secondary.label;
+      repliesEl.appendChild(sec);
+    }
     if (step.button) {
       var btn = document.createElement('button');
       btn.type = 'button';
@@ -3577,9 +3607,16 @@ button { font: inherit; color: inherit; }
     var chip = e.target.closest('[data-role="reply"]');
     if (chip) { onChip(step.chips[+chip.dataset.i]); return; }
     if (e.target.closest('[data-role="action"]')) onAction(step.button);
+    if (e.target.closest('[data-role="secondary"]')) onAction(step.secondary);
   });
   /* строки баннера «Просрочка продолжается» работают как чипы: реплика клиента и ветка дерева */
   messagesEl.addEventListener('click', function (e) {
+    var day = e.target.closest('[data-date]');
+    if (day && !state.pending && !state.stub && state.step === 'payDate') {
+      var dc = STEPS.payDate.dates.filter(function (d) { return d.date === day.dataset.date; })[0];
+      if (dc) onChip(dc);
+      return;
+    }
     var offer = e.target.closest('[data-offer]');
     if (offer && !state.pending && !state.stub) {
       say('client', offer.textContent.trim(), true);
@@ -4056,7 +4093,7 @@ button { font: inherit; color: inherit; }
   /* Сценарий ставит телефон в состояние сразу, с перепиской, какой она была бы у клиента */
   var DEFAULT_DATE = '30.09';
   function chipTo(stepId, go, date) {
-    return STEPS[stepId].chips.filter(function (c) { return c.go === go && (!date || c.date === date); })[0];
+    return (STEPS[stepId].chips || []).concat(STEPS[stepId].dates || []).filter(function (c) { return c.go === go && (!date || c.date === date); })[0];
   }
   function replay(stepId, go, date) {
     var c = chipTo(stepId, go, date);
