@@ -1620,14 +1620,14 @@ button { font: inherit; color: inherit; }
 }
 .screen.is-sheet-open .blanket,
 .screen.is-stub .blanket { opacity: 1; pointer-events: auto; }
-/* шторка 576, на низком экране не выше экрана; с клавиатурой верх шторки остаётся на месте */
+/* шторка 650 (80% экрана 812, её решение 20.10.2026), на низком экране не выше экрана; с клавиатурой верх шторки остаётся на месте */
 .slot > .bottom-sheet {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 20;
-  height: min(576px, calc(100% - var(--space-2xl)));
+  height: min(650px, calc(100% - var(--space-2xl)));
   transform: translateY(100%);
   visibility: hidden;
   transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s 0.32s, padding-bottom 0.25s ease;
@@ -3038,8 +3038,8 @@ button { font: inherit; color: inherit; }
     thinkingEnd: 'Давайте лучше подберём, как закрыть заём без\u00A0этого\u00A0🤝'
   };
   function payDateDone() {
-    /* реплика как в макете 2b (3512:6506), под ней баннер-корень дерева последствий */
-    return ['Запомнили день оплаты:\u00A0' + state.payDate + '.2026\u00A0✅ Пока заём не\u00A0оплачен, просрочка продолжается и\u00A0передаётся в\u00A0бюро кредитных историй. Она может помешать получить кредит, рассрочку или ипотеку', { info: 'choices' }];
+    /* реплика как в макете 2b (3512:6506), под ней баннер-корень дерева последствий (её правка 20.10.2026: только подтверждение дня) */
+    return ['Запомнили день оплаты:\u00A0' + state.payDate + '.2026\u00A0✅', { info: 'choices' }];
   }
   /* кнопка под «Перейти к\u00A0оплате»: пока день не выбран, открывает диалог; после выбора показывает день */
   function entryLabel() {
@@ -3103,7 +3103,7 @@ button { font: inherit; color: inherit; }
     payDateDone: {
       scenario: '2b', bot: payDateDone,
       chips: [{ label: 'Изменить день', go: 'payDate' }, OTHER_REASON],
-      button: { label: 'В\u00A0личный кабинет', close: true }
+      button: PAY_NOW /* её правка 20.10.2026: после выбора дня оставляем «Оплатить сейчас»; шторка закрывается крестиком */
     },
     partial: {
       scenario: '3', bot: [T.partial],
@@ -3160,7 +3160,7 @@ button { font: inherit; color: inherit; }
       { label: 'Уже подал заявление', go: 'treeFiled' }, { label: 'Пока только думаю', go: 'treeThinking' }, OTHER_REASON] },
     treeFiled: { scenario: '8c', bot: [T.filed, T.filed2], chips: SOLUTIONS.concat([OTHER_REASON]),
       button: { label: 'Написать в\u00A0поддержку', go: 'otherProblem' } },
-    treeThinking: { scenario: '8c', bot: [{ scene: 'scales' }, T.thinking, { info: 'bankruptcy' }, T.thinking2, { scene: 'solution' }, T.thinkingEnd],
+    treeThinking: { scenario: '8c', bot: [{ scene: 'scales' }, T.thinking, T.thinking2, { scene: 'solution' }, T.thinkingEnd],
       chips: SOLUTIONS.concat([OTHER_REASON]) }
   };
 
