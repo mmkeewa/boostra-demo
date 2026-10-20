@@ -1797,6 +1797,10 @@ button { font: inherit; color: inherit; }
 /* переключатели «Просрочка» и «Клиент»: подпись слева от Segmented Control */
 .scenario-switches { grid-area: switches; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-sm) var(--space-lg); }
 .scenario-switch { display: flex; align-items: center; gap: var(--space-sm); }
+/* Button / Neutral с текстом: в components.css он только с иконкой, ширина по содержимому */
+#resetDialog { width: auto; padding: 0 var(--size-button-lr-spacing); white-space: nowrap; color: var(--text-bottom-default); font: inherit; height: 40px; border: 0; border-radius: var(--radius-2xl); background: var(--brand-primary-alpha-5); } /* высота и подложка как у Segmented Control рядом */
+#resetDialog:hover { background: var(--brand-primary-alpha-10, var(--brand-primary-alpha-5)); }
+#resetDialog .btn-content { gap: var(--space-xs); }
 /* название сценария: H1/H1 Strong */
 .scenario-head__title {
   grid-area: title;
@@ -2683,6 +2687,10 @@ button { font: inherit; color: inherit; }
                 <button class="segment" type="button" data-client="good" aria-pressed="false">Хороший</button>
               </div>
             </div>
+            <!-- Button / Neutral, Size=Medium: сбрасывает переписку и выбранный день, телефон возвращается на вход -->
+            <button class="btn btn-neutral" type="button" id="resetDialog" data-size-button="medium">
+              <span class="btn-content"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJyZWZyZXNoIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTIwIDExQzE5Ljc1NTQgOS4yNDAyMyAxOC45MzkxIDcuNjA5NjcgMTcuNjc2NiA2LjM1OTUxQzE2LjQxNDIgNS4xMDkzNCAxNC43NzU4IDQuMzA4OTMgMTMuMDEzNyA0LjA4MTU2QzExLjI1MTYgMy44NTQyIDkuNDYzNjIgNC4yMTI0OSA3LjkyNTIgNS4xMDEyNkM2LjM4Njc4IDUuOTkwMDIgNS4xODMyNSA3LjM1OTk1IDQuNSA5LjAwMDAxTTQgNS4wMDAwMVY5LjAwMDAxSDhNNCAxM0M0LjI0NDU2IDE0Ljc1OTggNS4wNjA5MyAxNi4zOTAzIDYuMzIzMzYgMTcuNjQwNUM3LjU4NTc5IDE4Ljg5MDcgOS4yMjQyNCAxOS42OTExIDEwLjk4NjMgMTkuOTE4NEMxMi43NDg0IDIwLjE0NTggMTQuNTM2NCAxOS43ODc1IDE2LjA3NDggMTguODk4OEMxNy42MTMyIDE4LjAxIDE4LjgxNjggMTYuNjQwMSAxOS41IDE1TTIwIDE5VjE1SDE2IiBzdHJva2U9IiMzMzMzMzMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjwvZz4KPC9zdmc+Cg==" width="20" height="20" alt="">Сброс диалога</span>
+            </button>
           </div>
           <h2 class="scenario-head__title" id="scenarioTitle" aria-live="polite">Вход</h2>
         </header>
@@ -4050,6 +4058,12 @@ button { font: inherit; color: inherit; }
   dpdSwitch.addEventListener('click', function (e) {
     var c = e.target.closest('[data-dpd]');
     if (c) setDpd(c.dataset.dpd);
+  });
+  /* «Сброс диалога» в плитке «Сценарий»: стирает сохранённую переписку и выбранный день, телефон на входе */
+  $('#resetDialog').addEventListener('click', function () {
+    try { sessionStorage.removeItem(STORE_KEY); } catch (e) {}
+    applyScenario('entry');
+    closePanel();
   });
   scenarioChips.addEventListener('click', function (e) {
     var c = e.target.closest('[data-scenario]');
