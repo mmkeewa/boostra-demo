@@ -2353,6 +2353,7 @@ button { font: inherit; color: inherit; }
 .chat-info--extend { background: var(--brand-success-10); border-radius: var(--radius-2xl); }
 .chat-info--extend .btn { width: 100%; }
 .ci-ok { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--text-success-default); color: var(--text-peak-default); }
+.ci-ok svg path { stroke-width: 1.2; } /* глиф на сетке 16 в размере 24: линия 1,8 px, как у Icon из ДС в макете */
 
 </style>
 <style>
@@ -3024,7 +3025,7 @@ button { font: inherit; color: inherit; }
     extend: function () {
       return '<span class="ci-head"><span class="ci-ok">' + icon('calendar-check', 24) + '</span>' +
           '<span class="t-title-strong">Остановите просрочку сегодня</span></span>' +
-        '<p class="t-note cs-muted">Оплатите проценты 3\u00A0500\u00A0₽, и\u00A0заём продлится. Просрочка остановится сразу</p>' +
+        '<p class="t-note cs-muted">Оплатите только проценты. Просрочка сразу остановится</p>' +
         '<button class="btn btn-primary" type="button" data-size-button="large" data-extend>Продлить за\u00A03\u00A0500\u00A0₽</button>';
     },
     choices: function () {
