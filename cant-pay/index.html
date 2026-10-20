@@ -2201,13 +2201,10 @@ button { font: inherit; color: inherit; }
 .cs-ring--outer { width: 116px; height: 116px; background: none; border: var(--border-width-2, 2px) solid var(--brand-error-10); }
 .cs-dot { width: var(--size); height: var(--size); border-radius: var(--radius-full); background: var(--bg-grouped-secondary-w); }
 .cs-dot--spark { background: var(--brand-success-30); }
-/* кредитная история: год и 12 месяцев точками */
-.cs-year { display: flex; align-items: center; gap: var(--space-sm); color: var(--text-bottom-secondary); }
-.cs-months { display: flex; gap: var(--space-xs); }
-.cs-month { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--brand-success); }
-.cs-month[data-kind="now"] { background: var(--brand-error); animation: cs-pulse 3.6s ease-in-out infinite; }
-.cs-month[data-kind="ahead"] { background: none; box-shadow: inset 0 0 0 2px var(--brand-error-30); }
-@keyframes cs-pulse { 0%, 16.7%, 100% { transform: none; } 50%, 66.7% { transform: scale(1.25); } }
+/* кредитная история: условный отчёт, строки-заглушки без данных */
+.cs-line { display: block; height: 6px; border-radius: var(--radius-full); background: var(--neutral-bottom-alpha-10); }
+.cs-chip--inline { position: static; align-self: flex-start; }
+.cs-dot--trail { background: var(--brand-error-30); }
 /* весы */
 .cs-post { width: 6px; height: 64px; border-radius: var(--radius-full); background: var(--neutral-bottom-alpha-30); }
 .cs-base { width: 72px; height: 6px; border-radius: var(--radius-full); background: var(--neutral-bottom-alpha-30); }
@@ -2797,22 +2794,22 @@ button { font: inherit; color: inherit; }
     return '<span class="cs-chip cs-float" data-tone="' + tone + '"' + at(x, y, a) + '>' +
       (iconName ? icon(iconName, 16) : '') + '<span class="t-caption-medium">' + esc(label) + '</span></span>';
   }
-  function dots(year, row) {
-    var html = '';
-    for (var m = 0; m < 12; m += 1) {
-      var kind = row === 2 && m === 8 ? 'now' : row === 2 && m > 8 ? 'ahead' : 'paid';
-      html += '<i class="cs-month" data-kind="' + kind + '"></i>';
-    }
-    return '<span class="cs-year"><span class="t-caption">' + year + '</span><span class="cs-months">' + html + '</span></span>';
-  }
   var SCENES = {
-    /* Кредитная история: годы точками по месяцам, текущая просрочка красная, впереди пустые кружки (рефы Rocket Money, Me+) */
-    history: { tone: 'error', label: 'Кредитная история хранится 7 лет', html: function () {
-      return '<span class="cs-card cs-float"' + at(20, 16, { dy: -6 }) + '>' +
+    /* Кредитная история: условный отчёт без дат и данных клиента (её правка 20.10.2026: реальную историю мы не показываем),
+       строка «Просрочка» и те, кто её видит */
+    history: { tone: 'error', label: 'Просрочка попадает в кредитную историю, её видят банки и МФО', html: function () {
+      return '<span class="cs-card cs-float"' + at(20, 14, { dy: -6 }) + '>' +
           '<span class="t-caps-xsmall-strong cs-muted">Кредитная история</span>' +
-          dots('2024', 0) + dots('2025', 1) + dots('2026', 2) +
+          '<i class="cs-line" style="width:112px"></i><i class="cs-line" style="width:88px"></i>' +
+          '<span class="cs-chip cs-chip--inline" data-tone="error"><span class="t-caption-medium">Просрочка</span></span>' +
+          '<i class="cs-line" style="width:100px"></i>' +
         '</span>' +
-        chip('7 лет в истории', null, 'error', 159, 8, { r1: 6 });
+        '<i class="cs-dot cs-dot--trail cs-float"' + at(156, 62, { dx: 6, size: 4 }) + '></i>' +
+        '<i class="cs-dot cs-dot--trail cs-float"' + at(166, 62, { dx: 6, size: 4 }) + '></i>' +
+        '<i class="cs-dot cs-dot--trail cs-float"' + at(176, 62, { dx: 6, size: 4 }) + '></i>' +
+        chip('Банк', 'building-bank', 'w', 190, 40, { dy: -6 }) +
+        chip('МФО', 'building-bank', 'w', 196, 80, { dy: 4 }) +
+        chip('Хранится 7\u00A0лет', null, 'error', 162, 8, { r1: 6 });
     } },
     /* Взыскание: звонок покачивается, вокруг расходятся кольца, каналы связи плавают (рефы Cleo, Setel) */
     collection: { tone: 'error', label: 'Взыскание: звонки, СМС, письма, коллектор', html: function () {
@@ -3023,8 +3020,7 @@ button { font: inherit; color: inherit; }
     placeholder: 'Напишите сообщение',
     emptyError: 'Напишите сообщение',
     /* дерево последствий: тексты дословно из секции «Can't pay now / Dialog tree» (3512:6416), ждут взыскания и юристов */
-    history: 'По\u00A0закону мы передаём в\u00A0бюро кредитных историй все платежи по\u00A0займу: и\u00A0вовремя, и\u00A0с\u00A0опозданием. Каждый день просрочки попадает в\u00A0вашу историю\u00A0📄',
-    who: 'Её проверяют банки, МФО, сервисы рассрочки и\u00A0«плати частями», когда решают, дать ли вам деньги. Из-за\u00A0просрочки могут отказать даже в\u00A0льготных программах, например в\u00A0семейной ипотеке',
+    history: 'По\u00A0закону мы передаём в\u00A0бюро кредитных историй все платежи по\u00A0займу. Каждый день просрочки попадает в\u00A0вашу историю\u00A0📄',
     whoEnd: 'Чем дольше просрочка, тем выше риск отказа. Закройте её сейчас, чтобы она не\u00A0росла',
     fix: 'Для части банков и\u00A0МФО любая просрочка уже повод отказать. Лучшее, что можно сделать: закрыть просрочку сейчас и\u00A0дальше платить строго в\u00A0срок',
     fixEnd: 'Каждый день без\u00A0оплаты делает запись длиннее',
@@ -3154,7 +3150,7 @@ button { font: inherit; color: inherit; }
        Сцены и инфографика стоят в репликах бота: { scene } и { info }. Каждая ветка кончается последствием и «Оплатить сейчас» */
     treeHistory: { scenario: '8a', bot: [{ scene: 'history' }, T.history], chips: [
       { label: 'Кто смотрит кредитную историю', go: 'treeWho' }, { label: 'Как её исправить', go: 'treeFix' }, OTHER_REASON] },
-    treeWho: { scenario: '8a', bot: [T.who, { info: 'who' }, T.whoEnd], chips: [OTHER_REASON], button: PAY_NOW },
+    treeWho: { scenario: '8a', bot: [{ info: 'who' }, T.whoEnd], chips: [OTHER_REASON], button: PAY_NOW },
     treeFix: { scenario: '8a', bot: [T.fix, { info: 'years' }, T.fixEnd], chips: [OTHER_REASON], button: PAY_NOW },
     treeNoPay: { scenario: '8b', bot: [{ scene: 'collection' }, T.noPay, { info: 'steps' }], chips: [
       { label: 'Передадут ли мой долг коллекторам', go: 'treeSold' }, { label: 'Будет ли суд', go: 'treeCourt' }, OTHER_REASON] },
