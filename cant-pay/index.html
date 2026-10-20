@@ -2349,6 +2349,11 @@ button { font: inherit; color: inherit; }
 .ci-day:hover, .ci-day:focus-visible { outline: 2px solid var(--brand-secondary); outline-offset: -2px; }
 .t-title-strong { font-family: var(--title-medium-font-family); font-weight: var(--typography-primitives-semi-bold); font-size: var(--title-medium-size); line-height: var(--title-medium-line-height); letter-spacing: var(--title-medium-letter-spacing); } /* Title/Title Strong */
 
+/* Extend offer: зелёная карточка продления на шаге «День выбран» */
+.chat-info--extend { background: var(--brand-success-10); border-radius: var(--radius-2xl); }
+.chat-info--extend .btn { width: 100%; }
+.ci-ok { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--text-success-default); color: var(--text-peak-default); }
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -3014,6 +3019,14 @@ button { font: inherit; color: inherit; }
         }).join('') + '</span>';
     },
     /* корень дерева: баннер с вариантами выбора (реф Me+). Строки нажимаются, как чипы */
+    /* «День выбран» (Chat infographic, Type=Extend offer 3578:7030, её решение 20.10.2026): зелёная карточка продления
+       с кнопкой внутри; красный баннер на этом шаге не показываем, последствия по значку «!» в шапке */
+    extend: function () {
+      return '<span class="ci-head"><span class="ci-ok">' + icon('calendar-check', 24) + '</span>' +
+          '<span class="t-title-strong">Остановите просрочку сегодня</span></span>' +
+        '<p class="t-note cs-muted">Оплатите проценты 3\u00A0500\u00A0₽, и\u00A0заём продлится. Просрочка остановится сразу</p>' +
+        '<button class="btn btn-primary" type="button" data-size-button="large" data-extend>Продлить за\u00A03\u00A0500\u00A0₽</button>';
+    },
     choices: function () {
       return '<span class="ci-head"><span class="ci-alert">' + icon('alert-triangle-filled', 24) + '</span>' +
           '<span><span class="t-note-strong cs-error">Просрочка продолжается</span><span class="t-caption cs-muted">С 1-го дня она в бюро кредитных историй</span></span></span>' +
@@ -3135,7 +3148,7 @@ button { font: inherit; color: inherit; }
   };
   function payDateDone() {
     /* реплика как в макете 2b (3512:6506), под ней баннер-корень дерева последствий (её правка 20.10.2026: только подтверждение дня) */
-    return ['Запомнили день оплаты:\u00A0' + state.payDate + '.2026\u00A0✅', T.stopNow, { info: 'choices' }];
+    return ['Запомнили день оплаты:\u00A0' + state.payDate + '.2026\u00A0✅', { info: 'extend' }];
   }
   /* кнопка под «Перейти к\u00A0оплате»: пока день не выбран, открывает диалог; после выбора показывает день */
   function entryLabel() {
@@ -3201,7 +3214,6 @@ button { font: inherit; color: inherit; }
     payDateDone: {
       scenario: '2b', bot: payDateDone,
       chips: [{ label: 'Изменить день', go: 'payDate' }, OTHER_REASON],
-      secondary: { label: 'Продлить за\u00A03\u00A0500\u00A0₽', exit: 'Продление займа' },
       button: PAY_NOW /* её правка 20.10.2026: после выбора дня оставляем «Оплатить сейчас»; шторка закрывается крестиком */
     },
     partial: {
@@ -3615,6 +3627,13 @@ button { font: inherit; color: inherit; }
     if (day && !state.pending && !state.stub && state.step === 'payDate') {
       var dc = STEPS.payDate.dates.filter(function (d) { return d.date === day.dataset.date; })[0];
       if (dc) onChip(dc);
+      return;
+    }
+    var ext = e.target.closest('[data-extend]');
+    if (ext && !state.pending && !state.stub) {
+      say('client', ext.textContent.trim(), true);
+      repliesEl.classList.add('is-locked');
+      later(function () { showStub('Продление займа'); }, PAUSE);
       return;
     }
     var offer = e.target.closest('[data-offer]');
