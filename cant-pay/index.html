@@ -1620,14 +1620,14 @@ button { font: inherit; color: inherit; }
 }
 .screen.is-sheet-open .blanket,
 .screen.is-stub .blanket { opacity: 1; pointer-events: auto; }
-/* шторка 650 (80% экрана 812, её решение 20.10.2026), на низком экране не выше экрана; с клавиатурой верх шторки остаётся на месте */
+/* шторка Default из ДС: 89% высоты экрана (723 на 812; гайд Bottom sheet, 20.10.2026), на низком экране не выше экрана; с клавиатурой верх шторки остаётся на месте */
 .slot > .bottom-sheet {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 20;
-  height: min(650px, calc(100% - var(--space-2xl)));
+  height: 89%;
   transform: translateY(100%);
   visibility: hidden;
   transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s 0.32s, padding-bottom 0.25s ease;
@@ -1671,7 +1671,10 @@ button { font: inherit; color: inherit; }
 /* пока отвечает бот, новая зона ответа уже занимает своё место, но ещё не видна */
 .chat__replies.is-pending { pointer-events: none; opacity: 0; transition: none; }
 .chat__replies.is-locked { pointer-events: none; opacity: 0.5; }
-.chat__chips { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+/* быстрые ответы справа, на стороне клиента (рефы Too Good To Go, Lyft, Cleo, American Airlines, 20.10.2026): короткие по несколько в ряд,
+   длинные переносятся внутри чипа (рефы Lovi, Cash App), чип не шире 80% зоны ответа */
+.chat__chips { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-sm); }
+.chat__chips .chip { flex-shrink: 1; max-width: 80%; white-space: normal; text-align: right; }
 /* «Другая причина»: Button / Secondary, Size=Medium, иконка arrow-left (как в макете с 16.10.2026) */
 .btn[data-size-button="medium"] { border-radius: var(--circle-button-radius-m-s); }
 .btn > svg { display: block; width: var(--size-button-icon-wh); height: var(--size-button-icon-wh); flex-shrink: 0; }
@@ -2289,6 +2292,47 @@ button { font: inherit; color: inherit; }
 }
 .no-anim .chat-scene, .no-anim .chat-info { animation: none; }
 
+/* ---------- Значок «!» в шапке шторки: как у баннера «Просрочка продолжается», размер как у крестика (Medium 32) ---------- */
+.bottom-sheet__actions { display: flex; align-items: center; gap: var(--space-sm); }
+.sheet-alert {
+  --brand-error-30: #ffb3c4; /* Brand/Error/30 */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--brand-error);
+  color: var(--text-peak-default);
+  cursor: pointer;
+}
+.sheet-alert::after { /* мягкая пульсация кольца, чтобы значок заметили */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 var(--brand-error-30);
+  animation: sheet-alert-pulse 2.4s ease-out infinite;
+}
+@keyframes sheet-alert-pulse { 0% { box-shadow: 0 0 0 0 var(--brand-error-30); } 70%, 100% { box-shadow: 0 0 0 8px rgba(255, 179, 196, 0); } }
+@media (prefers-reduced-motion: reduce) { .sheet-alert::after { animation: none; } }
+
+/* ---------- Предложение со скидкой (Chat infographic, Type=Offer): зелёный билет ---------- */
+.chat-info--offer { position: relative; background: var(--brand-success-10); }
+.cs-success { color: var(--text-success-default); }
+.ci-offer-badge { align-self: flex-start; padding: var(--space-xxs) var(--space-sm); border-radius: var(--radius-full); background: var(--brand-success); color: var(--text-peak-default); }
+/* перфорация билета: пунктир и вырезы по краям цветом фона шторки */
+.ci-perf { position: relative; display: block; height: 0; margin: var(--space-xs) calc(-1 * var(--space-lg)); border-top: 2px dashed var(--brand-success-30); }
+.ci-perf::before, .ci-perf::after { content: ""; position: absolute; top: -9px; width: 16px; height: 16px; border-radius: var(--radius-full); background: var(--bg-grouped-secondary-w); }
+.ci-perf::before { left: -8px; }
+.ci-perf::after { right: -8px; }
+.ci-prices { display: inline-flex; align-items: baseline; gap: var(--space-sm); }
+.ci-prices s { text-decoration-thickness: 1px; }
+.chat-info--offer .btn { width: 100%; }
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -2610,9 +2654,15 @@ button { font: inherit; color: inherit; }
                 <div class="bottom-sheet__grabber"><span class="bottom-sheet__handle"></span></div>
                 <header class="bottom-sheet__header">
                   <h2 class="bottom-sheet__title t-h4-strong" id="sheetTitle">Поможем с&nbsp;оплатой</h2>
-                  <button class="btn-neutral" id="sheetClose" type="button" data-size-button="medium" aria-label="Закрыть">
-                    <span class="btn-content"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ4Ij4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE1IDVMNSAxNU01IDVMMTUgMTUiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" width="20" height="20" alt=""></span>
-                  </button>
+                  <div class="bottom-sheet__actions">
+                    <!-- значок «!»: баннер «Просрочка продолжается» в чат (её просьба 20.10.2026), иконка alert-triangle-filled из FTM UI Icons -->
+                    <button class="sheet-alert" id="sheetAlert" type="button" aria-label="Что будет, если просрочка продолжится">
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M11.9898 1.96802C13.0128 1.96802 13.9598 2.48902 14.5018 3.32702L14.6048 3.49902L21.7048 15.749L21.7668 15.875C21.9442 16.3137 22.0153 16.7881 21.9743 17.2595C21.9333 17.7308 21.7814 18.1859 21.531 18.5873C21.2806 18.9888 20.9388 19.3253 20.5334 19.5695C20.1281 19.8136 19.6708 19.9584 19.1988 19.992L18.9998 20H4.99983L4.95083 19.997L4.83883 19.999C4.39343 19.9761 3.95874 19.8542 3.56641 19.6421C3.17408 19.43 2.83396 19.1331 2.57083 18.773L2.46183 18.613C2.22367 18.2388 2.07145 17.8165 2.01611 17.3764C1.96078 16.9364 2.00371 16.4895 2.14183 16.068L2.21383 15.874L2.27383 15.749L9.36583 3.51602C9.62522 3.04705 10.0055 2.65612 10.4671 2.38389C10.9288 2.11165 11.4549 1.96805 11.9908 1.96802H11.9898ZM12.0098 14L11.8828 14.007C11.6398 14.0359 11.4158 14.153 11.2532 14.336C11.0907 14.519 11.0009 14.7553 11.0009 15C11.0009 15.2448 11.0907 15.481 11.2532 15.6641C11.4158 15.8471 11.6398 15.9641 11.8828 15.993L11.9998 16L12.1268 15.993C12.3699 15.9641 12.5939 15.8471 12.7564 15.6641C12.9189 15.481 13.0087 15.2448 13.0087 15C13.0087 14.7553 12.9189 14.519 12.7564 14.336C12.5939 14.153 12.3699 14.0359 12.1268 14.007L12.0098 14ZM11.9998 8.00002C11.7549 8.00005 11.5185 8.08997 11.3355 8.25273C11.1524 8.41549 11.0355 8.63977 11.0068 8.88302L10.9998 9.00002V11L11.0068 11.117C11.0357 11.3601 11.1528 11.5841 11.3358 11.7466C11.5188 11.9091 11.7551 11.9989 11.9998 11.9989C12.2446 11.9989 12.4809 11.9091 12.6639 11.7466C12.8469 11.5841 12.9639 11.3601 12.9928 11.117L12.9998 11V9.00002L12.9928 8.88302C12.9642 8.63977 12.8472 8.41549 12.6642 8.25273C12.4812 8.08997 12.2448 8.00005 11.9998 8.00002Z" fill="currentColor"/></svg>
+                    </button>
+                    <button class="btn-neutral" id="sheetClose" type="button" data-size-button="medium" aria-label="Закрыть">
+                      <span class="btn-content"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ4Ij4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE1IDVMNSAxNU01IDVMMTUgMTUiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" width="20" height="20" alt=""></span>
+                    </button>
+                  </div>
                 </header>
                 <div class="bottom-sheet__content">
                   <div class="chat">
@@ -2708,7 +2758,6 @@ button { font: inherit; color: inherit; }
             <button class="chip chip-inactive" type="button" data-scenario="3a" aria-pressed="false">3a. Скидка хорошему клиенту</button>
             <button class="chip chip-inactive" type="button" data-scenario="4" aria-pressed="false">4. Другой способ</button>
             <button class="chip chip-inactive" type="button" data-scenario="5" aria-pressed="false">5. Платёж не&nbsp;прошёл</button>
-            <button class="chip chip-inactive" type="button" data-scenario="6" aria-pressed="false">6. Я&nbsp;уже оплатил</button>
             <button class="chip chip-inactive" type="button" data-scenario="7" aria-pressed="false">7. Другая проблема</button>
             <button class="chip chip-inactive" type="button" data-scenario="7a" aria-pressed="false">7a. Другая проблема · отправлено</button>
             <button class="chip chip-inactive" type="button" data-scenario="8a" aria-pressed="false">8a. Последствия · кредитная история</button>
@@ -2927,6 +2976,17 @@ button { font: inherit; color: inherit; }
         '<span class="t-h1-strong cs-error">5 лет</span>' +
         '<p class="t-note">нужно сообщать о банкротстве при каждом займе или кредите</p>';
     },
+    /* предложение хорошему клиенту на «Сумма больше ожидаемой»: билет со скидкой, старая сумма зачёркнута, кнопка внутри
+       (рефы FocusFlight, BitePal, Givingli, Chime; её правка 20.10.2026) */
+    offer: function () {
+      return '<span class="ci-offer-badge t-caps-xsmall-strong">Только сейчас</span>' +
+        '<span class="t-note-strong cs-success">Скидка для\u00A0вас</span>' +
+        '<span class="t-h1-strong cs-success">\u221215\u00A0000\u00A0₽</span>' +
+        '<span class="ci-perf" aria-hidden="true"></span>' +
+        '<span class="ci-row"><span class="t-note cs-muted">К\u00A0оплате</span>' +
+          '<span class="ci-prices"><s class="t-note cs-muted">75\u00A0000\u00A0₽</s><span class="t-h3-strong">60\u00A0000\u00A0₽</span></span></span>' +
+        '<button class="btn btn-primary" type="button" data-size-button="large" data-offer>Оплатить сейчас</button>';
+    },
     /* корень дерева: баннер с вариантами выбора (реф Me+). Строки нажимаются, как чипы */
     choices: function () {
       return '<span class="ci-head"><span class="ci-alert">' + icon('alert-triangle-filled', 24) + '</span>' +
@@ -3019,7 +3079,7 @@ button { font: inherit; color: inherit; }
     partial: 'Внесите столько, сколько получается сейчас\u00A0👍',
     extend: 'Отличное решение\u00A0👍 Оплатите проценты и\u00A0пользуйтесь деньгами дальше. Возвращать всё сразу не\u00A0нужно',
     paid: 'Если вы оплатили заём полностью другим способом, загрузите чек об\u00A0оплате\u00A0🧾',
-    discount: 'Понимаем, сумма вышла больше, чем вы\u00A0ждали\u00A0🙏 Прямо сейчас можем сделать вам скидку 15\u00A0000\u00A0₽. Итого к\u00A0оплате 60\u00A0000\u00A0₽',
+    discount: 'Понимаем, сумма вышла больше, чем вы\u00A0ждали\u00A0🙏', /* предложение со скидкой: зелёный баннер offer (её правка 20.10.2026) */
     method: 'Выберите способ оплаты\u00A0👇',
     failed: 'Так бывает из-за\u00A0лимита банка или нехватки средств на\u00A0карте. Оплатите другим способом\u00A0💳',
     other: 'Расскажите о\u00A0своей проблеме\u00A0✍️',
@@ -3063,8 +3123,10 @@ button { font: inherit; color: inherit; }
   /* ---------- Шаги диалога ----------
      go: следующий шаг · exit: выход в существующий флоу (заглушка) · close: закрыть шторку */
   /* возврат к списку причин: Button / Secondary со стрелкой, на всех вторых шагах одинаковый (макет 16.10.2026) */
-  var OTHER_REASON = { label: 'Другая причина', go: 'reasons', back: true };
+  var OTHER_REASON = { label: 'Вернуться в\u00A0начало', go: 'reasons', back: true }; /* её правка 20.10.2026: было «Другая причина» */
   /* конец ветки дерева последствий: последствие и оплата сразу */
+  /* баннер «Просрочка продолжается» с ветками дерева последствий: в конце каждого сценария (её правка 20.10.2026) */
+  var CHOICES = { info: 'choices' };
   var PAY_NOW = { label: 'Оплатить сейчас', exit: 'Оплата' };
   /* решения в ветке банкротства */
   var SOLUTIONS = [
@@ -3083,8 +3145,7 @@ button { font: inherit; color: inherit; }
     { label: 'Сумма больше ожидаемой', go: 'amount' }, /* развилка «Хороший клиент?»: да → скидка (3a), нет → частичная оплата (3) */
     { label: 'Оплачу другим способом', go: 'otherMethod' },
     { label: 'Платёж не прошёл', go: 'payFailed' },
-    { label: 'Я уже оплатил', go: 'alreadyPaid' }, /* сначала ответ: чек загружают только при полной оплате (её правка 19.10.2026) */
-    { label: 'У\u00A0меня другая проблема', go: 'otherProblem' }
+    { label: 'Другая проблема', go: 'otherProblem' }
   ];
   var STEPS = {
     reasons: { scenario: '1', bot: [T.ask], chips: REASONS },
@@ -3114,27 +3175,21 @@ button { font: inherit; color: inherit; }
       button: PAY_NOW /* её правка 20.10.2026: после выбора дня оставляем «Оплатить сейчас»; шторка закрывается крестиком */
     },
     partial: {
-      scenario: '3', bot: [T.partial],
+      scenario: '3', bot: [T.partial, CHOICES],
       chips: [OTHER_REASON],
       button: { label: 'Оплатить частично', exit: 'Блок оплаты: Оплатить частично' }
     },
     extend: {
-      scenario: '2d', bot: [T.extend],
+      scenario: '2d', bot: [T.extend, CHOICES],
       chips: [OTHER_REASON],
       button: { label: 'Продлить за 3\u00A0500\u00A0₽', exit: 'Продление займа' }
     },
-    alreadyPaid: {
-      scenario: '6', bot: [T.paid],
-      chips: [OTHER_REASON],
-      button: { label: 'Загрузить чек', exit: 'Загрузка чека об\u00A0оплате' }
-    },
     discount: {
-      scenario: '3a', bot: [T.discount],
-      chips: [OTHER_REASON],
-      button: { label: 'Оплатить 60\u00A0000\u00A0₽', exit: 'Оплата' }
+      scenario: '3a', bot: [T.discount, { info: 'offer' }],
+      chips: [OTHER_REASON] /* кнопка «Оплатить сейчас» внутри баннера */
     },
     otherMethod: {
-      scenario: '4', bot: [T.method],
+      scenario: '4', bot: [T.method, CHOICES],
       chips: [
         { label: 'СБП', exit: 'Оплата' },
         { label: 'Банковская карта', exit: 'Оплата' },
@@ -3143,7 +3198,7 @@ button { font: inherit; color: inherit; }
       ]
     },
     payFailed: {
-      scenario: '5', bot: [T.failed],
+      scenario: '5', bot: [T.failed, CHOICES],
       chips: [
         { label: 'Оплатить через\u00A0СБП', exit: 'Оплата' },
         { label: 'Оплатить новой картой', exit: 'Карты и счета: добавить карту' },
@@ -3515,6 +3570,13 @@ button { font: inherit; color: inherit; }
   });
   /* строки баннера «Просрочка продолжается» работают как чипы: реплика клиента и ветка дерева */
   messagesEl.addEventListener('click', function (e) {
+    var offer = e.target.closest('[data-offer]');
+    if (offer && !state.pending && !state.stub) {
+      say('client', offer.textContent.trim(), true);
+      repliesEl.classList.add('is-locked');
+      later(function () { showStub('Оплата'); }, PAUSE);
+      return;
+    }
     var row = e.target.closest('[data-tree]');
     if (!row || state.pending || state.stub) return;
     var input = messageInput();
@@ -3580,6 +3642,14 @@ button { font: inherit; color: inherit; }
     else startDialog();
   });
   $('#sheetClose').addEventListener('click', closeDialog);
+  /* значок «!» рядом с крестиком: в чат приходит баннер «Просрочка продолжается» с ветками последствий */
+  $('#sheetAlert').addEventListener('click', function () {
+    if (state.pending || state.stub || !state.step) return;
+    var input = messageInput();
+    if (input) { input.blur(); closeKb(); }
+    state.pending = true;
+    botSay([CHOICES], function () { state.pending = false; save(); });
+  });
 
   /* ---------- Заглушка: выход в существующий флоу, которого нет в этих макетах ---------- */
   function showStub(name) {
@@ -3995,7 +4065,6 @@ button { font: inherit; color: inherit; }
     '3a': [['reasons', 'amount']],
     '4': [['reasons', 'otherMethod']],
     '5': [['reasons', 'payFailed']],
-    '6': [['reasons', 'alreadyPaid']],
     '2d': [['reasons', 'noMoney'], ['noMoney', 'extend']],
     '7': [['reasons', 'otherProblem']],
     '7a': [['reasons', 'otherProblem']],
