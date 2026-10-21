@@ -2805,7 +2805,8 @@ button { font: inherit; color: inherit; }
   animation: fade .2s ease;
 }
 .check__text { display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); text-align: center; }
-.check__title { color: var(--text-bottom-default); }
+.check__title { color: var(--text-bottom-default); transition: opacity .3s ease, transform .3s ease; }
+.check__title.is-out { opacity: 0; transform: translateY(-4px); }
 .check__desc { color: var(--text-bottom-secondary); }
 /* Таймер / LCD 343 × 124: верх на 150 ниже середины экрана, как в макете (556 из 812) */
 .check__lcd {
@@ -3757,8 +3758,17 @@ Path _cookiePath() {
   /* ---------- Демо-время: решение приходит быстрее, чем в жизни ---------- */
   var TIMER_SEC = 300;           /* таймер 05:00, как в макете */
   var TICK_MS = 1000;            /* шаг таймера; меньше 1000 ускоряет отсчёт */
-  var DECISION_DEMO_SEC = 15;    /* в прототипе решение приходит через 15 с ожидания */
-  var TIMEOUT_DEMO_SEC = 10;     /* после «Дольше обычного» решение приходит через 10 с */
+  var DECISION_DEMO_SEC = 70;    /* в прототипе решение приходит через 70 с: успевает пройти весь цикл фраз */
+  var TIMEOUT_DEMO_SEC = 26;     /* после «Дольше обычного» решение приходит через 26 с: фразы проходят круг */
+
+  /* ---------- Фразы заголовка (её тексты 2026-10-21) ----------
+     Подпись «Не закрывайте страницу» не меняется. Ожидание: старт и дальше раз в 6 с, на последней фразе стоим.
+     После 05:00: четыре фразы по кругу раз в 6 с. */
+  var PHRASE_MS = 6000;
+  var PHRASES_WAIT = ['Проверяем корректность данных', 'Сверяем паспортные данные', 'Смотрим кредитную историю',
+    'Оцениваем доход и нагрузку', 'Готовим решение', 'Решение покажем на этом экране', 'Обычно быстрее 5 минут',
+    'Осталось немного', 'Решение покажем на этом экране', 'Пока ждёте, поймайте Бустрочку', 'Готовим решение'];
+  var PHRASES_TIMEOUT = ['Проверяем дольше обычного', 'Проверка заняла больше 5 минут', 'Ещё проверяем заявку', 'Готовим решение'];
 
   /* ---------- Код доступа 93123 ---------- */
   var CODE = '93123', gate = $('#gate'), app = $('#app');
@@ -3823,13 +3833,34 @@ Path _cookiePath() {
   /* ---------- Ожидание: таймер считает вниз, по демо-времени приходит решение ---------- */
   var decision = 'approved';
   var wait = { left: TIMER_SEC, spent: 0, limit: DECISION_DEMO_SEC, timer: null };
-  function stopWait() { clearInterval(wait.timer); wait.timer = null; stopGame(); }
+  var phrase = { list: null, i: 0, loop: false, timer: null };
+  function setPhrase(text, animate) {
+    var el = $('#checkTitle');
+    if (!animate) { el.classList.remove('is-out'); el.textContent = text; return; }
+    el.classList.add('is-out');
+    setTimeout(function () { el.textContent = text; el.classList.remove('is-out'); }, 300);
+  }
+  function startPhrases(list, loop) {
+    clearInterval(phrase.timer);
+    phrase.list = list; phrase.i = 0; phrase.loop = loop;
+    setPhrase(list[0], false);
+    phrase.timer = setInterval(function () {
+      if (phrase.i >= phrase.list.length - 1) {
+        if (!phrase.loop) { clearInterval(phrase.timer); return; }
+        phrase.i = -1;
+      }
+      phrase.i++;
+      setPhrase(phrase.list[phrase.i], true);
+    }, PHRASE_MS);
+  }
+  function stopPhrases() { clearInterval(phrase.timer); phrase.timer = null; }
+  function stopWait() { clearInterval(wait.timer); wait.timer = null; stopPhrases(); stopGame(); }
   function startWait(timeout) {
     clearInterval(wait.timer);
     wait.left = timeout ? 0 : TIMER_SEC;
     wait.spent = 0;
     wait.limit = timeout ? TIMEOUT_DEMO_SEC : DECISION_DEMO_SEC;
-    $('#checkTitle').textContent = timeout ? 'Проверяем дольше обычного' : 'Проверяем корректность данных';
+    startPhrases(timeout ? PHRASES_TIMEOUT : PHRASES_WAIT, !!timeout);
     renderLcd(wait.left);
     wait.timer = setInterval(function () {
       wait.spent++;
@@ -3952,7 +3983,7 @@ Path _cookiePath() {
   /* ---------- Состояния ---------- */
   var STATES = {
     wait: { title: 'Ожидание',
-      text: 'Заявка на проверке. Таймер считает от 05:00, пока ждём решение. Бустрочка выглядывает в случайном месте, её можно поймать.',
+      text: 'Заявка на проверке. Таймер считает от 05:00, пока ждём решение. Заголовок меняется раз в 6 с (11 фраз, на последней стоит), подпись «Не закрывайте страницу» постоянная. Бустрочка выглядывает в случайном месте, её можно поймать.',
       next: 'В прототипе решение приходит через ' + DECISION_DEMO_SEC + ' с. Какое, задаёт переключатель «Решение».' },
     catchMe: { title: 'Поймай меня',
       text: 'Бустрочка выглядывает во время ожидания. Нажмите на неё, чтобы поймать. Таймер при этом идёт дальше.',
@@ -3961,7 +3992,7 @@ Path _cookiePath() {
       text: 'Бустрочка рассыпалась на 18 печенек, они разлетаются и гаснут примерно за 1 с. Потом она снова выглядывает в другом месте.',
       next: 'Ожидание и таймер продолжаются.' },
     timeout: { title: 'Дольше обычного',
-      text: 'Таймер дошёл до 00:00, а решения нет. Заголовок меняется на «Проверяем дольше обычного», таймер стоит на 00:00, игра продолжается.',
+      text: 'Таймер дошёл до 00:00, а решения нет. Таймер стоит на 00:00, игра продолжается. Заголовок по кругу раз в 6 с: «Проверяем дольше обычного», «Проверка заняла больше 5 минут», «Ещё проверяем заявку», «Готовим решение».',
       next: 'В прототипе решение приходит через ' + TIMEOUT_DEMO_SEC + ' с. Что показываем на самом деле, если ждём ещё дольше, не решено.' },
     approved: { title: 'Одобрено',
       text: 'Решение пришло: заём одобрен. Дальше оффер и подписание.',
