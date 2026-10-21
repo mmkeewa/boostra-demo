@@ -2670,7 +2670,7 @@ button { font: inherit; color: inherit; }
                     </div>
                     <div class="pay-option" data-state="default">
                       <img class="pay-option__icon" data-size-icon="20" src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJjcmVkaXQtY2FyZCI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0zIDEwSDIxTTcgMTVINy4wMU0xMSAxNUgxM00zIDhDMyA3LjIwNDM1IDMuMzE2MDcgNi40NDEyOSAzLjg3ODY4IDUuODc4NjhDNC40NDEyOSA1LjMxNjA3IDUuMjA0MzUgNSA2IDVIMThDMTguNzk1NiA1IDE5LjU1ODcgNS4zMTYwNyAyMC4xMjEzIDUuODc4NjhDMjAuNjgzOSA2LjQ0MTI5IDIxIDcuMjA0MzUgMjEgOFYxNkMyMSAxNi43OTU2IDIwLjY4MzkgMTcuNTU4NyAyMC4xMjEzIDE4LjEyMTNDMTkuNTU4NyAxOC42ODM5IDE4Ljc5NTYgMTkgMTggMTlINkM1LjIwNDM1IDE5IDQuNDQxMjkgMTguNjgzOSAzLjg3ODY4IDE4LjEyMTNDMy4zMTYwNyAxNy41NTg3IDMgMTYuNzk1NiAzIDE2VjhaIiBzdHJva2U9IiMzMzMzMzMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjwvZz4KPC9zdmc+Cg==" alt="">
-                      <p class="pay-option__label t-caption">Оплатить частично</p>
+                      <p class="pay-option__label t-caption">Вернуть частично</p>
                     </div>
                   </div>
                   <div class="input-field">
@@ -2951,7 +2951,7 @@ button { font: inherit; color: inherit; }
           '<span class="t-note-strong">Банкротство?</span><span class="t-caption cs-muted">Или есть выход проще?</span></span>';
     } },
     /* Решение: рукопожатие в центре, варианты парят вокруг, искры (реф Gojek) */
-    solution: { tone: 'success', label: 'Решение: продлить, оплатить частично, выбрать день', html: function () {
+    solution: { tone: 'success', label: 'Решение: продлить, вернуть частично, выбрать день', html: function () {
       return '<span class="cs-circle cs-circle--w cs-circle--success cs-float"' + at(104, 28, { dy: -6, size: 72 }) + '>' + icon('heart-handshake', 40) + '</span>' +
         '<span class="cs-circle cs-circle--check cs-float"' + at(160, 22, { s: 1.17, size: 24 }) + '>' + icon('check', 16) + '</span>' +
         chip('Продлить', 'calendar-check', 'success', 14, 22, { dy: 4 }) +
@@ -3034,7 +3034,7 @@ button { font: inherit; color: inherit; }
           '<button class="btn btn-primary" type="button" data-size-button="large" data-offer>Оплатить сейчас</button>' +
         '</span>';
     },
-    /* «Оплатить частично» (её просьба 20.10.2026): поле суммы прямо в диалоге, сумма уходит в кнопку «Оплатить N ₽».
+    /* «Вернуть частично» (её просьба 20.10.2026): поле суммы прямо в диалоге, сумма уходит в кнопку «Оплатить N ₽».
        Input / Input из ДС, размер Medium; подпись под полем показывает задолженность и ошибку */
     amount: function () {
       return '<label class="input-field"><span class="t-note-medium">Сумма платежа</span>' +
@@ -3185,7 +3185,7 @@ button { font: inherit; color: inherit; }
     court2: 'Приставы могут арестовать счета и\u00A0запретить выезд за\u00A0границу. Даже долга в\u00A01\u00A0000\u00A0₽ достаточно, чтобы по\u00A0закону запустилось принудительное взыскание',
     courtEnd: 'Сейчас долг можно закрыть без\u00A0суда и\u00A0лишних расходов',
     bankrupt: 'Спасибо, что сказали. На\u00A0каком вы этапе?',
-    filed: 'Заявление ещё можно отозвать. Поможем закрыть заём без\u00A0процедуры банкротства и\u00A0подберём решение. Сейчас есть варианты продлить, частично оплатить или выбрать удобный день',
+    filed: 'Заявление ещё можно отозвать. Поможем закрыть заём без\u00A0процедуры банкротства и\u00A0подберём решение. Сейчас есть варианты продлить, частично вернуть или выбрать удобный день',
     filed2: 'Если решение окончательное, пришлите номер дела в\u00A0поддержку, мы учтём его',
     thinking: 'Мы не\u00A0советуем банкротство. Вы заплатите управляющему больше суммы долга',
     thinking2: '5\u00A0лет придётся сообщать о\u00A0новых займах. 3\u00A0года нельзя руководить компанией. Некоторое имущество могут продать в\u00A0счёт долга',
@@ -3217,7 +3217,7 @@ button { font: inherit; color: inherit; }
   /* решения в ветке банкротства */
   var SOLUTIONS = [
     { label: 'Продлить за 3\u00A0500\u00A0₽', go: 'extend' },
-    { label: 'Оплатить частично', go: 'partial' },
+    { label: 'Вернуть частично', go: 'partial' },
     { label: 'Выбрать день оплаты', go: 'payDate' }
   ];
   /* строки баннера «Просрочка продолжается»: подпись = реплика клиента */
@@ -3242,7 +3242,7 @@ button { font: inherit; color: inherit; }
       options: [
         { label: 'Выбрать день оплаты', icon: 'calendar', go: 'payDate' },
         { label: 'Продлить за 3\u00A0500\u00A0₽', icon: 'calendar-check', go: 'extend' }, /* сначала ответ бота, потом переход (её правка 19.10.2026) */
-        { label: 'Оплатить частично', icon: 'pig-money', go: 'partial' }
+        { label: 'Вернуть частично', icon: 'pig-money', go: 'partial' }
       ],
       chips: [OTHER_REASON]
     },
@@ -3304,7 +3304,7 @@ button { font: inherit; color: inherit; }
     treeWho: { scenario: '8a', bot: [{ info: 'who' }, T.whoEnd], chips: [OTHER_REASON], button: PAY_NOW },
     treeFix: { scenario: '8a', bot: [T.fix, { info: 'years' }, { info: 'treeFix' }], chips: [OTHER_REASON], /* её правка 21.10.2026: вместо кнопки варианты списком */
       options: [
-        { label: 'Оплатить частично', icon: 'pig-money', go: 'partial' },
+        { label: 'Вернуть частично', icon: 'pig-money', go: 'partial' },
         { label: 'Закрыть полностью', icon: 'check', exit: 'Оплата' },
         { label: 'Продлить за\u00A03\u00A0500\u00A0₽', icon: 'calendar-check', go: 'extend' }
       ] },
