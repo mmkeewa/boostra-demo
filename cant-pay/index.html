@@ -3185,7 +3185,7 @@ button { font: inherit; color: inherit; }
     court2: 'Приставы могут арестовать счета и\u00A0запретить выезд за\u00A0границу. Даже долга в\u00A01\u00A0000\u00A0₽ достаточно, чтобы по\u00A0закону запустилось принудительное взыскание',
     courtEnd: 'Сейчас долг можно закрыть без\u00A0суда и\u00A0лишних расходов',
     bankrupt: 'Спасибо, что сказали. На\u00A0каком вы этапе?',
-    filed: 'Заявление ещё можно отозвать. Поможем закрыть заём без\u00A0процедуры банкротства и\u00A0подберём решение. Сейчас есть варианты продлить, частично вернуть или выбрать удобный день',
+    filed: 'Заявление ещё можно отозвать. Поможем закрыть заём без\u00A0процедуры банкротства. Ниже для\u00A0вас решения:',
     filed2: 'Если решение окончательное, пришлите номер дела в\u00A0поддержку, мы учтём его',
     thinking: 'Мы не\u00A0советуем банкротство. Вы заплатите управляющему больше суммы долга',
     thinking2: '5\u00A0лет придётся сообщать о\u00A0новых займах. 3\u00A0года нельзя руководить компанией. Некоторое имущество могут продать в\u00A0счёт долга',
@@ -3216,9 +3216,9 @@ button { font: inherit; color: inherit; }
   var PAY_NOW = { label: 'Закрыть заём сейчас', exit: 'Оплата' }; /* её правка 21.10.2026: «Оплатить сейчас» непонятно, что именно */
   /* решения в ветке банкротства */
   var SOLUTIONS = [
-    { label: 'Продлить за 3\u00A0500\u00A0₽', go: 'extend' },
-    { label: 'Вернуть частично', go: 'partial' },
-    { label: 'Выбрать день оплаты', go: 'payDate' }
+    { label: 'Продлить за 3\u00A0500\u00A0₽', icon: 'calendar-check', go: 'extend' },
+    { label: 'Вернуть частично', icon: 'pig-money', go: 'partial' },
+    { label: 'Выбрать день оплаты', icon: 'calendar', go: 'payDate' }
   ];
   /* строки баннера «Просрочка продолжается»: подпись = реплика клиента */
   var TREE_ROOT = {
@@ -3314,10 +3314,10 @@ button { font: inherit; color: inherit; }
     treeCourt: { scenario: '8b', bot: [{ scene: 'court' }, T.court, T.court2, { info: 'court' }, T.courtEnd], chips: [OTHER_REASON], button: PAY_NOW },
     treeBankrupt: { scenario: '8c', bot: [{ scene: 'doubt' }, T.bankrupt], chips: [
       { label: 'Уже подал заявление', go: 'treeFiled' }, { label: 'Пока только думаю', go: 'treeThinking' }, OTHER_REASON] },
-    treeFiled: { scenario: '8c', bot: [T.filed, T.filed2], chips: SOLUTIONS.concat([OTHER_REASON]),
+    treeFiled: { scenario: '8c', bot: [T.filed, { info: 'treeFiled' }, T.filed2], options: SOLUTIONS, chips: [OTHER_REASON], /* её правка 21.10.2026: решения списком в чате */
       button: { label: 'Написать в\u00A0поддержку', go: 'otherProblem' } },
-    treeThinking: { scenario: '8c', bot: [{ scene: 'scales' }, T.thinking, T.thinking2, { scene: 'solution' }, T.thinkingEnd],
-      chips: SOLUTIONS.concat([OTHER_REASON]) }
+    treeThinking: { scenario: '8c', bot: [{ scene: 'scales' }, T.thinking, T.thinking2, { scene: 'solution' }, T.thinkingEnd, { info: 'treeThinking' }],
+      options: SOLUTIONS, chips: [OTHER_REASON] }
   };
   /* списки предложений в диалоге (List row): шаги с полем options */
   Object.keys(STEPS).forEach(function (k) { if (STEPS[k].options) ChatScenes.lists[k] = STEPS[k].options; });
