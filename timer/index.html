@@ -3251,7 +3251,9 @@ button { font: inherit; color: inherit; }
       <div class="tile-grid tile-grid--three">
         <section class="tile tile--stat" id="tileNow" aria-labelledby="nowTitle">
           <header class="stat__head"><h3 class="stat__title" id="nowTitle">Сейчас</h3></header>
-          <p class="stat__text t-note">Нет данных: замера по&nbsp;этому шагу нет</p>
+          <p class="effect__value"><span class="effect__number">12,4%</span><span class="effect__unit t-note">ушли, не&nbsp;увидев решения</span></p>
+          <p class="stat__text t-note">1&nbsp;441 из&nbsp;11&nbsp;593 человек с&nbsp;таймером ожидания, из&nbsp;них 540 до&nbsp;конца таймера</p>
+          <p class="effect__text t-caption">НК, 15–28&nbsp;сентября 2026, Метрика, в&nbsp;пределах одного визита</p>
         </section>
         <section class="tile tile--stat" id="tileGame" aria-labelledby="gameTitle">
           <header class="stat__head"><h3 class="stat__title" id="gameTitle">Пасхалка</h3></header>
@@ -3267,12 +3269,12 @@ button { font: inherit; color: inherit; }
           <ul class="events t-note" id="eventsList"></ul>
           <p class="tile__caption t-caption">Разметка текущая. Какое событие на&nbsp;каком состоянии, сверить с&nbsp;картой разметки</p>
         </section>
-        <!-- Плитка «Эффект»: оценка в деньгах для планирования (её просьба 2026-10-20), стили ../core2/effect-tile.css -->
+        <!-- Плитка «Эффект»: оценка в деньгах для планирования (её просьбы 2026-10-20, 21: ушедшие с ожидания по Метрике, доля одобрений 55%) -->
         <section class="tile tile--stat tile--effect" id="tileEffect" aria-labelledby="effectTitle">
-          <header class="effect__head"><h3 class="effect__title" id="effectTitle">Эффект</h3><p class="effect__note t-caption">НК, выдачи 15–28 сентября 2026, DataLens</p></header>
-          <p class="effect__value"><span class="effect__number">+3,2 млн ₽</span><span class="effect__unit t-note">в месяц за каждый 1% клиентов, которых удержали на ожидании</span></p>
-          <table class="effect__table t-note"><thead><tr><th>Сценарий</th><th>К выдаче НК</th><th>Выдач в месяц</th><th>В месяц</th></tr></thead><tbody><tr><td>Удержали 1%</td><td>+1%</td><td>+142</td><td>+3,2 млн ₽</td></tr><tr class="is-base"><td>Удержали 3%</td><td>+3%</td><td>+426</td><td>+9,7 млн ₽</td></tr><tr><td>Удержали 5%</td><td>+5%</td><td>+709</td><td>+16,1 млн ₽</td></tr></tbody></table>
-          <p class="effect__text t-caption">Это чувствительность, а не прогноз: отвал на ожидании не измерен, события шага 13 приходят не всегда. Чтобы посчитать, нужна доля ушедших между dl_reg_step13_account_timer_start и решением. Выдачи НК 15–28 сентября 2026: 6 619 займов на 150,4 млн ₽, средний чек 22 726 ₽, в месяц около 322 млн ₽. Допущение: спасённые клиенты проходят скоринг и выдачу так же, как остальные (до выдачи доходят 19,6% привязавших карту).</p>
+          <header class="effect__head"><h3 class="effect__title" id="effectTitle">Эффект</h3><p class="effect__note t-caption">НК, 15–28 сентября 2026, Метрика и DataLens</p></header>
+          <p class="effect__value"><span class="effect__number">до +7,9 млн ₽</span><span class="effect__unit t-note">в месяц, если удержать всех ушедших без решения</span></p>
+          <table class="effect__table t-note"><thead><tr><th>Сценарий</th><th>Удержали</th><th>Выдач в месяц</th><th>В месяц</th></tr></thead><tbody><tr><td>Осторожно</td><td>10%</td><td>+35</td><td>+0,8 млн ₽</td></tr><tr class="is-base"><td>База</td><td>25%</td><td>+87</td><td>+2 млн ₽</td></tr><tr><td>Смело</td><td>50%</td><td>+175</td><td>+4 млн ₽</td></tr></tbody></table>
+          <p class="effect__text t-caption">Таймер ожидания запустился у 11 593 человек. В том же визите 5 448 увидели одобрение, 4 444 отказ, 1 441 (12,4%) ушли, не увидев решения: 540 до конца таймера, остальные после. Из ушедших одобрили бы около 790 (55%, как у дождавшихся). До выдачи доходят 20,6% одобренных (6 619 выдач ÷ одобренные из 58 328 заполнивших анкету), средний чек 22 726 ₽. Точно, кого из ушедших одобрили и вернулся ли он потом, Метрика и CRM не показывают: нужны данные по людям из ClickHouse datahints.</p>
         </section>
       </div>
     </aside>
