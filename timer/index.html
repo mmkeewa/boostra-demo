@@ -3676,7 +3676,8 @@ Path _cookiePath() {
 <script>
 /* ===== Окно «Код анимации для Flutter» (card/, timer/) =====
    Кнопка: <button class="code-open" data-code="#idКода" data-code-title="…" data-code-file="…" data-code-hint="…">.
-   Код лежит в <script type="text/plain" id="idКода" data-src="../flutter/….dart"></script>:
+   Код лежит в пустом теге script type="text/plain" id="idКода" data-src="../flutter/….dart"
+   (в комментарии нельзя писать закрывающий тег: при вшивании в страницу он обрывает скрипт):
    build_93123.py вшивает туда текст файла, локально (стенд, localhost) пустой тег дочитывается по data-src. */
 (function () {
   var modal = null, current = null;
