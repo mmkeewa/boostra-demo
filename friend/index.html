@@ -3412,7 +3412,7 @@ button.coins-nav__btn { cursor: pointer; }
               <div class="blanket" id="blanket"></div>
               <section class="share-sheet" id="shareSheet" role="dialog" aria-modal="true" aria-labelledby="shareTitle" hidden>
                 <p class="t-note-medium" id="shareTitle">Системное окно «Поделиться»</p>
-                <p class="t-note">Попалась ссылка, где можно быстро взять деньги по&nbsp;сниженной ставке: 0,5%&nbsp;в&nbsp;день вместо 0,8%. Вдруг пригодится<br>boostra.ru/r/K7M2Q9</p>
+                <p class="t-note">Попалась ссылка, где можно быстро взять деньги по&nbsp;сниженной ставке: 0,4%&nbsp;в&nbsp;день вместо 0,8%. Вдруг пригодится<br>boostra.ru/r/K7M2Q9</p>
                 <p class="t-caption coins-muted">Вид и&nbsp;список приложений задаёт телефон</p>
               </section>
 
@@ -3710,7 +3710,7 @@ button.coins-nav__btn { cursor: pointer; }
   $('#shareBtn').addEventListener('click', function () {
     hideToast();
     if (touch && navigator.share) {
-      navigator.share({ text: 'Попалась ссылка, где можно быстро взять деньги по сниженной ставке: 0,5% в день вместо 0,8%. Вдруг пригодится', url: 'https://boostra.ru/r/K7M2Q9' }).catch(function () {});
+      navigator.share({ text: 'Попалась ссылка, где можно быстро взять деньги по сниженной ставке: 0,4% в день вместо 0,8%. Вдруг пригодится', url: 'https://boostra.ru/r/K7M2Q9' }).catch(function () {});
       return;
     }
     openShare();
