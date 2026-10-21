@@ -2824,9 +2824,11 @@ button { font: inherit; color: inherit; }
   offset-path: path("M36 17 C41 9 46 5.2 52.5 5.2 C59.7 5.2 65.5 10.4 65.5 16.8 C65.5 23.2 59.7 28.4 52.5 28.4 C46 28.4 41 25 36 17 C31 25 26 28.5 19.5 28.5 C12.3 28.5 6.5 23.3 6.5 16.9 C6.5 10.5 12.3 5.3 19.5 5.3 C26 5.3 31 9 36 17 Z");
   animation: loader-infinity 2.6s linear infinite;
 }
-.loader-infinity__dot:nth-of-type(2) { opacity: .5; animation-delay: -.1s; }
-.loader-infinity__dot:nth-of-type(3) { opacity: .32; animation-delay: -.19s; }
-.loader-infinity__dot:nth-of-type(4) { opacity: .18; animation-delay: -.27s; }
+/* голова (первый, крупный кружок) идёт впереди, хвост отстаёт: у хвоста задержка меньше по модулю */
+.loader-infinity__dot:nth-of-type(1) { animation-delay: -.27s; }
+.loader-infinity__dot:nth-of-type(2) { opacity: .5; animation-delay: -.17s; }
+.loader-infinity__dot:nth-of-type(3) { opacity: .32; animation-delay: -.08s; }
+.loader-infinity__dot:nth-of-type(4) { opacity: .18; animation-delay: 0s; }
 @keyframes loader-infinity { to { offset-distance: 100%; } }
 
 /* ---------- Таймер / LCD: семисегментные цифры 44 × 76 и двоеточие 11 × 76 ---------- */
