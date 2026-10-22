@@ -3379,7 +3379,7 @@ button { font: inherit; color: inherit; }
   /* развилка «Хороший клиент?» после чипа «Сумма больше ожидаемой» */
   function resolve(id) { return id === 'amount' ? (state.client === 'good' ? 'discount' : 'partial') : id; }
 
-  /* ---------- Контекст диалога в рамках сессии ----------
+  /* ---------- Контекст диалога: на проде закреплён за клиентом, пока он не погасит долг (её решение 22.10.2026) ----------
      Переписка сохраняется: клиент вышел из шторки или из кабинета и вернулся, история диалога на месте.
      На проде переписка хранится на сервере и выгружается файлом для анализа причин; в прототипе — sessionStorage вкладки */
   var STORE_KEY = 'cantPay.dialog';
@@ -4250,7 +4250,7 @@ button { font: inherit; color: inherit; }
     show(part(tileNow, 'meterLabel'), now.meterLabel);
     /* «Ожидаем» и\u00A0«События» */
     part(tileGoal, 'text').textContent = data.goal;
-    fillText(part(tileEvents, 'text'), data.events + (data.context ? ' Переписка сохраняется в\u00A0рамках сессии и\u00A0выгружается файлом для\u00A0анализа причин.' : ''));
+    fillText(part(tileEvents, 'text'), data.events + (data.context ? ' Переписка хранится на\u00A0сервере, закреплена за\u00A0клиентом, пока он не\u00A0погасит долг, и\u00A0выгружается файлом для\u00A0анализа причин.' : ''));
     var nb = part(tileEvents, 'badge');
     nb.hidden = !data.newEvents;
     if (data.newEvents) nb.textContent = data.newEvents + '\u00A0' + (data.newEvents === 1 ? 'новое' : 'новых');
