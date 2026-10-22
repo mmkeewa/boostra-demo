@@ -3271,8 +3271,8 @@ button { font: inherit; color: inherit; }
     },
     payDateDone: {
       scenario: '2b', bot: payDateDone,
-      chips: [{ label: 'Изменить день', go: 'payDate' }, OTHER_REASON],
-      secondary: PAY_NOW /* одна Primary на экран (правило ДС, её просьба 22.10.2026): главная кнопка в билете «Продлить», «Закрыть заём сейчас» вторичная */
+      chips: [{ label: 'Изменить день', go: 'payDate' }, OTHER_REASON]
+      /* её решение 22.10.2026: «Закрыть заём сейчас» здесь не предлагаем, клиент только что сказал, что не может заплатить */
     },
     partial: {
       scenario: '3', bot: [T.partial, { info: 'amount' }], /* её решения 20.10.2026: без красного баннера; сумма вводится в диалоге и встаёт в кнопку */
