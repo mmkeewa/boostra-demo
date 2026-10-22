@@ -3205,7 +3205,7 @@ button { font: inherit; color: inherit; }
     start: 'Не могу заплатить сейчас',
     alertTitle: 'Просрочка небольшая',
     alertText: 'Оплатите сейчас, и\u00A0она не\u00A0повлияет на\u00A0новые займы и\u00A0кредитную историю',
-    alertBadge: 'До\u00A025\u00A0октября',
+    alertBadge: 'Просрочка 2\u00A0дня', /* её правка в Figma 22.10.2026: количество дней просрочки клиента */
     ask: 'Расскажите, что мешает оплатить. Подберём решение под\u00A0вашу ситуацию\u00A0🤝',
     noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂',
     payDate: 'Выберите день, когда вам удобно оплатить\u00A0📅 Срок по\u00A0договору не меняется. Проценты начисляются до\u00A0дня оплаты',
@@ -3742,7 +3742,7 @@ button { font: inherit; color: inherit; }
     if (a.amount) {
       var n = amountValue();
       if (!n) { amountError('Введите сумму'); return; }
-      if (n >= DEBT) { amountError('Для частичной оплаты сумма меньше ' + money(DEBT)); return; }
+      /* её решение 22.10.2026: сумму больше задолженности не блокируем, исправляем на следующем шаге, в оплате */
       var inp = amountInput(); if (inp) inp.blur();
       say('client', 'Оплатить ' + money(n), true);
       repliesEl.classList.add('is-locked');
