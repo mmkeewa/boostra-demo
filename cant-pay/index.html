@@ -2385,6 +2385,14 @@ button { font: inherit; color: inherit; }
 /* её правка 22.10.2026: баннеры, списки и инфографика в чате во всю ширину переписки (поля шторки 16), без отступа под аватар */
 .chat-info { width: auto; align-self: stretch; margin-left: 0; }
 
+/* Поле суммы с кнопкой внутри (её правка 22.10.2026): рамка и заливка как у Input, справа Button / Primary Large */
+.amount-field { display: flex; align-items: center; gap: var(--space-sm); height: 52px; padding: 0 var(--space-xs) 0 var(--space-lg); border: 1px solid transparent; border-bottom-color: var(--neutral-bottom-alpha-10); border-radius: var(--radius-2xl); background: var(--neutral-bottom-alpha-5); }
+.amount-field:focus-within { border-color: var(--brand-secondary-alpha-70); background: var(--bg-grouped-secondary-w); }
+.amount-field[data-state="error"] { border-color: var(--brand-error); background: var(--brand-error-alpha-5); }
+.amount-field__input { flex: 1 1 0; min-width: 0; height: 100%; padding: 0; border: 0; background: none; color: var(--text-bottom-default); outline: none; }
+.amount-field__input::placeholder { color: var(--text-bottom-quaternary); }
+.amount-field .btn { flex-shrink: 0; }
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -3045,9 +3053,11 @@ button { font: inherit; color: inherit; }
     /* «Вернуть частично» (её просьба 20.10.2026): поле суммы прямо в диалоге, сумма уходит в кнопку «Оплатить N ₽».
        Input / Input из ДС, размер Medium; подпись под полем показывает задолженность и ошибку */
     amount: function () {
-      return '<label class="input-field"><span class="t-note-medium">Сумма платежа</span>' +
-        '<input class="input" data-size-input="medium" data-amount type="text" inputmode="numeric" autocomplete="off" placeholder="Введите сумму">' +
-        '<span class="input-caption" data-amount-caption>Задолженность 20\u00A0000\u00A0₽</span></label>';
+      return '<div class="input-field"><label class="t-note-medium">Сумма платежа</label>' +
+        /* её правка 22.10.2026: кнопка «Оплатить» внутри поля, а не отдельно внизу */
+        '<span class="amount-field" data-amount-field><input class="amount-field__input t-body" data-amount type="text" inputmode="numeric" autocomplete="off" placeholder="Введите сумму">' +
+        '<button class="btn btn-primary" type="button" data-size-button="large" data-amount-pay>Оплатить</button></span>' +
+        '<span class="input-caption" data-amount-caption>Задолженность 20\u00A0000\u00A0₽</span></div>';
     },
     /* выбор дня внутри чата (Chat infographic, Type=Date picker 3576:6992): месяц и пять дней плитками */
     dates: function () {
@@ -3276,8 +3286,7 @@ button { font: inherit; color: inherit; }
     },
     partial: {
       scenario: '3', bot: [T.partial, { info: 'amount' }], /* её решения 20.10.2026: без красного баннера; сумма вводится в диалоге и встаёт в кнопку */
-      chips: [OTHER_REASON],
-      button: { label: 'Оплатить', exit: 'Оплата', amount: true }
+      chips: [OTHER_REASON] /* кнопка «Оплатить» внутри поля суммы */
     },
     extend: {
       scenario: '2d', bot: [T.extend], /* её решение 20.10.2026: на продлении красный баннер не показываем */
@@ -3674,8 +3683,8 @@ button { font: inherit; color: inherit; }
   function money(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0') + '\u00A0₽'; }
   function amountError(text) {
     var i = amountInput(); if (!i) return;
-    var cap = i.parentNode.querySelector('[data-amount-caption]');
-    i.dataset.state = text ? 'error' : '';
+    var cap = i.closest('.input-field').querySelector('[data-amount-caption]');
+    i.closest('[data-amount-field]').dataset.state = text ? 'error' : '';
     cap.dataset.state = text ? 'error' : '';
     cap.textContent = text || 'Задолженность ' + money(DEBT);
   }
@@ -3684,8 +3693,10 @@ button { font: inherit; color: inherit; }
     var n = +(i.value.replace(/\D/g, '') || 0);
     i.value = n ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : '';
     amountError('');
-    var btn = $('[data-role="action"]', repliesEl);
-    if (btn) btn.textContent = n ? 'Оплатить ' + money(n) : 'Оплатить';
+  });
+  messagesEl.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-amount-pay]') || state.pending || state.stub || state.step !== 'partial') return;
+    onAction({ exit: 'Оплата', amount: true });
   });
   function onAction(a) {
     if (a.amount) {
