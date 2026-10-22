@@ -3053,9 +3053,9 @@ button { font: inherit; color: inherit; }
     /* «Вернуть частично» (её просьба 20.10.2026): поле суммы прямо в диалоге, сумма уходит в кнопку «Оплатить N ₽».
        Input / Input из ДС, размер Medium; подпись под полем показывает задолженность и ошибку */
     amount: function () {
-      return '<div class="input-field"><label class="t-note-medium">Сумма платежа</label>' +
+      return '<div class="input-field">' + /* как DS Input XLarge в макете: подпись «Сумма платежа» внутри поля */
         /* её правка 22.10.2026: кнопка «Оплатить» внутри поля, а не отдельно внизу */
-        '<span class="amount-field" data-amount-field><input class="amount-field__input t-body" data-amount type="text" inputmode="numeric" autocomplete="off" placeholder="Введите сумму">' +
+        '<span class="amount-field" data-amount-field><input class="amount-field__input t-body" data-amount type="text" inputmode="numeric" autocomplete="off" placeholder="Сумма платежа" aria-label="Сумма платежа">' +
         '<button class="btn btn-primary" type="button" data-size-button="large" data-amount-pay>Оплатить</button></span>' +
         '<span class="input-caption" data-amount-caption>Задолженность 20\u00A0000\u00A0₽</span></div>';
     },
