@@ -4071,21 +4071,21 @@ button { font: inherit; color: inherit; }
     { label: 'каждый пятый', from: 970, to: 2150 }
   ];
 
-  var A_PAY = 'После входа: `dl_repayment_success_payment`, тип в\u00A0`repayment_type`.';
+  var A_PAY = 'Новое: `dl_repayment_cant_pay_method_select`, способ в\u00A0`payment_method` (`sbp`, `card`, `new_card`). Оплата: `dl_repayment_success_payment` с\u00A0`repayment_source = cant_pay_chat`.';
   var EST = 'оплат в\u00A0месяц: причину называют по\u00A0';
   var NOW_LATER = { value: '47,0%', badge: '13\u00A0561\u00A0ответ', caption: '«Заплачу позже» и\u00A0«Не хватает средств на\u00A0карте»', share: 47.0 };
   var EST_LATER = { value: '≈300', caption: EST + '3\u00A0000\u00A0договоров' };
   /* reasons: причины отмены, которые закрывает сценарий (выделены на\u00A0графике).
      now: плитка «Сейчас» (share: длина полосы в\u00A0процентах, meter: подпись справа от\u00A0полосы, если она не\u00A0равна доле).
-     goal и\u00A0events: тексты плиток «Ожидаем» и\u00A0«События», newEvents: бейдж «1 новое».
+     goal и\u00A0events: тексты плиток «Ожидаем» и\u00A0«События», newEvents: число новых событий на\u00A0бейдже.
      estimate: плитка «Оценка» (ranges: показать диапазоны; text: текст вместо числа) */
   var ANALYTICS = {
     start: {
       reasons: ['later', 'noFunds', 'otherMethod', 'wrongAmount', 'ownText', 'failed'],
       now: { value: '80\u00A0662', badge: '47\u00A0821\u00A0договор', caption: 'отмены оплаты за\u00A014.05–\u206003.09.2026', share: 35.8, meterLabel: 'ответили на\u00A0анкету' },
       goal: 'Доля вошедших в\u00A0диалог, которые оплатили: в\u00A0том же визите и за\u00A07\u00A0дней. С\u00A0разбивкой по\u00A0типу оплаты.',
-      events: 'Новое событие одно: клик по\u00A0«Не могу заплатить сейчас». Оплата уже размечена: `dl_repayment_success_payment`, тип в\u00A0`repayment_type` (полное, продление, частичное).',
-      newEvents: true,
+      events: 'Новые: `dl_repayment_cant_pay_click` (открыл диалог), `dl_repayment_cant_pay_reason_select` с\u00A0`cant_pay_reason`, `dl_repayment_cant_pay_close_chat_click` с\u00A0`cant_pay_step`. Оплата: `dl_repayment_success_payment` с\u00A0новым `repayment_source = cant_pay_chat`.',
+      newEvents: 3,
       context: true,
       estimate: { value: '480–\u20601\u00A0080', caption: 'дополнительных оплат в\u00A0месяц', ranges: true }
     },
@@ -4093,28 +4093,30 @@ button { font: inherit; color: inherit; }
       reasons: ['later', 'noFunds'],
       now: NOW_LATER,
       goal: 'Клиент не закрывает кабинет, а продлевает заём, вносит часть или выбирает день.',
-      events: 'После входа: `dl_repayment_success_payment` с\u00A0`repayment_type = loan_repayment_extension` или `loan_repayment_partial`.',
+      events: 'Новое: `dl_repayment_cant_pay_option_select` с\u00A0`cant_pay_option` (`pay_date`, `extension`, `partial`). Продление: `dl_repayment_click_pay` с\u00A0`loan_repayment_extension` и\u00A0`repayment_source = cant_pay_chat`.',
+      newEvents: 1,
       estimate: EST_LATER
     },
     payDate: {
       reasons: ['later', 'noFunds'],
       now: NOW_LATER,
       goal: 'Доля оплативших до\u00A0выбранного дня от\u00A0выбравших день.',
-      events: 'Выбранный день хранится на\u00A0сервере, считаем по\u00A0нему. Оплата: `dl_repayment_success_payment`.',
+      events: 'Новое: `dl_repayment_cant_pay_date_select`, день в\u00A0`pay_date`. Оплата до\u00A0этого дня: `dl_repayment_success_payment`.',
+      newEvents: 1,
       estimate: EST_LATER
     },
     partial: {
       reasons: ['wrongAmount'],
       now: { value: '11,0%', badge: '3\u00A0178\u00A0ответов', caption: '«Ошибся суммой платежа»', share: 11.0 },
       goal: 'Переходы в\u00A0частичную оплату из\u00A0диалога и успешные оплаты после них.',
-      events: 'После входа: `dl_repayment_success_payment` с\u00A0`repayment_type = loan_repayment_partial`.',
+      events: '`dl_repayment_entered_amount_paid`, затем `dl_repayment_click_pay` с\u00A0`loan_repayment_partial` и\u00A0`repayment_source = cant_pay_chat`.',
       estimate: { value: '≈70', caption: EST + '730\u00A0договорам' }
     },
     discount: {
       reasons: ['wrongAmount'],
       now: { value: '11,0%', badge: '3\u00A0178\u00A0ответов', caption: '«Ошибся суммой платежа»', share: 11.0 },
       goal: 'Доля оплативших со\u00A0скидкой от\u00A0увидевших предложение. Сравниваем с\u00A0частичной оплатой у\u00A0обычных клиентов.',
-      events: 'После входа: `dl_repayment_success_payment`. Отдельного признака оплаты со\u00A0скидкой нет.',
+      events: '`dl_repayment_click_pay` с\u00A0`loan_repayment_full`, `repayment_source = cant_pay_chat` и\u00A0новым `discount_applied = yes`.',
       estimate: { text: 'Посчитаем, когда будут размер скидки и\u00A0критерий «хорошего клиента»' }
     },
     otherMethod: {
@@ -4122,6 +4124,7 @@ button { font: inherit; color: inherit; }
       now: { value: '19,1%', badge: '5\u00A0509\u00A0ответов', caption: '«Оплачу другим способом»', share: 19.1 },
       goal: 'Клиент доходит до\u00A0оплаты выбранным способом, отмен на\u00A0экране оплаты меньше.',
       events: A_PAY,
+      newEvents: 1,
       estimate: { value: '≈130', caption: EST + '1\u00A0300\u00A0договорам' }
     },
     payFailed: {
@@ -4129,6 +4132,7 @@ button { font: inherit; color: inherit; }
       now: { value: '3,3%', badge: '963\u00A0ответа', caption: '«Платёж не прошёл»', share: 3.3 },
       goal: 'Повторная оплата через\u00A0СБП или новой картой проходит успешно.',
       events: A_PAY,
+      newEvents: 1,
       estimate: { value: '≈25', caption: EST + '240\u00A0договорам' }
     },
     paid: {
@@ -4142,14 +4146,15 @@ button { font: inherit; color: inherit; }
       reasons: ['later', 'noFunds'],
       now: NOW_LATER,
       goal: 'Доля оплативших после ветки последствий от\u00A0открывших её. Ветки и\u00A0тексты ждут взыскания и\u00A0юристов.',
-      events: 'Событий на\u00A0ветках нет. Оплата: `dl_repayment_success_payment`, тип в\u00A0`repayment_type`.',
+      events: 'В\u00A0«Как её исправить» `dl_repayment_cant_pay_option_select` (`full` у\u00A0«Закрыть полностью»). Оплата: `dl_repayment_success_payment` с\u00A0`repayment_source = cant_pay_chat`.',
       estimate: { text: 'Посчитаем, когда взыскание подтвердит ветки' }
     },
     otherProblem: {
       reasons: ['ownText'],
       now: { value: '5,0%', badge: '1\u00A0446\u00A0ответов', caption: '«Свой текст»', share: 5.0 },
       goal: 'Сообщения уходят в\u00A0контакт-центр, видим причины, которых нет в\u00A0списке.',
-      events: 'Сообщения считаем в\u00A0контакт-центре.',
+      events: 'Новое: `dl_repayment_cant_pay_message_send` при\u00A0отправке сообщения. Тексты считаем в\u00A0контакт-центре.',
+      newEvents: 1,
       estimate: { text: 'Сообщения считаем в\u00A0контакт-центре' }
     }
   };
@@ -4241,7 +4246,9 @@ button { font: inherit; color: inherit; }
     /* «Ожидаем» и\u00A0«События» */
     part(tileGoal, 'text').textContent = data.goal;
     fillText(part(tileEvents, 'text'), data.events + (data.context ? ' Переписка сохраняется в\u00A0рамках сессии и\u00A0выгружается файлом для\u00A0анализа причин.' : ''));
-    part(tileEvents, 'badge').hidden = !data.newEvents;
+    var nb = part(tileEvents, 'badge');
+    nb.hidden = !data.newEvents;
+    if (data.newEvents) nb.textContent = data.newEvents + '\u00A0' + (data.newEvents === 1 ? 'новое' : 'новых');
     /* «Оценка»: число с\u00A0подписью или текст, если оплаты в\u00A0сценарии нет */
     part(tileEstimate, 'value').hidden = !est.value;
     part(tileEstimate, 'number').textContent = est.value || '';
