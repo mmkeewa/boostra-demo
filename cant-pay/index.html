@@ -3187,7 +3187,8 @@ button { font: inherit; color: inherit; }
     history: 'По\u00A0закону мы передаём в\u00A0БКИ все платежи по\u00A0займу и\u00A0каждый день просрочки\u00A0📄',
     whoEnd: 'Чем дольше просрочка, тем выше риск отказа. Закройте её сейчас, чтобы она не\u00A0росла',
     fix: 'Лучшее, что можно сделать: закрыть просрочку сейчас и\u00A0дальше платить строго в\u00A0срок',
-    noPay: 'Если заём не\u00A0оплачен, мы начинаем взыскание по\u00A0закону 230-ФЗ: звонки, сообщения и\u00A0письма. К\u00A0работе могут подключиться коллекторы, возможны личные встречи',
+    noPay: 'Если заём не\u00A0оплачен, мы начинаем взыскание по\u00A0закону 230-ФЗ: звонки, сообщения и\u00A0письма',
+    collectors: 'К\u00A0работе могут подключиться коллекторы, возможны личные встречи',
     sold: 'Решение принимаем по\u00A0каждому долгу отдельно. Долг могут продать коллекторскому агентству. Тогда платить нужно будет ему, а\u00A0не\u00A0нам',
     soldEnd: 'После продажи договориться о\u00A0продлении или частичной оплате с\u00A0нами уже не\u00A0получится',
     court: 'Такой сценарий возможен по\u00A0решению кредитора или коллекторов после продажи долга. Тогда на\u00A0вас лягут дополнительные расходы: госпошлина и\u00A0исполнительский сбор ФССП',
@@ -3319,8 +3320,8 @@ button { font: inherit; color: inherit; }
         { label: 'Продлить за\u00A03\u00A0500\u00A0₽', icon: 'calendar-check', go: 'extend' }
       ] },
     treeNoPay: { scenario: '8b', bot: [{ scene: 'collection' }, T.noPay, { info: 'steps' }], chips: [
-      { label: 'Передадут ли мой долг коллекторам', go: 'treeSold' }, { label: 'Будет ли суд', go: 'treeCourt' }, OTHER_REASON] },
-    treeSold: { scenario: '8b', bot: [T.sold, T.soldEnd], chips: [OTHER_REASON], button: PAY_NOW },
+      { label: 'Когда продадут долг', go: 'treeSold' }, { label: 'Будет ли суд', go: 'treeCourt' }, OTHER_REASON] },
+    treeSold: { scenario: '8b', bot: [T.collectors, T.sold, T.soldEnd], /* её правка 22.10.2026: ветка разделена, про коллекторов уже здесь */ chips: [OTHER_REASON], button: PAY_NOW },
     treeCourt: { scenario: '8b', bot: [{ scene: 'court' }, T.court, T.court2, { info: 'court' }, T.courtEnd], chips: [OTHER_REASON], button: PAY_NOW },
     treeBankrupt: { scenario: '8c', bot: [{ scene: 'doubt' }, T.bankrupt], chips: [
       { label: 'Уже подал заявление', go: 'treeFiled' }, { label: 'Пока только думаю', go: 'treeThinking' }, OTHER_REASON] },
