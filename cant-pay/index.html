@@ -3272,7 +3272,7 @@ button { font: inherit; color: inherit; }
     payDateDone: {
       scenario: '2b', bot: payDateDone,
       chips: [{ label: 'Изменить день', go: 'payDate' }, OTHER_REASON],
-      button: PAY_NOW /* её правка 20.10.2026: после выбора дня оставляем «Оплатить сейчас»; шторка закрывается крестиком */
+      secondary: PAY_NOW /* одна Primary на экран (правило ДС, её просьба 22.10.2026): главная кнопка в билете «Продлить», «Закрыть заём сейчас» вторичная */
     },
     partial: {
       scenario: '3', bot: [T.partial, { info: 'amount' }], /* её решения 20.10.2026: без красного баннера; сумма вводится в диалоге и встаёт в кнопку */
@@ -3462,7 +3462,18 @@ button { font: inherit; color: inherit; }
   if (window.ResizeObserver) new ResizeObserver(function () { scrollBottom(); }).observe(messagesEl);
 
   /* ---------- Зона ответа: чипы, кнопка действия или поле ввода ---------- */
+  /* Одна Primary на экран (её просьба 22.10.2026): кнопки в билетах выше по переписке, до последней реплики клиента,
+     становятся Secondary, Primary остаётся только у текущего шага */
+  function normalizePrimaries() {
+    var clients = $$('.chat-bubble--client', messagesEl), last = clients[clients.length - 1];
+    $$('.chat-info .btn', messagesEl).forEach(function (b) {
+      var old = last && (last.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_PRECEDING);
+      b.classList.toggle('btn-primary', !old);
+      b.classList.toggle('btn-secondary', !!old);
+    });
+  }
   function renderReplies(pending) {
+    normalizePrimaries();
     var step = STEPS[state.step];
     repliesEl.innerHTML = '';
     repliesEl.className = 'chat__replies' + (pending ? ' is-pending' : '');
