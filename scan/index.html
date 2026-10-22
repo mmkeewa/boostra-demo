@@ -4189,7 +4189,8 @@ button.text-field__box:focus-visible {
     $('#viewData').hidden = v !== 'data';
     $('#viewWork').hidden = v !== 'work';
     $('#dataBar').hidden = v !== 'data';
-    if (v !== 'data') { clearTimeout(recT); $('#recognizing').hidden = true; }
+    /* любой переход снимает распознавание: иначе экран загрузки остаётся поверх анкеты, если шаг открыли во время распознавания */
+    clearTimeout(recT); $('#recognizing').hidden = true;
     if (v !== 'camera') $('#permDialog').hidden = true;
     var page = $('#view' + v.charAt(0).toUpperCase() + v.slice(1));
     if (page && page.classList.contains('page')) page.scrollTop = 0;
