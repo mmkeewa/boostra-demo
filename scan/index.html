@@ -3313,21 +3313,37 @@ button.text-field__box:focus-visible {
 /* камера во весь экран тёмная: индикатор «домой» светлый */
 .screen[data-view="camera"] .home-indicator::before { background: var(--always-peak-alpha); }
 
-/* ---------- Плитка «Сценарий» ---------- */
-#recogSwitch .segment { white-space: nowrap; }
-.shot-filter { display: flex; flex-direction: column; gap: var(--space-sm); }
-.shot-filter__chips { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
-/* одиннадцать тегов шагов: две колонки по шесть */
-#scenarioChips { grid-template-rows: repeat(6, auto); }
+/* ---------- Плитка «Сценарий»: слева вертикальный флоу, справа красный блок «Ошибки» (её просьба 2026-10-22) ---------- */
+.scenario-body--scan { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: start; }
+.flow-col { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; }
+.flow-steps { position: relative; display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.flow-steps li { position: relative; }
+/* линия флоу между точками основного пути */
+.flow-steps li:not(.flow-steps__side):not(:nth-last-child(2))::after { content: ""; position: absolute; left: 11px; top: 26px; bottom: -6px; width: 2px; border-radius: 1px; background: rgba(255, 255, 255, .2); }
+.flow-steps__side { margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px dashed rgba(255, 255, 255, .16); }
+.flow-step { display: flex; align-items: center; gap: var(--space-sm); width: 100%; padding: 6px var(--space-sm) 6px 4px; border: 0; border-radius: var(--radius-lg, 12px); background: none; color: inherit; text-align: left; cursor: pointer; font: inherit; }
+.flow-step:hover { background: rgba(255, 255, 255, .08); }
+.flow-step__dot { flex: none; width: 16px; height: 16px; margin: 0 2px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .4); background: transparent; }
+.flow-step__label { color: var(--text-bottom-secondary); }
+.flow-step[aria-pressed="true"] { background: rgba(255, 255, 255, .12); }
+.flow-step[aria-pressed="true"] .flow-step__dot { border-color: var(--palette-secondary-9, #0072eb); background: var(--palette-secondary-9, #0072eb); box-shadow: 0 0 0 4px rgba(0, 114, 235, .25); }
+.flow-step[aria-pressed="true"] .flow-step__label { color: var(--text-bottom-default); }
+
+.errors-block { display: flex; flex-direction: column; gap: var(--space-md); min-width: 0; padding: var(--space-md); border-radius: var(--radius-2xl, 16px); background: rgba(255, 2, 57, .12); box-shadow: inset 0 0 0 1px rgba(255, 2, 57, .4); }
+.errors-block__title { margin: 0; color: #ff6b86; font-weight: 600; }
+.errors-group { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.errors-group__label { flex: 0 0 100%; margin: 0; color: rgba(255, 255, 255, .56); }
+.error-item { padding: 6px 12px; border: 0; border-radius: 999px; background: rgba(255, 2, 57, .16); color: #ffd1da; cursor: pointer; font: inherit; text-align: left; }
+.error-item:hover { background: rgba(255, 2, 57, .28); }
+.error-item[aria-pressed="true"] { background: var(--palette-error-9, #ff0239); color: #fff; }
+
 .scenario-desc { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; margin: 0; }
 .scenario-desc p { margin: 0; }
 .scenario-desc .t-caption { color: var(--text-bottom-tertiary); }
 
-/* ---------- Малые плитки: «Сейчас» и «События» в ряд ---------- */
-.tile-grid--two { grid-auto-rows: auto; }
+/* ---------- Плитка «Сейчас» ---------- */
 .stat__value { align-items: baseline; }
-.events { display: flex; flex-direction: column; gap: var(--space-xs); margin: var(--space-xs) 0; padding: 0; list-style: none; }
-.events li { color: var(--text-bottom-secondary); }
+@media (max-width: 1279px) { .scenario-body--scan { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- Код доступа (как в timer/) ---------- */
 .gate { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: var(--space-2xl); background: #000; }
@@ -3339,10 +3355,6 @@ button.text-field__box:focus-visible {
 .gate__input { text-align: center; letter-spacing: 8px; }
 .gate__err { color: var(--text-error-default); }
 
-/* на стекле у выбранного тега при наведении заливка из ДС белая, текст тоже белый: держим серую */
-@media (min-width: 768px) and (pointer: fine) {
-  .stand[data-shell="glass"] .panel .chip-active:hover { background: rgba(255, 255, 255, .32); }
-}
 
 </style>
 <style>
@@ -3727,64 +3739,30 @@ button.text-field__box:focus-visible {
       <section class="tile tile--scenario" aria-labelledby="scenarioLabel">
         <header class="scenario-head">
           <p class="tile__label scenario-head__label t-caption" id="scenarioLabel">Сценарий</p>
-          <div class="scenario-switches">
-            <div class="scenario-switch">
-              <p class="tile__label t-caption" id="recogLabel">Распознали неуверенно</p>
-              <div class="segmented-control" id="recogSwitch" role="group" aria-labelledby="recogLabel" data-size-segmented-control="40">
-                <button class="segment" type="button" data-recog="attention" aria-pressed="false">Да</button>
-                <button class="segment" type="button" data-recog="ok" aria-pressed="true">Нет</button>
-              </div>
-            </div>
-          </div>
           <h2 class="scenario-head__title" id="scenarioTitle" aria-live="polite">Интро</h2>
         </header>
-        <div class="shot-filter">
-          <p class="tile__label t-caption" id="shotLabel">Результат снимка</p>
-          <div class="shot-filter__chips" id="shotSwitch" role="group" aria-labelledby="shotLabel">
-            <button class="chip chip-active" type="button" data-shot="ok" aria-pressed="true">Без&nbsp;ошибок</button>
-            <button class="chip chip-inactive" type="button" data-shot="blur" aria-pressed="false">Размыто</button>
-            <button class="chip chip-inactive" type="button" data-shot="glare" aria-pressed="false">Блик</button>
-            <button class="chip chip-inactive" type="button" data-shot="cropped" aria-pressed="false">Не&nbsp;целиком</button>
-            <button class="chip chip-inactive" type="button" data-shot="page" aria-pressed="false">Не&nbsp;та страница</button>
-            <button class="chip chip-inactive" type="button" data-shot="notfound" aria-pressed="false">Нет паспорта</button>
-            <button class="chip chip-inactive" type="button" data-shot="upload" aria-pressed="false">Не&nbsp;отправилось</button>
+        <div class="scenario-body scenario-body--scan">
+          <div class="flow-col">
+            <p class="tile__label t-caption">Флоу</p>
+            <ol class="flow-steps" id="flowSteps"><li><button class="flow-step" type="button" data-scenario="scanIntro" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Интро</span></button></li><li><button class="flow-step" type="button" data-scenario="scanPermission" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Доступ к&nbsp;камере</span></button></li><li><button class="flow-step" type="button" data-scenario="scanCamera" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Камера</span></button></li><li><button class="flow-step" type="button" data-scenario="scanRecognizing" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Распознавание</span></button></li><li><button class="flow-step" type="button" data-scenario="checkData" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Проверьте данные</span></button></li><li><button class="flow-step" type="button" data-scenario="scanDone" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Переход к&nbsp;проверке</span></button></li><li class="flow-steps__side"><button class="flow-step" type="button" data-scenario="manualData" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Ручной ввод, если пропустил скан</span></button></li></ol>
+          </div>
+          <div class="errors-block" id="errorsBlock" role="group" aria-label="Ошибки">
+            <p class="errors-block__title t-caption">Ошибки</p>
+            <div class="errors-group"><p class="errors-group__label t-caption">Камера</p><button class="error-item t-note" type="button" data-scenario="scanNoAccess" aria-pressed="false">Нет доступа к&nbsp;камере</button></div><div class="errors-group"><p class="errors-group__label t-caption">Снимок</p><button class="error-item t-note" type="button" data-scenario="scanPhotoError-blur" aria-pressed="false">Фото размыто</button><button class="error-item t-note" type="button" data-scenario="scanPhotoError-glare" aria-pressed="false">На&nbsp;фото блик</button><button class="error-item t-note" type="button" data-scenario="scanPhotoError-cropped" aria-pressed="false">Паспорт виден не&nbsp;целиком</button><button class="error-item t-note" type="button" data-scenario="scanPhotoError-page" aria-pressed="false">Нужны 2 и&nbsp;3&nbsp;страницы</button><button class="error-item t-note" type="button" data-scenario="scanPhotoError-notfound" aria-pressed="false">Не&nbsp;видим паспорт на&nbsp;фото</button><button class="error-item t-note" type="button" data-scenario="scanPhotoError-format" aria-pressed="false">Формат не&nbsp;подходит</button><button class="error-item t-note" type="button" data-scenario="scanPhotoError-size" aria-pressed="false">Файл больше 15&nbsp;МБ</button><button class="error-item t-note" type="button" data-scenario="scanPhotoError-upload" aria-pressed="false">Не&nbsp;получилось отправить фото</button></div><div class="errors-group"><p class="errors-group__label t-caption">Анкета</p><button class="error-item t-note" type="button" data-scenario="checkDataAttention" aria-pressed="false">Распознали неуверенно</button><button class="error-item t-note" type="button" data-scenario="checkDataErrors" aria-pressed="false">Ошибки в&nbsp;анкете после скана</button><button class="error-item t-note" type="button" data-scenario="manualDataErrors" aria-pressed="false">Ошибки при ручном вводе</button></div>
           </div>
         </div>
-        <div class="scenario-body">
-          <div class="scenario-tags" id="scenarioChips" role="group" aria-labelledby="scenarioLabel">
-            <button class="chip chip-active" type="button" data-scenario="scanIntro" aria-pressed="true">Интро</button>
-            <button class="chip chip-inactive" type="button" data-scenario="scanPermission" aria-pressed="false">Доступ к&nbsp;камере</button>
-            <button class="chip chip-inactive" type="button" data-scenario="scanNoAccess" aria-pressed="false">Нет доступа</button>
-            <button class="chip chip-inactive" type="button" data-scenario="scanCamera" aria-pressed="false">Камера</button>
-            <button class="chip chip-inactive" type="button" data-scenario="scanPhotoError" aria-pressed="false">Ошибка снимка</button>
-            <button class="chip chip-inactive" type="button" data-scenario="scanRecognizing" aria-pressed="false">Распознавание</button>
-            <button class="chip chip-inactive" type="button" data-scenario="checkData" aria-pressed="false">Проверьте данные</button>
-            <button class="chip chip-inactive" type="button" data-scenario="checkDataErrors" aria-pressed="false">Ошибки в&nbsp;анкете</button>
-            <button class="chip chip-inactive" type="button" data-scenario="manualData" aria-pressed="false">Ручной ввод</button>
-            <button class="chip chip-inactive" type="button" data-scenario="workIncome" aria-pressed="false">Работа и&nbsp;доход</button>
-            <button class="chip chip-inactive" type="button" data-scenario="scanDone" aria-pressed="false">Переход</button>
-          </div>
-          <div class="scenario-desc">
-            <p class="t-note" id="scenarioText"></p>
-            <p class="t-caption" id="scenarioNext"></p>
-          </div>
+        <div class="scenario-desc">
+          <p class="t-note" id="scenarioText"></p>
+          <p class="t-caption" id="scenarioNext"></p>
         </div>
       </section>
 
-      <div class="tile-grid tile-grid--two">
-        <section class="tile tile--stat" id="tileNow" aria-labelledby="nowTitle">
-          <header class="stat__head"><h3 class="stat__title" id="nowTitle">Сейчас</h3></header>
-          <p class="stat__value"><span class="stat__number">~68%</span><span class="stat__caption t-note">доходят до&nbsp;конца анкеты</span></p>
-          <p class="stat__text t-note">Контакты 93,5%, паспорт и&nbsp;прописка 82,1%, работа и&nbsp;доход 89%</p>
-          <p class="tile__caption t-caption">НК, 15–28&nbsp;сентября 2026, Метрика</p>
-        </section>
-        <section class="tile tile--stat" id="tileEvents" aria-labelledby="eventsTitle">
-          <header class="stat__head"><h3 class="stat__title" id="eventsTitle">События</h3></header>
-          <p class="stat__text t-note">У&nbsp;скана событий нет: это новые экраны. Текущие события анкеты, которую он заменяет:</p>
-          <ul class="events t-note" id="eventsList"></ul>
-          <p class="tile__caption t-caption">Новых событий не&nbsp;придумываем: разметку скана задаёт аналитика</p>
-        </section>
-      </div>
+      <section class="tile tile--stat" id="tileNow" aria-labelledby="nowTitle">
+        <header class="stat__head"><h3 class="stat__title" id="nowTitle">Сейчас</h3></header>
+        <p class="stat__value"><span class="stat__number">~68%</span><span class="stat__caption t-note">доходят до&nbsp;конца анкеты</span></p>
+        <p class="stat__text t-note">Контакты 93,5%, паспорт и&nbsp;прописка 82,1%, работа и&nbsp;доход 89%</p>
+        <p class="tile__caption t-caption">НК, 15–28&nbsp;сентября 2026, Метрика</p>
+      </section>
     </aside>
   </div>
 </div>
@@ -3837,7 +3815,10 @@ button.text-field__box:focus-visible {
   window.addEventListener('resize', fit);
   if (mobileMq.addEventListener) mobileMq.addEventListener('change', fit);
 
-  /* ---------- Шаги: название, что происходит, что дальше ---------- */
+  /* ---------- Шаги и ошибки: название, что происходит, что дальше ----------
+     Слева в плитке вертикальный флоу (основной путь и ручной ввод), справа красный блок «Ошибки».
+     Любой пункт нажимается всегда, с какого бы экрана ни пришли (её просьба 2026-10-22).
+     «Работа и доход» в этом флоу не показываем: после анкеты сразу переход к проверке. */
   var STEPS = {
     scanIntro: { title: 'Интро',
       text: 'Предлагаем сделать скан паспорта, чтобы заполнить анкету за клиента. Можно выбрать фото из галереи или пропустить скан.',
@@ -3845,45 +3826,45 @@ button.text-field__box:focus-visible {
     scanPermission: { title: 'Доступ к камере',
       text: 'Браузер спрашивает доступ к камере только после нажатия «Сканировать паспорт». Это системное окно, вид у него свой в каждом браузере.',
       next: '«Разрешить» открывает камеру, «Не разрешать» ведёт на экран без доступа.' },
-    scanNoAccess: { title: 'Нет доступа к камере',
-      text: 'Клиент запретил доступ к камере. Подсказываем включить его в настройках браузера или выбрать фото из галереи.',
-      next: 'Остаются галерея и ручной ввод по ссылке «Заполнить вручную».' },
     scanCamera: { title: 'Камера',
-      text: 'Клиент помещает 2 и 3 страницы паспорта в рамку и делает снимок. Что получится на снимке, задаёт фильтр «Результат снимка».',
-      next: 'Без ошибок дальше распознавание, с ошибкой подсказка и пересъёмка.' },
-    scanPhotoError: { title: 'Ошибка снимка',
-      text: 'Снимок не подошёл: причина в плашке над рамкой, под рамкой подсказка, как переснять. Ошибка случается на первом снимке, пересъёмка проходит.',
-      next: 'Причину выбирает фильтр «Результат снимка».' },
+      text: 'Клиент помещает 2 и 3 страницы паспорта в рамку и делает снимок.',
+      next: 'Дальше распознавание. Ошибки снимка открываются из красного блока.' },
     scanRecognizing: { title: 'Распознавание',
       text: 'Снимок отправлен, распознаём данные. Это занимает несколько секунд.',
       next: 'Дальше анкета с перенесёнными данными.' },
     checkData: { title: 'Проверьте данные',
-      text: 'Данные с фото уже в анкете, клиент проверяет их и дописывает адрес. С фильтром «Распознали неуверенно» сомнительные поля отмечены.',
-      next: '«Всё верно» запускает скоринг и ведёт на работу и доход.' },
-    checkDataErrors: { title: 'Ошибки в анкете',
-      text: 'Все ошибки показываем на одном экране, каждую под своим полем. Появляются они по нажатию «Всё верно».',
-      next: 'Клиент исправляет поле, и ошибка под ним пропадает.' },
-    manualData: { title: 'Ручной ввод',
-      text: 'Клиент пропустил скан и заполняет анкету сам. Внизу ссылка, чтобы вернуться к скану.',
-      next: '«Всё верно» ведёт на работу и доход.' },
-    workIncome: { title: 'Работа и доход',
-      text: 'Последний шаг анкеты: занятость, место работы и доход. Пенсионерам и неработающим место работы заполнять не нужно.',
-      next: '«Далее» отправляет заявку на проверку.' },
+      text: 'Данные с фото уже в анкете, клиент проверяет их и дописывает адрес.',
+      next: '«Всё верно» отправляет заявку на проверку.' },
     scanDone: { title: 'Переход к проверке',
       text: 'Анкета заполнена, заявка уходит на проверку. Это конец сценария.',
-      next: 'Нажатие на экран открывает сценарий «Таймер».' }
+      next: 'Нажатие на экран открывает сценарий «Таймер».' },
+    manualData: { title: 'Ручной ввод',
+      text: 'Клиент пропустил скан и заполняет анкету сам. Внизу ссылка, чтобы вернуться к скану.',
+      next: '«Всё верно» отправляет заявку на проверку.' },
+    scanNoAccess: { title: 'Нет доступа к камере', error: true,
+      text: 'Клиент запретил доступ к камере. Подсказываем включить его в настройках браузера или выбрать фото из галереи.',
+      next: 'Остаются галерея и ручной ввод по ссылке «Заполнить вручную».' },
+    scanPhotoError: { title: 'Ошибка снимка', error: true,
+      text: 'Снимок не подошёл: причина в плашке над рамкой, под рамкой подсказка, как переснять.',
+      next: 'Пересъёмка проходит без ошибки.' },
+    checkDataAttention: { title: 'Распознали неуверенно', error: true,
+      text: 'Часть данных распознали неуверенно: такие поля отмечены, клиент проверяет их внимательнее.',
+      next: '«Всё верно» отправляет заявку на проверку.' },
+    checkDataErrors: { title: 'Ошибки в анкете после скана', error: true,
+      text: 'Все ошибки показываем на одном экране, каждую под своим полем. Появляются они по нажатию «Всё верно».',
+      next: 'Клиент исправляет поле, и ошибка под ним пропадает.' },
+    manualDataErrors: { title: 'Ошибки при ручном вводе', error: true,
+      text: 'Пустые и неверно заполненные поля подсвечены, под каждым своя подсказка. Появляются по нажатию «Всё верно».',
+      next: 'Клиент исправляет поле, и ошибка под ним пропадает.' }
   };
-  /* экраны прототипа (proto:view) → тег шага и уточнение названия */
+  /* экран прототипа (proto:view) → пункт в плитке */
   function resolve(view) {
-    var m = /^scanPhotoError-(\w+)$/.exec(view || '');
-    if (m) { var c = $('#shotSwitch [data-shot="' + m[1] + '"]'); return { tag: 'scanPhotoError', title: 'Ошибка снимка' + (c ? ': ' + c.textContent.toLowerCase() : '') }; }
-    var map = {
-      checkDataAttention: { tag: 'checkData', title: 'Проверьте данные: распознали неуверенно' },
-      manualDataErrors: { tag: 'manualData', title: 'Ручной ввод: ошибки' },
-      workIncomeErrors: { tag: 'workIncome', title: 'Работа и доход: ошибки' }
-    };
-    if (map[view]) return map[view];
-    return STEPS[view] ? { tag: view, title: STEPS[view].title } : { tag: 'scanIntro', title: STEPS.scanIntro.title };
+    if (/^scanPhotoError-\w+$/.test(view || '')) {
+      var b = $('[data-scenario="' + view + '"]');
+      return { key: view, step: STEPS.scanPhotoError, title: 'Ошибка снимка' + (b ? ': ' + b.textContent.toLowerCase() : '') };
+    }
+    if (STEPS[view]) return { key: view, step: STEPS[view], title: STEPS[view].title };
+    return { key: 'scanIntro', step: STEPS.scanIntro, title: STEPS.scanIntro.title };
   }
 
   function nb(s) {
@@ -3894,51 +3875,26 @@ button.text-field__box:focus-visible {
   }
   function render(view) {
     current = view;
-    var r = resolve(view), s = STEPS[r.tag];
+    var r = resolve(view);
     $('#scenarioTitle').textContent = r.title;
-    $('#scenarioText').textContent = nb(s.text);
-    $('#scenarioNext').textContent = nb(s.next);
-    $$('#scenarioChips .chip').forEach(function (c) {
-      var on = c.dataset.scenario === r.tag;
-      c.classList.toggle('chip-active', on); c.classList.toggle('chip-inactive', !on); c.setAttribute('aria-pressed', String(on));
+    $('#scenarioText').textContent = nb(r.step.text);
+    $('#scenarioNext').textContent = nb(r.step.next);
+    $$('#flowSteps [data-scenario], #errorsBlock [data-scenario]').forEach(function (c) {
+      c.setAttribute('aria-pressed', String(c.dataset.scenario === r.key));
     });
   }
-  function renderFilters(f) {
-    if (!f) return;
-    $$('#shotSwitch .chip').forEach(function (c) {
-      var on = c.dataset.shot === f.shot;
-      c.classList.toggle('chip-active', on); c.classList.toggle('chip-inactive', !on); c.setAttribute('aria-pressed', String(on));
-    });
-    $$('#recogSwitch .segment').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.recog === f.recog)); });
-  }
-  var filtersSynced = false;
-  document.addEventListener('scan:view', function (e) {
-    render(e.detail.view);
-    if (!filtersSynced && api()) { filtersSynced = true; renderFilters(api().filters()); }   /* фильтры из адреса ?shot=…&recog=… */
-  });
-  document.addEventListener('scan:filters', function (e) { renderFilters(e.detail); });
+  document.addEventListener('scan:view', function (e) { render(e.detail.view); });
 
-  /* ---------- События: текущая разметка анкеты, которую заменяет скан (карта разметки datahints) ---------- */
-  var EVENTS = ['dl_reg_step4_contacts_open', 'dl_reg_step5_contacts_filled', 'dl_reg_step7_passport_open', 'dl_reg_step7_passport_filled',
-    'dl_reg_step8_propiska_open', 'dl_reg_step8_propiska_filled', 'dl_reg_step9_work_open', 'dl_reg_step9_work_submit'];
-  $('#eventsList').innerHTML = EVENTS.map(function (id) { return '<li><code>' + id + '</code></li>'; }).join('');
-
-  /* ---------- Нажатия в плитке «Сценарий» ---------- */
-  $('#scenarioChips').addEventListener('click', function (e) {
+  /* ---------- Нажатия: флоу идёт без ошибок, ошибка открывается сразу ---------- */
+  function pick(e) {
     var c = e.target.closest('[data-scenario]'); if (!c || !api()) return;
-    api().step(c.dataset.scenario);
+    var id = c.dataset.scenario;
+    if (c.closest('#flowSteps')) api().filter({ shot: 'ok', recog: 'ok' });   /* основной путь: снимок проходит, распознали уверенно */
+    api().step(id);
     closePanel();
-  });
-  $('#shotSwitch').addEventListener('click', function (e) {
-    var c = e.target.closest('[data-shot]'); if (!c || !api()) return;
-    api().filter({ shot: c.dataset.shot });
-    /* на экране ошибки снимка сразу показываем выбранную причину */
-    if (/^scanPhotoError/.test(current || '') && c.dataset.shot !== 'ok') api().step('scanPhotoError-' + c.dataset.shot);
-  });
-  $('#recogSwitch').addEventListener('click', function (e) {
-    var b = e.target.closest('[data-recog]'); if (!b || !api()) return;
-    api().filter({ recog: b.dataset.recog });
-  });
+  }
+  $('#flowSteps').addEventListener('click', pick);
+  $('#errorsBlock').addEventListener('click', pick);
 
   function openPanel() { stand.classList.add('is-panel-open'); panelToggle.setAttribute('aria-expanded', 'true'); }
   function closePanel() { stand.classList.remove('is-panel-open'); panelToggle.setAttribute('aria-expanded', 'false'); }
@@ -4347,7 +4303,7 @@ button.text-field__box:focus-visible {
     var ok = validateData();
     renderData();
     if (!ok) { scrollToEl(firstError(activeDataIds(), D) || $('#consentBlock')); return; }
-    showStub('Запуск скоринга\n(не' + NB + 'показывается клиенту, нажмите на' + NB + 'экран)', function () { openWork(); });
+    finish();   /* «Работа и доход» в этом флоу не показываем (её решение 2026-10-22): после анкеты сразу переход к проверке */
   }
   function validateWork() {
     W.errors = {};
@@ -4462,7 +4418,7 @@ button.text-field__box:focus-visible {
   });
 
   /* ---------- Стенд: proto:step с id экрана; отдельно ?step=<id> ---------- */
-  var ALIAS = { '@main': 'scanIntro', scan: 'scanIntro', data: 'checkData', manual: 'manualData', work: 'workIncome' };
+  var ALIAS = { '@main': 'scanIntro', scan: 'scanIntro', data: 'checkData', manual: 'manualData', work: 'scanDone', workIncome: 'scanDone', workIncomeErrors: 'scanDone' };
   function step(id) {
     id = ALIAS[id] || id;
     clearTimeout(recT);
@@ -4482,9 +4438,7 @@ button.text-field__box:focus-visible {
       case 'checkDataErrors': openData('scan', { errorsSample: true, submit: true }); break;
       case 'manualData': openData('manual'); break;
       case 'manualDataErrors': openData('manual', { submit: true }); break;
-      case 'workIncome': openWork(); break;
-      case 'workIncomeErrors': openWork({ submit: true }); break;
-      case 'scanDone': resetWork(); show('work'); WORK_IDS.forEach(renderField); finish(); break;
+      case 'scanDone': openData(D.mode === 'manual' ? 'manual' : 'scan'); finish(); break;
       default: C.perm = 'prompt'; goIntro();
     }
   }
