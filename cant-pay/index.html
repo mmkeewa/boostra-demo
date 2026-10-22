@@ -925,6 +925,11 @@
   background: var(--bg-grouped-primary); /* её правка в Figma 22.10.2026: Backgrounds (Grouped)/Primary, кнопки выделяются сильнее */
   color: var(--text-bottom-default);
 }
+.chat-bubble__bubble--cta {
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.chat-bubble__bubble--cta .btn { width: 100%; }
 .chat-bubble__text {
   max-width: 242px; /* ограничение ширины текста в компоненте, нет токена */
   margin: 0;
@@ -2394,7 +2399,8 @@ button { font: inherit; color: inherit; }
 .amount-field .btn { flex-shrink: 0; }
 
 /* List + Row из FTM DS Core 2: строка 56, Item L 36 (иконка 24 / картинка 30), контент с разделителем Divider 10% сверху */
-.chat-info--list { padding: 0; background: none; border: 0; border-radius: 0; }
+/* её правка 22.10.2026 в Figma: у List обводка Border/Primary/Default и Radius/2xl */
+.chat-info--list { padding: 0; background: none; border: var(--border-width-1) solid var(--border-primary-default); border-radius: var(--radius-2xl); overflow: hidden; }
 .ds-row { display: flex; align-items: stretch; width: 100%; min-height: 56px; padding: 0 var(--space-lg); border: 0; background: none; color: var(--text-bottom-default); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .ds-row:hover { background: var(--ghost-neutral-fill-hover-and-press); }
 .ds-row__item { display: flex; flex-shrink: 0; align-items: center; width: 36px; }
@@ -3307,9 +3313,8 @@ button { font: inherit; color: inherit; }
       chips: [OTHER_REASON] /* кнопка «Оплатить» внутри поля суммы */
     },
     extend: {
-      scenario: '2d', bot: [T.extend], /* её решение 20.10.2026: на продлении красный баннер не показываем */
-      chips: [OTHER_REASON],
-      button: { label: 'Продлить за 3\u00A0500\u00A0₽', exit: 'Продление займа' }
+      scenario: '2d', bot: [{ text: T.extend, cta: 'Продлить за\u00A03\u00A0500\u00A0₽' }], /* её решение 20.10.2026: на продлении красный баннер не показываем */
+      chips: [OTHER_REASON] /* её правка 22.10.2026 (Figma 3440:8110): кнопка внутри реплики бота */
     },
     discount: {
       scenario: '3a', bot: [T.discount, { info: 'offer' }],
@@ -3397,7 +3402,7 @@ button { font: inherit; color: inherit; }
   function cancelTimers() { timers.forEach(clearTimeout); timers = []; if (typeof stopTyping === 'function') stopTyping(); }
 
   /* ---------- Реплики: компонент Chat bubble ---------- */
-  function bubbleEl(from, text, isNew) {
+  function bubbleEl(from, text, isNew, cta) {
     var el = document.createElement('div');
     el.className = 'chat-bubble chat-bubble--' + from + (isNew ? ' is-new' : '');
     if (from === 'bot') {
@@ -3411,6 +3416,16 @@ button { font: inherit; color: inherit; }
     p.className = 'chat-bubble__text';
     p.textContent = text;
     bubble.appendChild(p);
+    if (cta) { /* Button / Primary XLarge внутри реплики, клик ловит обработчик [data-extend] */
+      bubble.classList.add('chat-bubble__bubble--cta');
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn btn-primary';
+      b.dataset.sizeButton = 'xlarge';
+      b.setAttribute('data-extend', '');
+      b.textContent = cta;
+      bubble.appendChild(b);
+    }
     el.appendChild(bubble);
     return el;
   }
@@ -3458,10 +3473,12 @@ button { font: inherit; color: inherit; }
       if (isNew) el.classList.add('is-new');
       return el;
     }
-    return bubbleEl(m.from, m.text, isNew);
+    return bubbleEl(m.from, m.text, isNew, m.cta);
   }
   function say(from, item, isNew) {
-    var m = typeof item === 'string' ? { from: from, text: item } : { from: from, scene: item.scene, info: item.info };
+    var m = typeof item === 'string' ? { from: from, text: item }
+      : item.text ? { from: from, text: item.text, cta: item.cta }
+      : { from: from, scene: item.scene, info: item.info };
     state.log.push(m);
     save();
     messagesEl.appendChild(messageEl(m, isNew));
