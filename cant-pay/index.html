@@ -922,7 +922,7 @@
 }
 .chat-bubble--bot .chat-bubble__bubble {
   border-radius: var(--radius-2xl) var(--radius-2xl) var(--radius-2xl) var(--radius-xxs);
-  background: var(--brand-secondary-10); /* её правка в Figma 20.10.2026: Brand/Secondary/10 */
+  background: var(--bg-grouped-primary); /* её правка в Figma 22.10.2026: Backgrounds (Grouped)/Primary, кнопки выделяются сильнее */
   color: var(--text-bottom-default);
 }
 .chat-bubble__text {
@@ -2277,7 +2277,7 @@ button { font: inherit; color: inherit; }
 }
 .ci-option + .ci-option { box-shadow: inset 0 1px 0 var(--neutral-bottom-alpha-10); }
 .ci-option .cs-icon { color: var(--text-error-default); }
-.ci-option:hover, .ci-option:focus-visible { background: var(--brand-error-5); outline: none; }
+.ci-option:hover, .ci-option:focus-visible { background: var(--ghost-neutral-fill-hover-and-press); outline: none; } /* её правка 22.10.2026: ховер не в цвет фона баннера, а серый, как Hover & Press у Ghost / Neutral в ДС */
 .ci-foot { text-align: center; }
 
 /* ---------- 🚧 Local Component/Typing ---------- */
@@ -2376,6 +2376,14 @@ button { font: inherit; color: inherit; }
 /* бейдж в строке не сжимается и не обрезается: переносится название слева (её замечание 21.10.2026, «Рассрочка и «плати частями»») */
 .ci-row > .badge { flex-shrink: 0; white-space: nowrap; }
 .ci-row > :first-child { min-width: 0; }
+
+/* Reminder card (её Figma 2990:21451): Backgrounds/Secondary G, Radius/3xl, поля и гэп 16 (Base/lg), тексты через 8 */
+.reminder-card { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-sm); padding: var(--space-lg); border-radius: var(--radius-3xl); background: var(--bg-grouped-primary); color: var(--text-bottom-default); }
+.reminder-card p { margin: 0; }
+.badge--attention { display: inline-flex; align-items: center; gap: var(--space-xs); height: 24px; padding: 0 var(--space-sm); border-radius: var(--radius-full); background: var(--brand-attention-alpha-5); color: var(--brand-attention-ink); white-space: nowrap; }
+.badge--attention svg { width: 16px; height: 16px; flex-shrink: 0; }
+/* её правка 22.10.2026: баннеры, списки и инфографика в чате во всю ширину переписки (поля шторки 16), без отступа под аватар */
+.chat-info { width: auto; align-self: stretch; margin-left: 0; }
 
 </style>
 <style>
@@ -3156,8 +3164,9 @@ button { font: inherit; color: inherit; }
   /* ---------- Тексты диалога (\u00A0 = неразрывный пробел, как в макете) ---------- */
   var T = {
     start: 'Не могу заплатить сейчас',
-    alertTitle: 'Оплатите до 3\u00A0дня просрочки',
-    alertText: 'Просрочка пока небольшая. Оплатите сейчас, и\u00A0она не\u00A0повлияет на\u00A0новые займы',
+    alertTitle: 'Просрочка небольшая',
+    alertText: 'Оплатите сейчас, и\u00A0она не\u00A0повлияет на\u00A0новые займы и\u00A0кредитную историю',
+    alertBadge: 'До\u00A025\u00A0октября',
     ask: 'Расскажите, что мешает оплатить. Подберём решение под\u00A0вашу ситуацию\u00A0🤝',
     noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂',
     payDate: 'Выберите день, когда вам удобно оплатить\u00A0📅 Срок по\u00A0договору не меняется. Проценты начисляются до\u00A0дня оплаты',
@@ -3378,16 +3387,17 @@ button { font: inherit; color: inherit; }
     return el;
   }
   /* Alert / Default из ДС в тоне Success: информер про первые 3 дня просрочки, стоит над перепиской */
+  /* её Reminder card (Figma 2990:21451, 22.10.2026) вместо Alert: подложка Backgrounds/Secondary G, заголовок H4 Strong,
+     описание Note, Badge из ДС Size=24, Type=Attention с иконкой clock */
   function alertEl() {
     var el = document.createElement('div');
-    el.className = 'alert';
-    el.setAttribute('data-semantic', 'success');
+    el.className = 'reminder-card';
     el.setAttribute('role', 'note');
-    el.innerHTML = '<div class="alert__state"><span class="alert__icon" aria-hidden="true">' +
-      '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.16663 10.0002L8.33329 14.1668L16.6666 5.8335" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-      '</span><div class="alert__text"><p class="alert__title"></p><p class="alert__description t-note"></p></div></div>';
-    el.querySelector('.alert__title').textContent = T.alertTitle;
-    el.querySelector('.alert__description').textContent = T.alertText;
+    el.innerHTML = '<p class="t-h4-strong reminder-card__title"></p><p class="t-note reminder-card__text"></p>' +
+      '<span class="badge badge--attention t-caps-small-strong"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 7V12L15 15M3 12C3 13.1819 3.23279 14.3522 3.68508 15.4442C4.13738 16.5361 4.80031 17.5282 5.63604 18.364C6.47177 19.1997 7.46392 19.8626 8.55585 20.3149C9.64778 20.7672 10.8181 21 12 21C13.1819 21 14.3522 20.7672 15.4442 20.3149C16.5361 19.8626 17.5282 19.1997 18.364 18.364C19.1997 17.5282 19.8626 16.5361 20.3149 15.4442C20.7672 14.3522 21 13.1819 21 12C21 10.8181 20.7672 9.64778 20.3149 8.55585C19.8626 7.46392 19.1997 6.47177 18.364 5.63604C17.5282 4.80031 16.5361 4.13738 15.4442 3.68508C14.3522 3.23279 13.1819 3 12 3C10.8181 3 9.64778 3.23279 8.55585 3.68508C7.46392 4.13738 6.47177 4.80031 5.63604 5.63604C4.80031 6.47177 4.13738 7.46392 3.68508 8.55585C3.23279 9.64778 3 10.8181 3 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span></span></span>';
+    el.querySelector('.reminder-card__title').textContent = T.alertTitle;
+    el.querySelector('.reminder-card__text').textContent = T.alertText;
+    el.querySelector('.badge span').textContent = T.alertBadge;
     return el;
   }
   /* аватар только у последней реплики бота в серии, ячейка под него остаётся у всех */
