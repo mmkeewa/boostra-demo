@@ -214,6 +214,7 @@
   --radius-3xl: 20px;
   --radius-4xl: 24px;
   --radius-5xl: 32px;
+  --radius-6xl: 40px; /* Radius/6xl */
   --radius-full: 999999px;
   --radius-lg: 10px;
   --radius-md: 8px;
@@ -941,12 +942,12 @@
   letter-spacing: var(--body-letter-spacing);
 }
 
-/* ---------- Bottom sheet (локальный компонент 2234:16960) ---------- */
+/* ---------- Bottom Sheet из FTM DS Core 2 (с 22.10.2026, её пример 3668:47102: шапка Title L + две кнопки Close n Action Large) ---------- */
 .bottom-sheet {
   display: flex;
   flex-direction: column;
   padding-bottom: var(--space-2xl);
-  border-radius: var(--radius-5xl) var(--radius-5xl) 0 0;
+  border-radius: var(--radius-6xl) var(--radius-6xl) 0 0;
   background: var(--bg-grouped-secondary-w);
   box-shadow: var(--shadow-floating-2); /* Shadow/Floating/2 level */
   color: var(--text-bottom-default);
@@ -955,11 +956,12 @@
   display: flex;
   flex-shrink: 0;
   justify-content: center;
-  padding-top: var(--space-sm);
+  height: 16px; /* блок захвата в ДС 16, ручка с отступом 5 сверху: внутренние размеры компонента */
+  padding-top: 5px;
 }
 .bottom-sheet__handle {
   width: 36px; /* размер ручки: нет токена */
-  height: 4px;
+  height: 5px;
   border-radius: var(--radius-full);
   background: var(--neutral-bottom-alpha-20);
 }
@@ -968,8 +970,9 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--space-xl);
-  padding: var(--space-md) var(--space-lg);
+  gap: var(--space-sm);
+  min-height: 50px; /* Title and Controls в ДС: кнопки 40 + 10 снизу */
+  padding: 0 var(--space-lg) 10px; /* снизу 10: Spacing (Gap)/System/10 внутри компонента ДС */
 }
 .bottom-sheet__title {
   flex: 1 0 0;
@@ -2298,16 +2301,18 @@ button { font: inherit; color: inherit; }
 .no-anim .chat-scene, .no-anim .chat-info { animation: none; }
 
 /* ---------- Значок «!» в шапке шторки: Button / Semantic, Semantic ✦ = Error, Size=Medium, только иконка alert-triangle ---------- */
-.bottom-sheet__actions { display: flex; align-items: center; gap: var(--space-sm); }
+/* её шапка ДС (22.10.2026): две Button / Close n Action Large 40 × 40, круглые, между ними 4 */
+.bottom-sheet__actions { display: flex; align-items: center; gap: var(--space-xs); }
+.bottom-sheet__actions .sheet-close { width: 40px; height: 40px; border-radius: var(--radius-full); }
 .sheet-alert {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px; /* Size=Medium */
-  height: 32px;
+  width: 40px; /* Close n Action, Large */
+  height: 40px;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-lg); /* 10, как у кнопки Medium */
+  border-radius: var(--radius-full);
   background: var(--brand-error-alpha-5); /* Button/Fill/Default в режиме Error */
   color: var(--text-error-default);
   cursor: pointer;
@@ -2735,13 +2740,13 @@ button { font: inherit; color: inherit; }
               <section class="bottom-sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" inert>
                 <div class="bottom-sheet__grabber"><span class="bottom-sheet__handle"></span></div>
                 <header class="bottom-sheet__header">
-                  <h2 class="bottom-sheet__title t-h4-strong" id="sheetTitle">Поможем с&nbsp;оплатой</h2>
+                  <h2 class="bottom-sheet__title t-h3-strong" id="sheetTitle">Поможем с&nbsp;оплатой</h2>
                   <div class="bottom-sheet__actions">
                     <!-- значок «!»: баннер «Просрочка продолжается» в чат (её просьба 20.10.2026), иконка alert-triangle-filled из FTM UI Icons -->
                     <button class="sheet-alert" id="sheetAlert" type="button" aria-label="Что будет, если просрочка продолжится">
                       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M12 9.00045V13.0004M12 17.0004H12.01M10.24 3.95745L1.81802 18.0174C1.64449 18.3181 1.5527 18.659 1.55177 19.0062C1.55083 19.3534 1.64078 19.6948 1.81268 19.9964C1.98458 20.298 2.23244 20.5494 2.53162 20.7256C2.83079 20.9017 3.17086 20.9965 3.51802 21.0004H20.363C20.7102 20.9965 21.0502 20.9017 21.3494 20.7256C21.6486 20.5494 21.8965 20.298 22.0684 19.9964C22.2403 19.6948 22.3302 19.3534 22.3293 19.0062C22.3283 18.659 22.2365 18.3181 22.063 18.0174L13.64 3.95745C13.4627 3.66544 13.2131 3.42404 12.9153 3.25651C12.6176 3.08898 12.2817 3.00098 11.94 3.00098C11.5984 3.00098 11.2625 3.08898 10.9647 3.25651C10.667 3.42404 10.4174 3.66544 10.24 3.95745Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
-                    <button class="btn-neutral" id="sheetClose" type="button" data-size-button="medium" aria-label="Закрыть">
+                    <button class="btn-neutral sheet-close" id="sheetClose" type="button" data-size-button="medium" aria-label="Закрыть">
                       <span class="btn-content"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ4Ij4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE1IDVMNSAxNU01IDVMMTUgMTUiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" width="20" height="20" alt=""></span>
                     </button>
                   </div>
