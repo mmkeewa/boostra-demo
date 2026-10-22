@@ -2280,6 +2280,9 @@ p, h1, h2 { margin: 0; }
   --neutral-bottom-30: #b9bcc8;                          /* Neutral/Bottom/30: человечек на месте фото в паспорте */
   --opacity-35: 0.35;                                    /* Opacity/35: подкраска иллюстрации Neutral/Bottom/Calm */
   --border-width-2: 2px;                                 /* Border/Width/2: обводка выбранного фото */
+  --brand-success-alpha-5: rgba(0,160,67,0.05);         /* Brand/Success Alpha/5: фон бейджа «заполнено» */
+  --brand-success-ink: #006b2d;                          /* Brand/Success/Ink: текст и иконка бейджа «заполнено» */
+  --brand-error-ink: #df0026;                            /* Brand/Error/Ink: текст и иконка бейджа «не заполнено» */
 }
 
 /* ---------- Button: svg-иконка внутри кнопки (Button/Icon/WH) и состояние Loading=True ----------
@@ -2708,11 +2711,13 @@ button.text-field__box:focus-visible {
 .form-card__actions { display: flex; flex-direction: column; gap: var(--space-md); }
 .form-card__actions .btn { width: 100%; }
 .form-fields { display: flex; flex-direction: column; gap: var(--space-3xl); }
-.form-group { display: flex; flex-direction: column; gap: var(--space-lg); }
+.form-group { display: flex; flex-direction: column; gap: var(--space-md); } /* Spacing (Gap)/Base/md 12, её правка 22.10 */
 .form-group__head { display: flex; align-items: center; gap: var(--space-lg); }
 .form-group__title { flex: 1 1 0; min-width: 0; margin: 0; color: var(--text-bottom-default); }
-.form-group__status { flex-shrink: 0; color: var(--text-bottom-tertiary); }
-.form-group__status[data-filled="true"] { color: var(--text-success-default); }
+/* Статус блока: Badge из ДС, Size=20, Extra color=Off, Type=Error / Success, иконка Icon L 16 */
+.form-group__status { flex-shrink: 0; background: var(--brand-error-alpha-5); color: var(--brand-error-ink); }
+.form-group__status[data-filled="true"] { background: var(--brand-success-alpha-5); color: var(--brand-success-ink); }
+.form-group__status > svg { display: block; flex-shrink: 0; width: 16px; height: 16px; }
 .gender { display: flex; gap: var(--space-2xl); }
 .work-fields { display: flex; flex-direction: column; gap: var(--space-lg); }
 .bottom-bar__link:hover { text-decoration: underline; }
@@ -3146,7 +3151,7 @@ html.in-frame .panel-toggle { display: none !important; }
         </div>
         <div class="form-fields">
           <div class="form-group" data-group="personal">
-            <div class="form-group__head"><h2 class="form-group__title t-body-strong">Личные данные</h2><span class="form-group__status t-caption" data-status></span></div>
+            <div class="form-group__head"><h2 class="form-group__title t-body-strong">Личные данные</h2><span class="form-group__status badge t-caps-xsmall-strong" data-size-badge="20" data-status></span></div>
             <div data-field="fio"></div>
             <div data-field="bday"></div>
             <div class="gender" role="radiogroup" aria-label="Пол">
@@ -3155,14 +3160,14 @@ html.in-frame .panel-toggle { display: none !important; }
             </div>
           </div>
           <div class="form-group" data-group="passport">
-            <div class="form-group__head"><h2 class="form-group__title t-body-strong">Паспорт</h2><span class="form-group__status t-caption" data-status></span></div>
+            <div class="form-group__head"><h2 class="form-group__title t-body-strong">Паспорт</h2><span class="form-group__status badge t-caps-xsmall-strong" data-size-badge="20" data-status></span></div>
             <div data-field="series"></div>
             <div data-field="issued"></div>
             <div data-field="code"></div>
             <div data-field="issuer"></div>
           </div>
           <div class="form-group" data-group="address">
-            <div class="form-group__head"><h2 class="form-group__title t-body-strong">Адрес</h2><span class="form-group__status t-caption" data-status></span></div>
+            <div class="form-group__head"><h2 class="form-group__title t-body-strong">Адрес</h2><span class="form-group__status badge t-caps-xsmall-strong" data-size-badge="20" data-status></span></div>
             <div data-field="addrReg"></div>
             <button class="switch-row" type="button" role="switch" data-act="same-addr" id="sameAddr">
               <span class="switch"></span>
@@ -3470,6 +3475,9 @@ html.in-frame .panel-toggle { display: none !important; }
   /* =====================================================================
      А. Анкета без скана: поля, маски, подсказки адреса, ошибки по нажатию
      ===================================================================== */
+  // Badge / Icon L 16: check (Success) и x (Error), как в макете
+  var ICON_BADGE_OK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.33 8.33l3 3l6.34-6.66"/></svg>';
+  var ICON_BADGE_ERR = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.67 4.67l6.66 6.66M11.33 4.67l-6.66 6.66"/></svg>';
   var ICON_CHEVRON = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5l5-5"/></svg>';
   var EMPLOY = ['Работаю официально', 'Работаю неофициально', 'ИП', 'Самозанятый', 'Пенсионер', 'Не работаю'];
   var EDU = ['Среднее', 'Среднее специальное', 'Неоконченное высшее', 'Высшее'];
@@ -3584,7 +3592,7 @@ html.in-frame .panel-toggle { display: none !important; }
     Object.keys(groups).forEach(function (g) {
       var ok = groups[g].every(function (id) { return !dataError(id); });
       var st = $('[data-group="' + g + '"] [data-status]');
-      st.textContent = ok ? 'заполнено' : 'не' + NB + 'заполнено';
+      st.innerHTML = (ok ? ICON_BADGE_OK : ICON_BADGE_ERR) + '<span>' + (ok ? 'заполнено' : 'не' + NB + 'заполнено') + '</span>';
       st.dataset.filled = String(ok);
     });
   }
