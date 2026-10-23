@@ -946,7 +946,8 @@
 .bottom-sheet {
   display: flex;
   flex-direction: column;
-  padding-bottom: var(--space-2xl);
+  /* слот 24 + Footer шторки ДС: Safe Area с индикатором «домой» (34 на мобильном) */
+  padding-bottom: calc(var(--space-2xl) + var(--comp-home-indicator-safe-area-h) * var(--responsive-comp-home-indicator-home-indicator));
   border-radius: var(--radius-6xl) var(--radius-6xl) 0 0;
   background: var(--bg-grouped-secondary-w);
   box-shadow: var(--shadow-floating-2); /* Shadow/Floating/2 level */
@@ -2051,6 +2052,8 @@ button { font: inherit; color: inherit; }
   }
   .status-bar,
   .home-indicator { display: none; }
+  /* на телефоне индикатор системный: под шторкой его безопасная зона */
+  .slot > .bottom-sheet { padding-bottom: calc(var(--space-2xl) + env(safe-area-inset-bottom, 0px)); }
   .kb { padding-bottom: 4px; }
   .lk { overflow-y: auto; overscroll-behavior: contain; }
   /* язычок в правом верхнем углу: открывает панель. Висит от верхнего края, выше иконок шапки и крестика шторки */
