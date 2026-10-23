@@ -2440,18 +2440,18 @@ button { font: inherit; color: inherit; }
 
 /* List + Row из FTM DS Core 2: строка 56, Item L 36 (иконка 24 / картинка 30), контент с разделителем Divider 10% сверху */
 /* её правка 22.10.2026 в Figma: у List обводка Border/Primary/Default и Radius/2xl */
-/* её строки-карточки (🤖 ⚠️ Local component / Chat / Reminder card с Row из ДС, 23.10.2026): отдельные плашки Brand/Primary/5, Radius/3xl, между ними 4 */
-.chat-info--list { display: flex; flex-direction: column; gap: var(--space-xs); padding: 0; background: none; border: 0; border-radius: 0; overflow: visible; }
-.ds-row { display: flex; align-items: stretch; width: 100%; min-height: 56px; padding: 0 var(--space-lg); border: 0; border-radius: var(--radius-3xl); background: var(--brand-primary-alpha-5); color: var(--text-bottom-default); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.ds-row:hover { background: var(--brand-primary-alpha-10); }
-.ds-row__item { display: flex; flex-shrink: 0; align-items: center; width: 36px; } /* Item L: иконка 24 + отступ 12 */
+.chat-info--list { padding: 0; background: none; border: var(--border-width-1) solid var(--border-primary-default); border-radius: var(--radius-2xl); overflow: hidden; }
+.ds-row { display: flex; align-items: stretch; width: 100%; min-height: 56px; padding: 0 var(--space-lg); border: 0; background: none; color: var(--text-bottom-default); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.ds-row:hover { background: var(--ghost-neutral-fill-hover-and-press); }
+.ds-row__item { display: flex; flex-shrink: 0; align-items: center; width: 36px; }
 .ds-row__item > .cs-icon { color: var(--text-bottom-default); }
 .ds-row__item > .cs-icon svg[viewBox="0 0 16 16"] path { stroke-width: 1.2; }
 .ds-row__item > .cs-icon svg[viewBox="0 0 40 40"] path { stroke-width: 3; }
 .ds-row__image { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; overflow: hidden; border: var(--border-width-1) solid var(--border-primary-default); border-radius: var(--radius-md); background: var(--bg-grouped-secondary-w); }
 .ds-row__image[data-logo="sbp"] > img { width: 13px; height: 15px; }
 .ds-row__image[data-logo="card"] > img { width: 14px; height: 14px; }
-.ds-row__content { display: flex; flex: 1 1 0; min-width: 0; align-items: center; gap: var(--space-sm); padding: var(--space-md) 0; }
+.ds-row__content { display: flex; flex: 1 1 0; min-width: 0; align-items: center; gap: var(--space-sm); }
+.ds-row + .ds-row .ds-row__content { box-shadow: inset 0 1px 0 var(--neutral-bottom-alpha-10); }
 .ds-row__title { flex: 1 1 0; min-width: 0; }
 .ds-row__content > .cs-icon { color: var(--text-bottom-tertiary); }
 
@@ -3166,7 +3166,7 @@ button { font: inherit; color: inherit; }
     return '<span class="ci-methods">' + lists[type].map(function (o, i) {
       var item = o.img ? '<span class="ds-row__image" data-logo="' + (o.logo || '') + '"><img src="' + o.img + '" alt=""></span>' : icon(o.icon, 24);
       return '<button class="ds-row" type="button" data-opt="' + i + '"><span class="ds-row__item">' + item + '</span>' +
-        '<span class="ds-row__content"><span class="t-title-strong ds-row__title">' + o.label + '</span>' + icon('chevron-right', 24) + '</span></button>';
+        '<span class="ds-row__content"><span class="t-body ds-row__title">' + o.label + '</span>' + icon('chevron-right', 24) + '</span></button>';
     }).join('') + '</span>';
   }
   function info(type) {
