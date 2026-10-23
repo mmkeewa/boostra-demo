@@ -221,6 +221,7 @@
   --radius-sm: 6px;
   --radius-xl: 12px;
   --radius-xxs: 2px;
+  --radius-xs: 4px; /* Radius/xs */
   --responsive-comp-home-indicator-home-indicator: 0;
   --segmented-control-gap: var(--space-xs);
   --semantic-button-fill-default: var(--ghost-info-fill-default);
@@ -547,6 +548,12 @@
   --comp-statusbar-h-dynamic-island: 59px;
   --responsive-comp-home-indicator-home-indicator: 1;
   --segmented-control-gap: var(--space-0);
+}
+[data-size-button="small"] { /* Button / Secondary Size=Small: 28, поля 12 (её Chat / Message, Actions) */
+  --size-button-gap: var(--space-xs);
+  --size-button-h: 28px;
+  --size-button-icon-wh: var(--icon-wh);
+  --size-button-lr-spacing: var(--space-md);
 }
 [data-size-button="medium"] {
   --size-button-gap: var(--space-sm);
@@ -891,48 +898,46 @@
 }
 .avatar > img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 
-/* ---------- 🚧 Local Component/Chat bubble (From=Bot / Client) ---------- */
+/* ---------- 🤖 ⚠️ Local component / Chat / Message (From=Bot / User), её компонент 23.10.2026 ---------- */
 .chat-bubble {
   display: flex;
   flex-shrink: 0;
-  align-items: flex-start;
+  gap: var(--space-sm);
   width: 100%;
 }
-.chat-bubble--client { justify-content: flex-end; }
-.chat-bubble--bot { gap: var(--space-sm); }
-/* Avatar slot: ячейка остаётся и без аватара, аватар прижат к низу реплики */
+/* Avatar column: аватар 32 прижат к низу пузыря (снизу 20 = время 16 + гэп 4) */
 .chat-bubble__avatar-slot {
   display: flex;
   flex-shrink: 0;
   flex-direction: column;
-  align-self: stretch;
   justify-content: flex-end;
-  width: 32px; /* ширина ячейки = Avatar 32, нет токена */
-  overflow: hidden;
+  width: 32px; /* ширина колонки = Avatar 32 */
+  padding-bottom: 20px; /* внутренний отступ компонента: под ним строка времени */
 }
-.chat-bubble__bubble {
+.chat-bubble__content {
   display: flex;
+  flex: 1 1 0;
   min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+}
+.chat-bubble--client .chat-bubble__content { align-items: flex-end; }
+.chat-bubble__bubble {
+  max-width: 240px; /* maxWidth пузыря в компоненте */
   padding: var(--space-md) var(--space-lg);
-  overflow: hidden;
 }
 .chat-bubble--client .chat-bubble__bubble {
-  border-radius: var(--radius-2xl) var(--radius-2xl) var(--radius-xxs) var(--radius-2xl);
+  border-radius: var(--radius-2xl) var(--radius-2xl) var(--radius-xs) var(--radius-2xl);
   background: var(--brand-primary);
-  color: var(--always-peak-alpha);
+  color: var(--text-peak-default);
 }
 .chat-bubble--bot .chat-bubble__bubble {
-  border-radius: var(--radius-2xl) var(--radius-2xl) var(--radius-2xl) var(--radius-xxs);
-  background: var(--bg-grouped-primary); /* её правка в Figma 22.10.2026: Backgrounds (Grouped)/Primary, кнопки выделяются сильнее */
+  border-radius: var(--radius-2xl) var(--radius-2xl) var(--radius-2xl) var(--radius-xs);
+  background: var(--bg-grouped-primary); /* Backgrounds/Secondary G, то же значение #f4f5f8 */
   color: var(--text-bottom-default);
 }
-.chat-bubble__bubble--cta {
-  flex-direction: column;
-  gap: var(--space-md);
-}
-.chat-bubble__bubble--cta .btn { width: 100%; }
 .chat-bubble__text {
-  max-width: 242px; /* ограничение ширины текста в компоненте, нет токена */
   margin: 0;
   overflow-wrap: anywhere;
   font-family: var(--body-font-family);
@@ -940,6 +945,17 @@
   font-size: var(--body-size);
   line-height: var(--body-line-height);
   letter-spacing: var(--body-letter-spacing);
+}
+.chat-bubble__actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+.chat-bubble__actions .btn[data-size-button="small"] { border-radius: var(--circle-button-radius-m-s); }
+.chat-bubble__meta {
+  margin: 0;
+  color: var(--text-bottom-tertiary);
+  font-family: var(--caption-font-family);
+  font-weight: var(--caption-font-weight);
+  font-size: var(--caption-size);
+  line-height: var(--caption-line-height);
+  letter-spacing: var(--caption-letter-spacing);
 }
 
 /* ---------- Bottom Sheet из FTM DS Core 2 (с 22.10.2026, её пример 3668:47102: шапка Title L + две кнопки Close n Action Large) ---------- */
@@ -3422,6 +3438,7 @@ button { font: inherit; color: inherit; }
   function cancelTimers() { timers.forEach(clearTimeout); timers = []; if (typeof stopTyping === 'function') stopTyping(); }
 
   /* ---------- Реплики: компонент Chat bubble ---------- */
+  /* её Chat / Message (23.10.2026): пузырь, под ним кнопки Actions и время; у бота колонка аватара слева */
   function bubbleEl(from, text, isNew, cta) {
     var el = document.createElement('div');
     el.className = 'chat-bubble chat-bubble--' + from + (isNew ? ' is-new' : '');
@@ -3430,23 +3447,33 @@ button { font: inherit; color: inherit; }
       slot.className = 'chat-bubble__avatar-slot';
       el.appendChild(slot);
     }
+    var content = document.createElement('div');
+    content.className = 'chat-bubble__content';
     var bubble = document.createElement('div');
     bubble.className = 'chat-bubble__bubble';
     var p = document.createElement('p');
     p.className = 'chat-bubble__text';
     p.textContent = text;
     bubble.appendChild(p);
-    if (cta) { /* Button / Primary XLarge внутри реплики, клик ловит обработчик [data-extend] */
-      bubble.classList.add('chat-bubble__bubble--cta');
+    content.appendChild(bubble);
+    if (cta) { /* Actions: Button / Secondary Small под репликой, клик ловит обработчик [data-extend] */
+      var acts = document.createElement('div');
+      acts.className = 'chat-bubble__actions';
       var b = document.createElement('button');
       b.type = 'button';
-      b.className = 'btn btn-primary';
-      b.dataset.sizeButton = 'xlarge';
+      b.className = 'btn btn-secondary';
+      b.dataset.sizeButton = 'small';
       b.setAttribute('data-extend', '');
       b.textContent = cta;
-      bubble.appendChild(b);
+      acts.appendChild(b);
+      content.appendChild(acts);
     }
-    el.appendChild(bubble);
+    var meta = document.createElement('p');
+    meta.className = 'chat-bubble__meta';
+    var d = new Date();
+    meta.textContent = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+    content.appendChild(meta);
+    el.appendChild(content);
     return el;
   }
   /* Alert / Default из ДС в тоне Success: информер про первые 3 дня просрочки, стоит над перепиской */
