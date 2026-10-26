@@ -3421,6 +3421,7 @@ button { font: inherit; color: inherit; }
        Сцены и инфографика стоят в репликах бота: { scene } и { info }. Каждая ветка кончается последствием и «Оплатить сейчас» */
     treeHistory: { scenario: '8a', bot: [{ scene: 'history' }, T.history], chips: [
       { label: 'Кто смотрит кредитную историю', go: 'treeWho' }, { label: 'Как её исправить', go: 'treeFix' }, OTHER_REASON] },
+    payDiscount: { scenario: '3a', bot: ['Выберите, чем оплатить\u00A0👇', { info: 'paySaved' }], payLabel: 'source', chips: [OTHER_REASON] },
     closeLoan: { scenario: '8a', bot: ['Выберите, чем оплатить\u00A0👇', { info: 'paySaved' }], payLabel: 'source', chips: [OTHER_REASON] },
     treeWho: { scenario: '8a', bot: [{ info: 'who' }, T.whoEnd], chips: [OTHER_REASON], button: PAY_NOW },
     treeFix: { scenario: '8a', bot: [T.fix, { info: 'years' }, { info: 'treeFix' }], chips: [OTHER_REASON], /* её правка 21.10.2026: вместо кнопки варианты списком */
@@ -3606,7 +3607,9 @@ button { font: inherit; color: inherit; }
      становятся Secondary, Primary остаётся только у текущего шага */
   function normalizePrimaries() {
     var clients = $$('.chat-bubble--client', messagesEl), last = clients[clients.length - 1];
+    /* её решение 27.10.2026: кнопка в тёмном билете остаётся Primary (Contrast), в Secondary не переводим */
     $$('.chat-info .btn', messagesEl).forEach(function (b) {
+      if (b.closest('.ci-ticket')) return;
       var old = last && (last.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_PRECEDING);
       b.classList.toggle('btn-primary', !old);
       b.classList.toggle('btn-secondary', !!old);
@@ -3928,8 +3931,7 @@ button { font: inherit; color: inherit; }
     var offer = e.target.closest('[data-offer]');
     if (offer && !state.pending && !state.stub) {
       say('client', offer.textContent.trim(), true);
-      repliesEl.classList.add('is-locked');
-      later(function () { showStub('Оплата'); }, PAUSE);
+      goStep('payDiscount'); /* её схема 27.10.2026: со скидки тоже через выбор способа оплаты (стрелка в секцию «Выбор способа оплаты») */
       return;
     }
     var row = e.target.closest('[data-tree]');
