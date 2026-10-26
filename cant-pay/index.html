@@ -2372,6 +2372,9 @@ button { font: inherit; color: inherit; }
 .ci-ticket .ci-perf::before { left: calc(-1 * var(--space-lg) - 12px); }
 .ci-ticket .ci-perf::after { right: calc(-1 * var(--space-lg) - 12px); }
 .ci-ticket .btn { align-self: stretch; }
+/* её правка 27.10.2026: на тёмном фоне Button / Primary в режиме Contrast = on (описание компонента в Core 2) */
+.ci-ticket .btn-primary { background: #ffffff; color: #152149; } /* Primary/Fill/Default → Surface/lvl 1/Peak/Peak; текст Always/Bottom/Bottom */
+.ci-ticket .btn-primary:hover, .ci-ticket .btn-primary:active { background: #f3f4f6; } /* Primary/Fill/Hover & Press → Always/Bottom/5 */
 
 /* ---------- Компоненты ДС, которых нет в components.css прототипа: Tag и Badge с заливкой (Extra color=On) ---------- */
 .tag { display: inline-flex; align-items: center; gap: var(--space-xxs); padding: var(--space-xxs) 6px; border-radius: var(--radius-md); background: var(--brand-error-alpha-5); color: #df0026; white-space: nowrap; } /* Tag, Type Tag & Badge = Danger (её правка 20.10.2026): Tag/Fill и Tag/Text & icon; отступ 6 в компоненте числом */
