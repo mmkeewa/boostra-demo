@@ -3418,7 +3418,7 @@ button { font: inherit; color: inherit; }
        Сцены и инфографика стоят в репликах бота: { scene } и { info }. Каждая ветка кончается последствием и «Оплатить сейчас» */
     treeHistory: { scenario: '8a', bot: [{ scene: 'history' }, T.history], chips: [
       { label: 'Кто смотрит кредитную историю', go: 'treeWho' }, { label: 'Как её исправить', go: 'treeFix' }, OTHER_REASON] },
-    closeLoan: { scenario: '8a', bot: ['Выберите, чем оплатить\u00A0👇', { info: 'paySaved' }], payLabel: 'Оплатить 20\u00A0000\u00A0₽', chips: [OTHER_REASON] },
+    closeLoan: { scenario: '8a', bot: ['Выберите, чем оплатить\u00A0👇', { info: 'paySaved' }], payLabel: 'source', chips: [OTHER_REASON] },
     treeWho: { scenario: '8a', bot: [{ info: 'who' }, T.whoEnd], chips: [OTHER_REASON], button: PAY_NOW },
     treeFix: { scenario: '8a', bot: [T.fix, { info: 'years' }, { info: 'treeFix' }], chips: [OTHER_REASON], /* её правка 21.10.2026: вместо кнопки варианты списком */
       options: [
@@ -3568,7 +3568,9 @@ button { font: inherit; color: inherit; }
       : { from: from, scene: item.scene, info: item.info };
     if (m.info === 'paySaved' || m.info === 'payChoice') { /* подпись кнопки карточки способа оплаты */
       var st = STEPS[state.step];
-      m.payLabel = (st && st.payLabel) || (state.payAmount ? 'Оплатить ' + money(state.payAmount) : null);
+      /* её решение 27.10.2026: суммы не показываем, кнопка повторяет действие, с которого клиент пришёл */
+      var lastClient = state.log.slice().reverse().find(function (x) { return x.from === 'client' && x.text; });
+      m.payLabel = (st && st.payLabel && st.payLabel !== 'source') ? st.payLabel : (lastClient ? lastClient.text : (state.step === 'closeLoan' ? 'Закрыть заём сейчас' : 'Оплатить частично'));
     }
     state.log.push(m);
     save();
@@ -3738,7 +3740,7 @@ button { font: inherit; color: inherit; }
     if (step.input) { revealReplies(); openInput(); }
     state.pending = true;
     save();
-    botSay(botTexts(step), function () { state.pending = false; save(); setPayLabel(step.payLabel); revealReplies(); });
+    botSay(botTexts(step), function () { state.pending = false; save(); setPayLabel(step.payLabel === 'source' ? null : step.payLabel); revealReplies(); });
   }
   function startDialog() {
     cancelTimers();
@@ -3857,12 +3859,11 @@ button { font: inherit; color: inherit; }
       var inp = amountInput(); if (inp) inp.blur();
       /* её просьба 27.10.2026: после суммы сначала способ оплаты (как в 92813), потом оплата */
       state.payAmount = n;
-      say('client', money(n), true);
+      say('client', 'Оплатить частично', true);
       normalizePrimaries();
       state.pending = true;
       botSay(['Выберите, чем оплатить\u00A0👇', { info: state.method === 'none' ? 'payChoice' : 'paySaved' }], function () {
         state.pending = false; save();
-        var b = $$('[data-pm-pay]', messagesEl).pop(); if (b) b.textContent = 'Оплатить ' + money(n);
       });
       return;
     }
