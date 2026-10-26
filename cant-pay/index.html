@@ -2455,6 +2455,18 @@ button { font: inherit; color: inherit; }
 .ds-row__title { flex: 1 1 0; min-width: 0; }
 .ds-row__content > .cs-icon { color: var(--text-bottom-tertiary); }
 
+/* Pay method из 92813 в чате: карточка способа оплаты после суммы частичной оплаты */
+.chat-info--paySaved, .chat-info--payChoice { gap: var(--space-md); padding: var(--space-lg); background: var(--bg-grouped-secondary-w); border: var(--border-width-1) solid var(--border-primary-default); border-radius: var(--radius-2xl); }
+.chat-info--paySaved .btn, .chat-info--payChoice .btn { width: 100%; }
+.pm-field { display: flex; align-items: center; gap: var(--space-md); min-height: 44px; padding: 0 var(--space-md); border: var(--border-width-1) solid var(--border-primary-default); border-radius: var(--radius-xl); }
+.pm-label { flex: 1 1 0; min-width: 0; }
+.pm-change { padding: 0; border: 0; background: none; color: var(--brand-secondary); cursor: pointer; }
+.pm-options { display: flex; flex-direction: column; padding: 0 var(--space-md); border: var(--border-width-1) solid var(--border-primary-default); border-radius: var(--radius-xl); }
+.pm-option { display: flex; align-items: center; gap: var(--space-md); min-height: 52px; cursor: pointer; }
+.pm-option + .pm-option { box-shadow: inset 0 1px 0 var(--neutral-bottom-alpha-10); }
+.pm-option > .t-body { flex: 1 1 0; }
+.pm-radio { width: 20px; height: 20px; margin: 0; accent-color: var(--brand-primary); }
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -2861,6 +2873,13 @@ button { font: inherit; color: inherit; }
                 <button class="segment" type="button" data-client="good" aria-pressed="false">Хороший</button>
               </div>
             </div>
+            <div class="scenario-switch">
+              <p class="tile__label t-caption" id="methodLabel">Способ оплаты</p>
+              <div class="segmented-control" id="methodSwitch" role="group" aria-labelledby="methodLabel" data-size-segmented-control="40">
+                <button class="segment" type="button" data-method="saved" aria-pressed="true">Сохранён</button>
+                <button class="segment" type="button" data-method="none" aria-pressed="false">Нет</button>
+              </div>
+            </div>
             <!-- Button / Neutral, Size=Medium: сбрасывает переписку и выбранный день, телефон возвращается на вход -->
             <button class="btn btn-neutral" type="button" id="resetDialog" data-size-button="medium">
               <span class="btn-content"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJyZWZyZXNoIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTIwIDExQzE5Ljc1NTQgOS4yNDAyMyAxOC45MzkxIDcuNjA5NjcgMTcuNjc2NiA2LjM1OTUxQzE2LjQxNDIgNS4xMDkzNCAxNC43NzU4IDQuMzA4OTMgMTMuMDEzNyA0LjA4MTU2QzExLjI1MTYgMy44NTQyIDkuNDYzNjIgNC4yMTI0OSA3LjkyNTIgNS4xMDEyNkM2LjM4Njc4IDUuOTkwMDIgNS4xODMyNSA3LjM1OTk1IDQuNSA5LjAwMDAxTTQgNS4wMDAwMVY5LjAwMDAxSDhNNCAxM0M0LjI0NDU2IDE0Ljc1OTggNS4wNjA5MyAxNi4zOTAzIDYuMzIzMzYgMTcuNjQwNUM3LjU4NTc5IDE4Ljg5MDcgOS4yMjQyNCAxOS42OTExIDEwLjk4NjMgMTkuOTE4NEMxMi43NDg0IDIwLjE0NTggMTQuNTM2NCAxOS43ODc1IDE2LjA3NDggMTguODk4OEMxNy42MTMyIDE4LjAxIDE4LjgxNjggMTYuNjQwMSAxOS41IDE1TTIwIDE5VjE1SDE2IiBzdHJva2U9IiMzMzMzMzMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjwvZz4KPC9zdmc+Cg==" width="20" height="20" alt="">Сброс диалога</span>
@@ -3123,6 +3142,19 @@ button { font: inherit; color: inherit; }
         '<span class="amount-field" data-amount-field><input class="amount-field__input t-body" data-amount type="text" inputmode="numeric" autocomplete="off" placeholder="Сумма платежа" aria-label="Сумма платежа">' +
         '<button class="btn btn-primary" type="button" data-size-button="large" data-amount-pay>Оплатить</button></span>' +
         '<span class="input-caption" data-amount-caption>Задолженность 20\u00A0000\u00A0₽</span></div>';
+    },
+    /* способ оплаты после суммы частичной оплаты (её просьба 27.10.2026, компонент Pay method из 92813):
+       есть сохранённый способ: строка способа и «Изменить»; нет: СБП или банковская карта, по умолчанию СБП */
+    paySaved: function () {
+      return '<span class="pm-field"><span class="ds-row__image" data-logo="card"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJJY29uIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTIgNi42NjY2N0gxNE00LjY2NjY3IDEwSDQuNjczMzNNNy4zMzMzMyAxMEg4LjY2NjY3TTIgNS4zMzMzM0MyIDQuODAyOSAyLjIxMDcxIDQuMjk0MTkgMi41ODU3OSAzLjkxOTEyQzIuOTYwODYgMy41NDQwNSAzLjQ2OTU3IDMuMzMzMzMgNCAzLjMzMzMzSDEyQzEyLjUzMDQgMy4zMzMzMyAxMy4wMzkxIDMuNTQ0MDUgMTMuNDE0MiAzLjkxOTEyQzEzLjc4OTMgNC4yOTQxOSAxNCA0LjgwMjkgMTQgNS4zMzMzM1YxMC42NjY3QzE0IDExLjE5NzEgMTMuNzg5MyAxMS43MDU4IDEzLjQxNDIgMTIuMDgwOUMxMy4wMzkxIDEyLjQ1NiAxMi41MzA0IDEyLjY2NjcgMTIgMTIuNjY2N0g0QzMuNDY5NTcgMTIuNjY2NyAyLjk2MDg2IDEyLjQ1NiAyLjU4NTc5IDEyLjA4MDlDMi4yMTA3MSAxMS43MDU4IDIgMTEuMTk3MSAyIDEwLjY2NjdWNS4zMzMzM1oiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K" alt=""></span>' +
+        '<span class="t-body pm-label">2200 •••• 0987</span><button class="pm-change t-note-medium" type="button" data-pm-change>Изменить</button></span>' +
+        '<button class="btn btn-primary" type="button" data-size-button="large" data-pm-pay>Оплатить</button>';
+    },
+    payChoice: function () {
+      return '<span class="pm-options">' +
+        '<label class="pm-option"><span class="ds-row__image" data-logo="sbp"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE1LjgwNCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE1LjgwNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9Ik1hcmsiIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8wXzEwMikiPgo8cGF0aCBpZD0iVmVjdG9yIiBkPSJNNC41ODc5MSA4Ljk5NzhMMi4yMDkzMyAxMC4zNTE2TDAgMTQuMTI4NEw5LjAwNjU1IDguOTk3OEg0LjU4NzkxWiIgZmlsbD0iIzhGNDc5NCIvPgo8cGF0aCBpZD0iVmVjdG9yXzIiIGQ9Ik0xMS4zODQ4IDUuMTMwNkw5LjAwNjIgNi40ODQzNUw2Ljc5NjkgMTAuMjYxMkwxNS44MDM0IDUuMTMwNkgxMS4zODQ4WiIgZmlsbD0iI0U0MDY0NiIvPgo8cGF0aCBpZD0iVmVjdG9yXzMiIGQ9Ik05LjAwNjIgMy43NzY4OUw2Ljc5NjkgMFY3LjczODhWMTAuMjYxMlYxOEw5LjAwNjIgMTQuMjIzMVYzLjc3Njg5WiIgZmlsbD0iI0Y5QjQyOSIvPgo8cGF0aCBpZD0iVmVjdG9yXzQiIGQ9Ik02Ljc5NjkgMEw5LjAwNjIgMy43NzY4OUwxMS4zODQ4IDUuMTMwNkgxNS44MDM0TDYuNzk2OSAwWiIgZmlsbD0iI0VGODAxOSIvPgo8cGF0aCBpZD0iVmVjdG9yXzUiIGQ9Ik02Ljc5NjkgNy43Mzg3NVYxOEw5LjAwNjIgMTQuMjIzMVYxMS41MTU2TDYuNzk2OSA3LjczODc1WiIgZmlsbD0iIzc4QjcyQSIvPgo8cGF0aCBpZD0iVmVjdG9yXzYiIGQ9Ik0xMS4zODQ4IDEyLjg2OTRMOS4wMDYyIDE0LjIyMzFMNi43OTY5IDE4TDE1LjgwMzQgMTIuODY5NEgxMS4zODQ4WiIgZmlsbD0iIzAwODUzRiIvPgo8cGF0aCBpZD0iVmVjdG9yXzciIGQ9Ik0wIDMuODcxNThWMTQuMTI4M0wyLjIwOTMzIDEwLjM1NTlWNy42NDM5NUwwIDMuODcxNThaIiBmaWxsPSIjNUI1N0EyIi8+CjxwYXRoIGlkPSJWZWN0b3JfOCIgZD0iTTYuNzk3MjUgNy43Mzg3TDYuODAxOCA3Ljc0MzI1TDAgMy44NzE1OEwyLjIwOTMzIDcuNjQzOTVMMTEuMzg1MSAxMi44Njk0SDE1LjgwMzhMNi43OTcyNSA3LjczODdaIiBmaWxsPSIjMDY5OEQ2Ii8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMF8xMDIiPgo8cmVjdCB3aWR0aD0iMTUuODA0IiBoZWlnaHQ9IjE4IiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=" alt=""></span><span class="t-body">СБП</span><input class="pm-radio" type="radio" name="pm' + Date.now() + '" checked data-pm-option="sbp"></label>' +
+        '<label class="pm-option"><span class="ds-row__image" data-logo="card"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJJY29uIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTIgNi42NjY2N0gxNE00LjY2NjY3IDEwSDQuNjczMzNNNy4zMzMzMyAxMEg4LjY2NjY3TTIgNS4zMzMzM0MyIDQuODAyOSAyLjIxMDcxIDQuMjk0MTkgMi41ODU3OSAzLjkxOTEyQzIuOTYwODYgMy41NDQwNSAzLjQ2OTU3IDMuMzMzMzMgNCAzLjMzMzMzSDEyQzEyLjUzMDQgMy4zMzMzMyAxMy4wMzkxIDMuNTQ0MDUgMTMuNDE0MiAzLjkxOTEyQzEzLjc4OTMgNC4yOTQxOSAxNCA0LjgwMjkgMTQgNS4zMzMzM1YxMC42NjY3QzE0IDExLjE5NzEgMTMuNzg5MyAxMS43MDU4IDEzLjQxNDIgMTIuMDgwOUMxMy4wMzkxIDEyLjQ1NiAxMi41MzA0IDEyLjY2NjcgMTIgMTIuNjY2N0g0QzMuNDY5NTcgMTIuNjY2NyAyLjk2MDg2IDEyLjQ1NiAyLjU4NTc5IDEyLjA4MDlDMi4yMTA3MSAxMS43MDU4IDIgMTEuMTk3MSAyIDEwLjY2NjdWNS4zMzMzM1oiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K" alt=""></span><span class="t-body">Банковская карта</span><input class="pm-radio" type="radio" name="pm' + Date.now() + '" data-pm-option="card"></label>' +
+        '</span><button class="btn btn-primary" type="button" data-size-button="large" data-pm-pay>Оплатить</button>';
     },
     /* выбор дня внутри чата (Chat infographic, Type=Date picker 3576:6992): месяц и пять дней плитками */
     dates: function () {
@@ -3412,7 +3444,7 @@ button { font: inherit; color: inherit; }
 
   /* payDate: выбранный день оплаты («30.09»), живёт, пока его не изменят или не сбросит тег сценария;
      pending: ответ сервиса на текущий шаг ещё не пришёл */
-  var state = { dpd: 'early', client: 'regular', scenario: 'entry', step: null, payDate: null, pending: false, stub: null, log: [], exited: false };
+  var state = { dpd: 'early', client: 'regular', method: 'saved', scenario: 'entry', step: null, payDate: null, pending: false, stub: null, log: [], exited: false };
   /* развилка «Хороший клиент?» после чипа «Сумма больше ожидаемой» */
   function resolve(id) { return id === 'amount' ? (state.client === 'good' ? 'discount' : 'partial') : id; }
 
@@ -3782,6 +3814,25 @@ button { font: inherit; color: inherit; }
     i.value = n ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : '';
     amountError('');
   });
+  /* карточка способа оплаты: «Изменить» открывает выбор, «Оплатить N ₽» уводит в оплату */
+  messagesEl.addEventListener('click', function (e) {
+    var ch = e.target.closest('[data-pm-change]');
+    if (ch && !state.pending && !state.stub) {
+      var box = ch.closest('.chat-info');
+      box.className = 'chat-info chat-info--payChoice';
+      box.innerHTML = ChatScenes.info('payChoice').innerHTML;
+      var b = $('[data-pm-pay]', box); if (b && state.payAmount) b.textContent = 'Оплатить ' + money(state.payAmount);
+      return;
+    }
+    if (e.target.closest('[data-pm-pay]') && !state.pending && !state.stub) { showStub('Оплата'); return; }
+  });
+  var methodSwitch = $('#methodSwitch');
+  methodSwitch.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-method]');
+    if (!c) return;
+    state.method = c.dataset.method;
+    markSegments(methodSwitch, 'data-method', state.method);
+  });
   messagesEl.addEventListener('click', function (e) {
     if (!e.target.closest('[data-amount-pay]') || state.pending || state.stub || state.step !== 'partial') return;
     onAction({ exit: 'Оплата', amount: true });
@@ -3792,9 +3843,15 @@ button { font: inherit; color: inherit; }
       if (!n) { amountError('Введите сумму'); return; }
       /* её решение 22.10.2026: сумму больше задолженности не блокируем, исправляем на следующем шаге, в оплате */
       var inp = amountInput(); if (inp) inp.blur();
-      say('client', 'Оплатить ' + money(n), true);
-      repliesEl.classList.add('is-locked');
-      later(function () { showStub(a.exit); }, PAUSE);
+      /* её просьба 27.10.2026: после суммы сначала способ оплаты (как в 92813), потом оплата */
+      state.payAmount = n;
+      say('client', money(n), true);
+      normalizePrimaries();
+      state.pending = true;
+      botSay(['Выберите, чем оплатить\u00A0👇', { info: state.method === 'none' ? 'payChoice' : 'paySaved' }], function () {
+        state.pending = false; save();
+        var b = $$('[data-pm-pay]', messagesEl).pop(); if (b) b.textContent = 'Оплатить ' + money(n);
+      });
       return;
     }
     if (a.exit) { showStub(a.exit); return; }
