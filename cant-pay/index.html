@@ -3331,7 +3331,7 @@ button { font: inherit; color: inherit; }
   /* конец ветки дерева последствий: последствие и оплата сразу */
   /* баннер «Просрочка продолжается» с ветками дерева последствий: в конце каждого сценария (её правка 20.10.2026) */
   var CHOICES = { info: 'choices' };
-  var PAY_NOW = { label: 'Закрыть заём сейчас', exit: 'Оплата' }; /* её правка 21.10.2026: «Оплатить сейчас» непонятно, что именно */
+  var PAY_NOW = { label: 'Закрыть заём сейчас', go: 'closeLoan' }; /* её решение 27.10.2026: перед оплатой всегда способ оплаты */ /* её правка 21.10.2026: «Оплатить сейчас» непонятно, что именно */
   /* решения в ветке банкротства */
   var SOLUTIONS = [
     { label: 'Продлить за 3\u00A0500\u00A0₽', icon: 'calendar-check', go: 'extend' },
@@ -3387,7 +3387,7 @@ button { font: inherit; color: inherit; }
       chips: [OTHER_REASON] /* кнопка «Оплатить» внутри поля суммы */
     },
     extend: {
-      scenario: '2d', bot: [{ text: T.extend, cta: 'Продлить за\u00A03\u00A0500\u00A0₽' }], /* её решение 20.10.2026: на продлении красный баннер не показываем */
+      scenario: '2d', bot: [T.extend, { info: 'paySaved' }], payLabel: 'Продлить за\u00A03\u00A0500\u00A0₽', payExit: 'Продление займа', /* её решение 27.10.2026: после «Продлить» способ оплаты, кнопка в карточке */ /* её решение 20.10.2026: на продлении красный баннер не показываем */
       chips: [OTHER_REASON] /* её правка 22.10.2026 (Figma 3440:8110): кнопка внутри реплики бота */
     },
     discount: {
@@ -3418,11 +3418,12 @@ button { font: inherit; color: inherit; }
        Сцены и инфографика стоят в репликах бота: { scene } и { info }. Каждая ветка кончается последствием и «Оплатить сейчас» */
     treeHistory: { scenario: '8a', bot: [{ scene: 'history' }, T.history], chips: [
       { label: 'Кто смотрит кредитную историю', go: 'treeWho' }, { label: 'Как её исправить', go: 'treeFix' }, OTHER_REASON] },
+    closeLoan: { scenario: '8a', bot: ['Выберите, чем оплатить\u00A0👇', { info: 'paySaved' }], payLabel: 'Оплатить 20\u00A0000\u00A0₽', chips: [OTHER_REASON] },
     treeWho: { scenario: '8a', bot: [{ info: 'who' }, T.whoEnd], chips: [OTHER_REASON], button: PAY_NOW },
     treeFix: { scenario: '8a', bot: [T.fix, { info: 'years' }, { info: 'treeFix' }], chips: [OTHER_REASON], /* её правка 21.10.2026: вместо кнопки варианты списком */
       options: [
         { label: 'Вернуть частично', icon: 'pig-money', go: 'partial' },
-        { label: 'Закрыть полностью', icon: 'circle-check', exit: 'Оплата' },
+        { label: 'Закрыть полностью', icon: 'circle-check', go: 'closeLoan' },
         { label: 'Продлить за\u00A03\u00A0500\u00A0₽', icon: 'calendar-check', go: 'extend' }
       ] },
     treeNoPay: { scenario: '8b', bot: [{ scene: 'collection' }, T.noPay, { info: 'steps' }], chips: [
@@ -3555,6 +3556,7 @@ button { font: inherit; color: inherit; }
   function messageEl(m, isNew) {
     if (m.scene || m.info) {
       var el = m.scene ? ChatScenes.scene(m.scene) : ChatScenes.info(m.info);
+      if (m.payLabel) { var pb = el.querySelector('[data-pm-pay]'); if (pb) pb.textContent = m.payLabel; }
       if (isNew) el.classList.add('is-new');
       return el;
     }
@@ -3564,6 +3566,10 @@ button { font: inherit; color: inherit; }
     var m = typeof item === 'string' ? { from: from, text: item }
       : item.text ? { from: from, text: item.text, cta: item.cta }
       : { from: from, scene: item.scene, info: item.info };
+    if (m.info === 'paySaved' || m.info === 'payChoice') { /* подпись кнопки карточки способа оплаты */
+      var st = STEPS[state.step];
+      m.payLabel = (st && st.payLabel) || (state.payAmount ? 'Оплатить ' + money(state.payAmount) : null);
+    }
     state.log.push(m);
     save();
     messagesEl.appendChild(messageEl(m, isNew));
@@ -3714,7 +3720,12 @@ button { font: inherit; color: inherit; }
       }, i === 0 ? PAUSE : PAUSE_NEXT);
     })();
   }
-  function botTexts(step) { return typeof step.bot === 'function' ? step.bot() : step.bot; }
+  function botTexts(step) {
+    var list = typeof step.bot === 'function' ? step.bot() : step.bot;
+    return list.map(function (m) { return m && m.info === 'paySaved' && state.method === 'none' ? { info: 'payChoice' } : m; });
+  }
+  /* подпись кнопки в карточке способа оплаты: сумма продления, оплаты или частичного платежа */
+  function setPayLabel(label) { var b = $$('[data-pm-pay]', messagesEl).pop(); if (b && label) b.textContent = label; }
   /* шаг: зона ответа сразу занимает своё место (скрыта), после паузы приходит ответ бота, зона проявляется */
   function goStep(id) {
     id = resolve(id);
@@ -3727,7 +3738,7 @@ button { font: inherit; color: inherit; }
     if (step.input) { revealReplies(); openInput(); }
     state.pending = true;
     save();
-    botSay(botTexts(step), function () { state.pending = false; save(); revealReplies(); });
+    botSay(botTexts(step), function () { state.pending = false; save(); setPayLabel(step.payLabel); revealReplies(); });
   }
   function startDialog() {
     cancelTimers();
@@ -3819,12 +3830,13 @@ button { font: inherit; color: inherit; }
     var ch = e.target.closest('[data-pm-change]');
     if (ch && !state.pending && !state.stub) {
       var box = ch.closest('.chat-info');
+      var prev = ($('[data-pm-pay]', box) || {}).textContent;
       box.className = 'chat-info chat-info--payChoice';
       box.innerHTML = ChatScenes.info('payChoice').innerHTML;
-      var b = $('[data-pm-pay]', box); if (b && state.payAmount) b.textContent = 'Оплатить ' + money(state.payAmount);
+      var b = $('[data-pm-pay]', box); if (b && prev) b.textContent = prev;
       return;
     }
-    if (e.target.closest('[data-pm-pay]') && !state.pending && !state.stub) { showStub('Оплата'); return; }
+    if (e.target.closest('[data-pm-pay]') && !state.pending && !state.stub) { showStub((STEPS[state.step] && STEPS[state.step].payExit) || 'Оплата'); return; }
   });
   var methodSwitch = $('#methodSwitch');
   methodSwitch.addEventListener('click', function (e) {
@@ -3898,8 +3910,7 @@ button { font: inherit; color: inherit; }
     var ext = e.target.closest('[data-extend]');
     if (ext && !state.pending && !state.stub) {
       say('client', ext.textContent.trim(), true);
-      repliesEl.classList.add('is-locked');
-      later(function () { showStub('Продление займа'); }, PAUSE);
+      goStep('extend'); /* её решение 27.10.2026: сначала способ оплаты, потом продление */
       return;
     }
     var opt = e.target.closest('[data-opt]');
