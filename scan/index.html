@@ -3744,7 +3744,7 @@ button.text-field__box:focus-visible {
         <div class="scenario-body scenario-body--scan">
           <div class="flow-col">
             <p class="tile__label t-caption">Флоу</p>
-            <ol class="flow-steps" id="flowSteps"><li><button class="flow-step" type="button" data-scenario="scanIntro" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Интро</span></button></li><li><button class="flow-step" type="button" data-scenario="scanPermission" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Доступ к&nbsp;камере</span></button></li><li><button class="flow-step" type="button" data-scenario="scanCamera" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Камера</span></button></li><li><button class="flow-step" type="button" data-scenario="scanRecognizing" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Распознавание</span></button></li><li><button class="flow-step" type="button" data-scenario="checkData" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Проверьте данные</span></button></li><li><button class="flow-step" type="button" data-scenario="scanDone" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Запуск скоринга</span></button></li><li class="flow-steps__side"><button class="flow-step" type="button" data-scenario="manualData" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Ручной ввод, если пропустил скан</span></button></li></ol>
+            <ol class="flow-steps" id="flowSteps"><li><button class="flow-step" type="button" data-scenario="scanIntro" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Интро</span></button></li><li><button class="flow-step" type="button" data-scenario="scanPermission" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Доступ к&nbsp;камере</span></button></li><li><button class="flow-step" type="button" data-scenario="scanCamera" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Камера</span></button></li><li><button class="flow-step" type="button" data-scenario="scanRecognizing" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Распознавание</span></button></li><li><button class="flow-step" type="button" data-scenario="checkData" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Проверьте данные</span></button></li><li><button class="flow-step" type="button" data-scenario="scanDone" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Работа и&nbsp;доход</span></button></li><li class="flow-steps__side"><button class="flow-step" type="button" data-scenario="manualData" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Ручной ввод, если пропустил скан</span></button></li></ol>
           </div>
           <div class="errors-block" id="errorsBlock" role="group" aria-label="Ошибки">
             <p class="errors-block__title t-caption">Ошибки</p>
@@ -3834,13 +3834,13 @@ button.text-field__box:focus-visible {
       next: 'Дальше анкета с перенесёнными данными.' },
     checkData: { title: 'Проверьте данные',
       text: 'Данные с фото уже в анкете, клиент проверяет их и дописывает адрес.',
-      next: '«Всё верно» отправляет заявку на проверку.' },
-    scanDone: { title: 'Запуск скоринга',
-      text: 'Анкета заполнена, заявка уходит на проверку. Клиенту этот экран не показываем, это конец сценария.',
-      next: 'Нажатие на экран открывает сценарий «Таймер».' },
+      next: '«Всё верно» ведёт к шагу «Работа и доход».' },
+    scanDone: { title: 'Работа и доход',
+      text: 'Паспорт заполнен, дальше клиент вносит работу и доход, как сейчас. Скоринг запускается после этого шага.',
+      next: 'Нажатие на экран ведёт дальше: ожидание решения, оффер, привязка карты.' },
     manualData: { title: 'Ручной ввод',
       text: 'Клиент пропустил скан и заполняет анкету сам. Внизу ссылка, чтобы вернуться к скану.',
-      next: '«Всё верно» отправляет заявку на проверку.' },
+      next: '«Всё верно» ведёт к шагу «Работа и доход».' },
     scanNoAccess: { title: 'Нет доступа к камере', error: true,
       text: 'Клиент запретил доступ к камере. Подсказываем включить его в настройках браузера или выбрать фото из галереи.',
       next: 'Остаются галерея и ручной ввод по ссылке «Заполнить вручную».' },
@@ -3849,7 +3849,7 @@ button.text-field__box:focus-visible {
       next: 'Пересъёмка проходит без ошибки.' },
     checkDataAttention: { title: 'Распознали неуверенно', error: true,
       text: 'Часть данных распознали неуверенно: такие поля отмечены, клиент проверяет их внимательнее.',
-      next: '«Всё верно» отправляет заявку на проверку.' },
+      next: '«Всё верно» ведёт к шагу «Работа и доход».' },
     checkDataErrors: { title: 'Ошибки в анкете после скана', error: true,
       text: 'Все ошибки показываем на одном экране, каждую под своим полем. Появляются они по нажатию «Всё верно».',
       next: 'Клиент исправляет поле, и ошибка под ним пропадает.' },
@@ -4304,7 +4304,7 @@ button.text-field__box:focus-visible {
     var ok = validateData();
     renderData();
     if (!ok) { scrollToEl(firstError(activeDataIds(), D) || $('#consentBlock')); return; }
-    finish();   /* «Работа и доход» в этом флоу не показываем (её решение 2026-10-22): после анкеты сразу переход к проверке */
+    finish();   /* «Работа и доход» не рисуем (её решение 2026-10-22), после анкеты переход к этому шагу (2026-10-26) */
   }
   function validateWork() {
     W.errors = {};
@@ -4321,7 +4321,7 @@ button.text-field__box:focus-visible {
   function finish() {
     show(view);
     tellStand('scanDone');
-    showStub('Запуск скоринга\n(не' + NB + 'показывается клиенту, нажмите на' + NB + 'экран)', next);   /* как экран «Переход на следующий шаг» в Figma (861:60928) */
+    showStub('Переход к шагу «Работа и доход»\n(существующий шаг, нажмите на' + NB + 'экран)', next);   /* в Figma ссылка на «Работа и доход» на странице «Анкета и паспорт AS IS» */
   }
   function next() {
     if (window.parent !== window) { try { window.parent.postMessage({ type: 'stand:next', to: 'Таймер' }, location.origin); return; } catch (e) {} }
