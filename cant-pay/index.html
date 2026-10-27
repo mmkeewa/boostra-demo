@@ -2582,6 +2582,11 @@ button { font: inherit; color: inherit; }
 .no-anim .toast { transition: none; }
 /* Бустрочка с подсказкой справа, над правым краем билета (её Figma 27.10.2026, 2990:23151 и 3365:7106) */
 .ci-mascot { justify-content: flex-end; }
+/* её правка 27.10.2026: логотип сохранённой карты МИР (card-sbp из макета) и Selector / Default Size=Small из ДС вместо браузерной радиокнопки */
+.pm-logo { display: block; flex-shrink: 0; width: 42px; height: 28px; }
+.pm-radio { -webkit-appearance: none; appearance: none; flex-shrink: 0; width: 20px; height: 20px; margin: 0; border: 2px solid var(--neutral-bottom-alpha-10); border-radius: var(--radius-full); background: var(--bg-grouped-secondary-w); cursor: pointer; }
+.pm-radio:checked { border: 0; background: #007aff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6.1 10l2.8 2.8 5.6-5.6' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 20px no-repeat; } /* Selector/Fill: в токенах прототипа не заведён */
+.pm-radio:focus-visible { outline: 1px solid var(--brand-secondary-alpha-70); outline-offset: 2px; }
 
 </style>
 <style>
@@ -3271,7 +3276,8 @@ button { font: inherit; color: inherit; }
     /* способ оплаты после суммы частичной оплаты (её просьба 27.10.2026, компонент Pay method из 92813):
        есть сохранённый способ: строка способа и «Изменить»; нет: СБП или банковская карта, по умолчанию СБП */
     paySaved: function () {
-      return '<span class="pm-field"><span class="ds-row__image" data-logo="card"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJJY29uIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTIgNi42NjY2N0gxNE00LjY2NjY3IDEwSDQuNjczMzNNNy4zMzMzMyAxMEg4LjY2NjY3TTIgNS4zMzMzM0MyIDQuODAyOSAyLjIxMDcxIDQuMjk0MTkgMi41ODU3OSAzLjkxOTEyQzIuOTYwODYgMy41NDQwNSAzLjQ2OTU3IDMuMzMzMzMgNCAzLjMzMzMzSDEyQzEyLjUzMDQgMy4zMzMzMyAxMy4wMzkxIDMuNTQ0MDUgMTMuNDE0MiAzLjkxOTEyQzEzLjc4OTMgNC4yOTQxOSAxNCA0LjgwMjkgMTQgNS4zMzMzM1YxMC42NjY3QzE0IDExLjE5NzEgMTMuNzg5MyAxMS43MDU4IDEzLjQxNDIgMTIuMDgwOUMxMy4wMzkxIDEyLjQ1NiAxMi41MzA0IDEyLjY2NjcgMTIgMTIuNjY2N0g0QzMuNDY5NTcgMTIuNjY2NyAyLjk2MDg2IDEyLjQ1NiAyLjU4NTc5IDEyLjA4MDlDMi4yMTA3MSAxMS43MDU4IDIgMTEuMTk3MSAyIDEwLjY2NjdWNS4zMzMzM1oiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9nPgo8L3N2Zz4K" alt=""></span>' +
+      /* её Pay method, State=Saved: сохранённая карта МИР (плитка card-sbp из макета 3774:20875) */
+      return '<span class="pm-field"><img class="pm-logo" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDIiIGhlaWdodD0iMjgiIHZpZXdCb3g9IjAgMCA0MiAyOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggMC41SDM0QzM4LjE0MjEgMC41IDQxLjUgMy44NTc4NiA0MS41IDhWMjBDNDEuNSAyNC4xNDIxIDM4LjE0MjEgMjcuNSAzNCAyNy41SDhDMy44NTc4NiAyNy41IDAuNSAyNC4xNDIxIDAuNSAyMFY4QzAuNSAzLjg1Nzg2IDMuODU3ODYgMC41IDggMC41WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTggMC41SDM0QzM4LjE0MjEgMC41IDQxLjUgMy44NTc4NiA0MS41IDhWMjBDNDEuNSAyNC4xNDIxIDM4LjE0MjEgMjcuNSAzNCAyNy41SDhDMy44NTc4NiAyNy41IDAuNSAyNC4xNDIxIDAuNSAyMFY4QzAuNSAzLjg1Nzg2IDMuODU3ODYgMC41IDggMC41WiIgc3Ryb2tlPSIjQzVDOUNFIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMjkuNzMxMyAxMC44MjQ3SDI1LjUxMjdDMjUuNzM5NSAxMi4yMzA5IDI3LjEwMDMgMTMuNTQ2NCAyOC41OTcyIDEzLjU0NjRIMzEuOTU0QzMxLjk5OTMgMTMuNDEwMyAzMS45OTkzIDEzLjIyODggMzEuOTk5MyAxMy4wOTI4QzMxLjk5OTMgMTEuODIyNiAzMS4wMDE0IDEwLjgyNDcgMjkuNzMxMyAxMC44MjQ3WiIgZmlsbD0idXJsKCNtaXJfZykiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yNS44NzY1IDEzLjc3MzJWMTcuMTc1M0gyNy45MTc3VjE1LjM2MDhIMjkuNzMyMUMzMC43MzAxIDE1LjM2MDggMzEuNTkxOSAxNC42ODA0IDMxLjg2NDEgMTMuNzczMkgyNS44NzY1WiIgZmlsbD0iIzREQjQ1RiIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTE4LjYxODcgMTAuODI0N1YxNy4xNzUySDIwLjQzMzFDMjAuNDMzMSAxNy4xNzUyIDIwLjg4NjcgMTcuMTc1MiAyMS4xMTM1IDE2LjcyMTZDMjIuMzM4MyAxNC4yNzIxIDIyLjcwMTEgMTMuNTQ2NCAyMi43MDExIDEzLjU0NjRIMjIuOTI3OVYxNy4xNzUySDI0Ljk2OTJWMTAuODI0N0gyMy4xNTQ4QzIzLjE1NDggMTAuODI0NyAyMi43MDExIDEwLjg3MDEgMjIuNDc0MyAxMS4yNzgzQzIxLjQzMSAxMy4zNjQ5IDIwLjg4NjcgMTQuNDUzNiAyMC44ODY3IDE0LjQ1MzZIMjAuNjU5OVYxMC44MjQ3SDE4LjYxODdaIiBmaWxsPSIjNERCNDVGIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMTAgMTcuMTc1MlYxMC44MjQ3SDEyLjA0MTJDMTIuMDQxMiAxMC44MjQ3IDEyLjYzMDkgMTAuODI0NyAxMi45NDg1IDExLjczMTlDMTMuNzY1IDE0LjEzNjEgMTMuODU1NyAxNC40NTM2IDEzLjg1NTcgMTQuNDUzNkMxMy44NTU3IDE0LjQ1MzYgMTQuMDM3MSAxMy44NjM5IDE0Ljc2MjkgMTEuNzMxOUMxNS4wODA0IDEwLjgyNDcgMTUuNjcwMSAxMC44MjQ3IDE1LjY3MDEgMTAuODI0N0gxNy43MTE0VjE3LjE3NTJIMTUuNjcwMVYxMy43NzMySDE1LjQ0MzNMMTQuMzA5MyAxNy4xNzUySDEzLjQwMjFMMTIuMjY4IDEzLjc3MzJIMTIuMDQxMlYxNy4xNzUySDEwWiIgZmlsbD0iIzREQjQ1RiIvPgo8ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9Im1pcl9nIiB4MT0iMjUuNTAxIiB5MT0iMTIuMTg1NSIgeDI9IjMxLjk5OTMiIHkyPSIxMi4xODU1IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iIzAwQjRFNiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzA4OENDQiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8L3N2Zz4K" width="42" height="28" alt="МИР">' +
         '<span class="t-body pm-label">2200 •••• 0987</span><button class="pm-change t-note-medium" type="button" data-pm-change>Изменить</button></span>' +
         '<button class="btn btn-primary" type="button" data-size-button="xlarge" data-pm-pay>Оплатить</button>';
     },
@@ -3401,7 +3407,7 @@ button { font: inherit; color: inherit; }
     start: 'Не могу заплатить сейчас',
     alertTitle: 'Просрочка небольшая',
     alertText: 'Оплатите сейчас, и\u00A0она не\u00A0повлияет на\u00A0новые займы и\u00A0кредитную историю',
-    alertBadge: 'Просрочка 2\u00A0дня', /* её правка в Figma 22.10.2026: количество дней просрочки клиента */
+    alertBadge: '2\u00A0дня', /* её правка в Figma 22.10.2026: количество дней просрочки клиента */
     ask: 'Расскажите, что мешает оплатить. Подберём решение под\u00A0вашу ситуацию\u00A0🤝',
     noMoney: 'Не обязательно возвращать всё сразу\u00A0🙂',
     payDate: 'Выберите день, когда вам удобно оплатить\u00A0📅 Срок по\u00A0договору не меняется. Проценты начисляются до\u00A0дня оплаты',
@@ -3409,7 +3415,7 @@ button { font: inherit; color: inherit; }
     extend: 'Отличное решение\u00A0👍 Просрочка сразу остановится',
     paid: 'Если вы оплатили заём полностью другим способом, загрузите чек об\u00A0оплате\u00A0🧾',
     discount: 'Понимаем, сумма вышла больше, чем вы\u00A0ждали\u00A0🙏', /* предложение со скидкой: зелёный баннер offer (её правка 20.10.2026) */
-    method: 'Выберите способ оплаты\u00A0👇',
+    method: 'Выберите, чем оплатить\u00A0👇', /* её правка 27.10.2026: как в остальных карточках оплаты */
     failed: 'Так бывает из-за\u00A0лимита банка или нехватки средств на\u00A0карте. Оплатите другим способом\u00A0💳',
     other: 'Расскажите о\u00A0своей проблеме\u00A0✍️',
     /* её тексты 27.10.2026: после отправки создаётся тикет в поддержку, номер обращения условный */
