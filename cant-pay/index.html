@@ -3020,7 +3020,6 @@ button { font: inherit; color: inherit; }
             <button class="chip chip-inactive" type="button" data-scenario="2d" aria-pressed="false">2d. Продление с&nbsp;оплатой&nbsp;%</button>
             <button class="chip chip-inactive" type="button" data-scenario="3" aria-pressed="false">3. Частичная оплата</button>
             <button class="chip chip-inactive" type="button" data-scenario="3a" aria-pressed="false">3a. Скидка хорошему клиенту</button>
-            <button class="chip chip-inactive" type="button" data-scenario="4" aria-pressed="false">4. Другой способ</button>
             <button class="chip chip-inactive" type="button" data-scenario="5" aria-pressed="false">5. Платёж не&nbsp;прошёл</button>
             <button class="chip chip-inactive" type="button" data-scenario="7" aria-pressed="false">7. Другая проблема</button>
             <button class="chip chip-inactive" type="button" data-scenario="7a" aria-pressed="false">7a. Другая проблема · отправлено</button>
@@ -3415,7 +3414,6 @@ button { font: inherit; color: inherit; }
     extend: 'Отличное решение\u00A0👍 Просрочка сразу остановится',
     paid: 'Если вы оплатили заём полностью другим способом, загрузите чек об\u00A0оплате\u00A0🧾',
     discount: 'Понимаем, сумма вышла больше, чем вы\u00A0ждали\u00A0🙏', /* предложение со скидкой: зелёный баннер offer (её правка 20.10.2026) */
-    method: 'Выберите, чем оплатить\u00A0👇', /* её правка 27.10.2026: как в остальных карточках оплаты */
     failed: 'Так бывает из-за\u00A0лимита банка или нехватки средств на\u00A0карте. Оплатите другим способом\u00A0💳',
     other: 'Расскажите о\u00A0своей проблеме\u00A0✍️',
     /* её тексты 27.10.2026: после отправки создаётся тикет в поддержку, номер обращения условный */
@@ -3483,10 +3481,9 @@ button { font: inherit; color: inherit; }
     treeBankrupt: 'Я\u00A0думаю о\u00A0банкротстве'
   };
   var REASONS = [
-    /* порядок и «Оплачу по-другому» её (21.10.2026): справа встают в три ряда — сумма; деньги + способ; платёж + другая */
+    /* порядок её (21.10.2026); «Оплачу по-другому» убрана её решением 28.10.2026 */
     { label: 'Сумма больше ожидаемой', go: 'amount' }, /* развилка «Хороший клиент?»: да → скидка (3a), нет → частичная оплата (3) */
     { label: 'Не хватает денег', go: 'noMoney' },
-    { label: 'Оплачу по-другому', go: 'otherMethod' },
     { label: 'Платёж не прошёл', go: 'payFailed' },
     { label: 'Другая проблема', go: 'otherProblem' }
   ];
@@ -3539,11 +3536,6 @@ button { font: inherit; color: inherit; }
     discount: {
       scenario: '3a', bot: [T.discount, { info: 'offer' }],
       chips: [OTHER_REASON] /* кнопка «Оплатить сейчас» внутри баннера */
-    },
-    otherMethod: {
-      /* её Figma 27.10.2026 (2990:24295): карточка Pay method, State=Choice — СБП или банковская карта, по умолчанию СБП, кнопка «Оплатить» */
-      scenario: '4', bot: [T.method, { info: 'payChoice' }], payLabel: 'Оплатить', payExit: 'Оплата',
-      chips: [OTHER_REASON]
     },
     payFailed: {
       scenario: '5', bot: [T.failed, { info: 'payChoice' }], payLabel: 'Оплатить', payExit: 'Оплата', /* её Figma 27.10.2026 (2990:24858): тот же выбор способа */
@@ -4451,7 +4443,7 @@ button { font: inherit; color: inherit; }
      estimate: плитка «Оценка» (ranges: показать диапазоны; text: текст вместо числа) */
   var ANALYTICS = {
     start: {
-      reasons: ['later', 'noFunds', 'otherMethod', 'wrongAmount', 'ownText', 'failed'],
+      reasons: ['later', 'noFunds', 'wrongAmount', 'ownText', 'failed'],
       now: { value: '80\u00A0662', badge: '47\u00A0821\u00A0договор', caption: 'отмены оплаты за\u00A014.05–\u206003.09.2026', share: 35.8, meterLabel: 'ответили на\u00A0анкету' },
       goal: 'Доля вошедших в\u00A0диалог, которые оплатили: в\u00A0том же визите и за\u00A07\u00A0дней. С\u00A0разбивкой по\u00A0типу оплаты.',
       events: 'Новые: `dl_repayment_cant_pay_click` (открыл диалог), `dl_repayment_cant_pay_reason_select` с\u00A0`cant_pay_reason`, `dl_repayment_cant_pay_close_chat_click` с\u00A0`cant_pay_step`. Оплата: `dl_repayment_success_payment` с\u00A0новым `repayment_source = cant_pay_chat`.',
@@ -4489,14 +4481,6 @@ button { font: inherit; color: inherit; }
       events: '`dl_repayment_click_pay` с\u00A0`loan_repayment_full`, `repayment_source = cant_pay_chat` и\u00A0новым `discount_applied = yes`.',
       estimate: { text: 'Посчитаем, когда будут размер скидки и\u00A0критерий «хорошего клиента»' }
     },
-    otherMethod: {
-      reasons: ['otherMethod'],
-      now: { value: '19,1%', badge: '5\u00A0509\u00A0ответов', caption: '«Оплачу другим способом»', share: 19.1 },
-      goal: 'Клиент доходит до\u00A0оплаты выбранным способом, отмен на\u00A0экране оплаты меньше.',
-      events: A_PAY,
-      newEvents: 1,
-      estimate: { value: '≈130', caption: EST + '1\u00A0300\u00A0договорам' }
-    },
     payFailed: {
       reasons: ['failed'],
       now: { value: '3,3%', badge: '963\u00A0ответа', caption: '«Платёж не прошёл»', share: 3.3 },
@@ -4530,7 +4514,7 @@ button { font: inherit; color: inherit; }
   };
   var ANALYTICS_BY_SCENARIO = {
     entry: 'start', '1': 'start', '2': 'noMoney', '2a': 'payDate', '2b': 'payDate', '2c': 'payDate', '2d': 'noMoney',
-    '3': 'partial', '3a': 'discount', '4': 'otherMethod', '5': 'payFailed', '6': 'paid', '7': 'otherProblem', '7a': 'otherProblem',
+    '3': 'partial', '3a': 'discount', '5': 'payFailed', '6': 'paid', '7': 'otherProblem', '7a': 'otherProblem',
     '8a': 'tree', '8b': 'tree', '8c': 'tree',
     '7b': 'otherProblem', E1: 'otherProblem', E2: 'payDate', E3: 'start', E4: 'noMoney', E5: 'partial'
   };
@@ -4667,7 +4651,6 @@ button { font: inherit; color: inherit; }
     '2c': [['reasons', 'noMoney'], ['noMoney', 'payDate'], ['payDate', 'payDateDone', DEFAULT_DATE]],
     '3': [['reasons', 'amount']],
     '3a': [['reasons', 'amount']],
-    '4': [['reasons', 'otherMethod']],
     '5': [['reasons', 'payFailed']],
     '2d': [['reasons', 'noMoney'], ['noMoney', 'extend']],
     '7': [['reasons', 'otherProblem']],
