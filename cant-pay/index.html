@@ -3436,6 +3436,7 @@ button { font: inherit; color: inherit; }
     sentFailed: 'Не удалось отправить сообщение\u00A0🙏 Попробуйте ещё раз или позвоните по\u00A0номеру +7\u00A0(111)\u00A0111-11-11',
     sample: 'Банк отклоняет карту, а\u00A0других карт у\u00A0меня нет',
     placeholder: 'Опишите проблему',
+    casePlaceholder: 'Напишите номер', /* её экран 3641:23457: номер дела о банкротстве */
     notSent: 'Не отправлено. Нажмите, чтобы повторить',
     payAsk: 'Выберите, чем оплатить\u00A0👇',
     /* после выбора дня: просрочку можно остановить продлением (предложение коллег, её правка 20.10.2026) */
@@ -3577,8 +3578,11 @@ button { font: inherit; color: inherit; }
     treeCourt: { scenario: '8b', bot: [{ scene: 'court' }, T.court, T.court2, { info: 'court' }, T.courtEnd], chips: [OTHER_REASON], button: PAY_NOW },
     treeBankrupt: { scenario: '8c', bot: [{ scene: 'doubt' }, T.bankrupt], chips: [
       { label: 'Уже подал заявление', go: 'treeFiled' }, { label: 'Пока только думаю', go: 'treeThinking' }, OTHER_REASON] },
-    treeFiled: { scenario: '8c', bot: [T.filed, { info: 'treeFiled' }, T.filed2], options: SOLUTIONS, chips: [OTHER_REASON], /* её правка 21.10.2026: решения списком в чате */
-      button: { label: 'Написать в\u00A0поддержку', go: 'otherProblem' } },
+    /* её правка 21.10.2026: решения списком в чате; 29.10.2026 по её экранам 3641:23457 и 3967:59686 номер дела пишут прямо в чат,
+       он уходит уведомлением в отдельный чат Битрикса (её слова); после отправки поле пропадает, ответа бота нет */
+    treeFiled: { scenario: '8c', bot: [T.filed, { info: 'treeFiled' }, T.filed2], options: SOLUTIONS, chips: [OTHER_REASON],
+      input: true, inputPassive: true, placeholder: T.casePlaceholder },
+    treeFiledSent: { scenario: '8c', bot: [], chips: [OTHER_REASON] },
     treeThinking: { scenario: '8c', bot: [{ scene: 'scales' }, T.thinking, T.thinking2, { scene: 'solution' }, T.thinkingEnd, { info: 'treeThinking' }],
       options: SOLUTIONS, chips: [OTHER_REASON] }
   };
@@ -3855,8 +3859,9 @@ button { font: inherit; color: inherit; }
           '</div>' +
         '</div>';
       var input = $('[data-msg-input]', form);
-      input.placeholder = T.placeholder;
-      input.setAttribute('aria-label', T.placeholder);
+      input.placeholder = step.placeholder || T.placeholder;
+      input.setAttribute('aria-label', input.placeholder);
+      if (step.placeholder) $('.composer__attach', form).remove(); /* у номера дела в макете скрепки нет */
       repliesEl.appendChild(form);
     }
   }
@@ -3928,7 +3933,7 @@ button { font: inherit; color: inherit; }
     swapReplies(true);
     /* поле сообщения и клавиатура открываются сразу: системная клавиатура на телефоне
        открывается только из обработчика нажатия, на десктопе нарисованная ведёт себя так же */
-    if (step.input) { revealReplies(); openInput(); }
+    if (step.input && !step.inputPassive) { revealReplies(); openInput(); }
     state.pending = true;
     save();
     botSay(botTexts(step), function () { state.pending = false; save(); setPayLabel(step.payLabel); revealReplies(); });
@@ -3967,7 +3972,7 @@ button { font: inherit; color: inherit; }
       botSay(botTexts(step), function () { state.pending = false; save(); revealReplies(); });
     } else {
       revealReplies();
-      if (step.input) openInput();
+      if (step.input && !step.inputPassive) openInput();
     }
   }
   /* перезагрузка страницы в той же сессии: переписка собирается из сохранённой */
@@ -4082,6 +4087,7 @@ button { font: inherit; color: inherit; }
     input.blur();
     closeKb();
     say('client', text, true);
+    if (state.step === 'treeFiled') { state.step = 'treeFiledSent'; swapReplies(false); save(); return; } /* номер дела: уведомление в чат Битрикса */
     delivered();
   }
   /* её развилка «Пришёл тикет сообщения?» (27.10.2026): да — обращение передано, «Другая проблема» прячется на сутки;
@@ -4136,6 +4142,10 @@ button { font: inherit; color: inherit; }
     goStep(row.dataset.tree);
   });
   repliesEl.addEventListener('submit', function (e) { e.preventDefault(); send(); });
+  /* поле, которое не открывается само (номер дела), открывает клавиатуру по нажатию */
+  repliesEl.addEventListener('focusin', function (e) {
+    if (e.target.hasAttribute('data-msg-input') && !touch && (STEPS[state.step] || {}).inputPassive) openKb();
+  });
   repliesEl.addEventListener('input', function (e) {
     if (!e.target.hasAttribute('data-msg-input')) return;
     fitComposer();
@@ -4276,7 +4286,7 @@ button { font: inherit; color: inherit; }
     repliesEl.classList.remove('is-locked');
     setScenario(STEPS[state.step].scenario);
     openSheet();
-    if (STEPS[state.step].input) openInput();
+    if (STEPS[state.step].input && !STEPS[state.step].inputPassive) openInput();
   }
   stub.addEventListener('click', stubNext);
   stub.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); stubNext(); } });
@@ -4718,7 +4728,7 @@ button { font: inherit; color: inherit; }
         closeSheet(); /* день выбран, клиент вернулся в\u00A0кабинет */
       } else {
         openSheet();
-        if (STEPS[state.step].input) openInput();
+        if (STEPS[state.step].input && !STEPS[state.step].inputPassive) openInput();
       }
     }
     setScenario(id);
