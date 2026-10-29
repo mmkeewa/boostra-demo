@@ -2497,6 +2497,11 @@ button { font: inherit; color: inherit; }
 .chat-info--dates .ci-day:hover, .chat-info--dates .ci-day:focus-visible { outline: 2px solid var(--brand-secondary); outline-offset: -2px; }
 .ci-day__weekday { padding: var(--space-xs) 0; background: #b2d7ff; color: rgba(0, 91, 255, 0.7); } /* Brand/Secondary/30, Text & icons/Primary/Secondary: в токенах прототипа не заведены */
 .ci-day__num { padding: var(--space-sm) 0; color: var(--text-bottom-default); }
+/* Date tile, State=Inactive: сверху Neutral/Bottom/20, снизу Neutral/Bottom/10, текст Text & icons/Bottom/Quaternary */
+.chat-info--dates .ci-day:disabled { cursor: default; }
+.chat-info--dates .ci-day:disabled:hover { outline: 0; }
+.chat-info--dates .ci-day:disabled .ci-day__weekday { background: var(--neutral-bottom-20); color: var(--text-bottom-quaternary); }
+.chat-info--dates .ci-day:disabled .ci-day__num { background: var(--neutral-bottom-10); color: var(--text-bottom-quaternary); }
 
 /* Сумма частичной оплаты (🚧 Local Component/Amount field): подложка Radius/4xl, поля и гэп 12 / 8,
    Input / Input Medium (40, Radius 12, заливка Neutral/Bottom Alpha/5, нижняя линия Alpha/10), справа Button / Primary Large только с иконкой */
@@ -3298,7 +3303,9 @@ button { font: inherit; color: inherit; }
        на Brand/Secondary/30, снизу число на белом, тень Shadow/Floating/1 level */
     dates: function () {
       return '<span class="ci-months"><span class="t-caps-xsmall-strong cs-muted">Сентябрь</span><span class="t-caps-xsmall-strong cs-muted">Октябрь</span></span><span class="ci-days">' +
-        [['завтра', '29', '09'], ['вт', '30', '09'], ['ср', '01', '10'], ['чт', '02', '10'], ['пт', '03', '10']].map(function (d) {
+        [['завтра', '29', '09'], ['вт', '30', '09'], ['ср', '01', '10'], ['чт', '02', '10'], ['пт', '03', '10']].map(function (d, i) {
+          /* её правило 29.10.2026: оплату переносим не больше чем на 3 дня, остальные дни неактивны (Date tile, State=Inactive) */
+          if (i > 2) return '<button class="ci-day" type="button" data-state="inactive" disabled aria-disabled="true"><span class="ci-day__weekday t-caption">' + d[0] + '</span><span class="ci-day__num t-title-strong">' + d[1] + '</span></button>';
           return '<button class="ci-day" type="button" data-date="' + d[1] + '.' + d[2] + '"><span class="ci-day__weekday t-caption">' + d[0] + '</span><span class="ci-day__num t-title-strong">' + d[1] + '</span></button>';
         }).join('') + '</span>';
     },
@@ -3518,12 +3525,10 @@ button { font: inherit; color: inherit; }
     payDate: {
       /* дни выбираются в карточке внутри чата (Chat infographic, Type=Date picker; её правка 20.10.2026) */
       scenario: '2a', bot: [T.payDate, { info: 'dates' }],
-      dates: [ /* дни как в макете 27.10.2026 (2990:22570): завтра 29, вт 30, ср 01, чт 02, пт 03 */
+      dates: [ /* дни как в макете (2990:22570): выбрать можно завтра 29, вт 30, ср 01; чт 02 и пт 03 неактивны (её правило 29.10.2026: не больше 3 дней) */
         { label: '29.09', go: 'payDateDone', date: '29.09' },
         { label: '30.09', go: 'payDateDone', date: '30.09' },
-        { label: '01.10', go: 'payDateDone', date: '01.10' },
-        { label: '02.10', go: 'payDateDone', date: '02.10' },
-        { label: '03.10', go: 'payDateDone', date: '03.10' }
+        { label: '01.10', go: 'payDateDone', date: '01.10' }
       ],
       chips: [OTHER_REASON]
     },
