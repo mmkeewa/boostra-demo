@@ -2503,6 +2503,10 @@ button { font: inherit; color: inherit; }
   .tile-grid { flex: 0 0 auto; }
   .stand.is-panel-open .panel { transform: none; visibility: visible; transition: transform 0.25s ease, visibility 0s; }
   .stand.is-panel-open .panel-scrim { opacity: 1; pointer-events: auto; }
+  /* внутри стенда (док справа от карты) панели нет: версии переключает сам стенд (её просьба 2026-10-30) */
+  .is-embedded .panel-toggle,
+  .is-embedded .panel,
+  .is-embedded .panel-scrim { display: none; }
 }
 
 /* экран прототипа: высота статус-бара для шапки сайта из ../core2/proto.css; на телефоне статус-бар системный */
@@ -2566,7 +2570,7 @@ button { font: inherit; color: inherit; }
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
-  top: var(--comp-statusbar-h-dynamic-island); /* статус-бар в потоке: страница листается под хэдером, но не под статус-баром */
+  top: var(--status-h); /* статус-бар в потоке: страница листается под хэдером, но не под статус-баром */
   padding-top: calc(var(--hdr-h) + var(--space-lg)); /* Header spacer + Top gap */
 }
 .page::-webkit-scrollbar { display: none; }
@@ -2580,7 +2584,7 @@ button { font: inherit; color: inherit; }
    Панель: Surface Lvl 3 Peak, Radius/4xl, Shadow/Floating/1 level, ряд с паддингом 8.
    Меню ☰ слева только до авторизации; после — логотип у левого края, справа выход */
 .hdr { width: 100%; padding: var(--space-lg) var(--space-lg) 0; }
-.hdr--fixed { position: absolute; top: var(--comp-statusbar-h-dynamic-island); left: 0; right: 0; z-index: 30; pointer-events: none; }
+.hdr--fixed { position: absolute; top: var(--status-h); left: 0; right: 0; z-index: 30; pointer-events: none; }
 .hdr--fixed > * { pointer-events: auto; }
 .screen[data-mode="auth"] .hdr--fixed { display: none; }
 .hdr__panel {
@@ -2612,7 +2616,7 @@ button { font: inherit; color: inherit; }
 .screen[data-mode="lk"] #menuBtn { display: none; }
 
 /* ---------- Бургер (1361:115827): каталог аккордеоном и контакты внизу ---------- */
-.menu { display: flex; flex-direction: column; max-height: calc(812px - var(--comp-statusbar-h-dynamic-island) - var(--space-lg) - 68px - var(--space-lg)); border-top: 1px solid var(--neutral-bottom-alpha-10); }
+.menu { display: flex; flex-direction: column; max-height: calc(812px - var(--status-h) - var(--space-lg) - 68px - var(--space-lg)); border-top: 1px solid var(--neutral-bottom-alpha-10); }
 .menu[hidden] { display: none; }
 .menu__scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: var(--space-md); scrollbar-width: thin; }
 .menu__title { padding: 14px var(--space-lg) var(--space-sm) var(--space-md); color: var(--neutral-bottom-alpha-30); font-family: var(--note-medium-font-family); font-weight: var(--note-medium-font-weight); font-size: var(--note-medium-size); line-height: var(--note-medium-line-height); text-transform: uppercase; }
@@ -2972,7 +2976,7 @@ button { font: inherit; color: inherit; }
 /* ---------- Toast «Вы вошли в личный кабинет» (Toast, Type=Success, Colored=on) ---------- */
 .lk-toast {
   position: absolute; left: var(--space-lg); right: var(--space-lg);
-  top: calc(var(--comp-statusbar-h-dynamic-island) + var(--hdr-h) + var(--space-lg));
+  top: calc(var(--status-h) + var(--hdr-h) + var(--space-lg));
   z-index: 50;
   display: flex; align-items: flex-start; gap: var(--space-sm);
   padding: var(--space-lg);
@@ -3978,6 +3982,7 @@ button { font: inherit; color: inherit; }
   });
 
   /* ---------- Правая панель на телефоне ---------- */
+  try { if (window.parent !== window) document.documentElement.classList.add('is-embedded'); } catch (e) {}
   var panel = $('#panel'), scrim = $('#panelScrim'), toggle = $('#panelToggle');
   var stand = $('#stand');
   function setPanel(open) { stand.classList.toggle('is-panel-open', open); toggle.setAttribute('aria-expanded', open); }
