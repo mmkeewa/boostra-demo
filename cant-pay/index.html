@@ -2195,7 +2195,9 @@ button { font: inherit; color: inherit; }
 }
 .chat-scene[data-tone="secondary"] { background: var(--brand-secondary-5); }
 .chat-scene[data-tone="success"] { background: var(--brand-success-5); }
-.chat-scene > * { position: absolute; }
+.chat-scene { width: auto; align-self: stretch; margin-left: 0; } /* во всю ширину переписки, как баннеры и инфографика (её правка 30.10.2026) */
+.cs-stage { position: absolute; top: 0; left: 50%; width: 280px; height: 128px; margin-left: -140px; } /* композиция сцены 280 × 128 по центру растянутой подложки */
+.cs-stage > * { position: absolute; }
 /* петля кадров A ↔ B как Smart animate в Figma: A держится 0,6 с, переход 1,2 с, B держится 0,6 с, обратно 1,2 с */
 .cs-float {
   --dx: 0px; --dy: 0px; --r0: 0deg; --r1: var(--r0); --s1: 1;
@@ -3209,7 +3211,7 @@ button { font: inherit; color: inherit; }
     el.dataset.tone = s.tone;
     el.setAttribute('role', 'img');
     el.setAttribute('aria-label', s.label);
-    el.innerHTML = s.html();
+    el.innerHTML = '<div class="cs-stage">' + s.html() + '</div>';
     return el;
   }
 
