@@ -3218,9 +3218,9 @@ button { font: inherit; color: inherit; }
   var INFO = {
     years: function () {
       var seg = ''; for (var i = 0; i < 7; i += 1) seg += '<i></i>';
-      return '<span class="t-caps-xsmall-strong cs-error">Кредитная история</span>' +
+      return '<span class="t-caps-xsmall-strong cs-error">Срок хранения просрочки</span>' +
         '<span class="t-h1-strong cs-error">7 лет</span>' +
-        '<p class="t-note">столько хранится запись о просрочке. Её видят все, кто проверяет вашу историю</p>' +
+        '<p class="t-note">Её видят все, кто проверяет вашу историю</p>' +
         '<span class="ci-segments">' + seg + '</span>' +
         '<span class="ci-row t-caption cs-muted"><span>2026</span><span>2033</span></span>';
     },
@@ -3236,7 +3236,7 @@ button { font: inherit; color: inherit; }
           ['30', 'С 1-го дня', 'Просрочка в бюро кредитных историй'],
           ['50', 'Дальше', 'Звонки, сообщения и письма'],
           ['70', 'Затем', 'Коллекторы и личные встречи'],
-          ['error', 'Суд', 'Госпошлина и исполнительский сбор'],
+          ['error', 'Суд', 'Госпошлина и сбор приставов'],
           ['deep', 'Приставы', 'Арест счетов и запрет выезда']
         ].map(function (r) {
           return '<li><i data-step="' + r[0] + '"></i><span><span class="t-caption cs-error">' + r[1] + '</span><span class="t-note-medium">' + r[2] + '</span></span></li>';
@@ -3433,8 +3433,9 @@ button { font: inherit; color: inherit; }
     /* её тексты 27.10.2026: после отправки создаётся тикет в поддержку, номер обращения условный */
     sent: 'Спасибо, что поделились\u00A0🙏 Мы передали ваше обращение №1234567 в\u00A0поддержку',
     /* тикет не пришёл (её развилка «Пришёл тикет сообщения?» → «Нет»): кнопка «Другая проблема» остаётся, номер телефона условный */
-    sentFailed: 'Не удалось отправить сообщение\u00A0🙏 Попробуйте ещё раз или позвоните по\u00A0номеру +7\u00A0(111)\u00A0111-11-11',
+    sentFailed: 'Не удалось отправить сообщение\u00A0🙏 Попробуйте ещё раз или позвоните по\u00A0номеру 8\u00A0800\u00A0333\u00A030\u00A073', /* номер с её экрана 3857:42163 */
     sample: 'Банк отклоняет карту, а\u00A0других карт у\u00A0меня нет',
+    sampleSent: 'Мне подключили дополнительные услуги, с\u00A0суммой не\u00A0согласен', /* её экраны 7a и 7b (3002:12886, 3857:42163); у E1 прежний пример */
     placeholder: 'Опишите проблему',
     casePlaceholder: 'Напишите номер', /* её экран 3641:23457: номер дела о банкротстве */
     notSent: 'Не отправлено. Нажмите, чтобы повторить',
@@ -4130,7 +4131,7 @@ button { font: inherit; color: inherit; }
     }
     var offer = e.target.closest('[data-offer]');
     if (offer && !state.pending && !state.stub) {
-      say('client', 'Оплатить со\u00A0скидкой 60\u00A0000\u00A0₽', true); /* её Figma 27.10.2026 (3811:36568) */
+      say('client', 'Оплатить 60\u00A0000\u00A0₽', true); /* её Figma 27.10.2026 (3811:36568) */
       goStep('payDiscount'); /* её схема 27.10.2026: со скидки тоже через выбор способа оплаты (стрелка в секцию «Выбор способа оплаты») */
       return;
     }
@@ -4717,7 +4718,7 @@ button { font: inherit; color: inherit; }
         botTexts(STEPS[state.step]).forEach(function (t) { say('bot', t, false); });
       }
       if (id === '7a' || id === '7b') {
-        say('client', T.sample, false);
+        say('client', T.sampleSent, false);
         if (id === '7a') hideOtherProblem();
         state.step = id === '7a' ? 'otherProblemSent' : 'otherProblemFailed';
         botTexts(STEPS[state.step]).forEach(function (t) { say('bot', t, false); });
