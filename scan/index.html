@@ -3324,6 +3324,80 @@ button.text-field__box:focus-visible {
 
 </style>
 <style>
+/* ===== Плитка «Сценарий» на дашбордах прототипов: эталон (её решение 2026-11-02, образец scan/) =====
+   Слева вертикальный флоу: точки основного пути соединены линией, ответвления под пунктиром (.flow-steps__side),
+   группы со своей подписью (.flow-group__label). Справа красный блок «Ошибки» с группами. Под ними описание шага
+   и что дальше. Каждый пункт нажимается всегда и открывает свой экран в прототипе.
+   Разметка:
+     .scenario-body.scenario-body--split
+       .flow-col > p.tile__label «Флоу» + ol.flow-steps > li > button.flow-step[data-scenario] > .flow-step__dot + .flow-step__label
+       .errors-block > p.errors-block__title + .errors-group > p.errors-group__label + button.error-item[data-scenario]
+     .scenario-desc > p.t-note#scenarioText + p.t-caption#scenarioNext
+   Выбранный пункт: aria-pressed="true". Цвета считаются от --text-bottom-default, поэтому читаются и на тёмном стекле,
+   и на светлой панели телефона. */
+
+.scenario-body--split { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: start; }
+.flow-col { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; }
+.flow-col > .tile__label { margin: 0; }
+/* группы ответвлений со своей подписью: p.flow-group__label + ol.flow-steps.flow-steps--side (точки без линии) */
+.flow-group__label { margin: var(--space-xs) 0 0; padding-top: var(--space-md); border-top: 1px dashed color-mix(in srgb, var(--text-bottom-default) 16%, transparent); color: var(--text-bottom-tertiary); }
+.flow-steps--side li::after { content: none !important; }
+.flow-steps { position: relative; display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.flow-steps li { position: relative; }
+/* линия между точками основного пути: под каждым шагом, за которым идёт ещё один шаг основного пути */
+.flow-steps li:not(.flow-steps__side):has(+ li:not(.flow-steps__side))::after {
+  content: ""; position: absolute; left: 11px; top: 26px; bottom: -6px; width: 2px; border-radius: 1px;
+  background: color-mix(in srgb, var(--text-bottom-default) 20%, transparent);
+}
+.flow-steps__side { margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px dashed color-mix(in srgb, var(--text-bottom-default) 16%, transparent); }
+.flow-steps__side + .flow-steps__side { margin-top: 0; padding-top: 0; border-top: 0; }
+.flow-step { display: flex; align-items: center; gap: var(--space-sm); width: 100%; padding: 6px var(--space-sm) 6px 4px; border: 0; border-radius: var(--radius-lg, 12px); background: none; color: inherit; text-align: left; cursor: pointer; font: inherit; }
+.flow-step:hover { background: color-mix(in srgb, var(--text-bottom-default) 8%, transparent); }
+.flow-step__dot { flex: none; width: 16px; height: 16px; margin: 0 2px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--text-bottom-default) 40%, transparent); background: transparent; }
+.flow-step__label { color: var(--text-bottom-secondary); }
+.flow-step[aria-pressed="true"] { background: color-mix(in srgb, var(--text-bottom-default) 12%, transparent); }
+.flow-step[aria-pressed="true"] .flow-step__dot { border-color: var(--palette-secondary-9, #0072eb); background: var(--palette-secondary-9, #0072eb); box-shadow: 0 0 0 4px rgba(0, 114, 235, .25); }
+.flow-step[aria-pressed="true"] .flow-step__label { color: var(--text-bottom-default); }
+
+.errors-block { display: flex; flex-direction: column; gap: var(--space-md); min-width: 0; padding: var(--space-md); border-radius: var(--radius-2xl, 16px); background: rgba(255, 2, 57, .12); box-shadow: inset 0 0 0 1px rgba(255, 2, 57, .4); }
+.errors-block__title { margin: 0; color: color-mix(in srgb, #ff0239 70%, var(--text-bottom-default)); font-weight: 600; }
+.errors-group { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.errors-group__label { flex: 0 0 100%; margin: 0; color: var(--text-bottom-tertiary); }
+.error-item { padding: 6px 12px; border: 0; border-radius: 999px; background: rgba(255, 2, 57, .16); color: color-mix(in srgb, #ff0239 35%, var(--text-bottom-default)); cursor: pointer; font: inherit; text-align: left; }
+.error-item:hover { background: rgba(255, 2, 57, .28); }
+.error-item[aria-pressed="true"] { background: var(--palette-error-9, #ff0239); color: #fff; }
+
+.scenario-desc { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; margin: 0; }
+.scenario-desc p { margin: 0; }
+.scenario-desc .t-caption { color: var(--text-bottom-tertiary); }
+
+@media (max-width: 1279px) { .scenario-body--split { grid-template-columns: minmax(0, 1fr); } }
+
+</style>
+<style>
+/* ===== Плитка «Аналитика»: таблица метрика · % · период (её просьба 2026-11-02) =====
+   Снимки дописываются в <папка>/metrics.js, таблицу рисует ../core2/metrics-table.js в #metricsTable.
+   У метрики сначала свежий период, ниже прошлые; рядом с процентом разница с прошлым снимком:
+   зелёная, если стало лучше, красная, если хуже. */
+.tile--metrics { grid-column: 1 / -1; display: flex; flex-direction: column; gap: var(--space-sm); }
+.metrics-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.metrics-table th, .metrics-table td { padding: var(--space-xs) 0; text-align: left; font-weight: inherit; vertical-align: baseline; }
+.metrics-table th + th, .metrics-table td, .metrics-table tbody th + td { padding-left: var(--space-md); }
+.metrics-table thead th { color: var(--text-bottom-tertiary); }
+.metrics-table tbody tr { border-top: 1px solid color-mix(in srgb, var(--text-bottom-default) 12%, transparent); }
+.metrics-table tbody tr.is-older { border-top-style: dashed; }
+.metrics-table tbody th { color: var(--text-bottom-default); }
+.metrics-table__value { white-space: nowrap; color: var(--text-bottom-default); font-weight: 600; }
+.metrics-table tr.is-older .metrics-table__value { color: var(--text-bottom-secondary); font-weight: inherit; }
+.metrics-table__period { white-space: nowrap; color: var(--text-bottom-secondary); }
+.metrics-table__delta { margin-left: var(--space-xs); font-weight: 600; }
+.metrics-table__delta[data-tone="good"] { color: #2fbf71; }
+.metrics-table__delta[data-tone="bad"] { color: #ff4d6d; }
+.metrics-table__delta[data-tone="flat"] { color: var(--text-bottom-tertiary); }
+.metrics-empty { margin: 0; color: var(--text-bottom-secondary); }
+
+</style>
+<style>
 /* ===== Boostra · «Сканирование паспорта» (93123) · экран в рамке и плитки дашборда =====
    Оболочка (сетка, плитки, рамка телефона) в shell.css, тёмное стекло в glass.css: обе копии из timer/.
    Здесь только то, что нужно скану: фон экрана как без оболочки, индикатор «домой» на камере, фильтры, теги, малые плитки, код доступа. */
@@ -3333,37 +3407,9 @@ button.text-field__box:focus-visible {
 /* камера во весь экран тёмная: индикатор «домой» светлый */
 .screen[data-view="camera"] .home-indicator::before { background: var(--always-peak-alpha); }
 
-/* ---------- Плитка «Сценарий»: слева вертикальный флоу, справа красный блок «Ошибки» (её просьба 2026-10-22) ---------- */
-.scenario-body--scan { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: start; }
-.flow-col { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; }
-.flow-steps { position: relative; display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
-.flow-steps li { position: relative; }
-/* линия флоу между точками основного пути */
-.flow-steps li:not(.flow-steps__side):not(:nth-last-child(2))::after { content: ""; position: absolute; left: 11px; top: 26px; bottom: -6px; width: 2px; border-radius: 1px; background: rgba(255, 255, 255, .2); }
-.flow-steps__side { margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px dashed rgba(255, 255, 255, .16); }
-.flow-step { display: flex; align-items: center; gap: var(--space-sm); width: 100%; padding: 6px var(--space-sm) 6px 4px; border: 0; border-radius: var(--radius-lg, 12px); background: none; color: inherit; text-align: left; cursor: pointer; font: inherit; }
-.flow-step:hover { background: rgba(255, 255, 255, .08); }
-.flow-step__dot { flex: none; width: 16px; height: 16px; margin: 0 2px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .4); background: transparent; }
-.flow-step__label { color: var(--text-bottom-secondary); }
-.flow-step[aria-pressed="true"] { background: rgba(255, 255, 255, .12); }
-.flow-step[aria-pressed="true"] .flow-step__dot { border-color: var(--palette-secondary-9, #0072eb); background: var(--palette-secondary-9, #0072eb); box-shadow: 0 0 0 4px rgba(0, 114, 235, .25); }
-.flow-step[aria-pressed="true"] .flow-step__label { color: var(--text-bottom-default); }
+/* ---------- Плитка «Сценарий»: общая, ../core2/scenario-tile.css (эталон 2026-11-02) ---------- */
 
-.errors-block { display: flex; flex-direction: column; gap: var(--space-md); min-width: 0; padding: var(--space-md); border-radius: var(--radius-2xl, 16px); background: rgba(255, 2, 57, .12); box-shadow: inset 0 0 0 1px rgba(255, 2, 57, .4); }
-.errors-block__title { margin: 0; color: #ff6b86; font-weight: 600; }
-.errors-group { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-.errors-group__label { flex: 0 0 100%; margin: 0; color: rgba(255, 255, 255, .56); }
-.error-item { padding: 6px 12px; border: 0; border-radius: 999px; background: rgba(255, 2, 57, .16); color: #ffd1da; cursor: pointer; font: inherit; text-align: left; }
-.error-item:hover { background: rgba(255, 2, 57, .28); }
-.error-item[aria-pressed="true"] { background: var(--palette-error-9, #ff0239); color: #fff; }
-
-.scenario-desc { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; margin: 0; }
-.scenario-desc p { margin: 0; }
-.scenario-desc .t-caption { color: var(--text-bottom-tertiary); }
-
-/* ---------- Плитка «Сейчас» ---------- */
-.stat__value { align-items: baseline; }
-@media (max-width: 1279px) { .scenario-body--scan { grid-template-columns: minmax(0, 1fr); } }
+/* ---------- Плитка «Аналитика»: общая таблица, ../core2/metrics-table.css ---------- */
 
 /* ---------- Код доступа (как в timer/) ---------- */
 .gate { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: var(--space-2xl); background: #000; }
@@ -3778,7 +3824,7 @@ button.text-field__box:focus-visible {
           <p class="tile__label scenario-head__label t-caption" id="scenarioLabel">Сценарий</p>
           <h2 class="scenario-head__title" id="scenarioTitle" aria-live="polite">Интро</h2>
         </header>
-        <div class="scenario-body scenario-body--scan">
+        <div class="scenario-body scenario-body--split">
           <div class="flow-col">
             <p class="tile__label t-caption">Флоу</p>
             <ol class="flow-steps" id="flowSteps"><li><button class="flow-step" type="button" data-scenario="scanIntro" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Интро</span></button></li><li><button class="flow-step" type="button" data-scenario="scanPermission" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Доступ к&nbsp;камере</span></button></li><li><button class="flow-step" type="button" data-scenario="scanCamera" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Камера</span></button></li><li><button class="flow-step" type="button" data-scenario="scanRecognizing" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Распознавание</span></button></li><li><button class="flow-step" type="button" data-scenario="checkData" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Проверьте данные</span></button></li><li><button class="flow-step" type="button" data-scenario="scanDone" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Работа и&nbsp;доход</span></button></li><li class="flow-steps__side"><button class="flow-step" type="button" data-scenario="scanGallery" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Выбор из&nbsp;галереи</span></button></li><li class="flow-steps__side"><button class="flow-step" type="button" data-scenario="manualData" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">Ручной ввод, если пропустил скан</span></button></li></ol>
@@ -3794,16 +3840,89 @@ button.text-field__box:focus-visible {
         </div>
       </section>
 
-      <section class="tile tile--stat" id="tileNow" aria-labelledby="nowTitle">
-        <header class="stat__head"><h3 class="stat__title" id="nowTitle">Сейчас</h3></header>
-        <p class="stat__value"><span class="stat__number">~68%</span><span class="stat__caption t-note">доходят до&nbsp;конца анкеты</span></p>
-        <p class="stat__text t-note">Контакты 93,5%, паспорт и&nbsp;прописка 82,1%, работа и&nbsp;доход 89%</p>
-        <p class="tile__caption t-caption">НК, 15–28&nbsp;сентября 2026, Метрика</p>
+      <section class="tile tile--metrics" id="tileMetrics" aria-labelledby="metricsTitle">
+        <header class="stat__head"><h3 class="stat__title" id="metricsTitle">Аналитика</h3></header>
+        <div id="metricsTable"></div>
+        <p class="tile__caption t-caption" id="metricsSource"></p>
       </section>
     </aside>
   </div>
 </div>
 
+<script>
+/* ===== Аналитика «Сканирования паспорта» (93123) для плитки «Аналитика» =====
+   Таблицу рисует ../core2/metrics-table.js. Новый снимок: строка с тем же названием метрики и своим периодом
+   (лучше неделя, пн–вс), старые строки не трогаем: так видно, стало лучше или хуже.
+   Доля шага = закончили шаг ÷ открыли шаг; «Доходят до конца анкеты» = произведение трёх шагов. */
+window.PROTO_METRICS = {
+  source: 'НК, Яндекс Метрика',
+  rows: [
+    { metric: 'Доходят до конца анкеты', from: '2026-09-15', to: '2026-09-28', value: 68.3 },
+    { metric: 'Контакты', from: '2026-09-15', to: '2026-09-28', value: 93.5 },
+    { metric: 'Паспорт и прописка', from: '2026-09-15', to: '2026-09-28', value: 82.1 },
+    { metric: 'Работа и доход', from: '2026-09-15', to: '2026-09-28', value: 89 }
+  ]
+};
+
+</script>
+<script>
+/* ===== Плитка «Аналитика»: таблица метрика · % · период (её просьба 2026-11-02) =====
+   Данные в <папка>/metrics.js:
+     window.PROTO_METRICS = {
+       source: 'НК, Метрика',
+       rows: [ { metric: 'Название', from: 'ГГГГ-ММ-ДД', to: 'ГГГГ-ММ-ДД', value: 68.3, better: 'up' | 'down' } ]
+     };
+   Новый снимок = новая строка с тем же названием метрики и своим периодом (лучше неделя, пн–вс).
+   better: 'down' у метрик, где меньше значит лучше (например, доля ушедших); по умолчанию 'up'.
+   Порядок метрик как в файле, у каждой сначала свежий период, ниже прошлые. */
+(function () {
+  'use strict';
+  var NB = ' ';
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function num(v) { return String(Math.round(v * 10) / 10).replace('.', ','); }
+  function period(from, to) {
+    var a = from.split('-'), b = to.split('-');
+    if (from === to) return b[2] + '.' + b[1] + '.' + b[0];
+    if (a[0] === b[0] && a[1] === b[1]) return a[2] + '–' + b[2] + '.' + b[1] + '.' + b[0];
+    if (a[0] === b[0]) return a[2] + '.' + a[1] + '–' + b[2] + '.' + b[1] + '.' + b[0];
+    return a[2] + '.' + a[1] + '.' + a[0] + '–' + b[2] + '.' + b[1] + '.' + b[0];
+  }
+  function render(el, data) {
+    var rows = (data && data.rows) || [];
+    if (!rows.length) { el.innerHTML = '<p class="metrics-empty t-note">Замеров пока нет</p>'; return; }
+    var order = [], by = {};
+    rows.forEach(function (r) { if (!by[r.metric]) { by[r.metric] = []; order.push(r.metric); } by[r.metric].push(r); });
+    var html = '<table class="metrics-table t-note"><thead><tr><th scope="col" class="t-caption">Метрика</th><th scope="col" class="t-caption">%</th><th scope="col" class="t-caption">Период</th></tr></thead><tbody>';
+    order.forEach(function (m) {
+      var list = by[m].slice().sort(function (x, y) { return x.to < y.to ? 1 : x.to > y.to ? -1 : 0; });
+      list.forEach(function (r, i) {
+        var prev = list[i + 1], delta = '';
+        if (prev) {
+          var d = Math.round((r.value - prev.value) * 10) / 10;
+          var good = (r.better || 'up') === 'down' ? d < 0 : d > 0;
+          delta = d === 0
+            ? '<span class="metrics-table__delta" data-tone="flat">=</span>'
+            : '<span class="metrics-table__delta" data-tone="' + (good ? 'good' : 'bad') + '">' + (d > 0 ? '▲' : '▼') + NB + num(Math.abs(d)) + '</span>';
+        }
+        html += '<tr' + (i ? ' class="is-older"' : '') + '>' +
+          '<th scope="row">' + (i ? '' : esc(m)) + '</th>' +
+          '<td><span class="metrics-table__value">' + num(r.value) + '%</span>' + delta + '</td>' +
+          '<td class="metrics-table__period">' + period(r.from, r.to) + '</td></tr>';
+      });
+    });
+    el.innerHTML = html + '</tbody></table>';
+  }
+  function mount() {
+    var el = document.getElementById('metricsTable'); if (!el) return;
+    render(el, window.PROTO_METRICS);
+    var src = document.getElementById('metricsSource');
+    if (src && window.PROTO_METRICS && window.PROTO_METRICS.source) src.textContent = window.PROTO_METRICS.source;
+  }
+  window.ProtoMetrics = { render: render };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
+})();
+
+</script>
 <script>
 /* ===== Boostra · «Сканирование паспорта» (93123) · оболочка дашборда =====
    Код доступа 93123, масштаб телефона fit(), теги шагов, фильтры «Результат снимка» и «Распознали неуверенно», панель на узкой ширине.

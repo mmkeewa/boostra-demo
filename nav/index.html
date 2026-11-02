@@ -2517,6 +2517,57 @@ button { font: inherit; color: inherit; }
 
 </style>
 <style>
+/* ===== Плитка «Сценарий» на дашбордах прототипов: эталон (её решение 2026-11-02, образец scan/) =====
+   Слева вертикальный флоу: точки основного пути соединены линией, ответвления под пунктиром (.flow-steps__side),
+   группы со своей подписью (.flow-group__label). Справа красный блок «Ошибки» с группами. Под ними описание шага
+   и что дальше. Каждый пункт нажимается всегда и открывает свой экран в прототипе.
+   Разметка:
+     .scenario-body.scenario-body--split
+       .flow-col > p.tile__label «Флоу» + ol.flow-steps > li > button.flow-step[data-scenario] > .flow-step__dot + .flow-step__label
+       .errors-block > p.errors-block__title + .errors-group > p.errors-group__label + button.error-item[data-scenario]
+     .scenario-desc > p.t-note#scenarioText + p.t-caption#scenarioNext
+   Выбранный пункт: aria-pressed="true". Цвета считаются от --text-bottom-default, поэтому читаются и на тёмном стекле,
+   и на светлой панели телефона. */
+
+.scenario-body--split { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: start; }
+.flow-col { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; }
+.flow-col > .tile__label { margin: 0; }
+/* группы ответвлений со своей подписью: p.flow-group__label + ol.flow-steps.flow-steps--side (точки без линии) */
+.flow-group__label { margin: var(--space-xs) 0 0; padding-top: var(--space-md); border-top: 1px dashed color-mix(in srgb, var(--text-bottom-default) 16%, transparent); color: var(--text-bottom-tertiary); }
+.flow-steps--side li::after { content: none !important; }
+.flow-steps { position: relative; display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.flow-steps li { position: relative; }
+/* линия между точками основного пути: под каждым шагом, за которым идёт ещё один шаг основного пути */
+.flow-steps li:not(.flow-steps__side):has(+ li:not(.flow-steps__side))::after {
+  content: ""; position: absolute; left: 11px; top: 26px; bottom: -6px; width: 2px; border-radius: 1px;
+  background: color-mix(in srgb, var(--text-bottom-default) 20%, transparent);
+}
+.flow-steps__side { margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px dashed color-mix(in srgb, var(--text-bottom-default) 16%, transparent); }
+.flow-steps__side + .flow-steps__side { margin-top: 0; padding-top: 0; border-top: 0; }
+.flow-step { display: flex; align-items: center; gap: var(--space-sm); width: 100%; padding: 6px var(--space-sm) 6px 4px; border: 0; border-radius: var(--radius-lg, 12px); background: none; color: inherit; text-align: left; cursor: pointer; font: inherit; }
+.flow-step:hover { background: color-mix(in srgb, var(--text-bottom-default) 8%, transparent); }
+.flow-step__dot { flex: none; width: 16px; height: 16px; margin: 0 2px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--text-bottom-default) 40%, transparent); background: transparent; }
+.flow-step__label { color: var(--text-bottom-secondary); }
+.flow-step[aria-pressed="true"] { background: color-mix(in srgb, var(--text-bottom-default) 12%, transparent); }
+.flow-step[aria-pressed="true"] .flow-step__dot { border-color: var(--palette-secondary-9, #0072eb); background: var(--palette-secondary-9, #0072eb); box-shadow: 0 0 0 4px rgba(0, 114, 235, .25); }
+.flow-step[aria-pressed="true"] .flow-step__label { color: var(--text-bottom-default); }
+
+.errors-block { display: flex; flex-direction: column; gap: var(--space-md); min-width: 0; padding: var(--space-md); border-radius: var(--radius-2xl, 16px); background: rgba(255, 2, 57, .12); box-shadow: inset 0 0 0 1px rgba(255, 2, 57, .4); }
+.errors-block__title { margin: 0; color: color-mix(in srgb, #ff0239 70%, var(--text-bottom-default)); font-weight: 600; }
+.errors-group { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.errors-group__label { flex: 0 0 100%; margin: 0; color: var(--text-bottom-tertiary); }
+.error-item { padding: 6px 12px; border: 0; border-radius: 999px; background: rgba(255, 2, 57, .16); color: color-mix(in srgb, #ff0239 35%, var(--text-bottom-default)); cursor: pointer; font: inherit; text-align: left; }
+.error-item:hover { background: rgba(255, 2, 57, .28); }
+.error-item[aria-pressed="true"] { background: var(--palette-error-9, #ff0239); color: #fff; }
+
+.scenario-desc { display: flex; flex-direction: column; gap: var(--space-sm); min-width: 0; margin: 0; }
+.scenario-desc p { margin: 0; }
+.scenario-desc .t-caption { color: var(--text-bottom-tertiary); }
+
+@media (max-width: 1279px) { .scenario-body--split { grid-template-columns: minmax(0, 1fr); } }
+
+</style>
+<style>
 /* ===== Boostra · «Хэдер, футер и нижняя панель» · экран телефона =====
    Макеты: FTM Constructor (6NeeLw4mvvBnW64r1pnZRd). Значения сняты get_design_context, размеры и цвета на токенах ДС
    из ../core2/tokens.css; числом только то, что в макете тоже число (помечено «нет токена»).
@@ -3488,17 +3539,17 @@ button { font: inherit; color: inherit; }
       <section class="tile tile--scenario" aria-labelledby="scenarioLabel">
         <header class="scenario-head">
           <p class="tile__label scenario-head__label t-caption" id="scenarioLabel">Сценарий</p>
-          <div class="scenario-switches">
-            <div class="segmented-control" id="modeSwitch" role="group" aria-label="Состояние" data-size-segmented-control="40">
-              <button class="segment" type="button" data-mode="guest" aria-pressed="true">До&nbsp;входа</button>
-              <button class="segment" type="button" data-mode="auth" aria-pressed="false">Вход</button>
-              <button class="segment" type="button" data-mode="lk" aria-pressed="false">После входа</button>
-            </div>
-          </div>
           <h2 class="scenario-head__title" id="scenarioTitle" aria-live="polite">Главная</h2>
         </header>
-        <div class="scenario-tags scenario-tags--flow" id="scenarioChips" role="group" aria-labelledby="scenarioLabel"></div>
-        <p class="t-note scenario-text" id="scenarioText"></p>
+        <!-- эталон плитки «Сценарий» (её решение 2026-11-02): флоу слева, ошибки справа, разметку пунктов рисует app.js -->
+        <div class="scenario-body scenario-body--split">
+          <div class="flow-col" id="flowSteps"></div>
+          <div class="errors-block" id="errorsBlock" role="group" aria-label="Ошибки"></div>
+        </div>
+        <div class="scenario-desc">
+          <p class="t-note" id="scenarioText"></p>
+          <p class="t-caption" id="scenarioNext"></p>
+        </div>
       </section>
 
       <div class="tile-grid tile-grid--rules">
@@ -3704,25 +3755,32 @@ button { font: inherit; color: inherit; }
   var tabMain = $('#tabMain'), tabLk = $('#tabLk'), blanket = $('#blanket'), menu = $('#menu'), menuScrim = $('#menuScrim');
   var toastTimer = null, miniTimer = null;
 
+  /* Шаги прототипа: title в заголовке плитки, label во флоу (если отличается), text что происходит, next что дальше.
+     Ошибки входа открываются из красного блока: тот же экран входа с заполненной формой и нажатой «Получить код». */
   var STEPS = {
-    home:   { mode: 'guest', title: 'Главная', text: 'Хэдер прибит сверху, контент уходит под него. Внизу пилюля «Чат». Пролистайте страницу: кнопки входа прикрепятся к низу и пойдут за вами' },
-    scroll: { mode: 'guest', title: 'Скролл главной', text: 'Кнопки калькулятора ушли под хэдер, ещё 300 px вниз: пилюля «Чат» раскрылась в кнопки входа, над ней промо Госуслуг. Пролистайте вверх, и панель свернётся обратно' },
-    menu:   { mode: 'guest', title: 'Бургер', text: 'Меню раскрывается внутри панели хэдера, каталог листается. Разделы аккордеоном, открыт один. Внизу контакты и «Получить заём бесплатно». Нажмите на маршрут, чтобы открыть страницу' },
-    route:  { mode: 'guest', title: 'Страница из меню', text: 'Любой маршрут до авторизации: тот же хэдер, нижняя панель и футер до авторизации внизу страницы' },
-    chat:   { mode: 'guest', title: 'Чат до входа', text: 'Окно чата поднимается из-за нижней панели, страница под затемнением. Повторное нажатие на «Чат» или на затемнение закрывает окно' },
-    login:  { mode: 'auth', title: 'Вход', text: 'Во время авторизации хэдер без меню стоит в потоке и уходит вместе со страницей. Футера и нижней панели нет. Введите номер, отметьте согласие и получите код' },
-    code:   { mode: 'auth', title: 'Код из СМС', text: 'Экрана кода в макете нет: каркас тот же, что у входа. Подойдёт любой код из 4 цифр, после него личный кабинет' },
-    loan:   { mode: 'lk', tab: 'loan', title: 'Заём', text: 'После входа тост «Вы вошли в личный кабинет». Хэдер: логотип и выход. Кнопка «Перейти к оплате» прикреплена к табам и идёт за клиентом. Внизу страницы футер после авторизации' },
-    lkchat: { mode: 'lk', tab: 'lkchat', title: 'Чат', text: 'Окно чата поднимается из-за панели и перекрывает хэдер. Табы остаются' },
-    gpt:    { mode: 'lk', tab: 'gpt', title: 'GPT', text: 'Окно ассистента «Вера» поднимается из-за панели, как чат' },
-    card:   { mode: 'lk', tab: 'card', title: 'Карта', text: 'Страница карты: над табами ничего нет. Содержимое в макете растром' },
-    more:   { mode: 'lk', tab: 'more', title: 'Ещё', text: 'Список разделов кабинета. Разделы ведут на страницы, которые пока старые (как сейчас): новый хэдер, табы и футер после авторизации вокруг старого содержимого' }
+    home:   { mode: 'guest', title: 'Главная', text: 'Хэдер прибит сверху, контент уходит под него. Внизу пилюля «Чат».', next: 'Пролистайте страницу: кнопки входа прикрепятся к низу и пойдут за вами.' },
+    scroll: { mode: 'guest', title: 'Скролл главной', text: 'Кнопки калькулятора ушли под хэдер, и после ещё 300 px пилюля «Чат» раскрылась в кнопки входа, над ней промо Госуслуг.', next: 'Пролистайте вверх, и панель свернётся обратно. Кнопки входа ведут ко входу.' },
+    menu:   { mode: 'guest', title: 'Бургер', text: 'Меню раскрывается внутри панели хэдера, каталог листается. Разделы аккордеоном, открыт один. Внизу контакты и «Получить заём бесплатно».', next: 'Нажмите на маршрут, чтобы открыть его страницу.' },
+    route:  { mode: 'guest', title: 'Страница из меню', text: 'Любой маршрут до входа: тот же хэдер, нижняя панель и футер до входа внизу страницы.', next: 'Кнопки входа в нижней панели ведут ко входу.' },
+    chat:   { mode: 'guest', title: 'Чат до входа', text: 'Окно чата поднимается из-за нижней панели, страница под затемнением.', next: 'Повторное нажатие на «Чат» или на затемнение закрывает окно.' },
+    login:  { mode: 'auth', title: 'Вход', label: 'Вход по телефону', text: 'Во время входа хэдер без меню стоит в потоке и уходит вместе со страницей. Футера и нижней панели нет.', next: 'Введите номер, отметьте согласие и получите код.' },
+    code:   { mode: 'auth', title: 'Код из СМС', text: 'Экрана кода в макете нет: каркас тот же, что у входа.', next: 'Подойдёт любой код из 4 цифр, после него личный кабинет.' },
+    loan:   { mode: 'lk', tab: 'loan', title: 'Заём', label: 'Заём в кабинете', text: 'После входа тост «Вы вошли в личный кабинет». Хэдер: логотип и выход. Кнопка «Перейти к оплате» прикреплена к табам и идёт за клиентом.', next: 'Внизу страницы футер после входа. Табы открывают чат, GPT, карту и «Ещё».' },
+    lkchat: { mode: 'lk', tab: 'lkchat', title: 'Чат в кабинете', text: 'Окно чата поднимается из-за панели и перекрывает хэдер. Табы остаются.', next: 'Затемнение или таб «Заём» закрывают окно.' },
+    gpt:    { mode: 'lk', tab: 'gpt', title: 'GPT', text: 'Окно ассистента «Вера» поднимается из-за панели, как чат.', next: 'Затемнение или таб «Заём» закрывают окно.' },
+    card:   { mode: 'lk', tab: 'card', title: 'Карта', text: 'Страница карты: над табами ничего нет. Содержимое в макете растром.', next: 'Таб «Заём» возвращает к займу.' },
+    more:   { mode: 'lk', tab: 'more', title: 'Ещё', text: 'Список разделов кабинета.', next: 'Разделы ведут на старые страницы кабинета: новый хэдер, табы и футер вокруг старого содержимого.' },
+    legacy: { mode: 'lk', tab: 'more', title: 'Страница', text: 'Старая страница кабинета, как сейчас: вокруг неё новый хэдер, табы и футер после входа.', next: 'Таб «Ещё» возвращает к списку разделов.' },
+    loginErrEmpty:   { mode: 'auth', view: 'login', error: 'empty', title: 'Номер не введён', text: 'Клиент нажал «Получить код» с пустым полем: поле красное, под ним «Введите номер телефона».', next: 'Начинает вводить номер, и ошибка пропадает.' },
+    loginErrShort:   { mode: 'auth', view: 'login', error: 'short', title: 'Номер неполный', text: 'В номере меньше 10 цифр после +7: под полем «Номер неполный: нужно 10 цифр после +7».', next: 'Клиент дописывает номер, и ошибка пропадает.' },
+    loginErrConsent: { mode: 'auth', view: 'login', error: 'consent', title: 'Нет согласия', text: 'Номер введён, а первое согласие не отмечено: рамка чекбокса красная.', next: 'Клиент ставит галочку, и ошибка пропадает.' }
   };
-  var CHIPS = {
-    guest: [['home', 'Главная'], ['scroll', 'Скролл'], ['menu', 'Бургер'], ['route', 'Страница из меню'], ['chat', 'Чат']],
-    auth: [['login', 'Вход по телефону'], ['code', 'Код из СМС']],
-    lk: [['loan', 'Заём'], ['lkchat', 'Чат'], ['gpt', 'GPT'], ['card', 'Карта'], ['more', 'Ещё'], ['legacy:files', 'Мои файлы'], ['legacy:tickets', 'Форма обращения']]
+  /* что показывает плитка: основной путь с линией, ответвления по группам, ошибки по группам */
+  var FLOW = {
+    main: ['home', 'scroll', 'login', 'code', 'loan'],
+    side: [['До входа', ['menu', 'route', 'chat']], ['После входа', ['lkchat', 'gpt', 'card', 'more', 'legacy:files', 'legacy:tickets']]]
   };
+  var ERRORS = [['Вход', ['loginErrEmpty', 'loginErrShort', 'loginErrConsent']]];
   var RULES = {
     guest: {
       hdr: 'Меню ☰, логотип, вход. Прибит сверху, страница листается под ним. Бургер раскрывается внутри панели хэдера',
@@ -3817,7 +3875,7 @@ button { font: inherit; color: inherit; }
     opts = opts || {};
     var key = step.indexOf('legacy:') === 0 ? 'legacy' : step;
     current = step;
-    var s = STEPS[key] || { mode: 'lk', tab: 'more' };
+    var s = STEPS[key] || STEPS.more;
     setMode(s.mode);
     hideLegacyModal();
     if (s.mode === 'guest') {
@@ -3831,8 +3889,10 @@ button { font: inherit; color: inherit; }
       if (key === 'chat') setChat(true);
       onScroll();
     } else if (s.mode === 'auth') {
-      showView(key);
+      showView(s.view || key);
       page.scrollTop = 0;
+      resetLoginErrors();
+      if (s.error) showLoginError(s.error);
       if (key === 'code') { resetOtp(); setTimeout(function () { $('#otpInput').focus({ preventScroll: true }); }, 50); }
     } else {
       if (key === 'legacy') {
@@ -3851,7 +3911,7 @@ button { font: inherit; color: inherit; }
       if (!opts.keepScroll) page.scrollTop = 0;
       if (opts.toast) showToast();
     }
-    updatePanel(key === 'legacy' ? { title: LEGACY_TITLES[step.split(':')[1]] || 'Страница', text: STEPS.more.text } : s);
+    updatePanel(key === 'legacy' ? { title: LEGACY_TITLES[step.split(':')[1]] || STEPS.legacy.title, text: STEPS.legacy.text, next: STEPS.legacy.next } : s);
     try { if (window.parent !== window) window.parent.postMessage({ type: 'proto:view', view: step }, '*'); } catch (e) {}
   }
   function setRoute(name, sec) {
@@ -3859,25 +3919,35 @@ button { font: inherit; color: inherit; }
     $('#routeCrumbs').textContent = 'Займы · ' + sec;
   }
 
-  /* ---------- Панель «Сценарий» ---------- */
+  /* ---------- Панель «Сценарий»: эталон 2026-11-02 (../core2/scenario-tile.css) ---------- */
+  function stepLabel(id) {
+    if (id.indexOf('legacy:') === 0) return LEGACY_TITLES[id.split(':')[1]] || STEPS.legacy.title;
+    return STEPS[id].label || STEPS[id].title;
+  }
+  function flowItem(id) {
+    return '<li><button class="flow-step" type="button" data-scenario="' + id + '" aria-pressed="false"><span class="flow-step__dot" aria-hidden="true"></span><span class="flow-step__label t-note">' + nb(stepLabel(id)) + '</span></button></li>';
+  }
+  $('#flowSteps').innerHTML = '<p class="tile__label t-caption">Флоу</p><ol class="flow-steps">' + FLOW.main.map(flowItem).join('') + '</ol>' +
+    FLOW.side.map(function (g) { return '<p class="flow-group__label t-caption">' + nb(g[0]) + '</p><ol class="flow-steps flow-steps--side">' + g[1].map(flowItem).join('') + '</ol>'; }).join('');
+  $('#errorsBlock').innerHTML = '<p class="errors-block__title t-caption">Ошибки</p>' + ERRORS.map(function (g) {
+    return '<div class="errors-group"><p class="errors-group__label t-caption">' + nb(g[0]) + '</p>' +
+      g[1].map(function (id) { return '<button class="error-item t-note" type="button" data-scenario="' + id + '" aria-pressed="false">' + nb(STEPS[id].title) + '</button>'; }).join('') + '</div>';
+  }).join('');
   function updatePanel(s) {
     $('#scenarioTitle').textContent = s.title || '';
     $('#scenarioText').textContent = nb(s.text || '');
-    $$('#modeSwitch .segment').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-mode') === mode); });
-    var chips = CHIPS[mode];
-    $('#scenarioChips').innerHTML = chips.map(function (c) {
-      var on = c[0] === current;
-      return '<button class="chip ' + (on ? 'chip-active' : 'chip-inactive') + '" type="button" data-step="' + c[0] + '" aria-pressed="' + on + '">' + c[1] + '</button>';
-    }).join('');
+    $('#scenarioNext').textContent = nb(s.next || '');
+    $$('#flowSteps [data-scenario], #errorsBlock [data-scenario]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-scenario') === current)); });
     var r = RULES[mode];
     $('#ruleHdr').textContent = nb(r.hdr); $('#ruleBar').textContent = nb(r.bar); $('#ruleFtr').textContent = nb(r.ftr);
   }
-  $('#scenarioChips').addEventListener('click', function (e) { var b = e.target.closest('[data-step]'); if (b) go(b.getAttribute('data-step')); });
-  $('#modeSwitch').addEventListener('click', function (e) {
-    var b = e.target.closest('[data-mode]'); if (!b) return;
-    var m = b.getAttribute('data-mode');
-    go(m === 'guest' ? 'home' : m === 'auth' ? 'login' : 'loan', { toast: m === 'lk' });
-  });
+  function pickScenario(e) {
+    var b = e.target.closest('[data-scenario]'); if (!b) return;
+    var id = b.getAttribute('data-scenario');
+    go(id, { toast: id === 'loan' });
+  }
+  $('#flowSteps').addEventListener('click', pickScenario);
+  $('#errorsBlock').addEventListener('click', pickScenario);
 
   /* ---------- Нажатия на экране ---------- */
   screen.addEventListener('click', function (e) {
@@ -3905,7 +3975,7 @@ button { font: inherit; color: inherit; }
     var tab = t.closest('.tab');
     if (tab) {
       var id = tab.getAttribute('data-tab');
-      if (id === 'chat') { setChat(tabMain.getAttribute('data-window') !== 'on'); current = 'chat'; updatePanel(tabMain.getAttribute('data-window') === 'on' ? STEPS.chat : STEPS.home); return; }
+      if (id === 'chat') { var open = tabMain.getAttribute('data-window') !== 'on'; setChat(open); current = open ? 'chat' : 'home'; updatePanel(open ? STEPS.chat : STEPS.home); return; }
       if (id === lkTab && (id === 'lkchat' || id === 'gpt')) { go('loan', { keepScroll: true }); return; }
       go(id, { keepScroll: id === 'lkchat' || id === 'gpt' });
       return;
@@ -3954,16 +4024,36 @@ button { font: inherit; color: inherit; }
   phone.addEventListener('focus', function () { phoneField.setAttribute('data-filled', 'true'); if (!phone.value) phone.value = '+7 '; });
   phone.addEventListener('blur', function () { if (maskPhone(phone.value).digits.length === 0) { phone.value = ''; phoneField.setAttribute('data-filled', 'false'); } });
   phone.addEventListener('input', function () { phone.value = maskPhone(phone.value).text; phoneField.removeAttribute('data-error'); $('#phoneErr').hidden = true; });
-  $('#loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+  function firstConsent() { return $('[data-consent]'); }
+  function setConsent(on) {
+    var cb = firstConsent();
+    cb.setAttribute('aria-checked', String(on)); $('.checkbox', cb).setAttribute('data-selected', on ? 'on' : 'off'); $('.checkbox', cb).removeAttribute('data-error');
+  }
+  function resetLoginErrors() {
+    phoneField.removeAttribute('data-error'); $('#phoneErr').hidden = true;
+    $$('[data-consent] .checkbox').forEach(function (c) { c.removeAttribute('data-error'); });
+  }
+  function setPhone(digits) {
+    phone.value = digits ? maskPhone(digits).text : '';
+    phoneField.setAttribute('data-filled', digits ? 'true' : 'false');
+  }
+  /* ошибка входа шагом прототипа: форма заполняется так, чтобы проверка её показала */
+  function showLoginError(kind) {
+    if (kind === 'empty') { setPhone(''); setConsent(true); }
+    if (kind === 'short') { setPhone('912345'); setConsent(true); }
+    if (kind === 'consent') { setPhone('9123456789'); setConsent(false); }
+    submitLogin();
+  }
+  function submitLogin() {
     var m = maskPhone(phone.value), ok = true;
     if (m.digits.length < 10) { phoneField.setAttribute('data-error', 'true'); $('#phoneErr').hidden = false; $('#phoneErr').textContent = m.digits.length ? 'Номер неполный: нужно 10 цифр после +7' : 'Введите номер телефона'; ok = false; }
-    var first = $('[data-consent]');
-    if (first.getAttribute('aria-checked') !== 'true') { $('.checkbox', first).setAttribute('data-error', 'on'); ok = false; }
-    if (!ok) return;
+    if (firstConsent().getAttribute('aria-checked') !== 'true') { $('.checkbox', firstConsent()).setAttribute('data-error', 'on'); ok = false; }
+    if (!ok) return false;
     $('#codeSub').textContent = 'Отправили на' + NB + 'номер ' + m.text.replace(/ /g, NB);
     go('code');
-  });
+    return true;
+  }
+  $('#loginForm').addEventListener('submit', function (e) { e.preventDefault(); submitLogin(); });
   var otpInput = $('#otpInput');
   function resetOtp() { otpInput.value = ''; drawOtp(); }
   function drawOtp() {
