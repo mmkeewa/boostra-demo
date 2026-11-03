@@ -3373,17 +3373,20 @@ html.in-frame .panel-toggle { display: none !important; }
               <button class="chip chip-inactive" type="button" data-scenario="puEmpty" aria-pressed="false">Загрузка</button>
               <button class="chip chip-inactive" type="button" data-scenario="puSelected" aria-pressed="false">Фото выбрано</button>
               <button class="chip chip-inactive" type="button" data-scenario="puChecking" aria-pressed="false">Проверка</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puFileError-size" aria-pressed="false">Файл больше 15&nbsp;МБ</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puFileError-format" aria-pressed="false">Неподдерживаемый формат</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puError-network" aria-pressed="false">Ошибка сети</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puFileError-content" aria-pressed="false">Содержимое не&nbsp;соответствует формату</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puFileError-pdfUnreadable" aria-pressed="false">PDF с&nbsp;паролем или не&nbsp;читается</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puFileError-pdfPages" aria-pressed="false">В&nbsp;PDF больше двух страниц</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puError-pdfTimeout" aria-pressed="false">Истёк срок конвертации PDF</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puError-pdfConvert" aria-pressed="false">Ошибка конвертации PDF</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puError-fileConvert" aria-pressed="false">Ошибка конвертации файла</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puError-save" aria-pressed="false">Не&nbsp;удалось сохранить файл</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puError-noFile" aria-pressed="false">Файл не&nbsp;передан</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puError-camera" aria-pressed="false">Нет доступа к&nbsp;камере</button>
               <button class="chip chip-inactive" type="button" data-scenario="puError" aria-pressed="false">Ошибка: размыто</button>
               <button class="chip chip-inactive" type="button" data-scenario="puError-page" aria-pressed="false">Ошибка: не&nbsp;тот разворот</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puFileError-format" aria-pressed="false">Ошибка: формат</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puFileError-size" aria-pressed="false">Ошибка: размер</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puError-network" aria-pressed="false">Ошибка: сеть</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puFileError-broken" aria-pressed="false">Ошибка: файл повреждён</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puFileError-pdfPassword" aria-pressed="false">Ошибка: PDF с&nbsp;паролем</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puFileError-pdfPages" aria-pressed="false">Ошибка: PDF больше 2&nbsp;страниц</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puError-pdfConvert" aria-pressed="false">Ошибка: PDF не&nbsp;обработан</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puError-noFile" aria-pressed="false">Ошибка: файл не&nbsp;передан</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puError-noCamera" aria-pressed="false">Ошибка: нет камеры</button>
             </div>
           </div>
         </div>
@@ -3741,15 +3744,18 @@ html.in-frame .panel-toggle { display: none !important; }
   var UERR = {
     size: 'Файл больше 15 МБ. Выберите другое фото',
     format: 'Формат не подходит. Загрузите фото в JPG, PNG, HEIC или PDF',
-    broken: 'Не получилось открыть файл. Выберите другое фото или файл',
-    pdfPassword: 'Не получилось открыть PDF. Загрузите файл без пароля или фото',
-    pdfPages: 'В PDF больше 2 страниц. Загрузите только разворот с фото',
-    pdfConvert: 'Не получилось обработать PDF. Попробуйте ещё раз или загрузите фото',
-    noFile: 'Файл не загрузился. Выберите его ещё раз',
-    noCamera: 'Нет доступа к камере. Разрешите его в настройках браузера или загрузите фото из галереи',
+    network: 'Не получилось загрузить. Проверьте интернет и попробуйте ещё раз',
+    content: 'С вашим файлом что-то не так, попробуйте другой',
+    pdfUnreadable: 'Не удалось прочитать PDF или файл защищён паролем',
+    pdfPages: 'PDF содержит больше 2 страниц',
+    pdfTimeout: 'Превышено время конвертации PDF',
+    pdfConvert: 'Ошибка конвертации PDF (возможно, файл защищён паролем)',
+    fileConvert: 'Ошибка конвертации файла',
+    save: 'Ошибка загрузки файла',
+    noFile: 'Нет файлов для загрузки',
+    camera: 'Произошла ошибка: "…". Подключите заново камеру и разрешите доступ.',
     quality: 'Не получилось прочитать данные. Сделайте чёткое фото без бликов, паспорт должен быть виден целиком',
     page: 'Нужны 2 и 3 страницы паспорта. Откройте разворот с фото',
-    network: 'Не получилось загрузить. Проверьте интернет и попробуйте ещё раз',
     empty: 'Загрузите фото паспорта'
   };
   /* photo: фото в рамке; keep: фото остаётся после ошибки сети, «Далее» отправит его снова */
@@ -3763,12 +3769,15 @@ html.in-frame .panel-toggle { display: none !important; }
     'puFileError-size': { err: 'size', next: true },
     'puFileError-format': { err: 'format', next: true },
     'puFileError-empty': { err: 'empty', next: true },
-    'puFileError-broken': { err: 'broken', next: true },
-    'puFileError-pdfPassword': { err: 'pdfPassword', next: true },
+    'puFileError-content': { err: 'content', next: true },
+    'puFileError-pdfUnreadable': { err: 'pdfUnreadable', next: true },
     'puFileError-pdfPages': { err: 'pdfPages', next: true },
-    'puError-pdfConvert': { err: 'pdfConvert', next: true, keep: true },
+    'puError-pdfTimeout': { err: 'pdfTimeout', next: true, keep: true },
+    'puError-pdfConvert': { err: 'pdfConvert', next: true },
+    'puError-fileConvert': { err: 'fileConvert', next: true },
+    'puError-save': { err: 'save', next: true, keep: true },
     'puError-noFile': { err: 'noFile', next: true },
-    'puError-noCamera': { err: 'noCamera', next: true }
+    'puError-camera': { err: 'camera', next: true }
   };
   var ill = $('#illustration'), photo = $('#photo'), uploader = $('#uploader'), hint = $('#hint'), nextBtn = $('#nextBtn');
   var P = { view: 'puEmpty', file: null, url: null }, checkT = null;
