@@ -4504,7 +4504,8 @@ button { font: inherit; color: inherit; }
       reasons: ['wrongAmount'],
       now: { value: '11,0%', badge: '3\u00A0178\u00A0ответов', caption: '«Ошибся суммой платежа»', share: 11.0 },
       goal: 'Доля оплативших со\u00A0скидкой от\u00A0увидевших предложение. Сравниваем с\u00A0частичной оплатой у\u00A0обычных клиентов.',
-      events: '`dl_repayment_click_pay` с\u00A0`loan_repayment_full`, `repayment_source = cant_pay_chat` и\u00A0новым `discount_applied = yes`.',
+      events: 'Новое: `dl_repayment_cant_pay_option_select` с\u00A0`full` по\u00A0«Оплатить сейчас». На\u00A0выборе способа `dl_repayment_click_pay` с\u00A0`loan_repayment_full`, `repayment_source = cant_pay_chat` и\u00A0новым `discount_applied = yes`.',
+      newEvents: 1,
       estimate: { text: 'Посчитаем, когда будут размер скидки и\u00A0критерий «хорошего клиента»' }
     },
     payFailed: {
