@@ -3223,9 +3223,9 @@ button { font: inherit; color: inherit; }
       var seg = ''; for (var i = 0; i < 7; i += 1) seg += '<i></i>';
       return '<span class="t-caps-xsmall-strong cs-error">Срок хранения просрочки</span>' +
         '<span class="t-h1-strong cs-error">7 лет</span>' +
-        '<p class="t-note">Её видят все, кто проверяет вашу историю</p>' +
+        '<p class="t-note">Её видят банки и\u00A0МФО с\u00A0вашего согласия</p>' +
         '<span class="ci-segments">' + seg + '</span>' +
-        '<span class="ci-row t-caption cs-muted"><span>2026</span><span>2033</span></span>';
+        '<span class="ci-row t-caption cs-muted"><span>Заём закрыт</span><span>+7\u00A0лет</span></span>';
     },
     who: function () {
       return '<span class="t-caps-xsmall-strong cs-error">Проверяют вашу историю</span>' +
@@ -3446,7 +3446,7 @@ button { font: inherit; color: inherit; }
     /* после выбора дня: просрочку можно остановить продлением (предложение коллег, её правка 20.10.2026) */
     stopNow: 'Пока заём не\u00A0оплачен, просрочка продолжается. Остановить её можно сейчас: продлите заём за\u00A03\u00A0500\u00A0₽',
     /* дерево последствий: тексты дословно из секции «Can't pay now / Dialog tree» (3512:6416), ждут взыскания и юристов */
-    history: 'По\u00A0закону мы передаём в\u00A0БКИ все платежи по\u00A0займу и\u00A0каждый день просрочки\u00A0📄',
+    history: 'По\u00A0закону мы передаём в\u00A0БКИ платежи и\u00A0длительность просрочки\u00A0📄',
     whoEnd: 'Чем дольше просрочка, тем выше риск отказа. Закройте её сейчас, чтобы она не\u00A0росла',
     fix: 'Лучшее, что можно сделать: закрыть просрочку сейчас и\u00A0дальше платить строго в\u00A0срок',
     noPay: 'Если заём не\u00A0оплачен, мы начинаем взыскание по\u00A0закону 230-ФЗ: звонки, сообщения и\u00A0письма',
