@@ -2771,6 +2771,10 @@ button { font: inherit; color: inherit; }
   .tile-grid { flex: 0 0 auto; }
   .stand.is-panel-open .panel { transform: none; visibility: visible; transition: transform 0.25s ease, visibility 0s; }
   .stand.is-panel-open .panel-scrim { opacity: 1; pointer-events: auto; }
+  /* внутри стенда (док справа от карты) панели нет: шаги переключает сам стенд, как у nav/ (2026-11-03) */
+  .is-embedded .panel-toggle,
+  .is-embedded .panel,
+  .is-embedded .panel-scrim { display: none; }
 }
 
 /* экран прототипа: высота статус-бара для шапки сайта из ../core2/proto.css; на телефоне статус-бар системный */
@@ -3935,6 +3939,7 @@ window.PROTO_METRICS = {
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var NB = ' ';
   function api() { return window.ScanProto || null; }
+  try { if (window.parent !== window) document.documentElement.classList.add('is-embedded'); } catch (e) {}
 
   /* ---------- Код доступа 93123 ---------- */
   var CODE = '93123', gate = $('#gate'), app = $('#app'), current = null;
