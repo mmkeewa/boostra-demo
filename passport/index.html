@@ -3378,6 +3378,12 @@ html.in-frame .panel-toggle { display: none !important; }
               <button class="chip chip-inactive" type="button" data-scenario="puFileError-format" aria-pressed="false">Ошибка: формат</button>
               <button class="chip chip-inactive" type="button" data-scenario="puFileError-size" aria-pressed="false">Ошибка: размер</button>
               <button class="chip chip-inactive" type="button" data-scenario="puError-network" aria-pressed="false">Ошибка: сеть</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puFileError-broken" aria-pressed="false">Ошибка: файл повреждён</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puFileError-pdfPassword" aria-pressed="false">Ошибка: PDF с&nbsp;паролем</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puFileError-pdfPages" aria-pressed="false">Ошибка: PDF больше 2&nbsp;страниц</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puError-pdfConvert" aria-pressed="false">Ошибка: PDF не&nbsp;обработан</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puError-noFile" aria-pressed="false">Ошибка: файл не&nbsp;передан</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puError-noCamera" aria-pressed="false">Ошибка: нет камеры</button>
             </div>
           </div>
         </div>
@@ -3728,13 +3734,19 @@ html.in-frame .panel-toggle { display: none !important; }
      ===================================================================== */
   var MAX_FILE = 15 * 1024 * 1024;   /* «Размер файла до 15 МБ» */
   var CHECK_MS = 2500;
-  var OK_TYPES = /^image\/(jpeg|pjpeg|png|heic|heif)$/i;
-  var OK_EXT = /\.(jpe?g|png|heic|heif)$/i;
+  var OK_TYPES = /^(image\/(jpeg|pjpeg|png|heic|heif)|application\/pdf)$/i;
+  var OK_EXT = /\.(jpe?g|png|heic|heif|pdf)$/i;
   var HINT = 'Размер файла до 15 МБ';
-  /* варианты текста ошибки: блок Upload errors (1127:59731). empty: «Далее» без фото, в макете такого текста нет (моё допущение) */
+  /* варианты текста ошибки: блок Upload errors (1127:59731), по списку ошибок бэкенда (03.11.2026). empty: «Далее» без фото, в макете такого текста нет (моё допущение) */
   var UERR = {
     size: 'Файл больше 15 МБ. Выберите другое фото',
-    format: 'Формат не подходит. Загрузите фото в JPG, PNG или HEIC',
+    format: 'Формат не подходит. Загрузите фото в JPG, PNG, HEIC или PDF',
+    broken: 'Не получилось открыть файл. Выберите другое фото или файл',
+    pdfPassword: 'Не получилось открыть PDF. Загрузите файл без пароля или фото',
+    pdfPages: 'В PDF больше 2 страниц. Загрузите только разворот с фото',
+    pdfConvert: 'Не получилось обработать PDF. Попробуйте ещё раз или загрузите фото',
+    noFile: 'Файл не загрузился. Выберите его ещё раз',
+    noCamera: 'Нет доступа к камере. Разрешите его в настройках браузера или загрузите фото из галереи',
     quality: 'Не получилось прочитать данные. Сделайте чёткое фото без бликов, паспорт должен быть виден целиком',
     page: 'Нужны 2 и 3 страницы паспорта. Откройте разворот с фото',
     network: 'Не получилось загрузить. Проверьте интернет и попробуйте ещё раз',
@@ -3750,7 +3762,13 @@ html.in-frame .panel-toggle { display: none !important; }
     'puError-network': { err: 'network', next: true, keep: true },
     'puFileError-size': { err: 'size', next: true },
     'puFileError-format': { err: 'format', next: true },
-    'puFileError-empty': { err: 'empty', next: true }
+    'puFileError-empty': { err: 'empty', next: true },
+    'puFileError-broken': { err: 'broken', next: true },
+    'puFileError-pdfPassword': { err: 'pdfPassword', next: true },
+    'puFileError-pdfPages': { err: 'pdfPages', next: true },
+    'puError-pdfConvert': { err: 'pdfConvert', next: true, keep: true },
+    'puError-noFile': { err: 'noFile', next: true },
+    'puError-noCamera': { err: 'noCamera', next: true }
   };
   var ill = $('#illustration'), photo = $('#photo'), uploader = $('#uploader'), hint = $('#hint'), nextBtn = $('#nextBtn');
   var P = { view: 'puEmpty', file: null, url: null }, checkT = null;
