@@ -3228,9 +3228,10 @@ p, h1, h2 { margin: 0; }
             <button class="chip chip-active" type="button" data-scenario="cardStart" aria-pressed="true">Старт</button>
             <button class="chip chip-inactive" type="button" data-scenario="cardService" aria-pressed="false">Внешний сервис</button>
             <button class="chip chip-inactive" type="button" data-scenario="cardAdded" aria-pressed="false">Карта добавлена</button>
-            <button class="chip chip-inactive" type="button" data-scenario="cardError-declined" aria-pressed="false">Ошибка: отказ</button>
-            <button class="chip chip-inactive" type="button" data-scenario="cardError-check" aria-pressed="false">Ошибка: проверка</button>
-            <button class="chip chip-inactive" type="button" data-scenario="cardError-service" aria-pressed="false">Ошибка: сервис</button>
+            <button class="chip chip-inactive" type="button" data-scenario="cardError-data" aria-pressed="false">Ошибка: данные карты</button>
+            <button class="chip chip-inactive" type="button" data-scenario="cardError-bank" aria-pressed="false">Ошибка: банк</button>
+            <button class="chip chip-inactive" type="button" data-scenario="cardError-card" aria-pressed="false">Ошибка: другая карта</button>
+            <button class="chip chip-inactive" type="button" data-scenario="cardError-retry" aria-pressed="false">Ошибка: повторить</button>
           </div>
           <p class="tile__caption t-caption" id="scenarioNote"></p>
         </div>
@@ -3604,8 +3605,8 @@ Path _cookiePath() {
    Ошибка: «Назад» из сервиса = тост на NDL 15; три текста тоста (отказ, проверка, сервис) открываются тегами сценария,
    шагом стенда proto:step или ?step=<id>.
    Экран ожидания с таймером 05:00 и игрой «Поймай меня» отсюда убран 2026-10-20: он в прототипе ожидания решения перед оффером.
-   Экраны (proto:view / proto:step): cardStart, cardService, cardAdded, cardError-declined (он же cardNotAdded), cardError-check,
-   cardError-service, cardDone. */
+   Экраны (proto:view / proto:step): cardStart, cardService, cardAdded, cardError-retry (он же cardNotAdded), cardError-data,
+   cardError-bank, cardError-card, cardDone. Ошибки по группам кодов Best2Pay, причину клиенту не называем. */
 (function () {
   'use strict';
 
@@ -3622,7 +3623,7 @@ Path _cookiePath() {
   /* ---------- Код доступа 93123 (внутри стенда cardGate уже стоит) ---------- */
   var CODE = '93123', gate = $('#gate'), app = $('#app');
   function unlock() { gate.hidden = true; app.hidden = false; }
-  try { if (sessionStorage.getItem('cardGate') === '1') unlock(); } catch (e) {}
+  try { if (!/github\.io$/.test(location.hostname) || sessionStorage.getItem('cardGate') === '1') unlock(); } catch (e) {}
   $('#gateInput').addEventListener('input', function () { $('#gateErr').hidden = true; this.value = this.value.replace(/\D/g, '').slice(0, 5); });
   $('#gateForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -3654,10 +3655,11 @@ Path _cookiePath() {
   if (mobileMq.addEventListener) mobileMq.addEventListener('change', fit);
 
   /* ---------- Тосты ошибок (Card errors 1102:67833): заголовок и описание дословно из макета ---------- */
-  var TOASTS = {
-    declined: { title: 'Карту добавить не получилось', text: 'Попробуйте ещё раз или добавьте другую карту' },  /* err:card declined: сервис добавления карты вернул отказ */
-    check: { title: 'Карта не прошла проверку', text: 'Добавьте другую карту' },                               /* err:card check failed: карта не прошла проверку после добавления */
-    service: { title: 'Сервис карты не отвечает', text: 'Попробуйте добавить карту ещё раз' }                  /* err:service unavailable: сервис добавления карты не отвечает */
+  var TOASTS = {  /* группы кодов Best2Pay; заголовок общий, конкретную причину не показываем */
+    data: { title: 'Карту добавить не получилось', text: 'Проверьте данные карты и деньги на ней. Если всё верно, узнайте в банке, можно ли платить картой в интернете' },  /* 2, 6, 11, 12 */
+    bank: { title: 'Карту добавить не получилось', text: 'Узнайте причину в банке или добавьте другую карту' },  /* 3, 4, 5, 7 */
+    card: { title: 'Карту добавить не получилось', text: 'Добавьте другую карту' },  /* 8, 14, 15, 16 */
+    retry: { title: 'Карту добавить не получилось', text: 'Попробуйте ещё раз или добавьте другую карту' }  /* 9, 10, 13, 0, другой код */
   };
   function showToast(kind) {
     var t = TOASTS[kind];
@@ -3751,9 +3753,10 @@ Path _cookiePath() {
     cardStart: 'NDL 15. Нажмите «Добавить карту»',
     cardService: 'Экран сервиса из макета. «Добавить» ведёт к «Карта добавлена», «Назад» в браузере возвращает с ошибкой',
     cardAdded: 'NDL 16, салют печеньками. «Хорошо» завершает шаг: дальше переход к следующему шагу',
-    'cardError-declined': 'Сервис добавления карты вернул отказ или клиент вернулся из сервиса без карты',
-    'cardError-check': 'Карта не прошла проверку после добавления',
-    'cardError-service': 'Сервис добавления карты не отвечает'
+    'cardError-retry': 'Коды 9, 10, 13, 0 и неизвестный код. Так же, если клиент вернулся из сервиса без карты',
+    'cardError-data': 'Коды 2, 6, 11, 12: срок, деньги на карте, 3DS, CVC',
+    'cardError-bank': 'Коды 3, 4, 5, 7: отказ банка, лимит',
+    'cardError-card': 'Коды 8, 14, 15, 16: антифрод, электронные деньги, BIN в чёрном списке'
   };
   /* какие события срабатывают на шаге (подсветка в плитке «События») */
   var EVENTS = [
@@ -3767,9 +3770,10 @@ Path _cookiePath() {
     cardStart: ['opened', 'skipped', 'goal'],
     cardService: ['goal'],
     cardAdded: ['submit'],
-    'cardError-declined': ['error'],
-    'cardError-check': ['error'],
-    'cardError-service': ['error'],
+    'cardError-retry': ['error'],
+    'cardError-data': ['error'],
+    'cardError-bank': ['error'],
+    'cardError-card': ['error'],
     cardDone: ['submit']
   };
   var eventsList = $('#eventsList');
@@ -3786,7 +3790,7 @@ Path _cookiePath() {
     li.appendChild(c); li.appendChild(p);
     eventsList.appendChild(li);
   });
-  var TAG_OF = { cardNotAdded: 'cardError-declined', cardDone: 'cardAdded' };
+  var TAG_OF = { cardNotAdded: 'cardError-retry', cardDone: 'cardAdded' };
   function renderDashboard(id) {
     var tag = TAG_OF[id] || id, chip = $('[data-scenario="' + tag + '"]', $('#scenarioChips'));
     $$('#scenarioChips .chip').forEach(function (c) {
@@ -3800,7 +3804,7 @@ Path _cookiePath() {
   }
 
   /* ---------- Экраны ---------- */
-  var VIEWS = ['cardStart', 'cardService', 'cardNotAdded', 'cardError-declined', 'cardError-check', 'cardError-service', 'cardAdded', 'cardDone'];
+  var VIEWS = ['cardStart', 'cardService', 'cardNotAdded', 'cardError-retry', 'cardError-data', 'cardError-bank', 'cardError-card', 'cardAdded', 'cardDone'];
   function setLayer(layer) {
     screen.dataset.view = layer;
     $('#viewStart').hidden = layer !== 'start';
@@ -3814,14 +3818,17 @@ Path _cookiePath() {
       case 'cardStart':
         setLayer('start'); page.scrollTop = 0;
         break;
-      case 'cardNotAdded': case 'cardError-declined':
-        setLayer('start'); page.scrollTop = 0; showToast('declined');
+      case 'cardNotAdded': case 'cardError-retry':
+        setLayer('start'); page.scrollTop = 0; showToast('retry');
         break;
-      case 'cardError-check':
-        setLayer('start'); page.scrollTop = 0; showToast('check');
+      case 'cardError-data':
+        setLayer('start'); page.scrollTop = 0; showToast('data');
         break;
-      case 'cardError-service':
-        setLayer('start'); page.scrollTop = 0; showToast('service');
+      case 'cardError-bank':
+        setLayer('start'); page.scrollTop = 0; showToast('bank');
+        break;
+      case 'cardError-card':
+        setLayer('start'); page.scrollTop = 0; showToast('card');
         break;
       case 'cardService':
         setLayer('service');
