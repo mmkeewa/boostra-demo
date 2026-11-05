@@ -623,6 +623,9 @@
   --neutral-bottom-alpha-66: var(--palette-control-b-4);
   --neutral-bottom-calm: #6885ab;
   --brand-success-alpha-70: rgba(0,160,67,0.7);
+  --brand-success-alpha-5: rgba(0,160,67,0.05);                    /* Brand/Success Alpha/5, снято с Badge в Check data */
+  --brand-success-ink: #006b2d;                                    /* Brand/Success/Ink */
+  --brand-error-ink: #df0026;                                      /* Brand/Error/Ink */
   /* Button / Secondary: Secondary/Fill/Default, Secondary/Text & icon/Default; Button / Close n Action: Fill/Default */
   --secondary-fill-default: var(--brand-secondary-alpha-5);
   --secondary-text-and-icon-default: var(--text-secondary-default);
@@ -725,6 +728,14 @@
 .t-caption-medium {
   font-family: var(--caption-medium-font-family);
   font-weight: var(--caption-medium-font-weight);
+  font-size: var(--caption-medium-size);
+  line-height: var(--caption-medium-line-height);
+  letter-spacing: var(--caption-medium-letter-spacing);
+}
+/* Caption/Caption Strong: 12 / 16, Semi Bold */
+.t-caption-strong {
+  font-family: var(--caption-medium-font-family);
+  font-weight: var(--typography-primitives-semi-bold);
   font-size: var(--caption-medium-size);
   line-height: var(--caption-medium-line-height);
   letter-spacing: var(--caption-medium-letter-spacing);
@@ -1099,6 +1110,15 @@
   background: var(--brand-attention-alpha-5);
   color: var(--brand-attention-ink);
 }
+.badge--success {
+  background: var(--brand-success-alpha-5);
+  color: var(--brand-success-ink);
+}
+.badge--error {
+  background: var(--brand-error-alpha-5);
+  color: var(--brand-error-ink);
+}
+.badge__icon { display: block; flex: none; width: 16px; height: 16px; }
 .badge--midnight-mid {
   /* 🚧 Loyalty Badge: Gradient/Midnight/Midnight Mid */
   background-image: linear-gradient(9.8deg, var(--system-gradient-midnight-mid-1) 14.645%, var(--system-gradient-midnight-mid-2) 85.355%);
@@ -1596,6 +1616,16 @@ button.link-button:focus-visible { outline: 1px solid var(--brand-secondary-alph
 }
 .toast__close > img { display: block; width: 20px; height: 20px; opacity: 0.5; }
 .toast__close:focus-visible { outline: 1px solid var(--brand-secondary-alpha-70); outline-offset: 2px; }
+/* Toast Type=Error, Colored=on: заливка System/e toast (#ee3245, 80%), текст, иконка и крестик Always/Peak Alpha/Peak (белые).
+   Значения сняты с тоста 1102:67832 («Выдача {Boostra}», ошибка привязки карты); токенов в tokens.css под них нет */
+.toast[data-colored="on"][data-type="error"] {
+  border-color: transparent;
+  background: rgba(238, 50, 69, 0.8);
+  color: #fff;
+}
+.toast[data-colored="on"][data-type] .toast__icon,
+.toast[data-colored="on"] .toast__close { color: #fff; }
+.toast[data-colored="on"] .toast__close > img { filter: invert(1); opacity: 1; }
 
 
 /* ============================================================================================
@@ -2329,7 +2359,7 @@ p, h1, h2 { margin: 0; }
    Item L / 🧩 Icon Small: значок 24 (глиф 20 × 1,2, линия 1,8), отступ до текста 12, по центру строки.
    Разделитель Divider / Horizontal Bottom 10% над второй и следующими строками, от левого края текста */
 .steps { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
-.steps__step { display: flex; align-items: center; gap: var(--space-md); min-height: 56px; color: var(--text-bottom-default); } /* 56: высота Row в ДС, нет токена */
+.steps__step { display: flex; align-items: center; gap: var(--space-md); min-height: 68px; color: var(--text-bottom-default); } /* 68: высота Row в макете 1127:59725, нет токена */
 .steps__icon { flex-shrink: 0; display: block; width: 24px; height: 24px; } /* Icon Small 24, нет токена */
 .steps__icon > svg { display: block; width: 100%; height: 100%; }
 .steps__text { flex: 1 1 0; min-width: 0; padding: var(--space-md) var(--space-lg) var(--space-md) 0; }
@@ -2725,8 +2755,11 @@ button.text-field__box:focus-visible {
 .form-group__status[data-filled="true"] { background: var(--brand-success-alpha-5); color: var(--brand-success-ink); }
 .form-group__status > svg { display: block; flex-shrink: 0; width: 16px; height: 16px; }
 .gender { display: flex; gap: var(--space-2xl); }
-.work-fields { display: flex; flex-direction: column; gap: var(--space-lg); }
+.work-fields { display: flex; flex-direction: column; gap: var(--space-md); }
 .bottom-bar__link:hover { text-decoration: underline; }
+
+/* Bottom Bar анкеты 112 как в макете: тело 16 / 16 / 0, Safe Area 16 (Home Indicator выключен) */
+#dataBar { padding-bottom: var(--space-lg); }
 
 </style>
 <style>
@@ -2943,6 +2976,9 @@ button.text-field__box:focus-visible {
 /* в iframe стенда язычка нет: шаг выбирает сам стенд */
 html.in-frame .panel-toggle { display: none !important; }
 
+/* кнопка панели на узкой ширине убрана везде (её решение 2026-11-05): сценарий показывает стенд справа, на широком экране панель как была */
+.panel-toggle, .panel-scrim { display: none !important; }
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -3015,6 +3051,8 @@ html.in-frame .panel-toggle { display: none !important; }
     font-size: 12px; line-height: 22px; font-weight: 500; color: #fff;
     background: rgba(255, 255, 255, .15); border: 1px solid transparent;
   }
+  a.stand-tag--link { text-decoration: none; transition: background .2s; }
+  a.stand-tag--link:hover { background: rgba(255, 255, 255, .24); }
   .stand-tag--status { color: #b9a4ff; gap: 7px; }
   .stand-tag--status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #b9a4ff; box-shadow: 0 0 10px #b9a4ff; }
   .stand-link {
@@ -3129,7 +3167,7 @@ html.in-frame .panel-toggle { display: none !important; }
         <h1 class="stand-top__title">Анкета и&nbsp;фото паспорта</h1>
         <div class="stand-tags">
           <span class="stand-tag">Концепт</span>
-          <span class="stand-tag">ID&nbsp;93123</span>
+          <a class="stand-tag stand-tag--link" href="https://bitrix.boostra.ru/company/personal/user/4547/tasks/task/view/93123/" target="_blank" rel="noopener">Битрикс&nbsp;93123</a><a class="stand-tag stand-tag--link" href="https://www.figma.com/design/nONrKDjiqsZ6WjatsMcjKq/?node-id=1127-59722" target="_blank" rel="noopener">Figma</a>
         </div>
       </div>
     </header>
@@ -3161,8 +3199,8 @@ html.in-frame .panel-toggle { display: none !important; }
             <div data-field="fio"></div>
             <div data-field="bday"></div>
             <div class="gender" role="radiogroup" aria-label="Пол">
-              <button class="radio-row" type="button" role="radio" data-act="gender" data-gender="f"><span class="radio"></span><span class="t-note-strong">Женщина</span></button>
-              <button class="radio-row" type="button" role="radio" data-act="gender" data-gender="m"><span class="radio"></span><span class="t-note-strong">Мужчина</span></button>
+              <button class="radio-row" type="button" role="radio" data-act="gender" data-gender="f"><span class="radio"></span><span class="t-note">Женщина</span></button>
+              <button class="radio-row" type="button" role="radio" data-act="gender" data-gender="m"><span class="radio"></span><span class="t-note">Мужчина</span></button>
             </div>
           </div>
           <div class="form-group" data-group="passport">
@@ -3377,7 +3415,7 @@ html.in-frame .panel-toggle { display: none !important; }
               <button class="chip chip-inactive" type="button" data-scenario="puFileError-format" aria-pressed="false">Неподдерживаемый формат</button>
               <button class="chip chip-inactive" type="button" data-scenario="puError-network" aria-pressed="false">Ошибка сети</button>
               <button class="chip chip-inactive" type="button" data-scenario="puFileError-content" aria-pressed="false">Содержимое не&nbsp;соответствует формату</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puFileError-pdfUnreadable" aria-pressed="false">PDF с&nbsp;паролем или не&nbsp;читается</button>
+              <button class="chip chip-inactive" type="button" data-scenario="puFileError-pdfUnreadable" aria-pressed="false">PDF защищён паролем или не&nbsp;читается</button>
               <button class="chip chip-inactive" type="button" data-scenario="puFileError-pdfPages" aria-pressed="false">В&nbsp;PDF больше двух страниц</button>
               <button class="chip chip-inactive" type="button" data-scenario="puError-pdfTimeout" aria-pressed="false">Истёк срок конвертации PDF</button>
               <button class="chip chip-inactive" type="button" data-scenario="puError-pdfConvert" aria-pressed="false">Ошибка конвертации PDF</button>
@@ -3385,8 +3423,6 @@ html.in-frame .panel-toggle { display: none !important; }
               <button class="chip chip-inactive" type="button" data-scenario="puError-save" aria-pressed="false">Не&nbsp;удалось сохранить файл</button>
               <button class="chip chip-inactive" type="button" data-scenario="puError-noFile" aria-pressed="false">Файл не&nbsp;передан</button>
               <button class="chip chip-inactive" type="button" data-scenario="puError-camera" aria-pressed="false">Нет доступа к&nbsp;камере</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puError" aria-pressed="false">Ошибка: размыто</button>
-              <button class="chip chip-inactive" type="button" data-scenario="puError-page" aria-pressed="false">Ошибка: не&nbsp;тот разворот</button>
             </div>
           </div>
         </div>
@@ -3461,7 +3497,7 @@ html.in-frame .panel-toggle { display: none !important; }
   /* ---------- Код доступа 93123 (как у friend/). Стенд заранее ставит passportGate ---------- */
   var CODE = '93123', gate = $('#gate'), app = $('#app');
   function unlock() { gate.hidden = true; app.hidden = false; }
-  try { if (sessionStorage.getItem('passportGate') === '1') unlock(); } catch (e) {}
+  try { if (!/github\.io$/.test(location.hostname) || sessionStorage.getItem('passportGate') === '1') unlock(); } catch (e) {}
   $('#gateInput').addEventListener('input', function () { $('#gateErr').hidden = true; this.value = this.value.replace(/\D/g, '').slice(0, 5); });
   $('#gateForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -3491,8 +3527,8 @@ html.in-frame .panel-toggle { display: none !important; }
      А. Анкета без скана: поля, маски, подсказки адреса, ошибки по нажатию
      ===================================================================== */
   // Badge / Icon L 16: check (Success) и x (Error), как в макете
-  var ICON_BADGE_OK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.33 8.33l3 3l6.34-6.66"/></svg>';
-  var ICON_BADGE_ERR = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.67 4.67l6.66 6.66M11.33 4.67l-6.66 6.66"/></svg>';
+  var ICON_BADGE_OK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.5 3.5L13 5"/></svg>';
+  var ICON_BADGE_ERR = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
   var ICON_CHEVRON = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5l5-5"/></svg>';
   var EMPLOY = ['Работаю официально', 'Работаю неофициально', 'ИП', 'Самозанятый', 'Пенсионер', 'Не работаю'];
   var EDU = ['Среднее', 'Среднее специальное', 'Неоконченное высшее', 'Высшее'];
@@ -3519,7 +3555,7 @@ html.in-frame .panel-toggle { display: none !important; }
   var SAMPLE = { fio: 'Иванова Анна Сергеевна', bday: '05.05.1995', series: '45 67 123456', issued: '05.05.2005', code: '770-077', issuer: 'ГУ МВД РОССИИ ПО Г. МОСКВЕ' };
   var ERR = {
     empty: 'Заполните поле',
-    date: 'Такой даты нет. Проверьте день, месяц и год',
+    date: 'Проверьте дату',
     passport: 'Введите 4 цифры серии и 6 цифр номера',
     code: 'Введите 6 цифр, например 770-001',
     addr: 'Выберите адрес из списка'
@@ -3745,17 +3781,15 @@ html.in-frame .panel-toggle { display: none !important; }
     size: 'Файл больше 15 МБ. Выберите другое фото',
     format: 'Формат не подходит. Загрузите фото в JPG, PNG, HEIC или PDF',
     network: 'Не получилось загрузить. Проверьте интернет и попробуйте ещё раз',
-    content: 'С вашим файлом что-то не так, попробуйте другой',
-    pdfUnreadable: 'Не удалось прочитать PDF или файл защищён паролем',
-    pdfPages: 'PDF содержит больше 2 страниц',
-    pdfTimeout: 'Превышено время конвертации PDF',
-    pdfConvert: 'Ошибка конвертации PDF (возможно, файл защищён паролем)',
-    fileConvert: 'Ошибка конвертации файла',
-    save: 'Ошибка загрузки файла',
+    content: 'Не получилось открыть файл. Загрузите другой',
+    pdfUnreadable: 'Не получилось открыть PDF. Загрузите файл без пароля или фото',
+    pdfPages: 'Слишком много страниц в PDF. Нужны только 2 и 3 страницы паспорта',
+    pdfTimeout: 'Не получилось обработать PDF. Попробуйте ещё раз или загрузите фото',
+    pdfConvert: 'Не получилось открыть PDF. Загрузите файл без пароля или фото',
+    fileConvert: 'Не получилось открыть файл. Загрузите другой',
+    save: 'Не получилось загрузить. Проверьте интернет и попробуйте ещё раз',
     noFile: 'Нет файлов для загрузки',
-    camera: 'Произошла ошибка: "…". Подключите заново камеру и разрешите доступ.',
-    quality: 'Не получилось прочитать данные. Сделайте чёткое фото без бликов, паспорт должен быть виден целиком',
-    page: 'Нужны 2 и 3 страницы паспорта. Откройте разворот с фото',
+    camera: 'Нет доступа к камере. Разрешите его в настройках или загрузите фото',
     empty: 'Загрузите фото паспорта'
   };
   /* photo: фото в рамке; keep: фото остаётся после ошибки сети, «Далее» отправит его снова */
@@ -3763,8 +3797,7 @@ html.in-frame .panel-toggle { display: none !important; }
     puEmpty: {},
     puSelected: { photo: true, next: true },
     puChecking: { photo: true, next: true, checking: true },
-    puError: { err: 'quality', next: true },
-    'puError-page': { err: 'page', next: true },
+    puError: { err: 'size', next: true },   /* пример ошибки, как на экране макета 1127:59729 */
     'puError-network': { err: 'network', next: true, keep: true },
     'puFileError-size': { err: 'size', next: true },
     'puFileError-format': { err: 'format', next: true },
@@ -3811,11 +3844,11 @@ html.in-frame .panel-toggle { display: none !important; }
     ill.setAttribute('aria-label', has ? 'Выбранное фото паспорта' : 'Разворот 2 и 3 страниц паспорта');
     renderPhoto();
     /* File Uploader / Mobile: на проверке «Загрузить фото» и камера иконкой */
-    var checking = !!v.checking;
-    uploader.dataset.state = checking ? 'file-checking' : 'default';
-    $('#uploadLabel').textContent = checking ? 'Загрузить фото' : 'Загрузить';
-    $('#cameraLabel').hidden = checking;
-    $('#cameraBtn').classList.toggle('btn-icon-only', checking);
+    var checking = !!v.checking;   /* как в макете 1127:59728: загрузчик в State=Default, грузится только «Далее» */
+    uploader.dataset.state = 'default';
+    $('#uploadLabel').textContent = 'Загрузить';
+    $('#cameraLabel').hidden = false;
+    $('#cameraBtn').classList.remove('btn-icon-only');
     hint.textContent = nb(v.err ? UERR[v.err] : HINT);
     if (v.err) hint.dataset.state = 'error'; else hint.removeAttribute('data-state');
     nextBtn.hidden = !v.next;

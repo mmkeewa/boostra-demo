@@ -623,6 +623,9 @@
   --neutral-bottom-alpha-66: var(--palette-control-b-4);
   --neutral-bottom-calm: #6885ab;
   --brand-success-alpha-70: rgba(0,160,67,0.7);
+  --brand-success-alpha-5: rgba(0,160,67,0.05);                    /* Brand/Success Alpha/5, снято с Badge в Check data */
+  --brand-success-ink: #006b2d;                                    /* Brand/Success/Ink */
+  --brand-error-ink: #df0026;                                      /* Brand/Error/Ink */
   /* Button / Secondary: Secondary/Fill/Default, Secondary/Text & icon/Default; Button / Close n Action: Fill/Default */
   --secondary-fill-default: var(--brand-secondary-alpha-5);
   --secondary-text-and-icon-default: var(--text-secondary-default);
@@ -725,6 +728,14 @@
 .t-caption-medium {
   font-family: var(--caption-medium-font-family);
   font-weight: var(--caption-medium-font-weight);
+  font-size: var(--caption-medium-size);
+  line-height: var(--caption-medium-line-height);
+  letter-spacing: var(--caption-medium-letter-spacing);
+}
+/* Caption/Caption Strong: 12 / 16, Semi Bold */
+.t-caption-strong {
+  font-family: var(--caption-medium-font-family);
+  font-weight: var(--typography-primitives-semi-bold);
   font-size: var(--caption-medium-size);
   line-height: var(--caption-medium-line-height);
   letter-spacing: var(--caption-medium-letter-spacing);
@@ -1099,6 +1110,15 @@
   background: var(--brand-attention-alpha-5);
   color: var(--brand-attention-ink);
 }
+.badge--success {
+  background: var(--brand-success-alpha-5);
+  color: var(--brand-success-ink);
+}
+.badge--error {
+  background: var(--brand-error-alpha-5);
+  color: var(--brand-error-ink);
+}
+.badge__icon { display: block; flex: none; width: 16px; height: 16px; }
 .badge--midnight-mid {
   /* 🚧 Loyalty Badge: Gradient/Midnight/Midnight Mid */
   background-image: linear-gradient(9.8deg, var(--system-gradient-midnight-mid-1) 14.645%, var(--system-gradient-midnight-mid-2) 85.355%);
@@ -1596,6 +1616,16 @@ button.link-button:focus-visible { outline: 1px solid var(--brand-secondary-alph
 }
 .toast__close > img { display: block; width: 20px; height: 20px; opacity: 0.5; }
 .toast__close:focus-visible { outline: 1px solid var(--brand-secondary-alpha-70); outline-offset: 2px; }
+/* Toast Type=Error, Colored=on: заливка System/e toast (#ee3245, 80%), текст, иконка и крестик Always/Peak Alpha/Peak (белые).
+   Значения сняты с тоста 1102:67832 («Выдача {Boostra}», ошибка привязки карты); токенов в tokens.css под них нет */
+.toast[data-colored="on"][data-type="error"] {
+  border-color: transparent;
+  background: rgba(238, 50, 69, 0.8);
+  color: #fff;
+}
+.toast[data-colored="on"][data-type] .toast__icon,
+.toast[data-colored="on"] .toast__close { color: #fff; }
+.toast[data-colored="on"] .toast__close > img { filter: invert(1); opacity: 1; }
 
 
 /* ============================================================================================
@@ -2783,6 +2813,9 @@ button { font: inherit; color: inherit; }
   .screen { --status-h: env(safe-area-inset-top, 0px); }
 }
 
+/* кнопка панели на узкой ширине убрана везде (её решение 2026-11-05): сценарий показывает стенд справа, на широком экране панель как была */
+.panel-toggle, .panel-scrim { display: none !important; }
+
 </style>
 <style>
 /* ===== Boostra · Сканирование паспорта и анкета (93123) · токены и компоненты, которых нет в core2 =====
@@ -3297,11 +3330,10 @@ button.text-field__box:focus-visible {
 
 /* ---------- Check data: Fields гэп Average/3xl, группа гэп Spacing/lg, шапка группы гэп 16 ---------- */
 .form-fields { display: flex; flex-direction: column; gap: var(--space-3xl); }
-.form-group { display: flex; flex-direction: column; gap: var(--space-lg); }
-.form-group__head { display: flex; align-items: center; gap: var(--space-lg); }
+.form-group { display: flex; flex-direction: column; gap: var(--space-md); }
+.form-group__head { display: flex; align-items: center; gap: var(--space-lg); padding-bottom: var(--space-xs); }
 .form-group__title { flex: 1 1 0; min-width: 0; margin: 0; color: var(--text-bottom-default); }
-.form-group__status { flex-shrink: 0; color: var(--text-bottom-tertiary); }
-.form-group__status[data-filled="true"] { color: var(--text-success-default); }
+.form-group__status { flex-shrink: 0; }  /* Badge Size=20, Type=Success / Error, Extra color=Off, иконка check / x */
 .gender { display: flex; gap: var(--space-2xl); }
 
 /* ---------- Work & income: поля с гэпом Spacing/lg, кнопка внутри карточки ---------- */
@@ -3325,6 +3357,9 @@ button.text-field__box:focus-visible {
 .recognizing__text { display: flex; flex-direction: column; gap: var(--space-xs); }
 .recognizing__title { color: var(--text-bottom-default); }
 .recognizing__desc { color: var(--text-bottom-secondary); }
+
+/* Bottom Bar анкеты 112 как в макете: тело 16 / 16 / 0, Safe Area 16 (Home Indicator выключен) */
+#dataBar { padding-bottom: var(--space-lg); }
 
 </style>
 <style>
@@ -3498,6 +3533,8 @@ button.text-field__box:focus-visible {
     font-size: 12px; line-height: 22px; font-weight: 500; color: #fff;
     background: rgba(255, 255, 255, .15); border: 1px solid transparent;
   }
+  a.stand-tag--link { text-decoration: none; transition: background .2s; }
+  a.stand-tag--link:hover { background: rgba(255, 255, 255, .24); }
   .stand-tag--status { color: #b9a4ff; gap: 7px; }
   .stand-tag--status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #b9a4ff; box-shadow: 0 0 10px #b9a4ff; }
   .stand-link {
@@ -3592,7 +3629,7 @@ button.text-field__box:focus-visible {
         <h1 class="stand-top__title">Сканирование паспорта</h1>
         <div class="stand-tags">
           <span class="stand-tag">Концепт</span>
-          <span class="stand-tag">ID&nbsp;93123</span>
+          <a class="stand-tag stand-tag--link" href="https://bitrix.boostra.ru/company/personal/user/4547/tasks/task/view/93123/" target="_blank" rel="noopener">Битрикс&nbsp;93123</a><a class="stand-tag stand-tag--link" href="https://www.figma.com/design/nONrKDjiqsZ6WjatsMcjKq/?node-id=102-9586" target="_blank" rel="noopener">Figma</a>
         </div>
       </div>
     </header>
@@ -3680,23 +3717,23 @@ button.text-field__box:focus-visible {
                   </div>
                   <div class="form-fields">
                     <div class="form-group" data-group="personal">
-                      <div class="form-group__head"><h2 class="form-group__title t-body-strong">Личные данные</h2><span class="form-group__status t-caption" data-status></span></div>
+                      <div class="form-group__head"><h2 class="form-group__title t-body-strong">Личные данные</h2><span class="form-group__status badge" data-size-badge="20" data-status></span></div>
                       <div data-field="fio"></div>
                       <div data-field="bday"></div>
                       <div class="gender" role="radiogroup" aria-label="Пол">
-                        <button class="radio-row" type="button" role="radio" data-act="gender" data-gender="f"><span class="radio"></span><span class="t-note-strong">Женщина</span></button>
-                        <button class="radio-row" type="button" role="radio" data-act="gender" data-gender="m"><span class="radio"></span><span class="t-note-strong">Мужчина</span></button>
+                        <button class="radio-row" type="button" role="radio" data-act="gender" data-gender="f"><span class="radio"></span><span class="t-note">Женщина</span></button>
+                        <button class="radio-row" type="button" role="radio" data-act="gender" data-gender="m"><span class="radio"></span><span class="t-note">Мужчина</span></button>
                       </div>
                     </div>
                     <div class="form-group" data-group="passport">
-                      <div class="form-group__head"><h2 class="form-group__title t-body-strong">Паспорт</h2><span class="form-group__status t-caption" data-status></span></div>
+                      <div class="form-group__head"><h2 class="form-group__title t-body-strong">Паспорт</h2><span class="form-group__status badge" data-size-badge="20" data-status></span></div>
                       <div data-field="series"></div>
                       <div data-field="issued"></div>
                       <div data-field="code"></div>
                       <div data-field="issuer"></div>
                     </div>
                     <div class="form-group" data-group="address">
-                      <div class="form-group__head"><h2 class="form-group__title t-body-strong">Адрес</h2><span class="form-group__status t-caption" data-status></span></div>
+                      <div class="form-group__head"><h2 class="form-group__title t-body-strong">Адрес</h2><span class="form-group__status badge" data-size-badge="20" data-status></span></div>
                       <div data-field="addrReg"></div>
                       <button class="switch-row" type="button" role="switch" data-act="same-addr" id="sameAddr">
                         <span class="switch"></span>
@@ -4155,7 +4192,7 @@ window.PROTO_METRICS = {
   };
   var ERR = {
     empty: 'Заполните поле',
-    date: 'Такой даты нет. Проверьте день, месяц и год',
+    date: 'Проверьте дату',
     passport: 'Введите 4 цифры серии и 6 цифр номера',
     code: 'Введите 6 цифр, например 770-001',
     addr: 'Выберите адрес из списка'
@@ -4251,12 +4288,16 @@ window.PROTO_METRICS = {
     cap.textContent = nb(text);
     if (err) cap.dataset.state = 'error'; else delete cap.dataset.state;
   }
+  /* иконки Badge 16: check и x из FTM UI Icons, цвет текущий */
+  var BADGE_CHECK = '<svg class="badge__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.5 3.5L13 5"/></svg>';
+  var BADGE_X = '<svg class="badge__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
   function renderGroups() {
     var groups = { personal: ['fio', 'bday'], passport: ['series', 'issued', 'code', 'issuer'], address: ['addrReg'].concat(D.same ? [] : ['addrLive']) };
     Object.keys(groups).forEach(function (g) {
       var ok = groups[g].every(function (id) { return !dataError(id); });
       var st = $('[data-group="' + g + '"] [data-status]');
-      st.textContent = ok ? 'заполнено' : 'не' + NB + 'заполнено';
+      st.className = 'form-group__status badge ' + (ok ? 'badge--success' : 'badge--error');
+      st.innerHTML = (ok ? BADGE_CHECK : BADGE_X) + '<span class="t-caps-xsmall-strong">' + (ok ? 'заполнено' : 'не' + NB + 'заполнено') + '</span>';
       st.dataset.filled = String(ok);
     });
   }
@@ -4388,7 +4429,8 @@ window.PROTO_METRICS = {
   }
   /* «Сканировать паспорт», «Переснять фото паспорта», «Отсканировать фото паспорта»: доступ к камере проверяем только по нажатию */
   function openCamera() {
-    if (C.perm === 'denied') { showCamera('noaccess'); return; }
+    /* запрет камеры: сначала снова системное окно (макет 1579:13853); «нет доступа» после повторного отказа */
+    if (C.perm === 'denied') C.perm = 'prompt';
     showCamera('hint');
     if (C.perm === 'prompt') { $('#permDialog').hidden = false; notify('scanPermission'); }
   }
@@ -4437,7 +4479,7 @@ window.PROTO_METRICS = {
     if (mode === 'scan') Object.keys(SAMPLE).forEach(function (k) { D.v[k] = SAMPLE[k]; });
     if (opts.attention || (mode === 'scan' && SF.recog === 'attention' && !opts.plain)) attention();
     if (opts.errorsSample) {   /* значения с экрана Check data / Errors (886:3661) */
-      D.v.fio = ''; D.v.series = '45 20 1234'; D.v.issued = '32.05.2015'; D.v.code = '770-0'; D.v.addrReg = 'Москва, Тверская 1';
+      D.v.fio = ''; D.v.bday = ''; D.v.issuer = ''; D.v.series = '45 20 1234'; D.v.issued = '32.05.2015'; D.v.code = '770-0'; D.v.addrReg = 'Москва, Тверская 1';
     }
     show('data');
     if (opts.submit) { validateData(); }

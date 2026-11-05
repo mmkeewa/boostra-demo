@@ -621,6 +621,9 @@
   --neutral-bottom-alpha-66: var(--palette-control-b-4);
   --neutral-bottom-calm: #6885ab;
   --brand-success-alpha-70: rgba(0,160,67,0.7);
+  --brand-success-alpha-5: rgba(0,160,67,0.05);                    /* Brand/Success Alpha/5, снято с Badge в Check data */
+  --brand-success-ink: #006b2d;                                    /* Brand/Success/Ink */
+  --brand-error-ink: #df0026;                                      /* Brand/Error/Ink */
   /* Button / Secondary: Secondary/Fill/Default, Secondary/Text & icon/Default; Button / Close n Action: Fill/Default */
   --secondary-fill-default: var(--brand-secondary-alpha-5);
   --secondary-text-and-icon-default: var(--text-secondary-default);
@@ -723,6 +726,14 @@
 .t-caption-medium {
   font-family: var(--caption-medium-font-family);
   font-weight: var(--caption-medium-font-weight);
+  font-size: var(--caption-medium-size);
+  line-height: var(--caption-medium-line-height);
+  letter-spacing: var(--caption-medium-letter-spacing);
+}
+/* Caption/Caption Strong: 12 / 16, Semi Bold */
+.t-caption-strong {
+  font-family: var(--caption-medium-font-family);
+  font-weight: var(--typography-primitives-semi-bold);
   font-size: var(--caption-medium-size);
   line-height: var(--caption-medium-line-height);
   letter-spacing: var(--caption-medium-letter-spacing);
@@ -1097,6 +1108,15 @@
   background: var(--brand-attention-alpha-5);
   color: var(--brand-attention-ink);
 }
+.badge--success {
+  background: var(--brand-success-alpha-5);
+  color: var(--brand-success-ink);
+}
+.badge--error {
+  background: var(--brand-error-alpha-5);
+  color: var(--brand-error-ink);
+}
+.badge__icon { display: block; flex: none; width: 16px; height: 16px; }
 .badge--midnight-mid {
   /* 🚧 Loyalty Badge: Gradient/Midnight/Midnight Mid */
   background-image: linear-gradient(9.8deg, var(--system-gradient-midnight-mid-1) 14.645%, var(--system-gradient-midnight-mid-2) 85.355%);
@@ -1594,6 +1614,16 @@ button.link-button:focus-visible { outline: 1px solid var(--brand-secondary-alph
 }
 .toast__close > img { display: block; width: 20px; height: 20px; opacity: 0.5; }
 .toast__close:focus-visible { outline: 1px solid var(--brand-secondary-alpha-70); outline-offset: 2px; }
+/* Toast Type=Error, Colored=on: заливка System/e toast (#ee3245, 80%), текст, иконка и крестик Always/Peak Alpha/Peak (белые).
+   Значения сняты с тоста 1102:67832 («Выдача {Boostra}», ошибка привязки карты); токенов в tokens.css под них нет */
+.toast[data-colored="on"][data-type="error"] {
+  border-color: transparent;
+  background: rgba(238, 50, 69, 0.8);
+  color: #fff;
+}
+.toast[data-colored="on"][data-type] .toast__icon,
+.toast[data-colored="on"] .toast__close { color: #fff; }
+.toast[data-colored="on"] .toast__close > img { filter: invert(1); opacity: 1; }
 
 
 /* ============================================================================================
@@ -2343,10 +2373,10 @@ p, h1, h2 { margin: 0; }
 .add-card__btn { width: 100%; }
 .add-card__note { color: var(--text-bottom-quaternary); }
 
-/* Toast поверх экрана под шапкой: 8 от шапки, поля Base/lg */
+/* Toast поверх экрана под шапкой: 16 от шапки, поля Base/lg (макет 1102:67832, y 142) */
 .card-toast {
   position: absolute;
-  top: calc(var(--status-h) + 66px + var(--space-sm)); /* шапка 66, как в proto.css */
+  top: calc(var(--status-h) + 66px + var(--space-lg)); /* шапка 66, как в proto.css */
   left: var(--space-lg);
   right: var(--space-lg);
   z-index: 35;
@@ -2845,6 +2875,9 @@ p, h1, h2 { margin: 0; }
 .gate__err { color: var(--text-error-default); }
 .tile-grid { flex: 0 0 auto; }
 
+/* кнопка панели на узкой ширине убрана везде (её решение 2026-11-05): сценарий показывает стенд справа, на широком экране панель как была */
+.panel-toggle, .panel-scrim { display: none !important; }
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -2917,6 +2950,8 @@ p, h1, h2 { margin: 0; }
     font-size: 12px; line-height: 22px; font-weight: 500; color: #fff;
     background: rgba(255, 255, 255, .15); border: 1px solid transparent;
   }
+  a.stand-tag--link { text-decoration: none; transition: background .2s; }
+  a.stand-tag--link:hover { background: rgba(255, 255, 255, .24); }
   .stand-tag--status { color: #b9a4ff; gap: 7px; }
   .stand-tag--status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #b9a4ff; box-shadow: 0 0 10px #b9a4ff; }
   .stand-link {
@@ -3074,7 +3109,7 @@ p, h1, h2 { margin: 0; }
         <h1 class="stand-top__title">Привязка карты</h1>
         <div class="stand-tags">
           <span class="stand-tag">Концепт</span>
-          <span class="stand-tag">ID&nbsp;93123</span>
+          <a class="stand-tag stand-tag--link" href="https://bitrix.boostra.ru/company/personal/user/4547/tasks/task/view/93123/" target="_blank" rel="noopener">Битрикс&nbsp;93123</a><a class="stand-tag stand-tag--link" href="https://www.figma.com/design/nONrKDjiqsZ6WjatsMcjKq/?node-id=1102-67693" target="_blank" rel="noopener">Figma</a>
         </div>
         <button class="code-open" type="button" data-code="#code-salute" data-code-title="Код салюта для Flutter" data-code-file="cookie_salute.dart · виджет CookieSalute" data-code-hint="Кладётся в Stack поверх экрана «Карта добавлена»: Positioned.fill(child: CookieSalute(active: isSuccessShown)). Параметры совпадают с прототипом."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Код салюта</button>
       </div>
@@ -3164,7 +3199,7 @@ p, h1, h2 { margin: 0; }
   <canvas class="cookie-salute" id="cookieSalute" aria-hidden="true"></canvas>
 
   <!-- Toast (FTM DS Core 2), Type=Error, Colored=off: поверх экрана под шапкой, экран не растёт (NDL 15 / Card not added, 1102:67811) -->
-  <div class="toast card-toast" id="toast" data-type="error" role="alert" hidden>
+  <div class="toast card-toast" id="toast" data-type="error" data-colored="on" role="alert" hidden>
     <span class="toast__icon" aria-hidden="true">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 12.5l5-5M2.5 10a7.5 7.5 0 1 0 15 0a7.5 7.5 0 1 0-15 0z"/></svg>
     </span>
@@ -3288,7 +3323,7 @@ import 'package:flutter/scheduler.dart';
 class CookieSaluteSpec {
   /// Размеры печенек, px: как у 12 инстансов `Cookie` в группе Horray на NDL 16.
   static const List<double> sizes = [
-    18, 14.7, 22.3, 13.9, 13.3, 12.2, 13.9, 12.8, 13.7, 12.3, 11.5, 10.3,
+    14, 12, 16, 12, 10, 10, 12, 10, 10, 9, 9, 8,
   ];
 
   /// Физика в px за кадр при 60 fps, как в вебе.
@@ -3697,7 +3732,7 @@ Path _cookiePath() {
      размерами из макета NDL 16 вылетают снизу залпом, тормозят о воздух и снова прыгают снизу, пока открыт экран */
   var ckCanvas = $('#cookieSalute'), ckCtx = ckCanvas && ckCanvas.getContext && ckCanvas.getContext('2d');
   var ckParts = [], ckRaf = null, ckPrev = 0, ckW = 0, ckH = 0;
-  var COOKIE_SIZES = [18, 14.7, 22.3, 13.9, 13.3, 12.2, 13.9, 12.8, 13.7, 12.3, 11.5, 10.3];
+  var COOKIE_SIZES = [14, 12, 16, 12, 10, 10, 12, 10, 10, 9, 9, 8];   /* размеры печенек группы Horray на NDL 16 */
   var CK_G = 0.09, CK_DRAG = 0.99;
   function ckSize() {
     var dpr = Math.min(2, window.devicePixelRatio || 1);
