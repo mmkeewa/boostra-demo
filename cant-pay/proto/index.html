@@ -2604,6 +2604,32 @@ button { font: inherit; color: inherit; }
 .pm-radio:checked { border: 0; background: #007aff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M6.1 10l2.8 2.8 5.6-5.6' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 20px no-repeat; } /* Selector/Fill: в токенах прототипа не заведён */
 .pm-radio:focus-visible { outline: 1px solid var(--brand-secondary-alpha-70); outline-offset: 2px; }
 
+/* ---------- Шторка «Способ оплаты» поверх чата (как в 92813, Page 19, 3092:2855; её просьба 06.11.2026) ----------
+   List row (её 2159:3759): плитка card-sbp 42 × 28, значение, Selector Small; между сохранёнными и новыми Divider */
+.ds { --border-bottom-secondary: var(--palette-bottom-alpha-3); --surface-lvl-2-peak: #ffffff; }
+.pm-blanket { z-index: 30; }
+.screen:not(.is-pm-open) .pm-blanket { opacity: 0; pointer-events: none; }
+.screen.is-pm-open .pm-blanket { opacity: 1; pointer-events: auto; }
+.slot > .pm-sheet { z-index: 40; height: auto; max-height: calc(100% - var(--space-2xl)); padding-bottom: var(--space-2xl); }
+.screen.is-sheet-open:not(.is-pm-open) .pm-sheet { transform: translateY(100%); visibility: hidden; transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s 0.32s; }
+.screen.is-pm-open .pm-sheet { transform: none; visibility: visible; transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s; }
+.pm-sheet__header { align-items: center; padding-top: var(--space-md); }
+.pm-sheet .bottom-sheet__content { flex: 0 1 auto; overflow-y: auto; }
+.pm-methods { display: flex; flex-direction: column; gap: var(--space-lg); }
+.pm-methods .divider { display: block; align-self: stretch; height: var(--border-width-1); margin: 0; border: 0; background: var(--neutral-bottom-alpha-10); }
+.list-row { display: flex; flex-shrink: 0; align-items: center; gap: var(--space-md); width: 100%; min-width: 0; margin: 0; padding: 0; border: 0; background: none; color: var(--text-bottom-default); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.list-row__label { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-sbp { display: flex; flex-shrink: 0; align-items: center; justify-content: center; width: 42px; height: 28px; overflow: hidden; border: var(--border-width-1) solid var(--border-bottom-secondary); border-radius: var(--radius-md); background: var(--bg-grouped-secondary-w); }
+.card-sbp > img { display: block; flex-shrink: 0; }
+.card-sbp[data-logo="mir"] > img { width: 22px; height: 6.351px; }
+.card-sbp[data-logo="mastercard"] > img { width: 16px; height: 9.896px; }
+.card-sbp[data-logo="tbank"] > img { width: 26px; height: 9px; }
+.card-sbp[data-logo="sbp"] > img { width: 15.804px; height: 18px; }
+.card-sbp[data-logo="plus"] > img { width: 16px; height: 16px; }
+.selector { display: block; flex-shrink: 0; width: 20px; height: 20px; border: 2px solid var(--border-bottom-default); border-radius: var(--radius-full); background: var(--surface-lvl-2-peak); }
+.selector[data-checked="true"] { border-color: transparent; background: var(--brand-secondary) url("data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJjaGVjayI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0zLjMzMzMzIDhMNi42NjY2NyAxMS4zMzMzTDEzLjMzMzMgNC42NjY2NyIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=") center / 16px 16px no-repeat; }
+.pm-field .card-sbp { width: 42px; height: 28px; }
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -2944,6 +2970,22 @@ button { font: inherit; color: inherit; }
                   </div>
                 </div>
                 <div class="bottom-sheet__footer" hidden></div>
+              </section>
+
+              <!-- Шторка «Способ оплаты» поверх чата: как в 92813 (Page 19, 3092:2855), её просьба 06.11.2026.
+                   Сохранённые способы, Divider, «Другая карта», «СБП»; нажатие на строку выбирает способ и закрывает шторку -->
+              <div class="blanket pm-blanket" id="pmBlanket"></div>
+              <section class="bottom-sheet pm-sheet" id="pmSheet" role="dialog" aria-modal="true" aria-labelledby="pmSheetTitle" inert>
+                <div class="bottom-sheet__grabber"><span class="bottom-sheet__handle"></span></div>
+                <header class="bottom-sheet__header pm-sheet__header">
+                  <h2 class="bottom-sheet__title t-h4-strong" id="pmSheetTitle">Способ оплаты</h2>
+                  <button class="btn-neutral sheet-close" id="pmSheetClose" type="button" data-size-button="medium" aria-label="Закрыть">
+                    <span class="btn-content"><img src="data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJ4Ij4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTE1IDVMNSAxNU01IDVMMTUgMTUiIHN0cm9rZT0iIzE1MjE0OSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=" width="20" height="20" alt=""></span>
+                  </button>
+                </header>
+                <div class="bottom-sheet__content">
+                  <div class="pm-methods" id="pmMethods" role="radiogroup" aria-labelledby="pmSheetTitle"></div>
+                </div>
               </section>
 
               <!-- Экранная клавиатура: только на десктопе, на тач-устройстве открывается системная -->
@@ -4032,14 +4074,7 @@ button { font: inherit; color: inherit; }
   /* карточка способа оплаты: «Изменить» открывает выбор, «Оплатить N ₽» уводит в оплату */
   messagesEl.addEventListener('click', function (e) {
     var ch = e.target.closest('[data-pm-change]');
-    if (ch && !state.pending && !state.stub) {
-      var box = ch.closest('.chat-info');
-      var prev = ($('[data-pm-pay]', box) || {}).textContent;
-      box.className = 'chat-info chat-info--payChoice';
-      box.innerHTML = ChatScenes.info('payChoice').innerHTML;
-      var b = $('[data-pm-pay]', box); if (b && prev) b.textContent = prev;
-      return;
-    }
+    if (ch && !state.pending && !state.stub) { openPm(ch.closest('.chat-info')); return; }
     var pay = e.target.closest('[data-pm-pay]');
     if (pay && !state.pending && !state.stub) {
       /* «Платёж не прошёл» и выбрана банковская карта: новая карта, выход в добавление карты (заметка «Карты и счета: добавить карту» в макете) */
@@ -4049,6 +4084,54 @@ button { font: inherit; color: inherit; }
       return;
     }
   });
+  /* ---------- Шторка «Способ оплаты» (как в 92813, Page 19, 3092:2855; её просьба 06.11.2026) ----------
+     «Изменить» в карточке способа открывает её поверх чата. Сохранённые способы, Divider, «Другая карта», «СБП».
+     Нажатие на строку выбирает способ, ставит его в карточку и закрывает шторку, кнопки подтверждения нет */
+  var PM = {
+    mir: { logo: 'sign-mir', tile: 'mir', label: '2200 •••• 0987' },
+    mc: { logo: 'logo-mastercard', tile: 'mastercard', label: '5469 •••• 1234' },
+    tbank: { logo: 'logo-tbank', tile: 'tbank', label: 'СБП, Т-Банк' },
+    newCard: { logo: 'plus', tile: 'plus', label: 'Другая карта' },
+    newSbp: { logo: 'logo-sbp', tile: 'sbp', label: 'СБП' }
+  };
+  var PM_SAVED = ['mir', 'mc', 'tbank'];
+  var pmSheet = $('#pmSheet'), pmMethods = $('#pmMethods'), pmBox = null;
+  function pmTile(id) {
+    var m = PM[id];
+    return '<span class="card-sbp" data-logo="' + m.tile + '"><img src="img/' + m.logo + '.svg" alt=""></span>';
+  }
+  function pmRow(id, checked) {
+    return '<button class="list-row" type="button" role="radio" aria-checked="' + checked + '" data-pm-id="' + id + '">' + pmTile(id) +
+      '<span class="list-row__label t-body">' + PM[id].label + '</span><span class="selector" data-checked="' + checked + '"></span></button>';
+  }
+  function openPm(box) {
+    pmBox = box;
+    var cur = (box && box.dataset.pm) || 'mir';
+    pmMethods.innerHTML = PM_SAVED.map(function (id) { return pmRow(id, id === cur); }).join('') +
+      '<hr class="divider">' + pmRow('newCard', cur === 'newCard') + pmRow('newSbp', cur === 'newSbp');
+    screen.classList.add('is-pm-open');
+    pmSheet.removeAttribute('inert');
+    sheet.setAttribute('inert', '');
+  }
+  function closePm() {
+    screen.classList.remove('is-pm-open');
+    pmSheet.setAttribute('inert', '');
+    if (screen.classList.contains('is-sheet-open')) sheet.removeAttribute('inert');
+    pmBox = null;
+  }
+  pmMethods.addEventListener('click', function (e) {
+    var row = e.target.closest('[data-pm-id]'); if (!row) return;
+    var id = row.dataset.pmId, field = pmBox && $('.pm-field', pmBox);
+    if (field) {
+      pmBox.dataset.pm = id;
+      var logo = field.querySelector('.pm-logo, .card-sbp'); if (logo) logo.outerHTML = pmTile(id);
+      $('.pm-label', field).textContent = PM[id].label;
+    }
+    closePm();
+  });
+  $('#pmSheetClose').addEventListener('click', closePm);
+  $('#pmBlanket').addEventListener('click', closePm);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && screen.classList.contains('is-pm-open')) { e.stopImmediatePropagation(); closePm(); } }, true);
   var methodSwitch = $('#methodSwitch');
   methodSwitch.addEventListener('click', function (e) {
     var c = e.target.closest('[data-method]');
