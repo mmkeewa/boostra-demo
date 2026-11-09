@@ -587,7 +587,7 @@ a.v-link:focus-visible { outline: 2px solid #5aa7ff; outline-offset: 2px; }
 .mt thead th small { display: block; font-weight: 400; }
 .mt th[scope="row"], .mt thead th:first-child {
   position: sticky; left: 0; z-index: 1; text-align: left; white-space: normal; min-width: 132px; max-width: 160px; padding-left: 0;
-  background: #0f0f11; color: #fff; font-weight: 500; box-shadow: 8px 0 12px -10px rgba(0, 0, 0, .9);
+  background: #0f0f11; color: #fff; font-weight: 500; box-shadow: -24px 0 0 0 #0f0f11, 8px 0 12px -10px rgba(0, 0, 0, .9);   /* слева закрывает поле прокрутки 24 px: столбцы не видны из-под названия */
 }
 .mt thead th:first-child { color: var(--ink-3); font-weight: 600; }
 .mt td b { font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
@@ -632,6 +632,13 @@ a.v-link:focus-visible { outline: 2px solid #5aa7ff; outline-offset: 2px; }
   .v-panel { height: 82vh; }
 }
 @media (prefers-reduced-motion: reduce) { .v-stage, .v-panel, .step-desc, .step-desc__in { animation: none !important; } .f-switch i, .f-switch i::after { transition: none; } }
+
+/* заголовок таблицы метрик с переключателем «По дням / По неделям» (её решение 2026-11-09: аналитика каждый день) */
+.mt-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 10px; }
+.mt-head .v-sec__title { margin: 0; }
+.v-pane .mt-per { margin: 0; flex: 0 0 auto; }
+.v-pane .mt-per button { height: 26px; padding: 0 10px; }
+.mt thead th.is-weekend small { color: #ff9db3; }
 
 </style>
 <style>#crumbs{display:none}.v-actions a[href^="index.html"]{display:none}</style>
@@ -707,6 +714,14 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
   'use strict';
 
   var D = window.STAND, MAPS = window.STAND_MAPS || {};
+  /* GitLab Pages: когда вход в Pages надо обновить, GitLab возвращает на страницу без адреса после «#», и стенд открывался с начала
+     (её жалоба 2026-11-09). Последний адрес храним во вкладке и после такого возврата подставляем обратно */
+  var HASH_KEY = 'stand.hash' + location.pathname;
+  try {
+    var savedHash = sessionStorage.getItem(HASH_KEY), noHash = !location.hash || location.hash === '#';
+    if (noHash && savedHash) history.replaceState(null, '', savedHash);   /* у страницы сценария пустой адрес смысла не имеет: подставляем всегда */
+  } catch (e0) {}
+  window.addEventListener('pagehide', function () { try { if (location.hash) sessionStorage.setItem(HASH_KEY, location.hash); } catch (e1) {} });
   var ONB = 'boostra-lk-onboarding-done';   /* отметка «онбординг кабинета пройден» в прототипе ../ */
   try { ['smsGate', 'ipGate', 'lkWebGate', 'cantPayGate', 'payMethodGate', 'friendGate', 'cardGate', 'passportGate', 'timerGate', 'scanGate', 'navGate'].forEach(function (k) { sessionStorage.setItem(k, '1'); }); } catch (e) {}
 
@@ -859,8 +874,16 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
 
   /* ---------- Прототип: какой открыть и на каком шаге ----------
      sync: сценарий выбрал сам прототип (дошёл до его экрана): прототип не перезагружаем и на шаг не прыгаем */
+  /* экран прототипа живёт в адресе (&at=<экран>): после обновления страницы прототип открывается там же, где был (её просьба 2026-11-09) */
+  var restoreAt = parse().q.at || null;
+  function rememberAt(view, source) {
+    if (source !== frame.contentWindow || !loaded || !view) return;
+    var r = parse(); if (!r.slug || r.q.at === view) return;
+    history.replaceState(null, '', queryHash(r, { at: view }));
+  }
   function render(sync) {
     var r = parse(), f = find(r);
+    var at = restoreAt; restoreAt = null;
     if (!f) { renderPanel(); protoEl.hidden = true; document.getElementById('none').hidden = true; return; }
     loadFeature(r.slug);
     if (selectedFor !== r.slug) { selected = null; selectedFor = r.slug; }
@@ -879,10 +902,12 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
     } catch (e2) {}
     var fdefs = filtersFor(f, v), fst = fdefs ? filterState(fdefs, r.q) : null;
     var clicks = [].concat(src.go ? '.state-btn[data-go="' + src.go + '"]' : [], src.click || []), step = src.step;
-    pending = clicks.length || step || fst ? function (win, doc) {
+    pending = clicks.length || step || fst || at ? function (win, doc) {
       clicks.forEach(function (sel) { var b = doc.querySelector(sel); if (b) b.click(); });
       if (fst) post({ type: 'proto:filter', filters: fst });
       if (step) post({ type: 'proto:step', step: step });
+      /* экран, на котором был до обновления: после стартового шага, когда прототип его отрисует */
+      if (at && at !== step) setTimeout(function () { post({ type: 'proto:step', step: at }); }, 400);
     } : null;
     if (loadedSrc !== src.href) { loadedSrc = src.href; loaded = false; frame.src = fresh(src.href); }
     else if (loaded) runJump();
@@ -1079,22 +1104,30 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
     }
     h += '</div></div>';
 
-    /* таблица: строки метрики, столбцы недели, новая неделя справа, неделя релиза с вертикальной линией */
-    h += '<div class="v-sec"><p class="v-sec__title">Метрики по неделям</p>';
-    var weeks = ((m && m.weeks) || []).slice().sort(function (a, b) { return a.from < b.from ? -1 : a.from > b.from ? 1 : 0; });
-    if (m && (m.rows || []).length && weeks.length) {
-      var relCol = -1;
-      if (rel && rel.date) weeks.forEach(function (w, i) { if (rel.date >= w.from && rel.date <= w.to) relCol = i; });
+    /* таблица: строки метрики, столбцы дни (её решение 2026-11-09: собираем каждый день в 9:00, показываем последний день) или недели;
+       свежий столбец справа, день или неделя релиза с вертикальной линией */
+    var byDate = function (a, b) { var x = a.date || a.from, y = b.date || b.from; return x < y ? -1 : x > y ? 1 : 0; };
+    var days = ((m && m.days) || []).slice().sort(byDate), weeks = ((m && m.weeks) || []).slice().sort(byDate);
+    var per = parse().q.per === 'weeks' || !days.length ? 'weeks' : 'days', cols = per === 'days' ? days : weeks;
+    h += '<div class="v-sec"><div class="mt-head"><p class="v-sec__title">' + (per === 'days' ? 'Метрики по дням' : 'Метрики по неделям') + '</p>' +
+      (days.length && weeks.length ? '<div class="vers f-seg mt-per" role="group" aria-label="Период">' +
+        '<button type="button" data-per="days" aria-pressed="' + (per === 'days') + '">По дням</button>' +
+        '<button type="button" data-per="weeks" aria-pressed="' + (per === 'weeks') + '">По неделям</button></div>' : '') + '</div>';
+    if (m && (m.rows || []).length && cols.length) {
+      var relCol = -1, WD = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+      if (rel && rel.date) cols.forEach(function (w, i) { if (per === 'days' ? rel.date === w.date : rel.date >= w.from && rel.date <= w.to) relCol = i; });
       h += '<div class="mt-wrap" id="mtWrap"><table class="mt"><thead><tr><th scope="col">Метрика</th>';
-      weeks.forEach(function (w, i) {
-        h += '<th scope="col"' + (i === relCol ? ' class="is-release"' : '') + '>' + (i === relCol ? '<em class="mt-rel">Релиз ' + esc(rel.version || ddmm(rel.date)) + '</em>' : '') +
-          ddmm(w.from) + '–' + ddmm(w.to) + '<small>' + w.to.slice(0, 4) + '</small></th>';
+      cols.forEach(function (w, i) {
+        var wd = per === 'days' ? new Date(w.date + 'T12:00:00').getDay() : -1;
+        h += '<th scope="col" class="' + (i === relCol ? 'is-release' : '') + (wd === 0 || wd === 6 ? ' is-weekend' : '') + '">' +
+          (i === relCol ? '<em class="mt-rel">Релиз ' + esc(rel.version || ddmm(rel.date)) + '</em>' : '') +
+          (per === 'days' ? ddmm(w.date) + '<small>' + WD[wd] + '</small>' : ddmm(w.from) + '–' + ddmm(w.to) + '<small>' + w.to.slice(0, 4) + '</small>') + '</th>';
       });
       h += '</tr></thead><tbody>';
       m.rows.forEach(function (row) {
         h += '<tr><th scope="row">' + esc(row.t) + '</th>';
-        weeks.forEach(function (w, i) {
-          var val = w.values ? w.values[row.id] : null, prev = i ? (weeks[i - 1].values || {})[row.id] : null, d = '';
+        cols.forEach(function (w, i) {
+          var val = w.values ? w.values[row.id] : null, prev = i ? (cols[i - 1].values || {})[row.id] : null, d = '';
           if (val != null && prev != null) {
             var dd = Math.round((val - prev) * 10) / 10, good = (row.better || 'up') === 'down' ? dd < 0 : dd > 0;
             d = dd === 0 ? '<span class="mt-d" data-tone="flat">=</span>' : '<span class="mt-d" data-tone="' + (good ? 'good' : 'bad') + '">' + (dd > 0 ? '▲' : '▼') + ' ' + num(Math.abs(dd)) + '</span>';
@@ -1103,9 +1136,11 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
         });
         h += '</tr>';
       });
-      var last = weeks[weeks.length - 1], n = last.n;
+      var last = cols[cols.length - 1], n = last.n;
       h += '</tbody></table></div><p class="mt-src">' + esc([m.segment, m.source, m.formula].filter(Boolean).join(' · ')) +
-        ' · вошли в шаг за последнюю неделю: ' + (n != null ? esc(String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')) : 'нет данных') + '</p>';
+        (per === 'days' ? ' · вошли в шаг за ' + ddmm(last.date) : ' · вошли в шаг за неделю ' + ddmm(last.from) + '–' + ddmm(last.to)) + ': ' +
+        (n != null ? esc(String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')) : 'нет данных') +
+        (per === 'days' ? ' · обновляется каждый день в 9:00 за вчера' : '') + '</p>';
     } else if (v && v.kind === 'exp') {
       h += expHtml(v);
     } else if (x && x.cr) {
@@ -1236,6 +1271,8 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
       if (loaded) post({ type: 'proto:filter', filters: st });
       renderPanel(); return;
     }
+    var pb = ev.target.closest('[data-per]');
+    if (pb) { var pr = parse(); history.replaceState(null, '', queryHash(pr, { per: pb.dataset.per === 'weeks' ? 'weeks' : null })); renderPanel(); return; }
     var vb = ev.target.closest('[data-ver]');
     if (vb) {
       var r = parse();
@@ -1384,7 +1421,7 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
   }
   window.addEventListener('message', function (ev) {
     if (ev.origin !== location.origin || !ev.data) return;
-    if (ev.data.type === 'proto:view') { if (syncView(ev.data.view, ev.source) !== 'moved') markView(ev.data.view); return; }
+    if (ev.data.type === 'proto:view') { if (syncView(ev.data.view, ev.source) !== 'moved') markView(ev.data.view); rememberAt(ev.data.view, ev.source); return; }
     if (ev.data.type === 'stand:next') goNext(ev.data.to);
   });
   /* прототип перешёл на экран другого сценария (с калькулятора нажали «Получить деньги»): страница показывает этот сценарий, прототип остаётся.
