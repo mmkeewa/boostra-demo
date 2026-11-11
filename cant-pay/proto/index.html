@@ -2,6 +2,16 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<!-- Отдельно прототип не открываем (её решение 2026-11-10): прямой адрес уводит на страницу сценария на стенде, там тот же прототип,
+     фильтры, аналитика, события и переходы. В iframe стенда, с ?solo=1 (отладка) и на github.io не уводит -->
+<script>
+  (function () {
+    try {
+      if (window.parent !== window || /github\.io$/.test(location.hostname) || /[?&]solo\b/.test(location.search)) return;
+      location.replace('../stand/view.html#/account/ne-mogu-zaplatit-seychas');
+    } catch (e) {}
+  })();
+</script>
 <!-- maximum-scale=1: поле сообщения 14 px, без этого iOS приближает страницу при фокусе. Ширина по устройству, текст не масштабируется -->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
@@ -2636,6 +2646,13 @@ button { font: inherit; color: inherit; }
 .selector[data-checked="true"] { border-color: transparent; background: var(--brand-secondary) url("data:image/svg+xml;base64,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgc3R5bGU9ImRpc3BsYXk6IGJsb2NrOyIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMTYgMTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGlkPSJjaGVjayI+CjxwYXRoIGlkPSJWZWN0b3IiIGQ9Ik0zLjMzMzMzIDhMNi42NjY2NyAxMS4zMzMzTDEzLjMzMzMgNC42NjY2NyIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L2c+Cjwvc3ZnPgo=") center / 16px 16px no-repeat; }
 .pm-field .card-sbp { width: 42px; height: 28px; }
 
+/* Button / Semantic, тон Info (Semantic ✦ = Info в ДС): кнопка «Я закрою заём …» после выбора дня */
+[data-semantic="info"] {
+  --semantic-button-fill-default: var(--palette-tertiary-alpha-1);
+  --semantic-button-fill-hover-and-press: var(--palette-tertiary-alpha-2);
+  --semantic-text-and-icon: var(--palette-tertiary-9);
+}
+
 </style>
 <style>
 /* Оболочка прототипа в стиле стенда: нейтральное тёмное «стекло» (эталон: ../stand/theme.css, со стартовой страницы стенда 2026-10-14).
@@ -3521,7 +3538,13 @@ button { font: inherit; color: inherit; }
   }
   /* кнопка под «Перейти к\u00A0оплате»: пока день не выбран, открывает диалог; после выбора показывает день */
   function entryLabel() {
-    return state.payDate ? 'Я заплачу\u00A0' + state.payDate + '.2026' : T.start;
+    return state.payDate ? 'Я закрою заём\u00A0' + state.payDate + '.2026' : T.start;
+  }
+  /* после выбора дня кнопка в\u00A0тоне Info, до выбора Error (её макет LK / Day chosen 3045:71879, 11.11.2026) */
+  function entryButton() {
+    var b = $('#openChat');
+    b.textContent = entryLabel();
+    b.dataset.semantic = state.payDate ? 'info' : 'error';
   }
 
   /* Просрочка: плашка Label time и срок на карточке займа; tech = реплика про техническую просрочку */
@@ -4318,9 +4341,9 @@ button { font: inherit; color: inherit; }
   function setPayDate(date) {
     state.payDate = date;
     save();
-    $('#openChat').textContent = entryLabel();
+    entryButton();
   }
-  /* кнопка «Я заплачу …»: диалог открывается на\u00A0состоянии «день выбран», история сохранена.
+  /* кнопка «Я закрою заём …»: диалог открывается на\u00A0состоянии «день выбран», история сохранена.
      Если клиент после выбора дня ушёл в\u00A0другую ветку, реплика кнопки и подтверждение дня добавляются в\u00A0конец */
   function openPayDate() {
     cancelTimers();

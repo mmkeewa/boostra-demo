@@ -595,6 +595,7 @@ a.v-link:focus-visible { outline: 2px solid #5aa7ff; outline-offset: 2px; }
 .mt-d[data-tone="good"] { color: var(--st-released); }
 .mt-d[data-tone="bad"] { color: #ff6b8b; }
 .mt-d[data-tone="flat"] { color: var(--ink-3); }
+.mt-n { display: block; font-size: 10px; line-height: 13px; color: var(--ink-3); font-variant-numeric: tabular-nums; }   /* знаменатель строки-сегмента */
 .mt .is-release { box-shadow: inset 2px 0 0 var(--st-released); }
 .mt-rel { display: block; margin-bottom: 4px; color: var(--st-released); font-style: normal; font-weight: 700; white-space: nowrap; }
 .mt-src { margin: 10px 0 0; font-size: 12px; line-height: 16px; color: var(--ink-3); }
@@ -694,9 +695,9 @@ a.v-link:focus-visible { outline: 2px solid #5aa7ff; outline-offset: 2px; }
 </div>
 
 <script>
-window.STAND = {"sections": [{"id": "account", "t": "Личный кабинет", "items": [{"t": "Не могу заплатить сейчас", "d": "Диалог причин и решение в шторке", "tag": "Концепт", "s": "concept", "who": "PDL, IL", "task": "92815", "mat": "Прототип", "sk": "sheet", "href": "proto/"}]}]};
+window.STAND = {"sections": [{"id": "account", "t": "Личный кабинет", "items": [{"filters": [{"id": "dpd", "t": "Просрочка", "options": [["early", "До 3 дней", "#dpdSwitch [data-dpd=\"early\"]"], ["late", "Больше 3 дней", "#dpdSwitch [data-dpd=\"late\"]"]]}, {"id": "client", "t": "Клиент", "options": [["regular", "Обычный", "#clientSwitch [data-client=\"regular\"]"], ["good", "Хороший", "#clientSwitch [data-client=\"good\"]"]]}, {"id": "method", "t": "Способ оплаты", "options": [["saved", "Сохранён", "#methodSwitch [data-method=\"saved\"]"], ["none", "Нет", "#methodSwitch [data-method=\"none\"]"]]}], "t": "Не могу заплатить сейчас", "d": "Диалог причин и решение в шторке", "tag": "Концепт", "s": "concept", "who": "PDL, IL", "task": "92815", "mat": "Прототип", "sk": "sheet", "href": "proto/"}]}]};
 window.STAND_MAPS = {};
-window.STAND_FEATURE = {"_about": "Фича на стенде: статус, релиз, ссылки, шаги прототипа, эффект, метрики по неделям, события. Пишут дизайн и агенты, страница stand/view.html только читает.", "title": "Не могу заплатить сейчас", "task": "92815", "status": "concept", "release": {"version": null, "date": null, "audience": null}, "links": {"bitrix": "https://bitrix.boostra.ru/company/personal/user/4547/tasks/task/view/92815/", "figma": "https://www.figma.com/design/rF7MaeLJR4AL2HxL5oHtAk/?node-id=2988-5759", "jira": null}, "scenario": {"groups": [{"t": "Основной путь", "kind": "flow", "steps": [{"id": "entry", "t": "Вход", "click": "[data-scenario=\"entry\"]"}, {"id": "1", "t": "Причины", "click": "[data-scenario=\"1\"]"}]}, {"t": "Не хватает денег", "kind": "side", "steps": [{"id": "2", "t": "Не хватает денег", "click": "[data-scenario=\"2\"]"}, {"id": "2a", "t": "День оплаты", "click": "[data-scenario=\"2a\"]"}, {"id": "2b", "t": "День оплаты · готово", "click": "[data-scenario=\"2b\"]"}, {"id": "2c", "t": "Кабинет · день выбран", "click": "[data-scenario=\"2c\"]"}, {"id": "2d", "t": "Продление с оплатой %", "click": "[data-scenario=\"2d\"]"}]}, {"t": "Сумма и оплата", "kind": "side", "steps": [{"id": "3", "t": "Частичная оплата", "click": "[data-scenario=\"3\"]"}, {"id": "3a", "t": "Скидка хорошему клиенту", "click": "[data-scenario=\"3a\"]"}, {"id": "5", "t": "Платёж не прошёл", "click": "[data-scenario=\"5\"]"}]}, {"t": "Другая проблема", "kind": "side", "steps": [{"id": "7", "t": "Другая проблема", "click": "[data-scenario=\"7\"]"}, {"id": "7a", "t": "Другая проблема · отправлено", "click": "[data-scenario=\"7a\"]"}, {"id": "7b", "t": "Другая проблема · тикет не пришёл", "click": "[data-scenario=\"7b\"]"}]}, {"t": "Последствия", "kind": "side", "steps": [{"id": "8a", "t": "Последствия · кредитная история", "click": "[data-scenario=\"8a\"]"}, {"id": "8b", "t": "Последствия · если не платить", "click": "[data-scenario=\"8b\"]"}, {"id": "8c", "t": "Последствия · банкротство", "click": "[data-scenario=\"8c\"]"}]}, {"t": "Ошибки", "kind": "error", "steps": [{"id": "E1", "t": "Сообщение не отправилось", "click": "[data-scenario=\"E1\"]"}, {"id": "E2", "t": "День не сохранился", "click": "[data-scenario=\"E2\"]"}, {"id": "E3", "t": "Переписка не загрузилась", "click": "[data-scenario=\"E3\"]"}, {"id": "E4", "t": "Продление недоступно", "click": "[data-scenario=\"E4\"]"}, {"id": "E5", "t": "Сумма не введена", "click": "[data-scenario=\"E5\"]"}]}]}, "effect": {"expected": {"by": "Дизайн, 12.10.2026", "metric": "Дополнительные оплаты на просрочке", "basis": "Анкета отмены оплаты, 14.05–03.09.2026: причину, которую закрывает диалог, называют по 4 800 договорам в месяц (с пропустившими анкету до 10 800). В рублях не посчитано: нет среднего платежа на просрочке", "cases": [{"t": "Оплатит каждый десятый", "to": null, "plus": "+480–1 080 оплат в месяц"}]}, "confirmed": null}, "metrics": {"segment": null, "source": null, "formula": null, "rows": [], "weeks": []}, "events": [{"name": "dl_repayment_click_pay", "status": "exists", "where": "Оплата и продление из диалога", "param": "новый repayment_source = cant_pay_chat; discount_applied = yes на скидке"}, {"name": "dl_repayment_entered_amount_paid", "status": "exists", "where": "Оплата и продление из диалога", "param": "новый repayment_source = cant_pay_chat"}, {"name": "dl_repayment_success_payment", "status": "exists", "where": "Оплата и продление из диалога", "param": "новый repayment_source = cant_pay_chat"}, {"name": "dl_repayment_cant_pay_click", "status": "add", "where": "«Не могу заплатить сейчас» или «Я заплачу <дата>» в кабинете", "param": "loan_type"}, {"name": "dl_repayment_cant_pay_reason_select", "status": "add", "where": "Причина в диалоге", "param": "loan_type, cant_pay_reason: amount_higher · not_enough_money · payment_failed · other_problem"}, {"name": "dl_repayment_cant_pay_option_select", "status": "add", "where": "Вариант: день оплаты, продление, частично, полностью", "param": "loan_type, cant_pay_option: pay_date · extension · partial · full"}, {"name": "dl_repayment_cant_pay_date_select", "status": "add", "where": "День оплаты на плитке", "param": "loan_type, pay_date: YYYY-MM-DD"}, {"name": "dl_repayment_cant_pay_method_select", "status": "add", "where": "Способ оплаты в диалоге", "param": "loan_type, payment_method: sbp · card · new_card"}, {"name": "dl_repayment_cant_pay_message_send", "status": "add", "where": "Сообщение в «Другая проблема»", "param": "loan_type"}, {"name": "dl_repayment_cant_pay_close_chat_click", "status": "add", "where": "Закрыл шторку", "param": "loan_type, cant_pay_step"}]};
+window.STAND_FEATURE = {"_about": "Фича на стенде: статус, релиз, ссылки, шаги прототипа, эффект, метрики по неделям, события. Пишут дизайн и агенты, страница stand/view.html только читает.", "title": "Не могу заплатить сейчас", "task": "92815", "status": "concept", "release": {"version": null, "date": null, "audience": null}, "links": {"bitrix": "https://bitrix.boostra.ru/company/personal/user/4547/tasks/task/view/92815/", "figma": "https://www.figma.com/design/rF7MaeLJR4AL2HxL5oHtAk/?node-id=2988-5759", "jira": null}, "scenario": {"groups": [{"t": "Основной путь", "kind": "flow", "steps": [{"id": "entry", "t": "Вход", "click": "[data-scenario=\"entry\"]"}, {"id": "1", "t": "Причины", "click": "[data-scenario=\"1\"]"}]}, {"t": "Не хватает денег", "kind": "side", "steps": [{"id": "2", "t": "Не хватает денег", "click": "[data-scenario=\"2\"]"}, {"id": "2a", "t": "День оплаты", "click": "[data-scenario=\"2a\"]"}, {"id": "2b", "t": "День оплаты · готово", "click": "[data-scenario=\"2b\"]"}, {"id": "2c", "t": "Кабинет · день выбран", "click": "[data-scenario=\"2c\"]"}, {"id": "2d", "t": "Продление с оплатой %", "click": "[data-scenario=\"2d\"]"}]}, {"t": "Сумма и оплата", "kind": "side", "steps": [{"id": "3", "t": "Частичная оплата", "click": "[data-scenario=\"3\"]"}, {"id": "3a", "t": "Скидка хорошему клиенту", "click": "[data-scenario=\"3a\"]"}, {"id": "5", "t": "Платёж не прошёл", "click": "[data-scenario=\"5\"]"}]}, {"t": "Другая проблема", "kind": "side", "steps": [{"id": "7", "t": "Другая проблема", "click": "[data-scenario=\"7\"]"}, {"id": "7a", "t": "Другая проблема · отправлено", "click": "[data-scenario=\"7a\"]"}, {"id": "7b", "t": "Другая проблема · тикет не пришёл", "click": "[data-scenario=\"7b\"]"}]}, {"t": "Последствия", "kind": "side", "steps": [{"id": "8a", "t": "Последствия · кредитная история", "click": "[data-scenario=\"8a\"]"}, {"id": "8b", "t": "Последствия · если не платить", "click": "[data-scenario=\"8b\"]"}, {"id": "8c", "t": "Последствия · банкротство", "click": "[data-scenario=\"8c\"]"}]}, {"t": "Ошибки", "kind": "error", "steps": [{"id": "E1", "t": "Сообщение не отправилось", "click": "[data-scenario=\"E1\"]"}, {"id": "E2", "t": "День не сохранился", "click": "[data-scenario=\"E2\"]"}, {"id": "E3", "t": "Переписка не загрузилась", "click": "[data-scenario=\"E3\"]"}, {"id": "E4", "t": "Продление недоступно", "click": "[data-scenario=\"E4\"]"}, {"id": "E5", "t": "Сумма не введена", "click": "[data-scenario=\"E5\"]"}]}], "keepFilters": true}, "effect": {"expected": {"by": "Дизайн, 12.10.2026", "metric": "Дополнительные оплаты на просрочке", "basis": "Анкета отмены оплаты, 14.05–03.09.2026: причину, которую закрывает диалог, называют по 4 800 договорам в месяц (с пропустившими анкету до 10 800). В рублях не посчитано: нет среднего платежа на просрочке", "cases": [{"t": "Оплатит каждый десятый", "to": null, "plus": "+480–1 080 оплат в месяц"}]}, "confirmed": null}, "metrics": {"segment": null, "source": null, "formula": null, "rows": [], "weeks": []}, "events": [{"name": "dl_repayment_click_pay", "status": "exists", "where": "Оплата и продление из диалога", "param": "новый repayment_source = cant_pay_chat; discount_applied = yes на скидке"}, {"name": "dl_repayment_entered_amount_paid", "status": "exists", "where": "Оплата и продление из диалога", "param": "новый repayment_source = cant_pay_chat"}, {"name": "dl_repayment_success_payment", "status": "exists", "where": "Оплата и продление из диалога", "param": "новый repayment_source = cant_pay_chat"}, {"name": "dl_repayment_cant_pay_click", "status": "add", "where": "«Не могу заплатить сейчас» или «Я закрою заём <дата>» в кабинете", "param": "loan_type"}, {"name": "dl_repayment_cant_pay_reason_select", "status": "add", "where": "Причина в диалоге", "param": "loan_type, cant_pay_reason: amount_higher · not_enough_money · payment_failed · other_problem"}, {"name": "dl_repayment_cant_pay_option_select", "status": "add", "where": "Вариант: день оплаты, продление, частично, полностью", "param": "loan_type, cant_pay_option: pay_date · extension · partial · full"}, {"name": "dl_repayment_cant_pay_date_select", "status": "add", "where": "День оплаты на плитке", "param": "loan_type, pay_date: YYYY-MM-DD"}, {"name": "dl_repayment_cant_pay_method_select", "status": "add", "where": "Способ оплаты в диалоге", "param": "loan_type, payment_method: sbp · card · new_card"}, {"name": "dl_repayment_cant_pay_message_send", "status": "add", "where": "Сообщение в «Другая проблема»", "param": "loan_type"}, {"name": "dl_repayment_cant_pay_close_chat_click", "status": "add", "where": "Закрыл шторку", "param": "loan_type, cant_pay_step"}]};
 /* файл фичи вшит в страницу: features/… отдаём из него */
 (function () { var f = window.fetch; window.fetch = function (u) {
   if (String(u).indexOf('features/') === 0) return Promise.resolve({ ok: true, json: function () { return Promise.resolve(window.STAND_FEATURE); } });
@@ -791,6 +792,16 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
     return h + (off ? '<p class="f-note">Только ВКЛ ещё не нарисован, в прототипе заглушка</p>' : '') + '</div>';
   }
   function post(msg) { try { frame.contentWindow.postMessage(msg, location.origin); } catch (e) {} }
+  /* фильтры страницы в прототип: сообщение proto:filter, а у прототипов со своими переключателями (cant-pay, pay-method, friend)
+     третий элемент варианта = кнопка переключателя в прототипе, её и нажимаем (её решение 2026-11-10: отдельная оболочка прототипа не нужна) */
+  function sendFilters(defs, st) {
+    post({ type: 'proto:filter', filters: st });
+    (defs || []).forEach(function (fd) {
+      (fd.options || []).forEach(function (o) {
+        if (o[2] && o[0] === st[fd.id]) { try { var b = frame.contentDocument.querySelector(o[2]); if (b) b.click(); } catch (e) {} }
+      });
+    });
+  }
 
   /* карты раздела: у кабинета две дорожки (НК и ПК), у остальных одна */
   function mapsOf(sid) { var m = MAPS[sid] || {}; return m.lanes || [m]; }
@@ -807,11 +818,17 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
 
   /* ---------- Файл фичи: features/<адрес сценария>.json, грузим один раз ---------- */
   var FEAT = {};   /* slug → объект, null (файла нет) или 'loading' */
+  /* общий файл фичи на несколько сценариев: поле feat в data.js (шесть экранов успеха — один экран, одни события, 2026-11-09) */
+  function featFile(sl) {
+    var hit = null;
+    D.sections.forEach(function (s) { itemsOf(s).forEach(function (x) { if (!hit && x.feat && slug(x.t) === sl) hit = x.feat; }); });
+    return hit || sl;
+  }
   function featOf(sl) { var x = FEAT[sl]; return x && x !== 'loading' ? x : null; }
   function loadFeature(sl) {
     if (FEAT[sl] !== undefined) return;
     FEAT[sl] = 'loading';
-    fetch('features/' + sl + '.json?t=' + STAMP, { cache: 'no-cache' })
+    fetch('features/' + featFile(sl) + '.json?t=' + STAMP, { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .catch(function () { return null; })
       .then(function (j) {
@@ -828,8 +845,24 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
       raw.slice(qi + 1).split('&').forEach(function (kv) { var a = kv.split('='); if (a[0]) q[a[0]] = decodeURIComponent(a[1] || ''); });
       ver = q.v || null; raw = raw.slice(0, qi);
     }
-    var p = raw.split('/').filter(Boolean);
+    var p = raw.split('/').filter(Boolean), now = moved(p[0], p[1]);
+    /* сценарий переименовали (поле was в data.js) или перенесли в другой раздел: старая ссылка открывает его же под новым адресом */
+    if (now) { p[0] = now.sec; p[1] = now.slug; history.replaceState(null, '', '#/' + p.join('/') + (qi >= 0 ? location.hash.slice(location.hash.indexOf('?')) : '')); }
     return { section: p[0], slug: p[1], ver: ver, q: q };
+  }
+  /* где сценарий сейчас: { sec, slug } или null, если адрес и так верный (или сценария нет) */
+  function moved(sec, sl) {
+    var here = false, hit = null;
+    if (!sl) return null;
+    D.sections.forEach(function (s) { if (s.id === sec) itemsOf(s).forEach(function (x) { if (slug(x.t) === sl) here = true; }); });
+    if (here || combosOf(sec).some(function (c) { return c.id === sl; })) return null;
+    D.sections.forEach(function (s) {
+      itemsOf(s).forEach(function (x) {
+        if (hit) return;
+        if (slug(x.t) === sl || (x.was || []).some(function (w) { return slug(w) === sl; })) hit = { sec: s.id, slug: slug(x.t) };
+      });
+    });
+    return hit;
   }
   function find(r) {
     var s = null, item = null, combo = null;
@@ -903,8 +936,8 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
     var fdefs = filtersFor(f, v), fst = fdefs ? filterState(fdefs, r.q) : null;
     var clicks = [].concat(src.go ? '.state-btn[data-go="' + src.go + '"]' : [], src.click || []), step = src.step;
     pending = clicks.length || step || fst || at ? function (win, doc) {
+      if (fst) sendFilters(fdefs, fst);   /* сначала состояние (просрочка, клиент), потом шаг: шаг рисуется уже с ним */
       clicks.forEach(function (sel) { var b = doc.querySelector(sel); if (b) b.click(); });
-      if (fst) post({ type: 'proto:filter', filters: fst });
       if (step) post({ type: 'proto:step', step: step });
       /* экран, на котором был до обновления: после стартового шага, когда прототип его отрисует */
       if (at && at !== step) setTimeout(function () { post({ type: 'proto:step', step: at }); }, 400);
@@ -1114,25 +1147,34 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
         '<button type="button" data-per="days" aria-pressed="' + (per === 'days') + '">По дням</button>' +
         '<button type="button" data-per="weeks" aria-pressed="' + (per === 'weeks') + '">По неделям</button></div>' : '') + '</div>';
     if (m && (m.rows || []).length && cols.length) {
-      var relCol = -1, WD = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
-      if (rel && rel.date) cols.forEach(function (w, i) { if (per === 'days' ? rel.date === w.date : rel.date >= w.from && rel.date <= w.to) relCol = i; });
+      var WD = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'], marks = {};
+      /* метки на шкале: релиз из release.date и события из metrics.marks (A/B-тест, раскатка на весь трафик, её просьба 2026-11-09) */
+      var allMarks = ((m && m.marks) || []).slice();
+      if (rel && rel.date) allMarks.push({ date: rel.date, t: 'Релиз ' + (rel.version || ddmm(rel.date)) });
+      allMarks.forEach(function (mk) {
+        cols.forEach(function (w, i) { if (per === 'days' ? mk.date === w.date : mk.date >= w.from && mk.date <= w.to) (marks[i] = marks[i] || []).push(mk.t); });
+      });
+      var sp = function (x) { return String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); };
       h += '<div class="mt-wrap" id="mtWrap"><table class="mt"><thead><tr><th scope="col">Метрика</th>';
       cols.forEach(function (w, i) {
         var wd = per === 'days' ? new Date(w.date + 'T12:00:00').getDay() : -1;
-        h += '<th scope="col" class="' + (i === relCol ? 'is-release' : '') + (wd === 0 || wd === 6 ? ' is-weekend' : '') + '">' +
-          (i === relCol ? '<em class="mt-rel">Релиз ' + esc(rel.version || ddmm(rel.date)) + '</em>' : '') +
+        h += '<th scope="col" class="' + (marks[i] ? 'is-release' : '') + (wd === 0 || wd === 6 ? ' is-weekend' : '') + '">' +
+          (marks[i] ? '<em class="mt-rel">' + esc(marks[i].join(' · ')) + '</em>' : '') +
           (per === 'days' ? ddmm(w.date) + '<small>' + WD[wd] + '</small>' : ddmm(w.from) + '–' + ddmm(w.to) + '<small>' + w.to.slice(0, 4) + '</small>') + '</th>';
       });
       h += '</tr></thead><tbody>';
       m.rows.forEach(function (row) {
+        var cnt = row.unit === 'count';   /* строка-число (сколько оплат за день), а не доля */
         h += '<tr><th scope="row">' + esc(row.t) + '</th>';
         cols.forEach(function (w, i) {
           var val = w.values ? w.values[row.id] : null, prev = i ? (cols[i - 1].values || {})[row.id] : null, d = '';
           if (val != null && prev != null) {
             var dd = Math.round((val - prev) * 10) / 10, good = (row.better || 'up') === 'down' ? dd < 0 : dd > 0;
-            d = dd === 0 ? '<span class="mt-d" data-tone="flat">=</span>' : '<span class="mt-d" data-tone="' + (good ? 'good' : 'bad') + '">' + (dd > 0 ? '▲' : '▼') + ' ' + num(Math.abs(dd)) + '</span>';
+            d = dd === 0 ? '<span class="mt-d" data-tone="flat">±0</span>' : '<span class="mt-d" data-tone="' + (good ? 'good' : 'bad') + '">' + (dd > 0 ? '▲' : '▼') + ' ' + (cnt ? sp(Math.abs(dd)) : num(Math.abs(dd))) + '</span>';
           }
-          h += '<td' + (i === relCol ? ' class="is-release"' : '') + '>' + (val != null ? '<b>' + num(val) + '%</b>' : '<span class="mt-d" data-tone="flat">—</span>') + d + '</td>';
+          /* знаменатель строки (у сегментов он свой): серым под долей */
+          var nn = w.ns && w.ns[row.id] != null && !cnt ? '<small class="mt-n">из ' + sp(w.ns[row.id]) + '</small>' : '';
+          h += '<td' + (marks[i] ? ' class="is-release"' : '') + '>' + (val != null ? '<b>' + (cnt ? sp(val) : num(val) + '%') + '</b>' : '<span class="mt-d" data-tone="flat">—</span>') + d + nn + '</td>';
         });
         h += '</tr>';
       });
@@ -1141,6 +1183,7 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
         (per === 'days' ? ' · вошли в шаг за ' + ddmm(last.date) : ' · вошли в шаг за неделю ' + ddmm(last.from) + '–' + ddmm(last.to)) + ': ' +
         (n != null ? esc(String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')) : 'нет данных') +
         (per === 'days' ? ' · обновляется каждый день в 9:00 за вчера' : '') + '</p>';
+      if (m.note) h += '<p class="mt-src">' + esc(m.note) + '</p>';   /* оговорки к данным: с какого дня считаем, какие дни нерепрезентативны */
     } else if (v && v.kind === 'exp') {
       h += expHtml(v);
     } else if (x && x.cr) {
@@ -1268,7 +1311,7 @@ if (!/^#\/account\/ne-mogu-zaplatit-seychas/.test(location.hash)) history.replac
       st[fb.dataset.filter] = fb.dataset.value;
       defs.forEach(function (d) { ex[d.id] = st[d.id]; });
       history.replaceState(null, '', queryHash(fr, ex));
-      if (loaded) post({ type: 'proto:filter', filters: st });
+      if (loaded) sendFilters(defs, st);
       renderPanel(); return;
     }
     var pb = ev.target.closest('[data-per]');
